@@ -1,7 +1,7 @@
 {
-  "name": "web-component-library",
+  "name": "@zennya/web-component-library",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "dependencies": {
     "@material-ui/core": "^4.11.3",
     "@testing-library/jest-dom": "^5.11.4",
@@ -47,5 +47,14 @@
     "@storybook/node-logger": "^6.1.21",
     "@storybook/preset-create-react-app": "^3.1.7",
     "@storybook/react": "^6.1.21"
-  }
+  },
+  "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@bitbucket.org/zennya/web-component-library.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/zennya/web-component-library#readme"
 }
