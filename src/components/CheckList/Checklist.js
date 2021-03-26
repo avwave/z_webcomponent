@@ -18,7 +18,7 @@ const StyledContainer = styled.div`
   box-shadow: 1px 3px 4px 0px rgba(0, 0, 0, 0.1);
   border: solid 1px #c2c2c2;
   display: flex;
-  flex-direction:column;
+  flex-direction: column;
 `;
 
 const StyledHeader = styled.h3`
@@ -27,7 +27,7 @@ const StyledHeader = styled.h3`
   font-size: 14px;
   line-height: 28px;
   font-weight: 400;
-  flex:1;
+  flex: 1;
 `;
 
 const ActionComponentContainer = styled.div`
@@ -37,7 +37,23 @@ const ActionComponentContainer = styled.div`
   justify-content: center;
 `;
 
-export default function Checklist({ items, title, onToggle, actionComponent }) {
+const FilterActionComponentContainer = styled.div`
+  padding-top: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+export default function Checklist({
+  items,
+  title,
+  onToggle,
+  actionComponent,
+  filterActionComponent,
+  lineItemComponent
+}) {
+  const LineItemComponent = lineItemComponent || Checkbox
+
   const events = { onToggle };
 
   const [state, dispatch] = React.useContext(CheckboxContext);
@@ -50,9 +66,15 @@ export default function Checklist({ items, title, onToggle, actionComponent }) {
     <StyledContainer>
       <StyledHeader>{title}</StyledHeader>
 
+      {filterActionComponent ? (
+        <FilterActionComponentContainer>
+          {filterActionComponent}
+        </FilterActionComponentContainer>
+      ) : null}
+
       <StyledList>
         {state.items.map((item) => (
-          <Checkbox key={item.id} item={item} {...events} />
+          <LineItemComponent key={item.id} item={item} {...events} />
         ))}
       </StyledList>
 
@@ -68,7 +90,8 @@ Checklist.propTypes = {
   items: PropTypes.arrayOf(Checkbox.propTypes.item).isRequired,
   /** Event to change the task to pinned */
   title: PropTypes.string,
-  actionComponent: PropTypes.elementType,
+  actionComponent: PropTypes.any,
+  filterActionComponent: PropTypes.any,
 };
 Checklist.defaultProps = {
   items: [],
