@@ -125,7 +125,6 @@ export default function Button({
 Button.propTypes = {
   onClick: PropTypes.func,
   title: PropTypes.string,
-  outlined: PropTypes.bool,
   disabled: PropTypes.bool,
   variant: PropTypes.string,
 };

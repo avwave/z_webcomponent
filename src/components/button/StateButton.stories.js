@@ -2,7 +2,7 @@ import React from "react";
 import StateButton from "./StateButton";
 
 export default {
-  title: "Button",
+  title: "StateButton",
   component: StateButton,
 };
 
