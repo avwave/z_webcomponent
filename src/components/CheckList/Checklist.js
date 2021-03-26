@@ -58,10 +58,6 @@ export default function Checklist({
 
   const [state, dispatch] = React.useContext(CheckboxContext);
 
-  if (state.items.length === 0) {
-    return <div>No results</div>;
-  }
-
   return (
     <StyledContainer>
       <StyledHeader>{title}</StyledHeader>
@@ -73,6 +69,7 @@ export default function Checklist({
       ) : null}
 
       <StyledList>
+        {(state.items.length === 0) ? (<div>No results</div>) : (<></>)}
         {state.items.map((item) => (
           <LineItemComponent key={item.id} item={item} {...events} />
         ))}
