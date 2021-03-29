@@ -26,6 +26,6 @@ pipelines:
         - step:
             name: Chromatic Publish
             script:
-              - npx chromatic --project-token=3b67b6c2ac82
+              - npx chromatic --project-token=3b67b6c2ac82 --auto-accept-changes
             caches:
               - node
