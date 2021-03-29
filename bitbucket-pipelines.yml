@@ -14,7 +14,7 @@ pipelines:
               - node
             script:
               - npm install
-              - npm test
+              - npm test -- -u
         - step:
             name: Chromatic Publish
             script:
@@ -28,7 +28,7 @@ pipelines:
               - node
             script:
               - npm install
-              - npm test
+              - npm test -- -u
         - step:
             name: Chromatic Publish
             script:
