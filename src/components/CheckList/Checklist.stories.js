@@ -10,14 +10,18 @@ import CheckboxProvider, {
   checkboxReducer,
 } from "./checklistContext";
 import { Button } from "../Button";
+import { TextField } from "@material-ui/core";
 
 let defaultItems = [
-  { id: "id1", title: "Task 1", state: status.UNCHECKED },
-  { id: "id2", title: "Task 2", state: status.UNCHECKED },
-  { id: "id3", title: "Task 3", state: status.UNCHECKED },
-  { id: "id4", title: "Task 4", state: status.UNCHECKED },
-  { id: "id5", title: "Task 5", state: status.UNCHECKED },
-  { id: "id6", title: "Task 6", state: status.UNCHECKED },
+  { id: "id1", title: "Task one", state: status.UNCHECKED },
+  { id: "id2", title: "Task two", state: status.UNCHECKED },
+  { id: "id3", title: "Task three", state: status.UNCHECKED },
+  { id: "id4", title: "Task four", state: status.UNCHECKED },
+  { id: "id5", title: "Task five", state: status.UNCHECKED },
+  { id: "id6", title: "Task six", state: status.UNCHECKED },
+  { id: "id7", title: "Task seven", state: status.UNCHECKED },
+  { id: "id8", title: "Task eight", state: status.UNCHECKED },
+  { id: "id9", title: "Task nine", state: status.UNCHECKED },
 ];
 
 const ChecklistStory = {
@@ -40,7 +44,7 @@ const ChecklistStory = {
 
 export default ChecklistStory;
 
-export const Empty = () => <Checklist title="Checklist compo" />;
+export const EmptyStory = () => <Checklist title="Checklist compo" />;
 
 export const Filled = () => {
   const [state, dispatch] = React.useContext(CheckboxContext);
@@ -51,6 +55,22 @@ export const Filled = () => {
     });
   }, [dispatch]);
   return <Checklist title="Checklist" />;
+};
+
+export const CustomLineItem = () => {
+  const [state, dispatch] = React.useContext(CheckboxContext);
+  React.useEffect(() => {
+    dispatch({
+      payload: { items: defaultItems },
+      type: actions.LOAD_ITEMS,
+    });
+  }, [dispatch]);
+  return (
+    <Checklist
+      title="TextList"
+      lineItemComponent={({ item }) => <div>{item.title}</div>}
+    />
+  );
 };
 
 export const CountSelected = () => {
@@ -82,13 +102,11 @@ export const CountSelected = () => {
   );
 };
 
-
-
 export const ButtonCountSelected = () => {
   const [state, dispatch] = React.useContext(CheckboxContext);
   const selectedItems = state.items.filter(function (item) {
     return item.state === status.CHECKED;
-  });  
+  });
 
   const [output, setOutput] = useState("");
   React.useEffect(() => {
@@ -103,18 +121,96 @@ export const ButtonCountSelected = () => {
   }, 0);
 
   const printOutput = () => {
-    const selected = setOutput(`to Send ids: ${selectedItems.map((item) => item.id).toString()}`);
-  }
+    const selected = setOutput(
+      `to Send ids: ${selectedItems.map((item) => item.id).toString()}`
+    );
+  };
   return (
     <>
       <Checklist
         title="Checklist"
-        actionComponent={(
+        actionComponent={
           <Button
             title={`Filter ${itemCount} items`}
             onClick={() => printOutput()}
           />
-        )}
+        }
+      />
+      <div>{output}</div>
+    </>
+  );
+};
+
+export const FilterActionComponent = () => {
+  const [state, dispatch] = React.useContext(CheckboxContext);
+  const selectedItems = state.items.filter(function (item) {
+    return item.state === status.CHECKED;
+  });
+
+  const [output, setOutput] = useState("");
+  React.useEffect(() => {
+    dispatch({
+      payload: { items: defaultItems },
+      type: actions.LOAD_ITEMS,
+    });
+  }, [dispatch]);
+
+  const itemCount = state.items.reduce(function (acc, current) {
+    return acc + (current.state === status.CHECKED ? 1 : 0);
+  }, 0);
+
+  const printOutput = () => {
+    const selected = setOutput(
+      `to Send ids: ${selectedItems.map((item) => item.id).toString()}`
+    );
+  };
+  return (
+    <>
+      <Checklist
+        title="Checklist"
+        filterActionComponent={
+          <Button
+            title={`Filter ${itemCount} items`}
+            onClick={() => printOutput()}
+          />
+        }
+      />
+      <div>{output}</div>
+    </>
+  );
+};
+
+
+export const Filtering = () => {
+  const [state, dispatch] = React.useContext(CheckboxContext);
+  const selectedItems = state.items.filter(function (item) {
+    return item.state === status.CHECKED;
+  });
+
+  const [output, setOutput] = useState("");
+  React.useEffect(() => {
+    dispatch({
+      payload: { items: defaultItems },
+      type: actions.LOAD_ITEMS,
+    });
+  }, [dispatch]);
+
+  const handleChange = (event) => {
+    const filter = event.target.value;
+    const items = defaultItems.filter(item=>item.title.toLowerCase().includes(filter.toLowerCase()))
+    dispatch({
+      payload: { items: items },
+      type: actions.LOAD_ITEMS,
+    });
+
+  }
+  return (
+    <>
+      <Checklist
+        title="Filterable Checklist"
+        filterActionComponent={
+          <TextField type="search" label='Filter...' onChange={handleChange}/>
+        }
       />
       <div>{output}</div>
     </>

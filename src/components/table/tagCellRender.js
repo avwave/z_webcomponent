@@ -6,9 +6,9 @@ export default class TagCellRender extends Component {
   render() {
     return (
       <span>
-        <a href="#" className="tagAnker">
+        <a href="#" className="ag-tagAnker">
           <Chip
-            className="tag"
+            className="ag-tag"
             label={this.props.value}
             color={getStatusColor(this.props.value)}
           />
