@@ -15,25 +15,43 @@ const DefaultStory = ({ ...args }) => (
 export const Default = DefaultStory.bind({})
 Default.args = {
   title:'Button1',
-  outlined: false,
   disabled:false
 }
 
-const OutlinedStory = ({...args}) => (
-  <Button {...args} onClick={action("Button onClick")} />
-);
-export const Outlined = OutlinedStory.bind({})
-Outlined.args = {
+export const DisabledButton = DefaultStory.bind({})
+DisabledButton.args = {
+  title: "Button1",
+  variant: "primary",
+  disabled: true,
+};
+
+export const PrimaryButton = DefaultStory.bind({})
+PrimaryButton.args = {
   title:'Button1',
-  outlined: true,
-  disabled:false
+  variant: 'primary',
 }
-const DisabledStory = ({...args}) => (
-  <Button {...args} onClick={action("Button onClick")} />
-);
-export const Disabled = DisabledStory.bind({})
-Disabled.args = {
+export const SecondaryButton = DefaultStory.bind({})
+SecondaryButton.args = {
   title:'Button1',
-  outlined: false,
-  disabled:true
+  variant: 'secondary',
+}
+export const SuccessButton = DefaultStory.bind({})
+SuccessButton.args = {
+  title:'Button1',
+  variant: 'success',
+}
+export const DangerButton = DefaultStory.bind({})
+DangerButton.args = {
+  title:'Button1',
+  variant: 'danger',
+}
+export const WarningButton = DefaultStory.bind({})
+WarningButton.args = {
+  title:'Button1',
+  variant: 'warning',
+}
+export const InfoButton = DefaultStory.bind({})
+InfoButton.args = {
+  title:'Button1',
+  variant: 'info',
 }

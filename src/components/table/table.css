@@ -15,7 +15,7 @@
 .ag-theme-alpine .ag-row {
     border-width: 0px !important;
 }
-.tag {
+.ag-tag {
   background: #f9dcd9 !important;
   color: red !important;
   display: inline-block;
@@ -28,6 +28,6 @@
   border-radius: 4px !important;
   height: 29px !important;
 }
-.tagAnker{
+.ag-tagAnker{
     text-decoration: none;
 }

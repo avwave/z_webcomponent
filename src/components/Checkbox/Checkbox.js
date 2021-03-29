@@ -14,6 +14,11 @@ const CheckboxContainer = styled.li`
   height: 28px;
   top: -9px;
   padding-bottom: 5px;
+  padding-left: 5px;
+  transition: 0.25s all ease-out;
+  &:hover {
+    background-color: #efefef;
+  }
 `;
 
 const Icon = styled.span`
