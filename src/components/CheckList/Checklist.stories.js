@@ -26,7 +26,7 @@ let defaultItems = [
 
 const ChecklistStory = {
   component: Checklist,
-  title: "Checklist",
+  title: "Checklist/List",
   decorators: [
     withReactContext({
       reducer: checkboxReducer,
