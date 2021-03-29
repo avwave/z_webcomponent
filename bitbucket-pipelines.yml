@@ -15,6 +15,12 @@ pipelines:
             script:
               - npm install
               - npm test
+        - step:
+            name: Chromatic Publish
+            script:
+              - npx chromatic --project-token=5715d8611200 --auto-accept-changes
+            caches:
+              - node
     '{master}':
         - step:
             name: Build and Test
@@ -26,6 +32,6 @@ pipelines:
         - step:
             name: Chromatic Publish
             script:
-              - npx chromatic --project-token=3b67b6c2ac82
+              - npx chromatic --project-token=5715d8611200 --auto-accept-changes
             caches:
               - node
