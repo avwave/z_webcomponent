@@ -6,7 +6,16 @@
 image: node:10.15.3
 
 pipelines:
-  default:
+  branches:
+    '{develop}':
+        - step:
+            name: Build and Test
+            caches:
+              - node
+            script:
+              - npm install
+              - npm test
+    '{master}':
         - step:
             name: Build and Test
             caches:
