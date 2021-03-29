@@ -27,6 +27,8 @@ export default function Element({
   variant,
   hasProgress,
 }) {
+  console.log("🚀 ~ file: Element.js ~ line 30 ~ title,subtitle,onClick,variant,hasProgress", title,subtitle,onClick,variant,hasProgress)
+  
   return (
     <StyledContainer>
       <StyledElement
