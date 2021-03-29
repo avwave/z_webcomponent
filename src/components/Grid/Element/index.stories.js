@@ -18,6 +18,14 @@ Default.args = {
   variant: "default",
 };
 
+export const Selected = DefaultStory.bind({});
+Selected.args = {
+  title: "Element1",
+  subtitle: "subtitle",
+  variant: "default",
+  selected: true,
+};
+
 export const Subtitle = DefaultStory.bind({});
 Subtitle.args = {
   title: "Element1",

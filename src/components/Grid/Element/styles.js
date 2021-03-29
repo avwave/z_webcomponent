@@ -30,3 +30,7 @@ export const variant = {
     color: #fff;
   `,
 };
+
+export const selected = css`
+  border: solid 1px #333;
+`

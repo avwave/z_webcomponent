@@ -9,6 +9,7 @@ const StyledContainer = styled.div``;
 const StyledElement = styled.div`
   ${Styles.base};
   ${(props) => Styles.variant[props.variant]};
+  ${(props) => props.selected ? Styles.selected : {}};
   padding-bottom: ${(props) => (props.hasProgress ? "0px" : "4px")};
 `;
 const StyledTitle = styled.div`
@@ -26,6 +27,7 @@ export default function Element({
   onClick,
   variant,
   hasProgress,
+  selected
 }) {
   console.log("🚀 ~ file: Element.js ~ line 30 ~ title,subtitle,onClick,variant,hasProgress", title,subtitle,onClick,variant,hasProgress)
   
@@ -35,6 +37,7 @@ export default function Element({
         variant={variant}
         onClick={onClick}
         hasProgress={hasProgress}
+        selected={selected}
       >
         <StyledTitle>{title}</StyledTitle>
         <StyledSubtitle>{subtitle}</StyledSubtitle>
