@@ -5,7 +5,7 @@ import { action, actions } from "@storybook/addon-actions";
 
 const CheckboxStory = {
   component: Checkbox,
-  title: "Checkbox",
+  title: "Checklist/Box",
 };
 
 export default CheckboxStory;
