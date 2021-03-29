@@ -7,6 +7,7 @@ export const base = css`
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  box-sizing: border-box;
 `;
 export const variant = {
   default: css`
@@ -32,5 +33,5 @@ export const variant = {
 };
 
 export const selected = css`
-  border: solid 1px #333;
+  border: solid 2px #333;
 `

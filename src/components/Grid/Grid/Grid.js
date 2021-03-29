@@ -3,6 +3,7 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 
 import { Column } from "../Column";
+import { GridContext } from "../GridContext";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -14,13 +15,21 @@ const StyledColumn = styled.div`
 `;
 
 export default function Grid({ columns }) {
-  return <StyledContainer>
-    {columns.map(column => (
-      <StyledColumn>
-        <Column {...column}/>
-      </StyledColumn>
-    ))}
-  </StyledContainer>;
+  const context = React.useContext(GridContext);
+  const [state, dispatch] = context || [{ columns: [] }, () => {}];
+  
+  return (
+    <StyledContainer>
+      {state.columns.length === 0 ? <div>No results</div> : <></>}
+      {state.columns.map((column) => {
+        return (
+          <StyledColumn key={column.id}>
+            <Column {...column} />
+          </StyledColumn>
+        );
+      })}
+    </StyledContainer>
+  );
 }
 
 Column.propTypes = {

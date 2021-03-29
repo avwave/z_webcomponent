@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 
 import * as Styles from "./styles";
 import { LinearProgress } from "@material-ui/core";
+import { actions, GridContext } from "../GridContext";
 
 const StyledContainer = styled.div``;
 const StyledElement = styled.div`
@@ -24,18 +25,32 @@ const StyledSubtitle = styled.div`
 export default function Element({
   title,
   subtitle,
-  onClick,
   variant,
   hasProgress,
-  selected
+  selected,
+  id,
+  columnId
 }) {
-  console.log("🚀 ~ file: Element.js ~ line 30 ~ title,subtitle,onClick,variant,hasProgress", title,subtitle,onClick,variant,hasProgress)
-  
+  const context = React.useContext(GridContext);
+  const [ctxstate, dispatch] = context || [[], () => {}];
+
+  function onCellClick() {
+    if(variant==='header') {
+      ctxstate.onColumnSelect(columnId)
+    } else {
+      dispatch({
+        payload: { cellId: id },
+        type: actions.CELL_CLICK,
+      });
+    }
+    
+  }
+
   return (
     <StyledContainer>
       <StyledElement
         variant={variant}
-        onClick={onClick}
+        onClick={()=>onCellClick()}
         hasProgress={hasProgress}
         selected={selected}
       >
@@ -48,9 +63,11 @@ export default function Element({
 }
 
 Element.propTypes = {
-  onClick: PropTypes.func,
   title: PropTypes.string,
   subtitle: PropTypes.string,
   variant: PropTypes.string,
+  selected: PropTypes.bool,
+  id: PropTypes.string,
+  columnId: PropTypes.string,
   hasProgress: PropTypes.bool,
 };

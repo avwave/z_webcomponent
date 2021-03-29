@@ -9,19 +9,24 @@ const StyledContainer = styled.div`
   flex-direction: column;
 `;
 
-export default function Column({ columnTitle, columnSubtitle, items, hasProgress }) {
+export default function Column({
+  columnTitle,
+  columnSubtitle,
+  items,
+  hasProgress,
+  id
+}) {
   return (
     <StyledContainer>
-      <Element variant="header" title={columnTitle} subtitle={columnSubtitle} hasProgress={hasProgress} />
+      <Element
+        variant="header"
+        title={columnTitle}
+        subtitle={columnSubtitle}
+        hasProgress={hasProgress}
+        columnId={id}
+      />
       {items.map((item) => {
-        return (
-          <Element
-            key={item.id}
-            title={item.title}
-            subtitle={item.subtitle}
-            variant={item.variant}
-          />
-        );
+        return <Element key={item.id} {...item} />;
       })}
     </StyledContainer>
   );
@@ -30,7 +35,7 @@ export default function Column({ columnTitle, columnSubtitle, items, hasProgress
 Column.propTypes = {
   columnTitle: PropTypes.string,
   columnSubtitle: PropTypes.string,
-  hasProgress: PropTypes.bool, 
+  hasProgress: PropTypes.bool,
   items: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string,
