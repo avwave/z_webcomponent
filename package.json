@@ -13,7 +13,6 @@
     "luxon": "^1.26.0",
     "react": "^17.0.1",
     "react-data-grid": "^7.0.0-canary.38",
-    "react-data-grid-addons": "^7.0.0-alpha.24",
     "react-dnd": "^14.0.2",
     "react-dnd-html5-backend": "^14.0.0",
     "react-dom": "^17.0.1",

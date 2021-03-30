@@ -139,7 +139,7 @@ function DataGrid({ columns: colData, rows: rowData }) {
           anchorEl={anchorEl}
           onClose={handleChecklistClose}
           anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-          transformOrigin={{ vertical: "top", horizontal: "center" }}
+          transformOrigin={{ vertical: "top", horizontal: "right" }}
         >
           <Checklist />
         </Popover>
