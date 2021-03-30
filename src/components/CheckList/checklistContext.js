@@ -25,6 +25,7 @@ export function toggleItem(itemId, items) {
 export function checkboxReducer(state, action) {
   switch (action.type) {
     case actions.LOAD_ITEMS:
+      console.log("🚀 ~ file: checklistContext.js ~ line 37 ~ checkboxReducer ~ action.payload", action)
       return { ...state, items: action.payload.items };
     case actions.TOGGLE_ITEM:
       return { ...state, items: toggleItem(action.payload.id, state.items) };

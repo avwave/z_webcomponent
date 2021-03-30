@@ -57,6 +57,7 @@ export default function Checklist({
   const events = { onToggle };
 
   const [state, dispatch] = React.useContext(CheckboxContext);
+  console.log("🚀 ~ file: Checklist.js ~ line 60 ~ state", state)
 
   return (
     <StyledContainer>
