@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import PropTypes from "prop-types";
 import ReactDataGrid from "react-data-grid";
-import { AppBar, Toolbar } from "@material-ui/core";
+import { AppBar, Popover, Toolbar } from "@material-ui/core";
 import { Button } from "../Button";
 import { Checklist } from "../CheckList";
 
@@ -17,6 +17,18 @@ const StyledAppBar = styled(Toolbar)`
     background-color: #fff;
   }
 `;
+
+function useCombinedRefs(...refs) {
+  return useCallback((handle) => {
+    for (const ref of refs) {
+      if (typeof ref === "function") {
+        ref(handle);
+      } else if (ref !== null) {
+        ref.current = handle;
+      }
+    }
+  }, refs);
+}
 
 function DataGrid({ columns: colData, rows: rowData }) {
   const [columns, setColumns] = useState(colData);
@@ -49,11 +61,13 @@ function DataGrid({ columns: colData, rows: rowData }) {
     });
 
     filteredColumns = copyColumns.filter((col) => {
-      const chbxstate =  checkListState.items.find((chkbx) => col.colId === chkbx.id);
-      if(!chbxstate) return false
-      return chbxstate.state === status.CHECKED
+      const chbxstate = checkListState.items.find(
+        (chkbx) => col.colId === chkbx.id
+      );
+      if (!chbxstate) return false;
+      return chbxstate.state === status.CHECKED;
     });
-    
+
     setColumns(filteredColumns);
   }, [checkListState]);
 
@@ -93,16 +107,42 @@ function DataGrid({ columns: colData, rows: rowData }) {
     setColumns(columnsCopy);
   };
 
-  // console.log(
-  //   "🚀 ~ file: DataGrid.js ~ line 118 ~ DataGrid ~ columns",
-  //   columns
-  // );
+  // const draggableColumns = useMemo(() => {
+  //   function HeaderRenderer(props) {
+  //     return
+  //   }
+  // })
+
+  const [anchorEl, setAnchorEl] = useState(null);
+  const isCheckListOpen = Boolean(anchorEl);
+  const popoverId = isCheckListOpen ? "simple-popover" : undefined;
+
+  const handleOpenCheckList = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleChecklistClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
     <>
-      <Checklist />
       <StyledAppBar>
         <div style={{ flex: 1 }} />
-        <Button title="Edit Columns" variant="default" />
+        <Button
+          title="Edit Columns"
+          variant="default"
+          onClick={handleOpenCheckList}
+        />
+        <Popover
+          id={popoverId}
+          open={isCheckListOpen}
+          anchorEl={anchorEl}
+          onClose={handleChecklistClose}
+          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+          transformOrigin={{ vertical: "top", horizontal: "center" }}
+        >
+          <Checklist />
+        </Popover>
       </StyledAppBar>
 
       <ReactDataGrid
