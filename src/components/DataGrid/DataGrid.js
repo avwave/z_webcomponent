@@ -16,7 +16,7 @@ const {
   DraggableHeader: { DraggableContainer },
 } = require("react-data-grid-addons");
 
-const StyledAppBar = styled(AppBar)`
+const StyledAppBar = styled(Toolbar)`
   && {
     background-color: #fff;
   }
@@ -25,8 +25,7 @@ const StyledAppBar = styled(AppBar)`
 function DataGrid({ columns: colData, rows: rowData }) {
   const [columns, setColumns] = useState(colData);
 
-  const [chkState, chkDispatch] = React.useContext(CheckboxContext)
-  console.log("🚀 ~ file: DataGrid.js ~ line 29 ~ DataGrid ~ chkState", chkState)
+  const [checkListState, checkListDispatch] = React.useContext(CheckboxContext);
 
   React.useEffect(() => {
     const defaultItems = colData.map((col) => {
@@ -36,12 +35,23 @@ function DataGrid({ columns: colData, rows: rowData }) {
         state: col.hidden ? status.UNCHECKED : status.CHECKED,
       };
     });
-    console.log("🚀 ~ file: DataGrid.js ~ line 38 ~ defaultItems ~ defaultItems", defaultItems)
-    chkDispatch({
+    checkListDispatch({
       payload: { items: defaultItems },
       type: actions.LOAD_ITEMS,
     });
-  }, [colData, chkDispatch]);
+  }, [colData, checkListDispatch]);
+
+  React.useEffect(() => {
+    let filterColumns = columns.slice();
+    checkListState.items.forEach((checkItem) => {
+      const idx = filterColumns.findIndex((col) => col.colId === checkItem.id);
+      filterColumns[idx].width = checkItem.state === status.CHECKED ? null : -1;
+      filterColumns[idx].hidden = checkItem.state !== status.CHECKED;
+    });
+    setColumns(filterColumns.slice());
+    setColumns(filterColumns);
+
+  }, [checkListState]);
 
   const [rows, setRows] = useState(rowData);
 
@@ -82,14 +92,15 @@ function DataGrid({ columns: colData, rows: rowData }) {
   return (
     <>
       <Checklist />
-      <StyledAppBar position="static">
-        <Toolbar>
-          <div style={{ flex: 1 }} />
-          <Button title="Edit Columns" variant="default" />
-        </Toolbar>
-      </StyledAppBar>
+
       <DraggableContainer onHeaderDrop={onHeaderDrop}>
         <ReactDataGrid
+          toolbar={() => (
+            <StyledAppBar>
+              <div style={{ flex: 1 }} />
+              <Button title="Edit Columns" variant="default" />
+            </StyledAppBar>
+          )}
           columns={columns}
           rowGetter={(i) => rows[i]}
           rowsCount={rows.length}
@@ -107,9 +118,9 @@ function DataGrid({ columns: colData, rows: rowData }) {
 export default function DGWrapper(props) {
   return (
     <CheckboxProvider>
-      <DataGrid {...props}/>
+      <DataGrid {...props} />
     </CheckboxProvider>
-  )
+  );
 }
 DataGrid.propTypes = {
   columns: PropTypes.arrayOf(PropTypes.any),
