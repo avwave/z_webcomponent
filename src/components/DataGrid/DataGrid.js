@@ -1,34 +1,27 @@
-import React, { useCallback, useMemo, useState } from "react";
+import { Popover, Toolbar } from "@material-ui/core";
 import PropTypes from "prop-types";
+import React, { useMemo, useState } from "react";
 import ReactDataGrid from "react-data-grid";
-import { AppBar, Popover, Toolbar } from "@material-ui/core";
-import { Button } from "../Button";
-import { Checklist } from "../CheckList";
-
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 import styled from "styled-components";
+import { Button } from "../Button";
+import { status } from "../Checkbox/Checkbox";
+import { Checklist } from "../CheckList";
 import CheckboxProvider, {
   actions,
   CheckboxContext,
 } from "../CheckList/checklistContext";
-import { status } from "../Checkbox/Checkbox";
+import {
+  DraggableHeaderRenderer,
+  DraggableHeaderRnderer,
+} from "./DraggableHeaderRenderer";
 
 const StyledAppBar = styled(Toolbar)`
   && {
     background-color: #fff;
   }
 `;
-
-function useCombinedRefs(...refs) {
-  return useCallback((handle) => {
-    for (const ref of refs) {
-      if (typeof ref === "function") {
-        ref(handle);
-      } else if (ref !== null) {
-        ref.current = handle;
-      }
-    }
-  }, refs);
-}
 
 function DataGrid({ columns: colData, rows: rowData }) {
   const [columns, setColumns] = useState(colData);
@@ -92,26 +85,35 @@ function DataGrid({ columns: colData, rows: rowData }) {
     return sortDirection === "NONE" ? initialRows : [...rows].sort(comparer);
   };
 
-  const onHeaderDrop = (source, target) => {
-    var columnsCopy = columns.slice();
-    const columnSourceIndex = columns.findIndex((i) => i.key === source);
-    const columnTargetIndex = columns.findIndex((i) => i.key === target);
+  const draggableColumns = useMemo(() => {
+    function HeaderRenderer(props) {
+      return (
+        <DraggableHeaderRenderer
+          {...props}
+          onColumnsReorder={handleColumnReorder}
+        />
+      );
+    }
 
-    columnsCopy.splice(
-      columnTargetIndex,
-      0,
-      columnsCopy.splice(columnSourceIndex, 1)[0]
-    );
+    function handleColumnReorder(sourceKey, targetKey) {
+      const sourceColumnIndex = columns.findIndex((c) => c.key === sourceKey);
+      const targetColumnIndex = columns.findIndex((c) => c.key === targetKey);
+      const reorderedColumns = [...columns];
 
-    setColumns(columnsCopy.splice());
-    setColumns(columnsCopy);
-  };
+      reorderedColumns.splice(
+        targetColumnIndex,
+        0,
+        reorderedColumns.splice(sourceColumnIndex, 1)[0]
+      );
 
-  // const draggableColumns = useMemo(() => {
-  //   function HeaderRenderer(props) {
-  //     return
-  //   }
-  // })
+      setColumns(reorderedColumns);
+    }
+
+    return columns.map((c) => {
+      if (c.key === "id") return c;
+      return { ...c, headerRenderer: HeaderRenderer };
+    });
+  }, [columns]);
 
   const [anchorEl, setAnchorEl] = useState(null);
   const isCheckListOpen = Boolean(anchorEl);
@@ -144,16 +146,17 @@ function DataGrid({ columns: colData, rows: rowData }) {
           <Checklist />
         </Popover>
       </StyledAppBar>
-
-      <ReactDataGrid
-        columns={columns}
-        rows={rows}
-        enableCellSelect={true}
-        onGridRowsUpdated={onGridRowsUpdated}
-        onGridSort={(sortColumn, sortDirection) =>
-          setRows(sortRows(rows, sortColumn, sortDirection))
-        }
-      />
+      <DndProvider backend={HTML5Backend}>
+        <ReactDataGrid
+          columns={draggableColumns}
+          rows={rows}
+          enableCellSelect={true}
+          onGridRowsUpdated={onGridRowsUpdated}
+          onGridSort={(sortColumn, sortDirection) =>
+            setRows(sortRows(rows, sortColumn, sortDirection))
+          }
+        />
+      </DndProvider>
     </>
   );
 }
