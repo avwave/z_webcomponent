@@ -1,6 +1,6 @@
 import { Popover, Toolbar } from "@material-ui/core";
 import PropTypes from "prop-types";
-import React, { useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import ReactDataGrid from "react-data-grid";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -23,7 +23,7 @@ const StyledAppBar = styled(Toolbar)`
   }
 `;
 
-function DataGrid({ columns: colData, rows: rowData }) {
+function DataGrid({ columns: colData, rows, draggable, showSelector }) {
   const [columns, setColumns] = useState(colData);
 
   const [checkListState, checkListDispatch] = React.useContext(CheckboxContext);
@@ -64,26 +64,18 @@ function DataGrid({ columns: colData, rows: rowData }) {
     setColumns(filteredColumns);
   }, [checkListState]);
 
-  const [rows, setRows] = useState(rowData);
+  const [[sortColumn, sortDirection], setSort] = useState(["", "NONE"]);
 
-  const onGridRowsUpdated = ({ fromRow, toRow, updated }) => {
-    const s = rows.slice();
-    for (let i = fromRow; i <= toRow; i++) {
-      s[i] = { ...s[i], ...updated };
-    }
-    setRows(s);
-  };
+  const handleSort = useCallback((columnKey, direction) => {
+    setSort([columnKey, direction]);
+  }, []);
 
-  const sortRows = (initialRows, sortColumn, sortDirection) => (rows) => {
-    const comparer = (a, b) => {
-      if (sortDirection === "ASC") {
-        return a[sortColumn] > b[sortColumn] ? 1 : -1;
-      } else if (sortDirection === "DESC") {
-        return a[sortColumn] < b[sortColumn] ? 1 : -1;
-      }
-    };
-    return sortDirection === "NONE" ? initialRows : [...rows].sort(comparer);
-  };
+  const sortedRows = useMemo(() => {
+    if (sortDirection === "NONE") return rows;
+    let sortedRows = [...rows];
+    sortedRows = sortedRows.sort((a, b) => a[sortColumn] - b[sortColumn]);
+    return sortDirection === "DESC" ? sortedRows.reverse() : sortedRows;
+  }, [rows, sortDirection, sortColumn]);
 
   const draggableColumns = useMemo(() => {
     function HeaderRenderer(props) {
@@ -130,31 +122,36 @@ function DataGrid({ columns: colData, rows: rowData }) {
     <>
       <StyledAppBar>
         <div style={{ flex: 1 }} />
-        <Button
-          title="Edit Columns"
-          variant="default"
-          onClick={handleOpenCheckList}
-        />
-        <Popover
-          id={popoverId}
-          open={isCheckListOpen}
-          anchorEl={anchorEl}
-          onClose={handleChecklistClose}
-          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-          transformOrigin={{ vertical: "top", horizontal: "right" }}
-        >
-          <Checklist />
-        </Popover>
+        {showSelector ? (
+          <>
+            <Button
+              title="Edit Columns"
+              variant="default"
+              onClick={handleOpenCheckList}
+            />
+            <Popover
+              id={popoverId}
+              open={isCheckListOpen}
+              anchorEl={anchorEl}
+              onClose={handleChecklistClose}
+              anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+              transformOrigin={{ vertical: "top", horizontal: "right" }}
+            >
+              <Checklist />
+            </Popover>
+          </>
+        ) : (
+          <></>
+        )}
       </StyledAppBar>
       <DndProvider backend={HTML5Backend}>
         <ReactDataGrid
-          columns={draggableColumns}
-          rows={rows}
+          columns={draggable ? draggableColumns : columns}
+          rows={sortedRows}
+          sortColumn={sortColumn}
+          sortDirection={sortDirection}
           enableCellSelect={true}
-          onGridRowsUpdated={onGridRowsUpdated}
-          onGridSort={(sortColumn, sortDirection) =>
-            setRows(sortRows(rows, sortColumn, sortDirection))
-          }
+          onSort={handleSort}
         />
       </DndProvider>
     </>

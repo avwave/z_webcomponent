@@ -14,7 +14,6 @@ function useCombinedRefs(...refs) {
   }, refs);
 }
 
-
 export function DraggableHeaderRenderer({
   onColumnsReorder,
   column,
@@ -51,14 +50,20 @@ export function DraggableHeaderRenderer({
         cursor: "move",
       }}
     >
-      <SortableHeaderCell
-        column={column}
-        sortColumn={sortColumn}
-        sortDirection={sortDirection}
-        onSort={onSort}
-      >
-        {column.name}
-      </SortableHeaderCell>
+      {column.sortable ? (
+        <>
+          <SortableHeaderCell
+            column={column}
+            sortColumn={sortColumn}
+            sortDirection={sortDirection}
+            onSort={onSort}
+          >
+            {column.name}
+          </SortableHeaderCell>
+        </>
+      ) : (
+        <>{column.name}</>
+      )}
     </div>
   );
 }

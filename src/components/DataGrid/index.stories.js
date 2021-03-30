@@ -46,9 +46,8 @@ CellFormatter.args = {
 export const Reorderable = DefaultStory.bind({})
 Reorderable.args = {
   ...Default.args,
-  columns: columnData.map((cols) => {
-    return { ...cols, draggable: true };
-  })
+  draggable: true,
+  columns: columnData
 };
 
 export const Sortable = DefaultStory.bind({});
@@ -62,5 +61,6 @@ Sortable.args = {
 
 export const ColumnDisplaySelection = DefaultStory.bind({})
 ColumnDisplaySelection.args = {
-  ...Default.args
+  ...Default.args,
+  showSelector: true
 }
