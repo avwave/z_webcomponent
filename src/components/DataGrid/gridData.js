@@ -16,8 +16,6 @@ const columnData = [
     key: "col3Type",
     colId: "col3",
     name: "Column3",
-    width: -1,
-    hidden: true,
   },
   {
     key: "col4Type",
@@ -28,36 +26,26 @@ const columnData = [
     key: "col5Type",
     colId: "col5",
     name: "Column5",
-    width: -1,
-    hidden: true,
   },
   {
     key: "col6Type",
     colId: "col6",
     name: "Column6",
-    width: -1,
-    hidden: true,
   },
   {
     key: "col7Type",
     colId: "col7",
     name: "Column7",
-    width: -1,
-    hidden: true,
   },
   {
     key: "col8Type",
     colId: "col8",
     name: "Column8",
-    width: -1,
-    hidden: true,
   },
   {
     key: "col9Type",
     colId: "col9",
     name: "Column9",
-    width: -1,
-    hidden: true,
   },
 ];
 

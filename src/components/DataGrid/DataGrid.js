@@ -12,10 +12,6 @@ import CheckboxProvider, {
 } from "../CheckList/checklistContext";
 import { status } from "../Checkbox/Checkbox";
 
-const {
-  DraggableHeader: { DraggableContainer },
-} = require("react-data-grid-addons");
-
 const StyledAppBar = styled(Toolbar)`
   && {
     background-color: #fff;
@@ -42,15 +38,23 @@ function DataGrid({ columns: colData, rows: rowData }) {
   }, [colData, checkListDispatch]);
 
   React.useEffect(() => {
-    let filterColumns = columns.slice();
-    checkListState.items.forEach((checkItem) => {
-      const idx = filterColumns.findIndex((col) => col.colId === checkItem.id);
-      filterColumns[idx].width = checkItem.state === status.CHECKED ? null : -1;
-      filterColumns[idx].hidden = checkItem.state !== status.CHECKED;
-    });
-    setColumns(filterColumns.slice());
-    setColumns(filterColumns);
+    let copyColumns = colData;
+    let filteredColumns = [];
 
+    checkListState.items.forEach((checkItem) => {
+      const idx = copyColumns.findIndex((col) => col.colId === checkItem.id);
+      filteredColumns.push(copyColumns[idx]);
+      if (checkItem.state === status.CHECKED) {
+      }
+    });
+
+    filteredColumns = copyColumns.filter((col) => {
+      const chbxstate =  checkListState.items.find((chkbx) => col.colId === chkbx.id);
+      if(!chbxstate) return false
+      return chbxstate.state === status.CHECKED
+    });
+    
+    setColumns(filteredColumns);
   }, [checkListState]);
 
   const [rows, setRows] = useState(rowData);
@@ -89,28 +93,27 @@ function DataGrid({ columns: colData, rows: rowData }) {
     setColumns(columnsCopy);
   };
 
+  // console.log(
+  //   "🚀 ~ file: DataGrid.js ~ line 118 ~ DataGrid ~ columns",
+  //   columns
+  // );
   return (
     <>
       <Checklist />
+      <StyledAppBar>
+        <div style={{ flex: 1 }} />
+        <Button title="Edit Columns" variant="default" />
+      </StyledAppBar>
 
-      <DraggableContainer onHeaderDrop={onHeaderDrop}>
-        <ReactDataGrid
-          toolbar={() => (
-            <StyledAppBar>
-              <div style={{ flex: 1 }} />
-              <Button title="Edit Columns" variant="default" />
-            </StyledAppBar>
-          )}
-          columns={columns}
-          rowGetter={(i) => rows[i]}
-          rowsCount={rows.length}
-          enableCellSelect={true}
-          onGridRowsUpdated={onGridRowsUpdated}
-          onGridSort={(sortColumn, sortDirection) =>
-            setRows(sortRows(rows, sortColumn, sortDirection))
-          }
-        />
-      </DraggableContainer>
+      <ReactDataGrid
+        columns={columns}
+        rows={rows}
+        enableCellSelect={true}
+        onGridRowsUpdated={onGridRowsUpdated}
+        onGridSort={(sortColumn, sortDirection) =>
+          setRows(sortRows(rows, sortColumn, sortDirection))
+        }
+      />
     </>
   );
 }

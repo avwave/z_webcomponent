@@ -1,7 +1,7 @@
 import { DateTime } from "luxon";
 import React from "react";
 import { DataGrid } from ".";
-import { Element } from "../Grid/Element";
+
 import { columnData, rows } from "./gridData";
 
 const DataGridStory = {
