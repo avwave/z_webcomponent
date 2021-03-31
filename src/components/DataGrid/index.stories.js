@@ -46,11 +46,8 @@ const DefaultStory = ({ ...args }) => {
 
 export const Default = DefaultStory.bind({});
 Default.args = {
-  columnTitle: "ColTitle",
-  columnSubtitle: "ColSubtitle",
-  rows: [...rows, ...rows],
+  rows: rows,
   columns: columnData,
-  hash: new Date(),
 };
 
 export const CellFormatter = DefaultStory.bind({});
@@ -71,7 +68,6 @@ const applyDateColumn = [
 CellFormatter.args = {
   ...Default.args,
   columns: applyDateColumn,
-  hash: new Date(),
 };
 
 export const Reorderable = DefaultStory.bind({});
@@ -79,7 +75,6 @@ Reorderable.args = {
   ...Default.args,
   draggable: true,
   columns: columnData,
-  hash: new Date(),
 };
 
 export const ClientSortable = DefaultStory.bind({});
@@ -88,14 +83,56 @@ ClientSortable.args = {
   columns: columnData.map((cols) => {
     return { ...cols, sortable: true };
   }),
-  hash: new Date(),
 };
 
 export const ColumnDisplaySelection = DefaultStory.bind({});
 ColumnDisplaySelection.args = {
   ...Default.args,
   showSelector: true,
-  hash: new Date(),
+  filterable: false,
 };
 
-// export const ServerFilterSortStory = ({ ...args }) => {};
+const ServerFilterSortStory = ({ ...args }) => {
+  const [state, dispatch] = React.useContext(DataGridContext);
+  React.useEffect(() => {
+    dispatch({
+      payload: { rows: args.rows, columns: args.columns },
+      type: actions.LOAD_DATA,
+    });
+  }, [args.columns, args.rows]);
+
+  
+  React.useEffect(() => {
+    if (state.sortColumn === null || state.sortDirection === null) {
+      console.log("init state")
+      return
+    }
+    if (state.sortDirection === "NONE") return state.rows;
+
+    let sortedRows = state.rows;
+    console.log("🚀 ~ file: index.stories.js ~ line 109 ~ React.useEffect ~ state", state)
+    
+
+    sortedRows = sortedRows.sort((a, b) =>
+      (a[state.sortColumn]).toString().localeCompare(b[state.sortColumn].toString())
+    )
+
+    sortedRows = state.sortDirection === "DESC" ? sortedRows.reverse() : sortedRows;
+    
+    dispatch({
+      payload: { rows: sortedRows },
+      type: actions.LOAD_ROWS,
+    });
+  }, [state.sortColumn, state.sortDirection])
+
+  return <DataGrid {...args} />;
+};
+export const ServerFilterSort = ServerFilterSortStory.bind({});
+ServerFilterSort.args = {
+  ...Default.args,
+  showSelector: true,
+  filterable: true,
+  columns: columnData.map((cols) => {
+    return { ...cols, sortable: true };
+  }),
+};

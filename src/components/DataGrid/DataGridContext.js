@@ -3,10 +3,10 @@ import React, { createContext, useReducer } from "react";
 export const initState = {
   rows: [],
   columns: [],
-  filterValue: "",
-  filterColumn: "",
-  sortColumn: "",
-  sortDirection: ""
+  filterValue: null,
+  filterColumn: null,
+  sortColumn: null,
+  sortDirection: null,
 };
 
 export const actions = {
