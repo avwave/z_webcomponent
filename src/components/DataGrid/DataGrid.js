@@ -9,10 +9,10 @@ import { Button } from "../Button";
 import { status } from "../Checkbox/Checkbox";
 import { Checklist } from "../CheckList";
 import CheckboxProvider, {
-  actions,
+  actions as checkboxActions,
   CheckboxContext,
 } from "../CheckList/checklistContext";
-import { DataGridContext } from "./DataGridContext";
+import { actions as dataGridActions, DataGridContext } from "./DataGridContext";
 import {
   DraggableHeaderRenderer,
   DraggableHeaderRnderer,
@@ -25,7 +25,7 @@ const StyledAppBar = styled(Toolbar)`
   }
 `;
 
-function DataGrid({ draggable, showSelector, filter }) {
+function DataGrid({ draggable, showSelector, filterable }) {
   const [checkListState, checkListDispatch] = React.useContext(CheckboxContext);
   const [dataGridState, dataGridDispatch] = React.useContext(DataGridContext)
   
@@ -41,7 +41,7 @@ function DataGrid({ draggable, showSelector, filter }) {
     });
     checkListDispatch({
       payload: { items: defaultItems },
-      type: actions.LOAD_ITEMS,
+      type: checkboxActions.LOAD_ITEMS,
     });
   }, [checkListDispatch, dataGridState.columns]);
 
@@ -69,10 +69,17 @@ function DataGrid({ draggable, showSelector, filter }) {
 
   const [[sortColumn, sortDirection], setSort] = useState(["", "NONE"]);
 
-  const handleSort = useCallback((columnKey, direction) => {
-    console.log("🚀 ~ file: DataGrid.js ~ line 73 ~ handleSort ~ columnKey, direction", columnKey, direction)
-    
-  }, []);
+  const handleSort = useCallback((sortColumn, sortDirection) => {
+    dataGridDispatch({
+      type: dataGridActions.SORT_COLUMN,
+      payload: {
+        sortColumn, sortDirection
+      }
+    })
+    setSort([sortColumn, sortDirection]);
+  }, [dataGridDispatch]);
+
+  
 
   const draggableColumns = useMemo(() => {
     function HeaderRenderer(props) {
@@ -166,7 +173,7 @@ function DataGrid({ draggable, showSelector, filter }) {
           sortDirection={sortDirection}
           enableCellSelect={true}
           onSort={handleSort}
-          enableFilterRow
+          enableFilterRow={filterable}
         />
       </DndProvider>
     </>
@@ -181,6 +188,7 @@ export default function DGWrapper(props) {
   );
 }
 DataGrid.propTypes = {
-  columns: PropTypes.arrayOf(PropTypes.any),
-  rows: PropTypes.arrayOf(PropTypes.any),
+  draggable: PropTypes.bool,
+  showSelector: PropTypes.bool,
+  filterable: PropTypes.bool,
 };
