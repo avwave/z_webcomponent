@@ -12,10 +12,12 @@ import CheckboxProvider, {
   actions,
   CheckboxContext,
 } from "../CheckList/checklistContext";
+import { DataGridContext } from "./DataGridContext";
 import {
   DraggableHeaderRenderer,
   DraggableHeaderRnderer,
 } from "./DraggableHeaderRenderer";
+import { TextFilterRenderer } from "./FilterRenderer";
 
 const StyledAppBar = styled(Toolbar)`
   && {
@@ -23,13 +25,14 @@ const StyledAppBar = styled(Toolbar)`
   }
 `;
 
-function DataGrid({ columns: colData, rows, draggable, showSelector }) {
-  const [columns, setColumns] = useState(colData);
-
+function DataGrid({ draggable, showSelector, filter }) {
   const [checkListState, checkListDispatch] = React.useContext(CheckboxContext);
-
+  const [dataGridState, dataGridDispatch] = React.useContext(DataGridContext)
+  
+  const [columns, setColumns] = useState(dataGridState.columns);
+  
   React.useEffect(() => {
-    const defaultItems = colData.map((col) => {
+    const defaultItems = dataGridState.columns.map((col) => {
       return {
         id: col.colId,
         title: col.name,
@@ -40,10 +43,10 @@ function DataGrid({ columns: colData, rows, draggable, showSelector }) {
       payload: { items: defaultItems },
       type: actions.LOAD_ITEMS,
     });
-  }, [colData, checkListDispatch]);
+  }, [checkListDispatch, dataGridState.columns]);
 
   React.useEffect(() => {
-    let copyColumns = colData;
+    let copyColumns = dataGridState.columns;
     let filteredColumns = [];
 
     checkListState.items.forEach((checkItem) => {
@@ -62,20 +65,14 @@ function DataGrid({ columns: colData, rows, draggable, showSelector }) {
     });
 
     setColumns(filteredColumns);
-  }, [checkListState]);
+  }, [checkListState, dataGridState.columns]);
 
   const [[sortColumn, sortDirection], setSort] = useState(["", "NONE"]);
 
   const handleSort = useCallback((columnKey, direction) => {
-    setSort([columnKey, direction]);
+    console.log("🚀 ~ file: DataGrid.js ~ line 73 ~ handleSort ~ columnKey, direction", columnKey, direction)
+    
   }, []);
-
-  const sortedRows = useMemo(() => {
-    if (sortDirection === "NONE") return rows;
-    let sortedRows = [...rows];
-    sortedRows = sortedRows.sort((a, b) => a[sortColumn] - b[sortColumn]);
-    return sortDirection === "DESC" ? sortedRows.reverse() : sortedRows;
-  }, [rows, sortDirection, sortColumn]);
 
   const draggableColumns = useMemo(() => {
     function HeaderRenderer(props) {
@@ -103,7 +100,24 @@ function DataGrid({ columns: colData, rows, draggable, showSelector }) {
 
     return columns.map((c) => {
       if (c.key === "id") return c;
-      return { ...c, headerRenderer: HeaderRenderer };
+      switch (c.filter) {
+        case "text":
+          c = {
+            ...c,
+            headerRenderer: HeaderRenderer,
+            filterRenderer: TextFilterRenderer
+          };
+          break;
+
+        default:
+          c = {
+            ...c,
+            headerRenderer: HeaderRenderer,
+          };
+
+          break;
+      }
+      return c;
     });
   }, [columns]);
 
@@ -147,11 +161,12 @@ function DataGrid({ columns: colData, rows, draggable, showSelector }) {
       <DndProvider backend={HTML5Backend}>
         <ReactDataGrid
           columns={draggable ? draggableColumns : columns}
-          rows={sortedRows}
+          rows={dataGridState.rows}
           sortColumn={sortColumn}
           sortDirection={sortDirection}
           enableCellSelect={true}
           onSort={handleSort}
+          enableFilterRow
         />
       </DndProvider>
     </>

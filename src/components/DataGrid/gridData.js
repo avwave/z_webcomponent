@@ -13,6 +13,7 @@ const columnData = [
     name: "Column2",
     type: "text",
     sortable: false,
+    filter: "text",
   },
   {
     key: "col3Type",
@@ -60,7 +61,7 @@ const columnData = [
 
 let rows = []
 
-for (let i = 0; i < 30; i++) {
+for (let i = 0; i < 3; i++) {
   rows.push({
     id: `row${i}`,
     title: faker.name.findName(),
