@@ -4,6 +4,7 @@ import React from "react";
 import { withReactContext } from "storybook-react-context";
 import { DataGrid } from ".";
 import { Button } from "../Button";
+import isEmpty from "lodash.isempty";
 
 import { columnData, rows } from "./gridData";
 import DataGridProvider, {
@@ -101,29 +102,49 @@ const ServerFilterSortStory = ({ ...args }) => {
     });
   }, [args.columns, args.rows]);
 
-  
   React.useEffect(() => {
     if (state.sortColumn === null || state.sortDirection === null) {
-      console.log("init state")
-      return
+      return;
     }
     if (state.sortDirection === "NONE") return state.rows;
 
     let sortedRows = state.rows;
-    console.log("🚀 ~ file: index.stories.js ~ line 109 ~ React.useEffect ~ state", state)
-    
-
     sortedRows = sortedRows.sort((a, b) =>
-      (a[state.sortColumn]).toString().localeCompare(b[state.sortColumn].toString())
-    )
+      a[state.sortColumn]
+        .toString()
+        .localeCompare(b[state.sortColumn].toString())
+    );
 
-    sortedRows = state.sortDirection === "DESC" ? sortedRows.reverse() : sortedRows;
-    
+    sortedRows =
+      state.sortDirection === "DESC" ? sortedRows.reverse() : sortedRows;
+
     dispatch({
       payload: { rows: sortedRows },
       type: actions.LOAD_ROWS,
     });
-  }, [state.sortColumn, state.sortDirection])
+  }, [state.sortColumn, state.sortDirection]);
+
+  React.useEffect(() => {
+    if (isEmpty(state.filterColumn)) {
+      console.log("ue filter init state");
+      return;
+    }
+    const searchKeys = Object.keys(state.filterColumn);
+
+    let filteredRows = args.rows
+    searchKeys.map(searchKey => {
+      filteredRows = filteredRows.filter(row => {
+        return row[searchKey]
+          .toLowerCase()
+          .includes(state.filterColumn[searchKey].toLowerCase());
+      })
+      console.log(`Filtering {${searchKey} ${state.filterColumn[searchKey]}`, filteredRows)
+    })
+    dispatch({
+      payload: { rows: filteredRows },
+      type: actions.LOAD_ROWS,
+    });
+  }, [state.filterColumn]);
 
   return <DataGrid {...args} />;
 };
@@ -133,6 +154,6 @@ ServerFilterSort.args = {
   showSelector: true,
   filterable: true,
   columns: columnData.map((cols) => {
-    return { ...cols, sortable: true };
+    return { ...cols, sortable: true, filter: "text" };
   }),
 };

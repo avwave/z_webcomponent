@@ -3,7 +3,6 @@ import React, { createContext, useReducer } from "react";
 export const initState = {
   rows: [],
   columns: [],
-  filterValue: null,
   filterColumn: null,
   sortColumn: null,
   sortDirection: null,
@@ -33,7 +32,6 @@ export function dataGridReducer(state, action) {
       return {
         ...state,
         filterColumn: action.payload.filterColumn,
-        filterValue: action.payload.filterValue,
       };
     case actions.SORT_COLUMN:
       return {

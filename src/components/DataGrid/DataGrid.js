@@ -30,7 +30,8 @@ function DataGrid({ draggable, showSelector, filterable }) {
   const [dataGridState, dataGridDispatch] = React.useContext(DataGridContext)
   
   const [columns, setColumns] = useState(dataGridState.columns);
-  
+  const [filters, setFilters] = useState(null);
+
   React.useEffect(() => {
     const defaultItems = dataGridState.columns.map((col) => {
       return {
@@ -79,6 +80,15 @@ function DataGrid({ draggable, showSelector, filterable }) {
     setSort([sortColumn, sortDirection]);
   }, [dataGridDispatch]);
 
+
+  React.useEffect(() => {
+    dataGridDispatch({
+      type: dataGridActions.FILTER_COLUMN,
+      payload: {
+        filterColumn: filters,
+      },
+    });
+  }, [dataGridDispatch, filters])
   
 
   const draggableColumns = useMemo(() => {
@@ -167,18 +177,21 @@ function DataGrid({ draggable, showSelector, filterable }) {
       </StyledAppBar>
       <DndProvider backend={HTML5Backend}>
         <ReactDataGrid
-          columns={draggable ? draggableColumns : columns}
+          columns={draggableColumns}
           rows={dataGridState.rows}
           sortColumn={sortColumn}
           sortDirection={sortDirection}
           enableCellSelect={true}
           onSort={handleSort}
           enableFilterRow={filterable}
+          filters={filters}
+          onFiltersChange={setFilters}
         />
       </DndProvider>
     </>
   );
 }
+  
 
 export default function DGWrapper(props) {
   return (
