@@ -1,6 +1,8 @@
+import { Chip } from "@material-ui/core";
 import { DateTime } from "luxon";
 import React from "react";
 import { DataGrid } from ".";
+import { Button } from "../Button";
 
 import { columnData, rows } from "./gridData";
 
@@ -25,15 +27,17 @@ Default.args = {
 
 
 export const CellFormatter = DefaultStory.bind({});
-const dateFormatter = ({value}) => {
-  return <div>{DateTime.fromISO(value).toLocaleString()}</div>
-}
+const CellFormatting = ( {value} ) => {
+  return <Chip label={value.row[value.key]}/>;
+};
 const applyDateColumn = [
   {
-    key: "col4Type",
+    key: "col5Type",
     colId: "col4",
     name: "Column4",
-    formatter: dateFormatter,
+    formatter(props){
+      return <CellFormatting value={{...props, key:"col5Type"}}/>
+    } 
   },
 ];
 
