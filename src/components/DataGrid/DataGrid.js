@@ -25,7 +25,7 @@ const StyledAppBar = styled(Toolbar)`
   }
 `;
 
-function DataGrid({ draggable, showSelector, filterable, style, containerStyle }) {
+function DataGrid({ draggable, showSelector, filterable, style, containerStyle, gridProps }) {
   const [checkListState, checkListDispatch] = React.useContext(CheckboxContext);
   const [dataGridState, dataGridDispatch] = React.useContext(DataGridContext)
   
@@ -187,6 +187,7 @@ function DataGrid({ draggable, showSelector, filterable, style, containerStyle }
           enableFilterRow={filterable}
           filters={filters}
           onFiltersChange={setFilters}
+          gridProps={gridProps}
         />
       </DndProvider>
     </div>
