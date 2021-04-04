@@ -25,7 +25,7 @@ const StyledAppBar = styled(Toolbar)`
   }
 `;
 
-function DataGrid({ draggable, showSelector, filterable }) {
+function DataGrid({ draggable, showSelector, filterable, style, containerStyle }) {
   const [checkListState, checkListDispatch] = React.useContext(CheckboxContext);
   const [dataGridState, dataGridDispatch] = React.useContext(DataGridContext)
   
@@ -150,7 +150,7 @@ function DataGrid({ draggable, showSelector, filterable }) {
   };
 
   return (
-    <>
+    <div style={{...containerStyle}}>
       <StyledAppBar>
         <div style={{ flex: 1 }} />
         {showSelector ? (
@@ -177,6 +177,7 @@ function DataGrid({ draggable, showSelector, filterable }) {
       </StyledAppBar>
       <DndProvider backend={HTML5Backend}>
         <ReactDataGrid
+          style={{...style}}
           columns={draggableColumns}
           rows={dataGridState.rows}
           sortColumn={sortColumn}
@@ -188,7 +189,7 @@ function DataGrid({ draggable, showSelector, filterable }) {
           onFiltersChange={setFilters}
         />
       </DndProvider>
-    </>
+    </div>
   );
 }
   

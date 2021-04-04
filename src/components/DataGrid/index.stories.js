@@ -49,6 +49,8 @@ export const Default = DefaultStory.bind({});
 Default.args = {
   rows: rows,
   columns: columnData,
+  containerStyle: { maxHeight: '100vh', display: "flex", flexDirection: "column" },
+  style: { flex: '1 1 auto' },
 };
 
 export const CellFormatter = DefaultStory.bind({});
