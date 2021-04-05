@@ -5,17 +5,21 @@ import ReactDataGrid from "react-data-grid";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import styled from "styled-components";
+import { GridBox } from ".";
 import { Button } from "../Button";
 import { status } from "../Checkbox/Checkbox";
 import { Checklist } from "../CheckList";
 import CheckboxProvider, {
-  actions,
+  actions as checkboxActions,
   CheckboxContext,
 } from "../CheckList/checklistContext";
+import { actions as dataGridActions, DataGridContext } from "./DataGridContext";
 import {
   DraggableHeaderRenderer,
   DraggableHeaderRnderer,
 } from "./DraggableHeaderRenderer";
+import { TextFilterRenderer } from "./FilterRenderer";
+
 
 const StyledAppBar = styled(Toolbar)`
   && {
@@ -23,13 +27,15 @@ const StyledAppBar = styled(Toolbar)`
   }
 `;
 
-function DataGrid({ columns: colData, rows, draggable, showSelector }) {
-  const [columns, setColumns] = useState(colData);
-
+function DataGrid({ draggable, showSelector, filterable, style, containerStyle, gridProps }) {
   const [checkListState, checkListDispatch] = React.useContext(CheckboxContext);
+  const [dataGridState, dataGridDispatch] = React.useContext(DataGridContext)
+  
+  const [columns, setColumns] = useState(dataGridState.columns);
+  const [filters, setFilters] = useState(null);
 
   React.useEffect(() => {
-    const defaultItems = colData.map((col) => {
+    const defaultItems = dataGridState.columns.map((col) => {
       return {
         id: col.colId,
         title: col.name,
@@ -38,12 +44,12 @@ function DataGrid({ columns: colData, rows, draggable, showSelector }) {
     });
     checkListDispatch({
       payload: { items: defaultItems },
-      type: actions.LOAD_ITEMS,
+      type: checkboxActions.LOAD_ITEMS,
     });
-  }, [colData, checkListDispatch]);
+  }, [checkListDispatch, dataGridState.columns]);
 
   React.useEffect(() => {
-    let copyColumns = colData;
+    let copyColumns = dataGridState.columns;
     let filteredColumns = [];
 
     checkListState.items.forEach((checkItem) => {
@@ -62,20 +68,30 @@ function DataGrid({ columns: colData, rows, draggable, showSelector }) {
     });
 
     setColumns(filteredColumns);
-  }, [checkListState]);
+  }, [checkListState, dataGridState.columns]);
 
   const [[sortColumn, sortDirection], setSort] = useState(["", "NONE"]);
 
-  const handleSort = useCallback((columnKey, direction) => {
-    setSort([columnKey, direction]);
-  }, []);
+  const handleSort = useCallback((sortColumn, sortDirection) => {
+    dataGridDispatch({
+      type: dataGridActions.SORT_COLUMN,
+      payload: {
+        sortColumn, sortDirection
+      }
+    })
+    setSort([sortColumn, sortDirection]);
+  }, [dataGridDispatch]);
 
-  const sortedRows = useMemo(() => {
-    if (sortDirection === "NONE") return rows;
-    let sortedRows = [...rows];
-    sortedRows = sortedRows.sort((a, b) => a[sortColumn] - b[sortColumn]);
-    return sortDirection === "DESC" ? sortedRows.reverse() : sortedRows;
-  }, [rows, sortDirection, sortColumn]);
+
+  React.useEffect(() => {
+    dataGridDispatch({
+      type: dataGridActions.FILTER_COLUMN,
+      payload: {
+        filterColumn: filters,
+      },
+    });
+  }, [dataGridDispatch, filters])
+  
 
   const draggableColumns = useMemo(() => {
     function HeaderRenderer(props) {
@@ -103,7 +119,31 @@ function DataGrid({ columns: colData, rows, draggable, showSelector }) {
 
     return columns.map((c) => {
       if (c.key === "id") return c;
-      return { ...c, headerRenderer: HeaderRenderer };
+      c.formatter = (props) => {
+        return (
+          <GridBox align={c.align ?? "center"}>
+            {c.cellRenderer ? c.cellRenderer(props) : props.row[props.column.key]}
+          </GridBox>
+        );
+      }
+      switch (c.filter) {
+        case "text":
+          c = {
+            ...c,
+            headerRenderer: HeaderRenderer,
+            filterRenderer: TextFilterRenderer
+          };
+          break;
+
+        default:
+          c = {
+            ...c,
+            headerRenderer: HeaderRenderer,
+          };
+
+          break;
+      }
+      return c;
     });
   }, [columns]);
 
@@ -119,7 +159,7 @@ function DataGrid({ columns: colData, rows, draggable, showSelector }) {
   };
 
   return (
-    <>
+    <div style={{...containerStyle}}>
       <StyledAppBar>
         <div style={{ flex: 1 }} />
         {showSelector ? (
@@ -146,17 +186,23 @@ function DataGrid({ columns: colData, rows, draggable, showSelector }) {
       </StyledAppBar>
       <DndProvider backend={HTML5Backend}>
         <ReactDataGrid
-          columns={draggable ? draggableColumns : columns}
-          rows={sortedRows}
+          {...gridProps}
+          style={{...style}}
+          columns={draggableColumns}
+          rows={dataGridState.rows}
           sortColumn={sortColumn}
           sortDirection={sortDirection}
           enableCellSelect={true}
           onSort={handleSort}
+          enableFilterRow={filterable}
+          filters={filters}
+          onFiltersChange={setFilters}
         />
       </DndProvider>
-    </>
+    </div>
   );
 }
+  
 
 export default function DGWrapper(props) {
   return (
@@ -166,6 +212,7 @@ export default function DGWrapper(props) {
   );
 }
 DataGrid.propTypes = {
-  columns: PropTypes.arrayOf(PropTypes.any),
-  rows: PropTypes.arrayOf(PropTypes.any),
+  draggable: PropTypes.bool,
+  showSelector: PropTypes.bool,
+  filterable: PropTypes.bool,
 };

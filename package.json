@@ -10,6 +10,7 @@
     "@testing-library/user-event": "^12.1.10",
     "ag-grid-community": "^25.1.0",
     "ag-grid-react": "^25.1.0",
+    "lodash.isempty": "^4.4.0",
     "luxon": "^1.26.0",
     "react": "^17.0.1",
     "react-data-grid": "^7.0.0-canary.38",

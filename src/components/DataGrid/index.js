@@ -1,2 +1,3 @@
 import DataGrid from "./DataGrid";
-export { DataGrid };
+import GridBox from './GridBox';
+export { DataGrid, GridBox };
