@@ -14,6 +14,7 @@ const columnData = [
     type: "text",
     sortable: false,
     filter: "text",
+    align: 'flex-start'
   },
   {
     key: "col3Type",

@@ -62,7 +62,8 @@ const applyDateColumn = [
     key: "col5Type",
     colId: "col4",
     name: "Column4",
-    formatter(props) {
+    align: "flex-start",
+    cellRenderer(props) {
       return <CellFormatting value={{ ...props, key: "col5Type" }} />;
     },
   },
@@ -78,6 +79,16 @@ Reorderable.args = {
   ...Default.args,
   draggable: true,
   columns: columnData,
+};
+
+export const GridProps = DefaultStory.bind({});
+GridProps.args = {
+  ...Default.args,
+  draggable: true,
+  columns: columnData,
+  gridProps: {
+    rowHeight: 60,
+  },
 };
 
 export const ClientSortable = DefaultStory.bind({});

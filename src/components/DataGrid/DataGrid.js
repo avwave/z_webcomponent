@@ -5,6 +5,7 @@ import ReactDataGrid from "react-data-grid";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import styled from "styled-components";
+import { GridBox } from ".";
 import { Button } from "../Button";
 import { status } from "../Checkbox/Checkbox";
 import { Checklist } from "../CheckList";
@@ -18,6 +19,7 @@ import {
   DraggableHeaderRnderer,
 } from "./DraggableHeaderRenderer";
 import { TextFilterRenderer } from "./FilterRenderer";
+
 
 const StyledAppBar = styled(Toolbar)`
   && {
@@ -117,6 +119,13 @@ function DataGrid({ draggable, showSelector, filterable, style, containerStyle, 
 
     return columns.map((c) => {
       if (c.key === "id") return c;
+      c.formatter = (props) => {
+        return (
+          <GridBox align={c.align ?? "center"}>
+            {c.cellRenderer ? c.cellRenderer(props) : props.row[props.column.key]}
+          </GridBox>
+        );
+      }
       switch (c.filter) {
         case "text":
           c = {
