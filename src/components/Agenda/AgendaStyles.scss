@@ -10,3 +10,14 @@ $event-zindex: 4 !default;
     outline: 2px auto $event-border;
   }
 }
+
+.rbc-calendar {
+  .rbc-event {
+    background-color: inherit;
+  }
+}
+
+.rbc-day-slot .rbc-background-event, .rbc-day-slot .rbc-event {
+  background-color: $event-bg;
+}
+

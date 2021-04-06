@@ -7,6 +7,7 @@ import "./AgendaStyles.scss";
 import GridBox from "../DataGrid/GridBox";
 import { Box, Link, Paper, Toolbar, Typography } from "@material-ui/core";
 import AgendaToolbar from "./AgendaToolbar";
+import { ProgressContainer } from "../ProgressContainer";
 
 const localizer = momentLocalizer(moment);
 
@@ -21,24 +22,33 @@ function Agenda(props) {
     );
   };
   const EventComponent = ({ event }) => {
-    return (
-      <GridBox align="flex-start">
+    const BaseComponent = ({variant})=> (
+      <GridBox align="flex-start" variant={variant}>
         <Typography color={event.color} variant="caption">
           {event.title}
         </Typography>
       </GridBox>
     );
+    return event.progress ? (
+      <ProgressContainer progress={event.progress} variant={event.variant}>
+        <BaseComponent />
+      </ProgressContainer>
+    ) : (
+      <BaseComponent variant={event.variant??"primary"}/>
+    );
   };
 
   const AgendaDateHeader = ({ date, label, onDrillDown }) => {
-    const summaryStatus = state.summaries?.find(summ=> {
-      const comp = moment(date).isSame(summ.date)
-      return comp
-    })
+    const summaryStatus = state.summaries?.find((summ) => {
+      const comp = moment(date).isSame(summ.date);
+      return comp;
+    });
     return (
       <Box width="100%" fontWeight="fontWeightBold">
         <Link color="textPrimary" onClick={onDrillDown}>
-          <Typography variant="caption">{summaryStatus?.summary?.status} </Typography>
+          <Typography variant="caption">
+            {summaryStatus?.summary?.status}{" "}
+          </Typography>
           {label}
         </Link>
       </Box>

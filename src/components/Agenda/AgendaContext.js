@@ -11,11 +11,6 @@ export const actions = {
 export const AgendaContext = createContext();
 
 export function AgendaReducer(state, action) {
-  console.log(
-    "🚀 ~ file: AgendaContext.js ~ line 23 ~ AgendaReducer ~ state, action",
-    state,
-    action
-  );
   switch (action.type) {
     case actions.LOAD_DATA:
       return { ...state, events: action.payload.events, summaries: action.payload.summaries };

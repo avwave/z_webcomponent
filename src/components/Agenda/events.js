@@ -22,12 +22,14 @@ const baseEvents = [
     title: "1h Event First of Month",
     start: moment().startOf("month").hour(13).toDate(),
     end: moment().startOf("month").hour(14).toDate(),
+    variant: "info",
   },
   {
     id: 1,
     title: "2h Event First of Month",
     start: moment().startOf("month").hour(14).toDate(),
     end: moment().startOf("month").hour(16).toDate(),
+    variant: "success",
   },
   {
     id: 2,
@@ -40,10 +42,7 @@ const baseEvents = [
     title: "2h Event Today",
     start: moment().startOf("day").hour(14).toDate(),
     end: moment().startOf("day").hour(16).toDate(),
-    evtStyle: {
-      backgroundColor: "#ffffcc",
-      color: "#333",
-    },
+    variant: "warning",
   },
   {
     id: 4,
@@ -55,8 +54,9 @@ const baseEvents = [
   {
     id: 6,
     title: "Spanning",
-    start: moment().startOf("week").add(4, 'd').hour(8).toDate(),
-    end: moment().startOf("week").add(6, 'd').hour(12).toDate(),
+    start: moment().startOf("week").add(4, "d").hour(8).toDate(),
+    end: moment().startOf("week").add(6, "d").hour(12).toDate(),
+    variant: "error",
   },
 ];
 
@@ -102,4 +102,15 @@ const heightBugEvents = [
   ...filledDay(),
 ];
 
-export {baseEvents, heightBugEvents, daySummary};
+const progressEvents = baseEvents.map(event => {
+  if (event.id.toString().startsWith("fill")) {
+    event.progress = (Math.floor(Math.random() * 10) + 1) * 10;
+    event.variant = "primary"
+  } else if (event.id === 0){
+    event.progress = 70;
+  }
+
+  return event;
+});
+
+export {baseEvents, heightBugEvents, daySummary, progressEvents};

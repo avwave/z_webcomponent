@@ -5,7 +5,7 @@ import { Agenda } from ".";
 import { Button } from "../Button";
 import isEmpty from "lodash.isempty";
 
-import { baseEvents, daySummary, heightBugEvents } from './events'
+import { baseEvents, daySummary, heightBugEvents , progressEvents} from './events'
 
 import AgendaProvider, {
   AgendaReducer,
@@ -40,7 +40,7 @@ const DefaultStory = ({ ...args }) => {
       payload: { events: args.events, summaries: args.summaries },
       type: actions.LOAD_DATA,
     });
-  }, [args.events, dispatch]);
+  }, [args.events, args.summaries, dispatch]);
 
   return <Agenda {...args} />;
 };
@@ -67,3 +67,11 @@ VariableHeightEventsBug.args = {
   ...Default.args,
   events: [...heightBugEvents],
 };
+
+
+export const ProgressEvent = DefaultStory.bind({})
+ProgressEvent.args = {
+  ...Default.args,
+  events: [...progressEvents],
+  summaries: [],
+}
