@@ -5,7 +5,7 @@ import { AgendaContext } from "./AgendaContext";
 
 import "./AgendaStyles.scss";
 import GridBox from "../DataGrid/GridBox";
-import { Box, Paper, Toolbar, Typography } from "@material-ui/core";
+import { Paper, Toolbar, Typography } from "@material-ui/core";
 import AgendaToolbar from "./AgendaToolbar";
 
 const localizer = momentLocalizer(moment);
