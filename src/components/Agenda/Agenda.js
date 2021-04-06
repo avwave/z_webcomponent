@@ -5,7 +5,7 @@ import { AgendaContext } from "./AgendaContext";
 
 import "./AgendaStyles.scss";
 import GridBox from "../DataGrid/GridBox";
-import { Paper, Toolbar, Typography } from "@material-ui/core";
+import { Box, Paper, Toolbar, Typography } from "@material-ui/core";
 import AgendaToolbar from "./AgendaToolbar";
 
 const localizer = momentLocalizer(moment);
@@ -20,13 +20,12 @@ const AgendaEventComponent = ({ event }) => {
 const EventComponent = ({ event }) => {
   return (
     <GridBox align="flex-start">
-      <Typography color={event.color} variant="caption">
-        {event.title}
-      </Typography>
+        <Typography color={event.color} variant="caption">
+          {event.title}
+        </Typography>
     </GridBox>
   );
 };
-
 const eventPropGetter = ({ evtStyle }) => {
   return { style: evtStyle ?? {} };
 };

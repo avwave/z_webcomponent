@@ -5,7 +5,7 @@ import { Agenda } from ".";
 import { Button } from "../Button";
 import isEmpty from "lodash.isempty";
 
-import events from './events'
+import { baseEvents, heightBugEvents } from './events'
 
 import AgendaProvider, {
   AgendaReducer,
@@ -37,10 +37,10 @@ const DefaultStory = ({ ...args }) => {
   const [state, dispatch] = React.useContext(AgendaContext);
   React.useEffect(() => {
     dispatch({
-      payload: { events: events },
+      payload: { events: args.events },
       type: actions.LOAD_DATA,
     });
-  }, [args.columns, args.rows, dispatch]);
+  }, [args.events, dispatch]);
 
   return <Agenda {...args} />;
 };
@@ -48,8 +48,16 @@ const DefaultStory = ({ ...args }) => {
 export const Default = DefaultStory.bind({});
 Default.args = {
   containerStyle: {
-    height: 700,
-    maxHeight: "100vh",
+    height: 750,
   },
+  popup: true,
   style: { flex: "1 1 auto" },
+  events: [...baseEvents],
+};
+
+export const VariableHeightEventsBug = DefaultStory.bind({})
+VariableHeightEventsBug.args = {
+  ...Default.args,
+  events: [...heightBugEvents],
+
 };
