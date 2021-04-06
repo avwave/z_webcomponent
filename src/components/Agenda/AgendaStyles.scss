@@ -1,0 +1,12 @@
+$event-border-radius: 0px !default;
+$event-padding: 2px !default;
+$event-zindex: 4 !default;
+
+@import 'react-big-calendar/lib/sass/styles';
+
+.rbc-event{
+  @extend .rbc-event;
+  &:focus {
+    outline: 2px auto $event-border;
+  }
+}
