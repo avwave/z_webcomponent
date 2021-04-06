@@ -52,6 +52,25 @@ const baseEvents = [
     end: moment().startOf("day").hour(12).toDate(),
   },
   ...filledDay(),
+  {
+    id: 6,
+    title: "Spanning",
+    start: moment().startOf("week").add(4, 'd').hour(8).toDate(),
+    end: moment().startOf("week").add(6, 'd').hour(12).toDate(),
+  },
+];
+
+const daySummary = [
+  { date: moment().startOf("month").toDate(), summary: { status: "INC" } },
+  { date: moment().startOf("day").toDate(), summary: { status: "PENDING" } },
+  {
+    date: moment().add(1, "d").startOf("day").toDate(),
+    summary: { status: "FULL" },
+  },
+  {
+    date: moment().add(3, "d").startOf("day").toDate(),
+    summary: { status: "FREE" },
+  },
 ];
 
 const heightBugEvents = [
@@ -83,4 +102,4 @@ const heightBugEvents = [
   ...filledDay(),
 ];
 
-export {baseEvents, heightBugEvents};
+export {baseEvents, heightBugEvents, daySummary};
