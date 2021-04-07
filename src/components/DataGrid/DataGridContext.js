@@ -20,7 +20,6 @@ export const DataGridContext = createContext();
 
 
 export function dataGridReducer(state, action) {
-  console.log("🚀 ~ file: DataGridContext.js ~ line 23 ~ dataGridReducer ~ state, action", state, action)
   switch (action.type) {
     case actions.LOAD_COLUMNS:
       return { ...state, columns:  action.payload.columns };

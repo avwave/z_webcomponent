@@ -1,16 +1,23 @@
-import { Box } from '@material-ui/core';
+import { Box, withTheme } from '@material-ui/core';
 import React from 'react';
+import styled from 'styled-components'
 
-export default function GridBox({ children, align = "center" }) {
+const StyledGridBox = styled(Box)`
+  background: ${(props) => props.background};
+`;
+
+function GridBox({ theme, variant, children, align = "center" }) {
   return (
-    <Box
+    <StyledGridBox
+      background={variant ? theme.palette[variant].light : "transparent"}
       display="flex"
+      flexDirection="column"
       width="100%"
       height="100%"
-      justifyContent={align}
-      alignItems="center"
+      alignItems={align}
     >
       {children}
-    </Box>
+    </StyledGridBox>
   );
 }
+export default withTheme(GridBox);
