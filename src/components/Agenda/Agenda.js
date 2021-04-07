@@ -8,17 +8,26 @@ import GridBox from "../DataGrid/GridBox";
 import { Box, Link, Paper, Toolbar, Typography } from "@material-ui/core";
 import AgendaToolbar from "./AgendaToolbar";
 import { ProgressContainer } from "../ProgressContainer";
+import { EdgeContainer } from "../EdgeContainer";
 
 const localizer = momentLocalizer(moment);
 
 function Agenda(props) {
+  const metaRenderer = props.metaRenderer?props.metaRenderer: ()=>{}
+
   const [state, dispatch] = React.useContext(AgendaContext);
 
   const AgendaEventComponent = ({ event }) => {
     return (
-      <GridBox align="flex-start">
-        <Typography color={event.color}>{event.title}</Typography>
-      </GridBox>
+      <EdgeContainer clear variant={event.variant}>
+        <GridBox align="flex-start">
+          <Typography>{event.title}</Typography>
+          <Typography variant="body2">{event.description}</Typography>
+        </GridBox>
+        <GridBox align="flex-start">
+          {metaRenderer(event)}
+        </GridBox>
+      </EdgeContainer>
     );
   };
   const EventComponent = ({ event }) => {

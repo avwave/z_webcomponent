@@ -5,7 +5,12 @@ import { Agenda } from ".";
 import { Button } from "../Button";
 import isEmpty from "lodash.isempty";
 
-import { baseEvents, daySummary, heightBugEvents , progressEvents} from './events'
+import {
+  baseEvents,
+  daySummary,
+  heightBugEvents,
+  progressEvents,
+} from "./events";
 
 import AgendaProvider, {
   AgendaReducer,
@@ -17,6 +22,14 @@ import AgendaProvider, {
 const AgendaStory = {
   component: Agenda,
   title: "Agenda/Agenda",
+  argTypes: {
+    view: {
+      control: {
+        type: "select",
+        options: ["month", "week", "day", "agenda"],
+      },
+    },
+  },
   decorators: [
     withReactContext({
       reducer: AgendaReducer,
@@ -61,17 +74,31 @@ CustomDayHeader.args = {
   summaries: [...daySummary],
 };
 
-
-export const VariableHeightEventsBug = DefaultStory.bind({})
+export const VariableHeightEventsBug = DefaultStory.bind({});
 VariableHeightEventsBug.args = {
   ...Default.args,
   events: [...heightBugEvents],
 };
 
-
-export const ProgressEvent = DefaultStory.bind({})
+export const ProgressEvent = DefaultStory.bind({});
 ProgressEvent.args = {
   ...Default.args,
   events: [...progressEvents],
   summaries: [],
-}
+};
+
+export const AgendaMetaRendering = DefaultStory.bind({});
+AgendaMetaRendering.args = {
+  ...Default.args,
+  view: "agenda",
+  events: [...progressEvents],
+  metaRenderer: (event) => {
+    console.log("🚀 ~ file: index.stories.js ~ line 87 ~ event", event);
+    return (
+      <div>
+        event object:
+        <pre>{JSON.stringify(event, null, 2)}</pre>;
+      </div>
+    )
+  },
+};

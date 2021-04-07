@@ -23,6 +23,7 @@ const baseEvents = [
     start: moment().startOf("month").hour(13).toDate(),
     end: moment().startOf("month").hour(14).toDate(),
     variant: "info",
+    description: "Minima voluptatem ut et veritatis repellat. Dolores veniam est. Nesciunt ipsam dignissimos provident. Et illum asperiores et totam consequatur et praesentium dolores. Magni est atque voluptatem consequatur qui doloremque. Repellendus nam voluptatem dolore est suscipit et laborum sint veniam."
   },
   {
     id: 1,

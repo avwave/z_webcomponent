@@ -11,10 +11,10 @@ function GridBox({ theme, variant, children, align = "center" }) {
     <StyledGridBox
       background={variant ? theme.palette[variant].light : "transparent"}
       display="flex"
+      flexDirection="column"
       width="100%"
       height="100%"
-      justifyContent={align}
-      alignItems="center"
+      alignItems={align}
     >
       {children}
     </StyledGridBox>
