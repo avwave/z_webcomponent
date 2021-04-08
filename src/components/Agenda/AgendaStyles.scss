@@ -20,4 +20,13 @@ $event-zindex: 4 !default;
 .rbc-day-slot .rbc-background-event, .rbc-day-slot .rbc-event {
   background-color: $event-bg;
 }
+.rbc-allday-cell {
+  display: none;
+}
+.rbc-time-view .rbc-header {
+  border-bottom: none;
+}
 
+.rbc-event-content > *{
+  pointer-events: none;
+}

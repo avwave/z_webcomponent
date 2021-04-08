@@ -49,7 +49,11 @@ export default function AgendaToolbar({
   return (
     <div className={classes.root}>
       <Toolbar>
-        <ButtonGroup size='small' className={classes.leftGroup}>
+        <ButtonGroup
+          variant="text"
+          size="small"
+          className={classes.leftGroup}
+        >
           <Button
             type="button"
             onClick={() => onNavigate(Navigate.TODAY, date)}
@@ -69,7 +73,11 @@ export default function AgendaToolbar({
         <Typography variant="h6" className={classes.title}>
           {label}
         </Typography>
-        <ButtonGroup size='small' className={classes.rightGroup}>
+        <ButtonGroup
+          variant="text"
+          size="small"
+          className={classes.rightGroup}
+        >
           {viewNamesGroup(localizer.messages)}
         </ButtonGroup>
       </Toolbar>

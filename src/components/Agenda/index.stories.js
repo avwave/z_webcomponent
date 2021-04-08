@@ -19,6 +19,8 @@ import AgendaProvider, {
   initState,
 } from "./AgendaContext";
 
+import moment from "moment";
+
 const AgendaStory = {
   component: Agenda,
   title: "Agenda/Agenda",
@@ -93,7 +95,6 @@ AgendaMetaRendering.args = {
   view: "agenda",
   events: [...progressEvents],
   metaRenderer: (event) => {
-    console.log("🚀 ~ file: index.stories.js ~ line 87 ~ event", event);
     return (
       <div>
         event object:
@@ -101,4 +102,19 @@ AgendaMetaRendering.args = {
       </div>
     )
   },
+};
+
+
+export const BlockView = DefaultStory.bind({})
+BlockView.args = {
+  ...Default.args,
+  events: [...progressEvents],
+  timeslots: 1,
+  step: 240,
+  defaultView: 'week',
+  selectable: true,
+  onSelectEvent: (event) => alert(event.title),
+  onSelectSlot: (slot) => alert(`${slot.start} to ${slot.end}`),
+  lockSlotStartTime: "08:00",
+  lockSlotEndTime: "23:59",
 };

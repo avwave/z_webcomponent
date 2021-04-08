@@ -3,12 +3,19 @@ import PropTypes from "prop-types";
 import { Checkbox } from "../Checkbox";
 import styled from "styled-components";
 import { CheckboxContext } from "./checklistContext";
+import isEmpty from "lodash.isempty";
+import { withTheme } from "@material-ui/core/styles";
+import { Button } from "@material-ui/core";
 
 const StyledList = styled.ul`
   list-style-type: none;
   padding: 16px;
   padding-bottom: 0px;
-  border-top: solid 1px #c4c4c4;
+  border-top: ${(props) => (props.hasTitle ? "solid 1px #c4c4c4" : "none")};
+  max-height: ${(props) => props.maxHeight};
+  min-height: 20px;
+  overflow: auto;
+  
 `;
 
 const StyledContainer = styled.div`
@@ -44,23 +51,32 @@ const FilterActionComponentContainer = styled.div`
   justify-content: center;
 `;
 
-export default function Checklist({
-  items,
+const DefaultActionComponentButton = styled(Button)`
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+`;
+
+function Checklist({
+  theme,
   title,
   onToggle,
   actionComponent,
   filterActionComponent,
-  lineItemComponent
+  lineItemComponent,
+  maxDisplayHeight = "500px",
+  actionComponentLabel,
+  actionComponentVariant = "primary",
+  actionComponentOnClick = () => {},
 }) {
-  const LineItemComponent = lineItemComponent || Checkbox
+  const LineItemComponent = lineItemComponent || Checkbox;
 
   const events = { onToggle };
 
   const [state, dispatch] = React.useContext(CheckboxContext);
-  
+
   return (
     <StyledContainer>
-      <StyledHeader>{title}</StyledHeader>
+      {!isEmpty(title) ? <StyledHeader>{title}</StyledHeader> : null}
 
       {filterActionComponent ? (
         <FilterActionComponentContainer>
@@ -68,19 +84,39 @@ export default function Checklist({
         </FilterActionComponentContainer>
       ) : null}
 
-      <StyledList>
-        {(state.items.length === 0) ? (<div>No results</div>) : (<></>)}
-        {state.items.map((item) => (
-          <LineItemComponent key={item.id} item={item} {...events} />
+      <StyledList maxHeight={maxDisplayHeight} hasTitle={!isEmpty(title)}>
+        {state.items.length === 0 ? <li>No results</li> : <></>}
+        {state.items.map((item, index) => (
+          <li>
+            <LineItemComponent
+              key={`${item.id}-${index}`}
+              item={item}
+              {...events}
+            />
+          </li>
         ))}
       </StyledList>
 
       {actionComponent ? (
         <ActionComponentContainer>{actionComponent}</ActionComponentContainer>
       ) : null}
+
+      {actionComponentLabel ? (
+        <DefaultActionComponentButton
+          color={actionComponentVariant}
+          variant='contained'
+          onClick={() => actionComponentOnClick()}
+          disableElevation
+          size="large"
+        >
+          {actionComponentLabel}
+        </DefaultActionComponentButton>
+      ) : null}
     </StyledContainer>
   );
 }
+
+export default withTheme(Checklist);
 
 Checklist.propTypes = {
   /** The list of tasks */
