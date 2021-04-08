@@ -21,9 +21,10 @@ const baseEvents = [
     id: 0,
     title: "1h Event First of Month",
     start: moment().startOf("month").hour(13).toDate(),
-    end: moment().startOf("month").hour(14).toDate(),
+    end: moment("2020-05-12T08:32:23.000Z").toDate(),
     variant: "info",
-    description: "Minima voluptatem ut et veritatis repellat. Dolores veniam est. Nesciunt ipsam dignissimos provident. Et illum asperiores et totam consequatur et praesentium dolores. Magni est atque voluptatem consequatur qui doloremque. Repellendus nam voluptatem dolore est suscipit et laborum sint veniam."
+    description:
+      "Minima voluptatem ut et veritatis repellat. Dolores veniam est. Nesciunt ipsam dignissimos provident. Et illum asperiores et totam consequatur et praesentium dolores. Magni est atque voluptatem consequatur qui doloremque. Repellendus nam voluptatem dolore est suscipit et laborum sint veniam.",
   },
   {
     id: 1,
