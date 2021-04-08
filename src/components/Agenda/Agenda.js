@@ -84,8 +84,6 @@ function Agenda(props) {
         return children;
       }
       const child = React.Children.only(children);
-      console.log("🚀 ~ file: Agenda.js ~ line 86 ~ TimeslotWrapper ~ child", child)
-      
       return React.cloneElement(child, {
         className: child.props.className + " rbc-off-range-bg",
       });
@@ -97,6 +95,7 @@ function Agenda(props) {
     return { style: evtStyle ?? {} };
   };
 
+
   const onSelectSlot = (slotProps) => {
     const {start, end} = slotProps
     if(isBetween(start, props.lockSlotStartTime, props.lockSlotEndTime) &&
@@ -107,6 +106,16 @@ function Agenda(props) {
     }
   }
   const handleCloseAlert = () => {setOpenAlert(false)}
+
+    const min = new Date();
+    min.setHours(8);
+    min.setMinutes(0, 0, 0);
+
+    const max = new Date();
+    max.setHours(23);
+    max.setMinutes(0, 0, 0);
+
+    console.log("🚀 ~ file: Agenda.js ~ line 119 ~ Agenda ~ min, moment(props.lockSlotStartTime).toDate()", min, moment(props.lockSlotStartTime).toDate())
 
   return (
     <Paper style={{ height: 700, ...props.containerStyle }}>
@@ -142,6 +151,10 @@ function Agenda(props) {
         }}
         eventPropGetter={eventPropGetter}
         onSelectSlot={onSelectSlot}
+        min={moment(props.lockSlotStartTime, "HH:mm").toDate()}
+        max={moment(props.lockSlotEndTime, "HH:mm").toDate()}
+        
+        showMultiDayTimes
       />
     </Paper>
   );

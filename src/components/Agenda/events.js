@@ -53,13 +53,6 @@ const baseEvents = [
     end: moment().startOf("day").hour(12).toDate(),
   },
   ...filledDay(),
-  {
-    id: 6,
-    title: "Spanning",
-    start: moment().startOf("week").add(4, "d").hour(8).toDate(),
-    end: moment().startOf("week").add(6, "d").hour(12).toDate(),
-    variant: "error",
-  },
 ];
 
 const daySummary = [
