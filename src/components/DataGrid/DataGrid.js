@@ -184,7 +184,6 @@ function DataGrid({ draggable, showSelector, filterable, style, containerStyle, 
           <></>
         )}
       </StyledAppBar>
-      <DndProvider backend={HTML5Backend}>
         <ReactDataGrid
           {...gridProps}
           style={{...style}}
@@ -198,7 +197,6 @@ function DataGrid({ draggable, showSelector, filterable, style, containerStyle, 
           filters={filters}
           onFiltersChange={setFilters}
         />
-      </DndProvider>
     </div>
   );
 }

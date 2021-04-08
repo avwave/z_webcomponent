@@ -13,6 +13,8 @@ import DataGridProvider, {
   actions,
   initState,
 } from "./DataGridContext";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 const DataGridStory = {
   component: DataGrid,
@@ -24,9 +26,11 @@ const DataGridStory = {
       initialState: { ...initState },
     }),
     (Story) => (
-      <DataGridProvider>
-        <Story />
-      </DataGridProvider>
+      <DndProvider backend={HTML5Backend}>
+        <DataGridProvider>
+          <Story />
+        </DataGridProvider>
+      </DndProvider>
     ),
   ],
 };
@@ -49,8 +53,12 @@ export const Default = DefaultStory.bind({});
 Default.args = {
   rows: rows,
   columns: columnData,
-  containerStyle: { maxHeight: '100vh', display: "flex", flexDirection: "column" },
-  style: { flex: '1 1 auto' },
+  containerStyle: {
+    maxHeight: "100vh",
+    display: "flex",
+    flexDirection: "column",
+  },
+  style: { flex: "1 1 auto" },
 };
 
 export const CellFormatter = DefaultStory.bind({});
@@ -144,15 +152,18 @@ const ServerFilterSortStory = ({ ...args }) => {
     }
     const searchKeys = Object.keys(state.filterColumn);
 
-    let filteredRows = args.rows
-    searchKeys.map(searchKey => {
-      filteredRows = filteredRows.filter(row => {
+    let filteredRows = args.rows;
+    searchKeys.map((searchKey) => {
+      filteredRows = filteredRows.filter((row) => {
         return row[searchKey]
           .toLowerCase()
           .includes(state.filterColumn[searchKey].toLowerCase());
-      })
-      console.log(`Filtering {${searchKey} ${state.filterColumn[searchKey]}`, filteredRows)
-    })
+      });
+      console.log(
+        `Filtering {${searchKey} ${state.filterColumn[searchKey]}`,
+        filteredRows
+      );
+    });
     dispatch({
       payload: { rows: filteredRows },
       type: actions.LOAD_ROWS,

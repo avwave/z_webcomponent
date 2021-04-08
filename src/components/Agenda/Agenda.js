@@ -5,13 +5,23 @@ import { AgendaContext } from "./AgendaContext";
 
 import "./AgendaStyles.scss";
 import GridBox from "../DataGrid/GridBox";
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, Link, Paper, Toolbar, Typography } from "@material-ui/core";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  Link,
+  Paper,
+  Toolbar,
+  Typography,
+} from "@material-ui/core";
 import AgendaToolbar from "./AgendaToolbar";
 import { ProgressContainer } from "../ProgressContainer";
 import { EdgeContainer } from "../EdgeContainer";
 
 const localizer = momentLocalizer(moment);
-
 
 export function isBetween(value, start, end) {
   const getTime = (dateTime) => {
@@ -30,7 +40,7 @@ function Agenda(props) {
 
   const [state, dispatch] = React.useContext(AgendaContext);
   const [openAlert, setOpenAlert] = React.useState(false);
-  const alertMessage = props.alertMessage ?? "Outside allowed timerange"
+  const alertMessage = props.alertMessage ?? "Outside allowed timerange";
 
   const AgendaEventComponent = ({ event }) => {
     return (
@@ -78,7 +88,7 @@ function Agenda(props) {
   };
 
   const TimeslotWrapper = (slotProp) => {
-    const { value, children } = slotProp
+    const { value, children } = slotProp;
     if (props.lockSlotEndTime || props.lockSlotStartTime) {
       if (isBetween(value, props.lockSlotStartTime, props.lockSlotEndTime)) {
         return children;
@@ -88,48 +98,39 @@ function Agenda(props) {
         className: child.props.className + " rbc-off-range-bg",
       });
     }
-    return children
+    return children;
   };
 
   const eventPropGetter = ({ evtStyle }) => {
     return { style: evtStyle ?? {} };
   };
 
-
   const onSelectSlot = (slotProps) => {
-    const {start, end} = slotProps
-    if(isBetween(start, props.lockSlotStartTime, props.lockSlotEndTime) &&
-    isBetween(end, props.lockSlotStartTime, props.lockSlotEndTime)) {
-      props.onSelectSlot(slotProps)
+    const { start, end } = slotProps;
+    if (
+      isBetween(start, props.lockSlotStartTime, props.lockSlotEndTime) &&
+      isBetween(end, props.lockSlotStartTime, props.lockSlotEndTime)
+    ) {
+      props.onSelectSlot(slotProps);
     } else {
-      setOpenAlert(true)
+      setOpenAlert(true);
     }
-  }
-  const handleCloseAlert = () => {setOpenAlert(false)}
-
-    const min = new Date();
-    min.setHours(8);
-    min.setMinutes(0, 0, 0);
-
-    const max = new Date();
-    max.setHours(23);
-    max.setMinutes(0, 0, 0);
-
-    console.log("🚀 ~ file: Agenda.js ~ line 119 ~ Agenda ~ min, moment(props.lockSlotStartTime).toDate()", min, moment(props.lockSlotStartTime).toDate())
+  };
+  const handleCloseAlert = () => {
+    setOpenAlert(false);
+  };
 
   return (
     <Paper style={{ height: 700, ...props.containerStyle }}>
-      <Dialog open={openAlert}
-      onClose={handleCloseAlert}
-      >
+      <Dialog open={openAlert} onClose={handleCloseAlert}>
         <DialogContent>
           <DialogContentText>{alertMessage}</DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseAlert} color="primary" >
+          <Button onClick={handleCloseAlert} color="primary">
             Ok
           </Button>
-          </DialogActions>
+        </DialogActions>
       </Dialog>
       <Calendar
         {...props}
@@ -147,13 +148,11 @@ function Agenda(props) {
             dateHeader: AgendaDateHeader,
           },
           timeSlotWrapper: TimeslotWrapper,
-          
         }}
         eventPropGetter={eventPropGetter}
         onSelectSlot={onSelectSlot}
         min={moment(props.lockSlotStartTime, "HH:mm").toDate()}
         max={moment(props.lockSlotEndTime, "HH:mm").toDate()}
-        
         showMultiDayTimes
       />
     </Paper>
