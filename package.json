@@ -1,6 +1,6 @@
 {
   "name": "@zennya/web-component-library",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "private": false,
   "dependencies": {
     "@material-ui/core": "^4.11.3",
