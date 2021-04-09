@@ -20,6 +20,7 @@ import AgendaProvider, {
 } from "./AgendaContext";
 
 import moment from "moment";
+import { views } from "react-big-calendar/lib/utils/constants";
 
 const AgendaStory = {
   component: Agenda,
@@ -65,7 +66,13 @@ Default.args = {
   containerStyle: {
     height: 750,
   },
+  timeslots: 8,
+  step: 30,
+  lockSlotStartTime: "00:00",
+  lockSlotEndTime: "23:59",
   popup: true,
+  views: [views.WEEK, views.WORK_WEEK, views.AGENDA],
+  defaultView: views.WEEK,
   style: { flex: "1 1 auto" },
   events: [...baseEvents],
 };
@@ -92,7 +99,8 @@ ProgressEvent.args = {
 export const AgendaMetaRendering = DefaultStory.bind({});
 AgendaMetaRendering.args = {
   ...Default.args,
-  view: "agenda",
+  views:[views.AGENDA],
+  defaultView: "agenda",
   events: [...progressEvents],
   metaRenderer: (event) => {
     return (
@@ -111,10 +119,11 @@ BlockView.args = {
   events: [...progressEvents],
   timeslots: 1,
   step: 240,
+  lockSlotStartTime: "08:00",
+  lockSlotEndTime: "23:59",
   defaultView: 'week',
   selectable: true,
   onSelectEvent: (event) => alert(event.title),
   onSelectSlot: (slot) => alert(`${slot.start} to ${slot.end}`),
-  lockSlotStartTime: "08:00",
-  lockSlotEndTime: "23:59",
+  
 };
