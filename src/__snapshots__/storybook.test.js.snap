@@ -1382,6 +1382,2386 @@ exports[`Storyshots Agenda/Agenda Block View 1`] = `
 </div>
 `;
 
+exports[`Storyshots Agenda/Agenda Custom Cell Rendering 1`] = `
+<div
+  className="MuiPaper-root MuiPaper-elevation1 MuiPaper-rounded"
+  style={
+    Object {
+      "height": 750,
+    }
+  }
+>
+  <div
+    className="rbc-calendar"
+    style={
+      Object {
+        "flex": "1 1 auto",
+      }
+    }
+  >
+    <div>
+      <div
+        className="MuiToolbar-root MuiToolbar-regular MuiToolbar-gutters"
+      >
+        <div
+          className="MuiButtonGroup-root makeStyles-leftGroup-72"
+          role="group"
+        >
+          <button
+            className="MuiButtonBase-root MuiButton-root MuiButton-text MuiButtonGroup-grouped MuiButtonGroup-groupedHorizontal MuiButtonGroup-groupedText MuiButtonGroup-groupedTextHorizontal MuiButtonGroup-groupedText MuiButton-textSizeSmall MuiButton-sizeSmall"
+            disabled={false}
+            onBlur={[Function]}
+            onClick={[Function]}
+            onDragLeave={[Function]}
+            onFocus={[Function]}
+            onKeyDown={[Function]}
+            onKeyUp={[Function]}
+            onMouseDown={[Function]}
+            onMouseLeave={[Function]}
+            onMouseUp={[Function]}
+            onTouchEnd={[Function]}
+            onTouchMove={[Function]}
+            onTouchStart={[Function]}
+            tabIndex={0}
+            type="button"
+          >
+            <span
+              className="MuiButton-label"
+            >
+              Today
+            </span>
+            <span
+              className="MuiTouchRipple-root"
+            />
+          </button>
+          <button
+            className="MuiButtonBase-root MuiButton-root MuiButton-text MuiButtonGroup-grouped MuiButtonGroup-groupedHorizontal MuiButtonGroup-groupedText MuiButtonGroup-groupedTextHorizontal MuiButtonGroup-groupedText MuiButton-textSizeSmall MuiButton-sizeSmall"
+            disabled={false}
+            onBlur={[Function]}
+            onClick={[Function]}
+            onDragLeave={[Function]}
+            onFocus={[Function]}
+            onKeyDown={[Function]}
+            onKeyUp={[Function]}
+            onMouseDown={[Function]}
+            onMouseLeave={[Function]}
+            onMouseUp={[Function]}
+            onTouchEnd={[Function]}
+            onTouchMove={[Function]}
+            onTouchStart={[Function]}
+            tabIndex={0}
+            type="button"
+          >
+            <span
+              className="MuiButton-label"
+            >
+              Back
+            </span>
+            <span
+              className="MuiTouchRipple-root"
+            />
+          </button>
+          <button
+            className="MuiButtonBase-root MuiButton-root MuiButton-text MuiButtonGroup-grouped MuiButtonGroup-groupedHorizontal MuiButtonGroup-groupedText MuiButtonGroup-groupedTextHorizontal MuiButtonGroup-groupedText MuiButton-textSizeSmall MuiButton-sizeSmall"
+            disabled={false}
+            onBlur={[Function]}
+            onClick={[Function]}
+            onDragLeave={[Function]}
+            onFocus={[Function]}
+            onKeyDown={[Function]}
+            onKeyUp={[Function]}
+            onMouseDown={[Function]}
+            onMouseLeave={[Function]}
+            onMouseUp={[Function]}
+            onTouchEnd={[Function]}
+            onTouchMove={[Function]}
+            onTouchStart={[Function]}
+            tabIndex={0}
+            type="button"
+          >
+            <span
+              className="MuiButton-label"
+            >
+              Next
+            </span>
+            <span
+              className="MuiTouchRipple-root"
+            />
+          </button>
+        </div>
+        <h6
+          className="MuiTypography-root makeStyles-title-74 MuiTypography-h6"
+        >
+          April 04 – 10
+        </h6>
+        <div
+          className="MuiButtonGroup-root makeStyles-rightGroup-73"
+          role="group"
+        >
+          <button
+            className="MuiButtonBase-root MuiButton-root MuiButton-text MuiButtonGroup-grouped MuiButtonGroup-groupedHorizontal MuiButtonGroup-groupedText MuiButtonGroup-groupedTextHorizontal MuiButtonGroup-groupedText MuiButton-textPrimary MuiButton-textSizeSmall MuiButton-sizeSmall"
+            disabled={false}
+            onBlur={[Function]}
+            onClick={[Function]}
+            onDragLeave={[Function]}
+            onFocus={[Function]}
+            onKeyDown={[Function]}
+            onKeyUp={[Function]}
+            onMouseDown={[Function]}
+            onMouseLeave={[Function]}
+            onMouseUp={[Function]}
+            onTouchEnd={[Function]}
+            onTouchMove={[Function]}
+            onTouchStart={[Function]}
+            tabIndex={0}
+            type="button"
+          >
+            <span
+              className="MuiButton-label"
+            >
+              Week
+            </span>
+            <span
+              className="MuiTouchRipple-root"
+            />
+          </button>
+          <button
+            className="MuiButtonBase-root MuiButton-root MuiButton-text MuiButtonGroup-grouped MuiButtonGroup-groupedHorizontal MuiButtonGroup-groupedText MuiButtonGroup-groupedTextHorizontal MuiButtonGroup-groupedText MuiButton-colorInherit MuiButton-textSizeSmall MuiButton-sizeSmall"
+            disabled={false}
+            onBlur={[Function]}
+            onClick={[Function]}
+            onDragLeave={[Function]}
+            onFocus={[Function]}
+            onKeyDown={[Function]}
+            onKeyUp={[Function]}
+            onMouseDown={[Function]}
+            onMouseLeave={[Function]}
+            onMouseUp={[Function]}
+            onTouchEnd={[Function]}
+            onTouchMove={[Function]}
+            onTouchStart={[Function]}
+            tabIndex={0}
+            type="button"
+          >
+            <span
+              className="MuiButton-label"
+            >
+              Work Week
+            </span>
+            <span
+              className="MuiTouchRipple-root"
+            />
+          </button>
+          <button
+            className="MuiButtonBase-root MuiButton-root MuiButton-text MuiButtonGroup-grouped MuiButtonGroup-groupedHorizontal MuiButtonGroup-groupedText MuiButtonGroup-groupedTextHorizontal MuiButtonGroup-groupedText MuiButton-colorInherit MuiButton-textSizeSmall MuiButton-sizeSmall"
+            disabled={false}
+            onBlur={[Function]}
+            onClick={[Function]}
+            onDragLeave={[Function]}
+            onFocus={[Function]}
+            onKeyDown={[Function]}
+            onKeyUp={[Function]}
+            onMouseDown={[Function]}
+            onMouseLeave={[Function]}
+            onMouseUp={[Function]}
+            onTouchEnd={[Function]}
+            onTouchMove={[Function]}
+            onTouchStart={[Function]}
+            tabIndex={0}
+            type="button"
+          >
+            <span
+              className="MuiButton-label"
+            >
+              Agenda
+            </span>
+            <span
+              className="MuiTouchRipple-root"
+            />
+          </button>
+        </div>
+      </div>
+    </div>
+    <div
+      className="rbc-time-view"
+    >
+      <div
+        className="rbc-time-header"
+        style={Object {}}
+      >
+        <div
+          className="rbc-label rbc-time-header-gutter"
+          style={
+            Object {
+              "maxWidth": undefined,
+              "minWidth": undefined,
+              "width": undefined,
+            }
+          }
+        />
+        <div
+          className="rbc-time-header-content"
+        >
+          <div
+            className="rbc-row rbc-time-header-cell"
+          >
+            <div
+              className="rbc-header"
+            >
+              <a
+                href="#"
+                onClick={[Function]}
+              >
+                <span
+                  aria-sort="none"
+                  role="columnheader"
+                >
+                  04 Sun
+                </span>
+              </a>
+            </div>
+            <div
+              className="rbc-header"
+            >
+              <a
+                href="#"
+                onClick={[Function]}
+              >
+                <span
+                  aria-sort="none"
+                  role="columnheader"
+                >
+                  05 Mon
+                </span>
+              </a>
+            </div>
+            <div
+              className="rbc-header"
+            >
+              <a
+                href="#"
+                onClick={[Function]}
+              >
+                <span
+                  aria-sort="none"
+                  role="columnheader"
+                >
+                  06 Tue
+                </span>
+              </a>
+            </div>
+            <div
+              className="rbc-header"
+            >
+              <a
+                href="#"
+                onClick={[Function]}
+              >
+                <span
+                  aria-sort="none"
+                  role="columnheader"
+                >
+                  07 Wed
+                </span>
+              </a>
+            </div>
+            <div
+              className="rbc-header"
+            >
+              <a
+                href="#"
+                onClick={[Function]}
+              >
+                <span
+                  aria-sort="none"
+                  role="columnheader"
+                >
+                  08 Thu
+                </span>
+              </a>
+            </div>
+            <div
+              className="rbc-header rbc-today"
+            >
+              <a
+                href="#"
+                onClick={[Function]}
+              >
+                <span
+                  aria-sort="none"
+                  role="columnheader"
+                >
+                  09 Fri
+                </span>
+              </a>
+            </div>
+            <div
+              className="rbc-header"
+            >
+              <a
+                href="#"
+                onClick={[Function]}
+              >
+                <span
+                  aria-sort="none"
+                  role="columnheader"
+                >
+                  10 Sat
+                </span>
+              </a>
+            </div>
+          </div>
+          <div
+            className="rbc-allday-cell"
+            role="rowgroup"
+          >
+            <div
+              className="rbc-row-bg"
+            >
+              <div
+                className="rbc-day-bg"
+              />
+              <div
+                className="rbc-day-bg"
+              />
+              <div
+                className="rbc-day-bg"
+              />
+              <div
+                className="rbc-day-bg"
+              />
+              <div
+                className="rbc-day-bg"
+              />
+              <div
+                className="rbc-day-bg rbc-today"
+              />
+              <div
+                className="rbc-day-bg"
+              />
+            </div>
+            <div
+              className="rbc-row-content"
+              role="row"
+            >
+              <div
+                className="rbc-row"
+              />
+              <div
+                className="rbc-row"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        className="rbc-time-content"
+        onScroll={[Function]}
+      >
+        <div
+          className="rbc-time-gutter rbc-time-column"
+        >
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            >
+              <span
+                className="rbc-label"
+              >
+                12:00 AM
+              </span>
+            </div>
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            >
+              <span
+                className="rbc-label"
+              >
+                4:00 AM
+              </span>
+            </div>
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            >
+              <span
+                className="rbc-label"
+              >
+                8:00 AM
+              </span>
+            </div>
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            >
+              <span
+                className="rbc-label"
+              >
+                12:00 PM
+              </span>
+            </div>
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            >
+              <span
+                className="rbc-label"
+              >
+                4:00 PM
+              </span>
+            </div>
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            >
+              <span
+                className="rbc-label"
+              >
+                8:00 PM
+              </span>
+            </div>
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+        </div>
+        <div
+          className="rbc-day-slot rbc-time-column"
+        >
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-events-container"
+          />
+        </div>
+        <div
+          className="rbc-day-slot rbc-time-column"
+        >
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-events-container"
+          />
+        </div>
+        <div
+          className="rbc-day-slot rbc-time-column"
+        >
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-events-container"
+          />
+        </div>
+        <div
+          className="rbc-day-slot rbc-time-column"
+        >
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-events-container"
+          />
+        </div>
+        <div
+          className="rbc-day-slot rbc-time-column"
+        >
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-events-container"
+          />
+        </div>
+        <div
+          className="rbc-day-slot rbc-time-column rbc-now rbc-today"
+        >
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-events-container"
+          >
+            <div
+              className="rbc-event"
+              onClick={[Function]}
+              onDoubleClick={[Function]}
+              onKeyPress={[Function]}
+              style={
+                Object {
+                  "height": "16.66666666666667%",
+                  "left": "0%",
+                  "top": "33.33333333333333%",
+                  "width": "100%",
+                }
+              }
+              title="8:00 AM – 12:00 PM: AM Event Today"
+            >
+              <div
+                className="rbc-event-label"
+              >
+                8:00 AM – 12:00 PM
+              </div>
+              <div
+                className="rbc-event-content"
+              >
+                <div
+                  background="transparent"
+                  className="MuiBox-root MuiBox-root-75 sc-bdfBwQ dBzZky"
+                >
+                  <pre>
+                    {
+  "id": 4,
+  "title": "AM Event Today",
+  "start": "2021-04-09T00:00:00.000Z",
+  "end": "2021-04-09T04:00:00.000Z"
+}
+                  </pre>
+                </div>
+              </div>
+            </div>
+            <div
+              className="rbc-event"
+              onClick={[Function]}
+              onDoubleClick={[Function]}
+              onKeyPress={[Function]}
+              style={
+                Object {
+                  "height": "4.166666666666671%",
+                  "left": "0%",
+                  "top": "54.166666666666664%",
+                  "width": "85%",
+                }
+              }
+              title="1:00 PM – 2:00 PM: 1h Event Today"
+            >
+              <div
+                className="rbc-event-label"
+              >
+                1:00 PM – 2:00 PM
+              </div>
+              <div
+                className="rbc-event-content"
+              >
+                <div
+                  background="transparent"
+                  className="MuiBox-root MuiBox-root-76 sc-bdfBwQ dBzZky"
+                >
+                  <pre>
+                    {
+  "id": 2,
+  "title": "1h Event Today",
+  "start": "2021-04-09T05:00:00.000Z",
+  "end": "2021-04-09T06:00:00.000Z"
+}
+                  </pre>
+                </div>
+              </div>
+            </div>
+            <div
+              className="rbc-event"
+              onClick={[Function]}
+              onDoubleClick={[Function]}
+              onKeyPress={[Function]}
+              style={
+                Object {
+                  "height": "8.333333333333321%",
+                  "left": "50%",
+                  "top": "58.333333333333336%",
+                  "width": "50%",
+                }
+              }
+              title="2:00 PM – 4:00 PM: 2h Event Today"
+            >
+              <div
+                className="rbc-event-label"
+              >
+                2:00 PM – 4:00 PM
+              </div>
+              <div
+                className="rbc-event-content"
+              >
+                <div
+                  background="#ffb74d"
+                  className="MuiBox-root MuiBox-root-77 sc-bdfBwQ gLiisO"
+                >
+                  <pre>
+                    {
+  "id": 3,
+  "title": "2h Event Today",
+  "start": "2021-04-09T06:00:00.000Z",
+  "end": "2021-04-09T08:00:00.000Z",
+  "variant": "warning"
+}
+                  </pre>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            className="rbc-current-time-indicator"
+            style={
+              Object {
+                "top": "76.66666666666667%",
+              }
+            }
+          />
+        </div>
+        <div
+          className="rbc-day-slot rbc-time-column"
+        >
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-events-container"
+          >
+            <div
+              className="rbc-event"
+              onClick={[Function]}
+              onDoubleClick={[Function]}
+              onKeyPress={[Function]}
+              style={
+                Object {
+                  "height": "4.166666666666666%",
+                  "left": "0%",
+                  "top": "0%",
+                  "width": "85%",
+                }
+              }
+              title="12:00 AM – 1:00 AM: FillEvent-0"
+            >
+              <div
+                className="rbc-event-label"
+              >
+                12:00 AM – 1:00 AM
+              </div>
+              <div
+                className="rbc-event-content"
+              >
+                <div
+                  background="#7986cb"
+                  className="MuiBox-root MuiBox-root-78 sc-bdfBwQ bfepOe"
+                >
+                  <pre>
+                    {
+  "id": "fill-0",
+  "title": "FillEvent-0",
+  "start": "2021-04-09T16:00:00.000Z",
+  "end": "2021-04-09T17:00:00.000Z",
+  "progress": 10,
+  "variant": "primary"
+}
+                  </pre>
+                </div>
+              </div>
+            </div>
+            <div
+              className="rbc-event"
+              onClick={[Function]}
+              onDoubleClick={[Function]}
+              onKeyPress={[Function]}
+              style={
+                Object {
+                  "height": "4.166666666666666%",
+                  "left": "50%",
+                  "top": "4.166666666666666%",
+                  "width": "50%",
+                }
+              }
+              title="1:00 AM – 2:00 AM: FillEvent-1"
+            >
+              <div
+                className="rbc-event-label"
+              >
+                1:00 AM – 2:00 AM
+              </div>
+              <div
+                className="rbc-event-content"
+              >
+                <div
+                  background="#7986cb"
+                  className="MuiBox-root MuiBox-root-79 sc-bdfBwQ bfepOe"
+                >
+                  <pre>
+                    {
+  "id": "fill-1",
+  "title": "FillEvent-1",
+  "start": "2021-04-09T17:00:00.000Z",
+  "end": "2021-04-09T18:00:00.000Z",
+  "progress": 30,
+  "variant": "primary"
+}
+                  </pre>
+                </div>
+              </div>
+            </div>
+            <div
+              className="rbc-event"
+              onClick={[Function]}
+              onDoubleClick={[Function]}
+              onKeyPress={[Function]}
+              style={
+                Object {
+                  "height": "4.166666666666668%",
+                  "left": "0%",
+                  "top": "8.333333333333332%",
+                  "width": "85%",
+                }
+              }
+              title="2:00 AM – 3:00 AM: FillEvent-2"
+            >
+              <div
+                className="rbc-event-label"
+              >
+                2:00 AM – 3:00 AM
+              </div>
+              <div
+                className="rbc-event-content"
+              >
+                <div
+                  background="#7986cb"
+                  className="MuiBox-root MuiBox-root-80 sc-bdfBwQ bfepOe"
+                >
+                  <pre>
+                    {
+  "id": "fill-2",
+  "title": "FillEvent-2",
+  "start": "2021-04-09T18:00:00.000Z",
+  "end": "2021-04-09T19:00:00.000Z",
+  "progress": 80,
+  "variant": "primary"
+}
+                  </pre>
+                </div>
+              </div>
+            </div>
+            <div
+              className="rbc-event"
+              onClick={[Function]}
+              onDoubleClick={[Function]}
+              onKeyPress={[Function]}
+              style={
+                Object {
+                  "height": "4.166666666666664%",
+                  "left": "50%",
+                  "top": "12.5%",
+                  "width": "50%",
+                }
+              }
+              title="3:00 AM – 4:00 AM: FillEvent-3"
+            >
+              <div
+                className="rbc-event-label"
+              >
+                3:00 AM – 4:00 AM
+              </div>
+              <div
+                className="rbc-event-content"
+              >
+                <div
+                  background="#7986cb"
+                  className="MuiBox-root MuiBox-root-81 sc-bdfBwQ bfepOe"
+                >
+                  <pre>
+                    {
+  "id": "fill-3",
+  "title": "FillEvent-3",
+  "start": "2021-04-09T19:00:00.000Z",
+  "end": "2021-04-09T20:00:00.000Z",
+  "progress": 10,
+  "variant": "primary"
+}
+                  </pre>
+                </div>
+              </div>
+            </div>
+            <div
+              className="rbc-event"
+              onClick={[Function]}
+              onDoubleClick={[Function]}
+              onKeyPress={[Function]}
+              style={
+                Object {
+                  "height": "4.166666666666671%",
+                  "left": "0%",
+                  "top": "16.666666666666664%",
+                  "width": "85%",
+                }
+              }
+              title="4:00 AM – 5:00 AM: FillEvent-4"
+            >
+              <div
+                className="rbc-event-label"
+              >
+                4:00 AM – 5:00 AM
+              </div>
+              <div
+                className="rbc-event-content"
+              >
+                <div
+                  background="#7986cb"
+                  className="MuiBox-root MuiBox-root-82 sc-bdfBwQ bfepOe"
+                >
+                  <pre>
+                    {
+  "id": "fill-4",
+  "title": "FillEvent-4",
+  "start": "2021-04-09T20:00:00.000Z",
+  "end": "2021-04-09T21:00:00.000Z",
+  "progress": 90,
+  "variant": "primary"
+}
+                  </pre>
+                </div>
+              </div>
+            </div>
+            <div
+              className="rbc-event"
+              onClick={[Function]}
+              onDoubleClick={[Function]}
+              onKeyPress={[Function]}
+              style={
+                Object {
+                  "height": "4.166666666666664%",
+                  "left": "50%",
+                  "top": "20.833333333333336%",
+                  "width": "50%",
+                }
+              }
+              title="5:00 AM – 6:00 AM: FillEvent-5"
+            >
+              <div
+                className="rbc-event-label"
+              >
+                5:00 AM – 6:00 AM
+              </div>
+              <div
+                className="rbc-event-content"
+              >
+                <div
+                  background="#7986cb"
+                  className="MuiBox-root MuiBox-root-83 sc-bdfBwQ bfepOe"
+                >
+                  <pre>
+                    {
+  "id": "fill-5",
+  "title": "FillEvent-5",
+  "start": "2021-04-09T21:00:00.000Z",
+  "end": "2021-04-09T22:00:00.000Z",
+  "progress": 20,
+  "variant": "primary"
+}
+                  </pre>
+                </div>
+              </div>
+            </div>
+            <div
+              className="rbc-event"
+              onClick={[Function]}
+              onDoubleClick={[Function]}
+              onKeyPress={[Function]}
+              style={
+                Object {
+                  "height": "4.166666666666668%",
+                  "left": "0%",
+                  "top": "25%",
+                  "width": "85%",
+                }
+              }
+              title="6:00 AM – 7:00 AM: FillEvent-6"
+            >
+              <div
+                className="rbc-event-label"
+              >
+                6:00 AM – 7:00 AM
+              </div>
+              <div
+                className="rbc-event-content"
+              >
+                <div
+                  background="#7986cb"
+                  className="MuiBox-root MuiBox-root-84 sc-bdfBwQ bfepOe"
+                >
+                  <pre>
+                    {
+  "id": "fill-6",
+  "title": "FillEvent-6",
+  "start": "2021-04-09T22:00:00.000Z",
+  "end": "2021-04-09T23:00:00.000Z",
+  "progress": 10,
+  "variant": "primary"
+}
+                  </pre>
+                </div>
+              </div>
+            </div>
+            <div
+              className="rbc-event"
+              onClick={[Function]}
+              onDoubleClick={[Function]}
+              onKeyPress={[Function]}
+              style={
+                Object {
+                  "height": "4.166666666666661%",
+                  "left": "50%",
+                  "top": "29.166666666666668%",
+                  "width": "50%",
+                }
+              }
+              title="7:00 AM – 8:00 AM: FillEvent-7"
+            >
+              <div
+                className="rbc-event-label"
+              >
+                7:00 AM – 8:00 AM
+              </div>
+              <div
+                className="rbc-event-content"
+              >
+                <div
+                  background="#7986cb"
+                  className="MuiBox-root MuiBox-root-85 sc-bdfBwQ bfepOe"
+                >
+                  <pre>
+                    {
+  "id": "fill-7",
+  "title": "FillEvent-7",
+  "start": "2021-04-09T23:00:00.000Z",
+  "end": "2021-04-10T00:00:00.000Z",
+  "progress": 100,
+  "variant": "primary"
+}
+                  </pre>
+                </div>
+              </div>
+            </div>
+            <div
+              className="rbc-event"
+              onClick={[Function]}
+              onDoubleClick={[Function]}
+              onKeyPress={[Function]}
+              style={
+                Object {
+                  "height": "4.166666666666671%",
+                  "left": "0%",
+                  "top": "33.33333333333333%",
+                  "width": "85%",
+                }
+              }
+              title="8:00 AM – 9:00 AM: FillEvent-8"
+            >
+              <div
+                className="rbc-event-label"
+              >
+                8:00 AM – 9:00 AM
+              </div>
+              <div
+                className="rbc-event-content"
+              >
+                <div
+                  background="#7986cb"
+                  className="MuiBox-root MuiBox-root-86 sc-bdfBwQ bfepOe"
+                >
+                  <pre>
+                    {
+  "id": "fill-8",
+  "title": "FillEvent-8",
+  "start": "2021-04-10T00:00:00.000Z",
+  "end": "2021-04-10T01:00:00.000Z",
+  "progress": 30,
+  "variant": "primary"
+}
+                  </pre>
+                </div>
+              </div>
+            </div>
+            <div
+              className="rbc-event"
+              onClick={[Function]}
+              onDoubleClick={[Function]}
+              onKeyPress={[Function]}
+              style={
+                Object {
+                  "height": "4.166666666666671%",
+                  "left": "50%",
+                  "top": "37.5%",
+                  "width": "50%",
+                }
+              }
+              title="9:00 AM – 10:00 AM: FillEvent-9"
+            >
+              <div
+                className="rbc-event-label"
+              >
+                9:00 AM – 10:00 AM
+              </div>
+              <div
+                className="rbc-event-content"
+              >
+                <div
+                  background="#7986cb"
+                  className="MuiBox-root MuiBox-root-87 sc-bdfBwQ bfepOe"
+                >
+                  <pre>
+                    {
+  "id": "fill-9",
+  "title": "FillEvent-9",
+  "start": "2021-04-10T01:00:00.000Z",
+  "end": "2021-04-10T02:00:00.000Z",
+  "progress": 100,
+  "variant": "primary"
+}
+                  </pre>
+                </div>
+              </div>
+            </div>
+            <div
+              className="rbc-event"
+              onClick={[Function]}
+              onDoubleClick={[Function]}
+              onKeyPress={[Function]}
+              style={
+                Object {
+                  "height": "4.166666666666657%",
+                  "left": "0%",
+                  "top": "41.66666666666667%",
+                  "width": "100%",
+                }
+              }
+              title="10:00 AM – 11:00 AM: FillEvent-10"
+            >
+              <div
+                className="rbc-event-label"
+              >
+                10:00 AM – 11:00 AM
+              </div>
+              <div
+                className="rbc-event-content"
+              >
+                <div
+                  background="#7986cb"
+                  className="MuiBox-root MuiBox-root-88 sc-bdfBwQ bfepOe"
+                >
+                  <pre>
+                    {
+  "id": "fill-10",
+  "title": "FillEvent-10",
+  "start": "2021-04-10T02:00:00.000Z",
+  "end": "2021-04-10T03:00:00.000Z",
+  "progress": 60,
+  "variant": "primary"
+}
+                  </pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
 exports[`Storyshots Agenda/Agenda Custom Day Header 1`] = `
 <div
   className="MuiPaper-root MuiPaper-elevation1 MuiPaper-rounded"

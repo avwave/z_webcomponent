@@ -112,7 +112,6 @@ AgendaMetaRendering.args = {
   },
 };
 
-
 export const BlockView = DefaultStory.bind({})
 BlockView.args = {
   ...Default.args,
@@ -127,3 +126,11 @@ BlockView.args = {
   onSelectSlot: (slot) => alert(`${slot.start} to ${slot.end}`),
   
 };
+
+export const CustomCellRendering = DefaultStory.bind({});
+CustomCellRendering.args= {
+  ...BlockView.args,
+  eventComponent: ((event) => {
+    return <pre>{JSON.stringify(event, null, 2)}</pre>
+  })
+}

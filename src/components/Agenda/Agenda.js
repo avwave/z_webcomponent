@@ -44,6 +44,7 @@ function Agenda(props) {
     onSelectSlot,
     containerStyle,
     defaultEvents,
+    eventComponent
     }= props;
 
   const metaRenderer = metaR ? metaR : () => {};
@@ -64,19 +65,14 @@ function Agenda(props) {
     );
   };
   const EventComponent = ({ event }) => {
-    const BaseComponent = ({ variant }) => (
-      <GridBox align="flex-start" variant={variant}>
-        <Typography color={event.color} variant="caption">
-          {event.title}
-        </Typography>
+    return(
+      <GridBox align="flex-start" variant={event.variant}>
+        {eventComponent ? eventComponent(event) : (
+          <Typography color={event.color} variant="caption">
+            {event.title}
+          </Typography>
+        )}
       </GridBox>
-    );
-    return event.progress ? (
-      <ProgressContainer progress={event.progress} variant={event.variant}>
-        <BaseComponent />
-      </ProgressContainer>
-    ) : (
-      <BaseComponent variant={event.variant ?? "primary"} />
     );
   };
 
