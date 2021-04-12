@@ -36,11 +36,22 @@ export function isBetween(value, start, end) {
 }
 
 function Agenda(props) {
-  const metaRenderer = props.metaRenderer ? props.metaRenderer : () => {};
+  const {
+    metaRenderer: metaR,
+    alertMessage: alertM,
+    lockSlotEndTime,
+    lockSlotStartTime,
+    onSelectSlot,
+    containerStyle,
+    defaultEvents,
+    eventComponent
+    }= props;
+
+  const metaRenderer = metaR ? metaR : () => {};
 
   const [state, dispatch] = React.useContext(AgendaContext);
   const [openAlert, setOpenAlert] = React.useState(false);
-  const alertMessage = props.alertMessage ?? "Outside allowed timerange";
+  const alertMessage = alertM ?? "Outside allowed timerange";
 
   const AgendaEventComponent = ({ event }) => {
     return (
@@ -54,19 +65,14 @@ function Agenda(props) {
     );
   };
   const EventComponent = ({ event }) => {
-    const BaseComponent = ({ variant }) => (
-      <GridBox align="flex-start" variant={variant}>
-        <Typography color={event.color} variant="caption">
-          {event.title}
-        </Typography>
+    return(
+      <GridBox align="flex-start" variant={event.variant}>
+        {eventComponent ? eventComponent(event) : (
+          <Typography color={event.color} variant="caption">
+            {event.title}
+          </Typography>
+        )}
       </GridBox>
-    );
-    return event.progress ? (
-      <ProgressContainer progress={event.progress} variant={event.variant}>
-        <BaseComponent />
-      </ProgressContainer>
-    ) : (
-      <BaseComponent variant={event.variant ?? "primary"} />
     );
   };
 
@@ -89,8 +95,8 @@ function Agenda(props) {
 
   const TimeslotWrapper = (slotProp) => {
     const { value, children } = slotProp;
-    if (props.lockSlotEndTime || props.lockSlotStartTime) {
-      if (isBetween(value, props.lockSlotStartTime, props.lockSlotEndTime)) {
+    if (lockSlotEndTime || lockSlotStartTime) {
+      if (isBetween(value, lockSlotStartTime, lockSlotEndTime)) {
         return children;
       }
       const child = React.Children.only(children);
@@ -105,13 +111,13 @@ function Agenda(props) {
     return { style: evtStyle ?? {} };
   };
 
-  const onSelectSlot = (slotProps) => {
+  const onSelectSlotHandler = (slotProps) => {
     const { start, end } = slotProps;
     if (
-      isBetween(start, props.lockSlotStartTime, props.lockSlotEndTime) &&
-      isBetween(end, props.lockSlotStartTime, props.lockSlotEndTime)
+      isBetween(start, lockSlotStartTime, lockSlotEndTime) &&
+      isBetween(end, lockSlotStartTime, lockSlotEndTime)
     ) {
-      props.onSelectSlot(slotProps);
+      onSelectSlot(slotProps);
     } else {
       setOpenAlert(true);
     }
@@ -121,7 +127,7 @@ function Agenda(props) {
   };
 
   return (
-    <Paper style={{ height: 700, ...props.containerStyle }}>
+    <Paper style={{ height: 700, ...containerStyle }}>
       <Dialog open={openAlert} onClose={handleCloseAlert}>
         <DialogContent>
           <DialogContentText>{alertMessage}</DialogContentText>
@@ -135,7 +141,7 @@ function Agenda(props) {
       <Calendar
         {...props}
         localizer={localizer}
-        events={state.events}
+        events={state.events||defaultEvents}
         startAccessor="start"
         endAccessor="end"
         components={{
@@ -151,8 +157,8 @@ function Agenda(props) {
         }}
         eventPropGetter={eventPropGetter}
         onSelectSlot={onSelectSlot}
-        min={moment(props.lockSlotStartTime, "HH:mm").toDate()}
-        max={moment(props.lockSlotEndTime, "HH:mm").toDate()}
+        min={moment(lockSlotStartTime, "HH:mm").toDate()}
+        max={moment(lockSlotEndTime, "HH:mm").toDate()}
         showMultiDayTimes
       />
     </Paper>
