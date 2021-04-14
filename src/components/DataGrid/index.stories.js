@@ -1,6 +1,6 @@
 import { Chip } from "@material-ui/core";
 
-import React from "react";
+import React, { useState } from "react";
 import { withReactContext } from "storybook-react-context";
 import { DataGrid } from ".";
 import { Button } from "../Button";
@@ -15,6 +15,7 @@ import DataGridProvider, {
 } from "./DataGridContext";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import { SelectColumn } from "react-data-grid";
 
 const DataGridStory = {
   component: DataGrid,
@@ -117,10 +118,23 @@ ColumnDisplaySelection.args = {
 const ServerFilterSortStory = ({ ...args }) => {
   const [state, dispatch] = React.useContext(DataGridContext);
   React.useEffect(() => {
+    async function fetchData() {
+      dispatch({
+        payload: { rows: args.rows, columns: args.columns },
+        type: actions.LOAD_DATA,
+      });
+    }
+
     dispatch({
-      payload: { rows: args.rows, columns: args.columns },
-      type: actions.LOAD_DATA,
+      type: actions.SET_LOADING,
     });
+
+    const timer = setTimeout(() => {
+      fetchData();
+    }, 1500);
+
+    return () => clearTimeout(timer);
+
   }, [args.columns, args.rows]);
 
   React.useEffect(() => {
@@ -180,4 +194,44 @@ ServerFilterSort.args = {
   columns: columnData.map((cols) => {
     return { ...cols, sortable: true, filter: "text" };
   }),
+};
+
+const SelectableStory = ({ ...args }) => {
+  const [state, dispatch] = React.useContext(DataGridContext);
+  const [selectedRowIds, setSelectedRowIds] = useState(() => new Set());
+
+  React.useEffect(() => {
+    dispatch({
+      payload: { rows: args.rows, columns: args.columns },
+      type: actions.LOAD_DATA,
+    });
+  }, [args.columns, args.rows, dispatch]);
+
+  
+  return (
+    <DataGrid
+      {...args}
+      gridProps={{
+        selectedRows: selectedRowIds,
+        onSelectedRowsChange: (rows) => {
+          setSelectedRowIds(rows);
+        },
+        rowKeyGetter: (row) => {
+          return row.id
+        },
+      }}
+    />
+  );
+};
+
+export const Selectable = SelectableStory.bind({});
+Selectable.args = {
+  rows: rows,
+  columns: [SelectColumn, ...columnData],
+  containerStyle: {
+    maxHeight: "100vh",
+    display: "flex",
+    flexDirection: "column",
+  },
+  style: { flex: "1 1 auto" },
 };
