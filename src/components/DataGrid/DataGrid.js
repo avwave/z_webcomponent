@@ -119,12 +119,14 @@ function DataGrid({ draggable, showSelector, filterable, style, containerStyle, 
 
     return columns.map((c) => {
       if (c.key === "id") return c;
-      c.formatter = (props) => {
-        return (
-          <GridBox align={c.align ?? "center"}>
-            {c.cellRenderer ? c.cellRenderer(props) : props.row[props.column.key]}
-          </GridBox>
-        );
+      if (!c.formatter) {
+        c.formatter = (props) => {
+          return (
+            <GridBox align={c.align ?? "center"}>
+              {c.cellRenderer ? c.cellRenderer(props) : props.row[props.column.key]}
+            </GridBox>
+          );
+        }
       }
       switch (c.filter) {
         case "text":
