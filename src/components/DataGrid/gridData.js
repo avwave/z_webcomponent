@@ -6,6 +6,7 @@ const columnData = [
     name: "Column1",
     type: "text",
     sortable: false,
+    noTooltip: true,
   },
   {
     key: "title",
@@ -14,7 +15,8 @@ const columnData = [
     type: "text",
     sortable: false,
     filter: "text",
-    align: 'flex-start'
+    align: 'flex-start',
+    noTooltip: true,
   },
   {
     key: "col3Type",
@@ -26,13 +28,14 @@ const columnData = [
     key: "col4Type",
     colId: "col4",
     name: "Column4",
-    sortable: false
+    sortable: false,
   },
   {
     key: "col5Type",
     colId: "col5",
     name: "Column5",
-    sortable: false
+    sortable: false,
+    align:"flex-start",
   },
   {
     key: "col6Type",
@@ -68,7 +71,7 @@ for (let i = 0; i < 3; i++) {
     title: faker.name.findName(),
     col3Type: faker.random.number().toString(),
     col4Type: faker.date.recent().toISOString(),
-    col5Type: faker.random.word(),
+    col5Type: faker.lorem.paragraphs(2),
     col6Type: faker.random.word(),
     col7Type: faker.random.word(),
     col8Type: faker.random.word(),

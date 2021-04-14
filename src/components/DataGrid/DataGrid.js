@@ -1,11 +1,8 @@
-import { Popover, Toolbar } from "@material-ui/core";
+import { Popover, Toolbar, Tooltip, withStyles } from "@material-ui/core";
 import PropTypes from "prop-types";
 import React, { useCallback, useMemo, useState } from "react";
 import ReactDataGrid from "react-data-grid";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
 import styled from "styled-components";
-import { GridBox } from ".";
 import { Button } from "../Button";
 import { status } from "../Checkbox/Checkbox";
 import { Checklist } from "../CheckList";
@@ -14,12 +11,21 @@ import CheckboxProvider, {
   CheckboxContext,
 } from "../CheckList/checklistContext";
 import { actions as dataGridActions, DataGridContext } from "./DataGridContext";
-import {
-  DraggableHeaderRenderer,
-  DraggableHeaderRnderer,
-} from "./DraggableHeaderRenderer";
+import { DraggableHeaderRenderer } from "./DraggableHeaderRenderer";
 import { TextFilterRenderer } from "./FilterRenderer";
 
+const styles = (theme) => ({
+  
+});
+const LightTooltip = withStyles((theme) => ({
+  tooltip: {
+    backgroundColor: '#f5f5f9',
+    color: 'rgba(0, 0, 0, 0.87)',
+    maxWidth: 220,
+    fontSize: theme.typography.pxToRem(14),
+    border: '1px solid #dadde9',
+  },
+}))(Tooltip);
 
 const StyledAppBar = styled(Toolbar)`
   && {
@@ -27,10 +33,18 @@ const StyledAppBar = styled(Toolbar)`
   }
 `;
 
-function DataGrid({ draggable, showSelector, filterable, style, containerStyle, gridProps }) {
+function DataGrid({
+  classes,
+  draggable,
+  showSelector,
+  filterable,
+  style,
+  containerStyle,
+  gridProps,
+}) {
   const [checkListState, checkListDispatch] = React.useContext(CheckboxContext);
-  const [dataGridState, dataGridDispatch] = React.useContext(DataGridContext)
-  
+  const [dataGridState, dataGridDispatch] = React.useContext(DataGridContext);
+
   const [columns, setColumns] = useState(dataGridState.columns);
   const [filters, setFilters] = useState(null);
 
@@ -72,16 +86,19 @@ function DataGrid({ draggable, showSelector, filterable, style, containerStyle, 
 
   const [[sortColumn, sortDirection], setSort] = useState(["", "NONE"]);
 
-  const handleSort = useCallback((sortColumn, sortDirection) => {
-    dataGridDispatch({
-      type: dataGridActions.SORT_COLUMN,
-      payload: {
-        sortColumn, sortDirection
-      }
-    })
-    setSort([sortColumn, sortDirection]);
-  }, [dataGridDispatch]);
-
+  const handleSort = useCallback(
+    (sortColumn, sortDirection) => {
+      dataGridDispatch({
+        type: dataGridActions.SORT_COLUMN,
+        payload: {
+          sortColumn,
+          sortDirection,
+        },
+      });
+      setSort([sortColumn, sortDirection]);
+    },
+    [dataGridDispatch]
+  );
 
   React.useEffect(() => {
     dataGridDispatch({
@@ -90,8 +107,7 @@ function DataGrid({ draggable, showSelector, filterable, style, containerStyle, 
         filterColumn: filters,
       },
     });
-  }, [dataGridDispatch, filters])
-  
+  }, [dataGridDispatch, filters]);
 
   const draggableColumns = useMemo(() => {
     function HeaderRenderer(props) {
@@ -119,19 +135,33 @@ function DataGrid({ draggable, showSelector, filterable, style, containerStyle, 
 
     return columns.map((c) => {
       if (c.key === "id") return c;
-      c.formatter = (props) => {
-        return (
-          <GridBox align={c.align ?? "center"}>
-            {c.cellRenderer ? c.cellRenderer(props) : props.row[props.column.key]}
-          </GridBox>
-        );
+      if (!c.formatter) {
+        c.formatter = (props) => {
+          if (!c.noTooltip) {
+            return (
+              <LightTooltip
+                title={props.row[props.column.key]}
+                placement="bottom-start"
+                className={classes.tooltip}
+              >
+                {c.cellRenderer ? (
+                  c.cellRenderer(props)
+                ) : (
+                  <span>{props.row[props.column.key]}</span>
+                )}
+              </LightTooltip>
+            );
+          } else {
+            return <span>{props.row[props.column.key]}</span>
+          }
+        };
       }
       switch (c.filter) {
         case "text":
           c = {
             ...c,
             headerRenderer: HeaderRenderer,
-            filterRenderer: TextFilterRenderer
+            filterRenderer: TextFilterRenderer,
           };
           break;
 
@@ -159,7 +189,7 @@ function DataGrid({ draggable, showSelector, filterable, style, containerStyle, 
   };
 
   return (
-    <div style={{...containerStyle}}>
+    <div style={{ ...containerStyle }}>
       <StyledAppBar>
         <div style={{ flex: 1 }} />
         {showSelector ? (
@@ -184,31 +214,33 @@ function DataGrid({ draggable, showSelector, filterable, style, containerStyle, 
           <></>
         )}
       </StyledAppBar>
-        <ReactDataGrid
-          {...gridProps}
-          style={{...style}}
-          columns={draggableColumns}
-          rows={dataGridState.rows}
-          sortColumn={sortColumn}
-          sortDirection={sortDirection}
-          enableCellSelect={true}
-          onSort={handleSort}
-          enableFilterRow={filterable}
-          filters={filters}
-          onFiltersChange={setFilters}
-        />
+      <ReactDataGrid
+        {...gridProps}
+        style={{ ...style }}
+        columns={draggableColumns}
+        rows={dataGridState.rows}
+        sortColumn={sortColumn}
+        sortDirection={sortDirection}
+        enableCellSelect={true}
+        onSort={handleSort}
+        enableFilterRow={filterable}
+        filters={filters}
+        onFiltersChange={setFilters}
+      />
     </div>
   );
 }
-  
 
-export default function DGWrapper(props) {
+function DGWrapper(props) {
   return (
     <CheckboxProvider>
       <DataGrid {...props} />
     </CheckboxProvider>
   );
 }
+
+export default withStyles(styles)(DGWrapper);
+
 DataGrid.propTypes = {
   draggable: PropTypes.bool,
   showSelector: PropTypes.bool,
