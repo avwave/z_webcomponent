@@ -6,7 +6,7 @@ const StyledGridBox = styled(Box)`
   background: ${(props) => props.background};
 `;
 
-function GridBox({ theme, variant, children, align = "center" }) {
+function GridBox({ verticalAlign='center', theme, variant, children, align = "center" }) {
   return (
     <StyledGridBox
       background={variant ? theme.palette[variant].light : "transparent"}
@@ -15,6 +15,7 @@ function GridBox({ theme, variant, children, align = "center" }) {
       width="100%"
       height="100%"
       alignItems={align}
+      justifyContent={verticalAlign}
     >
       {children}
     </StyledGridBox>
