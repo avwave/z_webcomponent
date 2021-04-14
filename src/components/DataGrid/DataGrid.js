@@ -214,6 +214,7 @@ function DataGrid({
           <></>
         )}
       </StyledAppBar>
+      {dataGridState.loading ? <LinearProgress/> : null}
       <ReactDataGrid
         {...gridProps}
         style={{ ...style }}

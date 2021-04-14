@@ -117,10 +117,23 @@ ColumnDisplaySelection.args = {
 const ServerFilterSortStory = ({ ...args }) => {
   const [state, dispatch] = React.useContext(DataGridContext);
   React.useEffect(() => {
+    async function fetchData() {
+      dispatch({
+        payload: { rows: args.rows, columns: args.columns },
+        type: actions.LOAD_DATA,
+      });
+    }
+
     dispatch({
-      payload: { rows: args.rows, columns: args.columns },
-      type: actions.LOAD_DATA,
+      type: actions.SET_LOADING,
     });
+
+    const timer = setTimeout(() => {
+      fetchData();
+    }, 1500);
+
+    return () => clearTimeout(timer);
+
   }, [args.columns, args.rows]);
 
   React.useEffect(() => {
