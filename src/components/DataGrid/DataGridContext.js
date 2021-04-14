@@ -15,7 +15,8 @@ export const actions = {
   LOAD_ROWS: 'LOAD_ROWS',
   LOAD_COLUMNS: 'LOAD_COLUMNS',
   LOAD_DATA: 'LOAD_DATA',
-  SET_LOADING: 'SET_LOADING'
+  SET_LOADING: 'SET_LOADING',
+  SET_DONE_LOADING: 'SET_DONE_LOADING'
 };
 
 export const DataGridContext = createContext();
@@ -25,12 +26,14 @@ export function dataGridReducer(state, action) {
   switch (action.type) {
     case actions.SET_LOADING:
       return { ...state, loading: true };
+    case actions.SET_DONE_LOADING:
+      return { ...state, loading: false };
     case actions.LOAD_COLUMNS:
       return { ...state, columns:  action.payload.columns };
     case actions.LOAD_ROWS:
-      return { ...state, rows: action.payload.rows, loading: false};
+      return { ...state, rows: action.payload.rows};
     case actions.LOAD_DATA:
-      return { ...state, ...action.payload, loading: false};
+      return { ...state, ...action.payload};
     case actions.FILTER_COLUMN:
       return {
         ...state,

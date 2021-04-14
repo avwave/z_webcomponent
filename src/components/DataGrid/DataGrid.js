@@ -140,7 +140,7 @@ function DataGrid({
           if (!c.noTooltip) {
             return (
               <LightTooltip
-                title={props.row[props.column.key]}
+                title={props.row[props.column.key]??""}
                 placement="bottom-start"
                 className={classes.tooltip}
               >
