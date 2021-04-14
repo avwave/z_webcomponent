@@ -10,7 +10,8 @@ import CheckboxProvider, {
   checkboxReducer,
 } from "./checklistContext";
 import { Button } from "../Button";
-import { TextField } from "@material-ui/core";
+import { InputAdornment, TextField } from "@material-ui/core";
+import { Search } from "@material-ui/icons";
 
 let defaultItems = [
   { id: "id1", title: "Task one", state: status.UNCHECKED },
@@ -40,21 +41,32 @@ const ChecklistStory = {
     ),
   ],
   onToggle: () => {},
+  argTypes: {
+    maxDisplayHeight: "500px",
+  },
 };
 
 export default ChecklistStory;
 
 export const EmptyStory = () => <Checklist title="Checklist compo" />;
 
-export const Filled = () => {
+export const Default = ({ ...args }) => {
   const [state, dispatch] = React.useContext(CheckboxContext);
   React.useEffect(() => {
     dispatch({
-      payload: { items: defaultItems },
+      payload: { items: args.items },
       type: actions.LOAD_ITEMS,
     });
   }, [dispatch]);
-  return <Checklist title="Checklist" />;
+  return (
+    <Checklist
+      {...args}
+    />
+  );
+};
+Default.args = {
+  title: "Checklist",
+  items: defaultItems,
 };
 
 export const CustomLineItem = () => {
@@ -180,8 +192,7 @@ export const FilterActionComponent = () => {
   );
 };
 
-
-export const Filtering = () => {
+export const Filtering = ({ ...args }) => {
   const [state, dispatch] = React.useContext(CheckboxContext);
   const selectedItems = state.items.filter(function (item) {
     return item.state === status.CHECKED;
@@ -190,29 +201,71 @@ export const Filtering = () => {
   const [output, setOutput] = useState("");
   React.useEffect(() => {
     dispatch({
-      payload: { items: defaultItems },
+      payload: { items: args.items },
       type: actions.LOAD_ITEMS,
     });
   }, [dispatch]);
 
   const handleChange = (event) => {
     const filter = event.target.value;
-    const items = defaultItems.filter(item=>item.title.toLowerCase().includes(filter.toLowerCase()))
+    const items = args.items.filter((item) =>
+      item.title.toLowerCase().includes(filter.toLowerCase())
+    );
     dispatch({
       payload: { items: items },
       type: actions.LOAD_ITEMS,
     });
-
-  }
+  };
   return (
     <>
       <Checklist
         title="Filterable Checklist"
         filterActionComponent={
-          <TextField type="search" label='Filter...' onChange={handleChange}/>
+          <TextField type="search" label="Filter..." onChange={handleChange} />
         }
       />
       <div>{output}</div>
     </>
   );
+};
+
+Filtering.args = {
+  items: [...defaultItems],
+};
+
+export const LongFilter = Default.bind({});
+LongFilter.args = {
+  ...Default.args,
+  items: [...defaultItems, ...defaultItems],
+  maxDisplayHeight: "200px",
+  actionComponent: <Button title="Action" />,
+  filterActionComponent: <TextField type="search" label="Filter..." />,
+};
+
+export const TitleLess = Default.bind({});
+TitleLess.args = {
+  ...Default.args,
+  items: [...defaultItems],
+  title: "",
+};
+
+export const DefaultActionComponent = Default.bind({});
+DefaultActionComponent.args = {
+  ...Default.args,
+  items: [...defaultItems, ...defaultItems],
+  maxDisplayHeight: "200px",
+  actionComponentLabel: "Action",
+  actionComponentVariant: "primary",
+  actionComponentOnClick: (selection) => {
+    alert(JSON.stringify(selection));
+  },
+  filterActionComponent: (
+    <TextField
+      InputProps={{
+        startAdornment: <InputAdornment position="start"><Search/></InputAdornment>
+      }}
+      type="search"
+      label="Filter..."
+    />
+  ),
 };

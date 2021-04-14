@@ -16,10 +16,6 @@ export const actions = {
 export const GridContext = createContext();
 
 function cellClick(gridItems, cellId) {
-  console.log(
-    "🚀 ~ file: GridContext.js ~ line 17 ~ cellClick ~ cellId",
-    cellId
-  );
   const gc = gridItems.map((column) => {
     column.items = column.items.map((item) => {
       item.selected = item.id === cellId;

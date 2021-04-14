@@ -6,6 +6,7 @@ const columnData = [
     name: "Column1",
     type: "text",
     sortable: false,
+    noTooltip: true,
   },
   {
     key: "title",
@@ -13,24 +14,38 @@ const columnData = [
     name: "Column2",
     type: "text",
     sortable: false,
+    filter: "text",
+    align: 'flex-start',
+    noTooltip: true,
+    cellStyles: {
+      color: 'red'
+    }
   },
   {
     key: "col3Type",
     colId: "col3",
     name: "Column3",
-    sortable: false
+    sortable: false,
+    cellStyles: {
+      color: 'green',
+      fontWeight: 'bold'
+    }
   },
   {
     key: "col4Type",
     colId: "col4",
     name: "Column4",
-    sortable: false
+    sortable: false,
+    cellStyles: {
+      fontStyle:"italic"
+    }
   },
   {
     key: "col5Type",
     colId: "col5",
     name: "Column5",
-    sortable: false
+    sortable: false,
+    align:"flex-start",
   },
   {
     key: "col6Type",
@@ -60,13 +75,13 @@ const columnData = [
 
 let rows = []
 
-for (let i = 0; i < 30; i++) {
+for (let i = 0; i < 3; i++) {
   rows.push({
     id: `row${i}`,
     title: faker.name.findName(),
-    col3Type: faker.random.number(),
+    col3Type: faker.random.number().toString(),
     col4Type: faker.date.recent().toISOString(),
-    col5Type: faker.random.word(),
+    col5Type: faker.lorem.paragraphs(2),
     col6Type: faker.random.word(),
     col7Type: faker.random.word(),
     col8Type: faker.random.word(),
