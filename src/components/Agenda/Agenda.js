@@ -12,6 +12,7 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
+  LinearProgress,
   Link,
   Paper,
   Toolbar,
@@ -128,6 +129,7 @@ function Agenda(props) {
 
   return (
     <Paper style={{ height: 700, ...containerStyle }}>
+      {state.loading ? <LinearProgress/> : null}
       <Dialog open={openAlert} onClose={handleCloseAlert}>
         <DialogContent>
           <DialogContentText>{alertMessage}</DialogContentText>
