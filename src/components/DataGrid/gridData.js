@@ -17,18 +17,28 @@ const columnData = [
     filter: "text",
     align: 'flex-start',
     noTooltip: true,
+    cellStyles: {
+      color: 'red'
+    }
   },
   {
     key: "col3Type",
     colId: "col3",
     name: "Column3",
-    sortable: false
+    sortable: false,
+    cellStyles: {
+      color: 'green',
+      fontWeight: 'bold'
+    }
   },
   {
     key: "col4Type",
     colId: "col4",
     name: "Column4",
     sortable: false,
+    cellStyles: {
+      fontStyle:"italic"
+    }
   },
   {
     key: "col5Type",

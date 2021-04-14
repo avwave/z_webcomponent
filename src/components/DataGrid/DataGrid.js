@@ -1,4 +1,4 @@
-import { Popover, Toolbar, Tooltip, withStyles } from "@material-ui/core";
+import { LinearProgress, Popover, Toolbar, Tooltip, withStyles } from "@material-ui/core";
 import PropTypes from "prop-types";
 import React, { useCallback, useMemo, useState } from "react";
 import ReactDataGrid from "react-data-grid";
@@ -147,12 +147,12 @@ function DataGrid({
                 {c.cellRenderer ? (
                   c.cellRenderer(props)
                 ) : (
-                  <span>{props.row[props.column.key]}</span>
+                  <span style={c.cellStyles}>{props.row[props.column.key]}</span>
                 )}
               </LightTooltip>
             );
           } else {
-            return <span>{props.row[props.column.key]}</span>
+            return <span style={c.cellStyles}>{props.row[props.column.key]}</span>
           }
         };
       }
