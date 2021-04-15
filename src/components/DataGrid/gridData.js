@@ -1,4 +1,7 @@
 import faker from "faker";
+import { FormControlLabel, MenuItem, Select } from "@material-ui/core";
+import Checkbox from "../../shared/Checkbox";
+import { TriStateSelect } from "../TriStateSelect";
 const columnData = [
   {
     key: "id",
@@ -15,11 +18,11 @@ const columnData = [
     type: "text",
     sortable: false,
     filter: "text",
-    align: 'flex-start',
+    align: "flex-start",
     noTooltip: true,
     cellStyles: {
-      color: 'red'
-    }
+      color: "red",
+    },
   },
   {
     key: "col3Type",
@@ -27,9 +30,9 @@ const columnData = [
     name: "Column3",
     sortable: false,
     cellStyles: {
-      color: 'green',
-      fontWeight: 'bold'
-    }
+      color: "green",
+      fontWeight: "bold",
+    },
   },
   {
     key: "col4Type",
@@ -37,56 +40,83 @@ const columnData = [
     name: "Column4",
     sortable: false,
     cellStyles: {
-      fontStyle:"italic"
-    }
+      fontStyle: "italic",
+    },
   },
   {
     key: "col5Type",
     colId: "col5",
     name: "Column5",
     sortable: false,
-    align:"flex-start",
+    align: "flex-start",
   },
   {
     key: "col6Type",
     colId: "col6",
     name: "Column6",
-    sortable: false
+    sortable: false,
+    filter: {
+      type: "option",
+      label: "Is type of",
+      options: [
+        {
+          label: "Tip",
+          value: "tip",
+        },
+        {
+          label: "Top",
+          value: "top",
+        },
+      ],
+    },
   },
   {
     key: "col7Type",
     colId: "col7",
     name: "Column7",
-    sortable: false
+    sortable: false,
   },
   {
     key: "col8Type",
     colId: "col8",
     name: "Column8",
-    sortable: false
+    sortable: false,
   },
   {
     key: "col9Type",
     colId: "col9",
     name: "Column9",
-    sortable: false
+    sortable: false,
+    filterRenderer: ({ onChange, value }) => (
+      <FormControlLabel
+        control={
+          <TriStateSelect
+            checked={value}
+            onChange={(e) => {
+              console.log("📢[gridData.js:95]:", e);
+              onChange(e)
+            }}
+          />
+        }
+        label="has"
+      />
+    ),
   },
 ];
 
-let rows = []
+let rows = [];
 
-for (let i = 0; i < 3; i++) {
+for (let i = 0; i < 20; i++) {
   rows.push({
     id: `row${i}`,
     title: faker.name.findName(),
     col3Type: faker.random.number().toString(),
     col4Type: faker.date.recent().toISOString(),
     col5Type: faker.lorem.paragraphs(2),
-    col6Type: faker.random.word(),
+    col6Type: faker.datatype.boolean() ? "Tip" : "Top",
     col7Type: faker.random.word(),
     col8Type: faker.random.word(),
-    col9Type: faker.random.word(),
+    col9Type: faker.datatype.boolean() ? faker.random.word() : null,
   });
-  
 }
 export { columnData, rows };
