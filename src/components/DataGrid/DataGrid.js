@@ -19,7 +19,6 @@ import CheckboxProvider, {
 import { actions as dataGridActions, DataGridContext } from "./DataGridContext";
 import { DraggableHeaderRenderer } from "./DraggableHeaderRenderer";
 import {
-  NumericFilter,
   OptionFilterRenderer,
   TextFilterRenderer,
 } from "./FilterRenderer";
@@ -178,9 +177,6 @@ function DataGrid({
           c.filterRenderer = (args) => (
             <OptionFilterRenderer {...args} filter={c?.filter} />
           );
-          break;
-        case "numeric":
-          c.filterRenderer = NumericFilter;
           break;
         default:
           break;
