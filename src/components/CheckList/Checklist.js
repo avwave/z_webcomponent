@@ -87,7 +87,7 @@ function Checklist({
       <StyledList maxHeight={maxDisplayHeight} hasTitle={!isEmpty(title)}>
         {state.items.length === 0 ? <li>No results</li> : <></>}
         {state.items.map((item, index) => (
-          <li>
+          <li key={`${item.id}-${index}`}>
             <LineItemComponent
               key={`${item.id}-${index}`}
               item={item}

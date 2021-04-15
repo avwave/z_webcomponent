@@ -9,7 +9,7 @@ export const status = {
   INDETERMINATE: "INDETERMINATE",
 };
 
-const CheckboxContainer = styled.li`
+const CheckboxContainer = styled.div`
   display: block;
   height: 28px;
   top: -9px;
