@@ -125,16 +125,15 @@ const ServerFilterSortStory = ({ ...args }) => {
       });
     }
 
-    dispatch({
-      type: actions.SET_LOADING,
-    });
+    // dispatch({
+    //   type: actions.SET_LOADING,
+    // });
 
     const timer = setTimeout(() => {
       fetchData();
-    }, 1500);
+    }, 100);
 
     return () => clearTimeout(timer);
-
   }, [args.columns, args.rows]);
 
   React.useEffect(() => {
@@ -169,9 +168,18 @@ const ServerFilterSortStory = ({ ...args }) => {
     let filteredRows = args.rows;
     searchKeys.map((searchKey) => {
       filteredRows = filteredRows.filter((row) => {
-        return row[searchKey]
-          .toLowerCase()
-          .includes(state.filterColumn[searchKey].toLowerCase());
+        switch (typeof state.filterColumn[searchKey]) {
+          case "boolean":
+            return isEmpty(row[searchKey]) === state.filterColumn[searchKey];
+          case 'object':
+            if (state.filterColumn[searchKey] === null)
+              return true
+            break
+          default:
+            return row[searchKey]
+              .toLowerCase()
+              .includes(state.filterColumn[searchKey].toString().toLowerCase());
+        }
       });
       console.log(
         `Filtering {${searchKey} ${state.filterColumn[searchKey]}`,
@@ -191,9 +199,6 @@ ServerFilterSort.args = {
   ...Default.args,
   showSelector: true,
   filterable: true,
-  columns: columnData.map((cols) => {
-    return { ...cols, sortable: true, filter: "text" };
-  }),
 };
 
 const SelectableStory = ({ ...args }) => {
@@ -207,7 +212,6 @@ const SelectableStory = ({ ...args }) => {
     });
   }, [args.columns, args.rows, dispatch]);
 
-  
   return (
     <DataGrid
       {...args}
@@ -217,7 +221,7 @@ const SelectableStory = ({ ...args }) => {
           setSelectedRowIds(rows);
         },
         rowKeyGetter: (row) => {
-          return row.id
+          return row.id;
         },
       }}
     />
