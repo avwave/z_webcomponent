@@ -249,6 +249,19 @@ function displayItem({props:{row}}) {
   alert(`selected row with: ${JSON.stringify(row, null, 2)}`)
 }
 
+function copyRow({props:{row}}) {
+  const rowcsv = Object.entries(row).map(([k,v] )=>{
+    return `"${v}"`
+  }).join(',')
+  const dummy = document.createElement("input");
+  document.body.appendChild(dummy);
+  dummy.setAttribute('value', rowcsv);
+  dummy.select();
+  document.execCommand("copy");
+  document.body.removeChild(dummy);
+  alert(`copied to clipboard`)
+}
+
 export const DemoContextMenu = DefaultStory.bind({});
 DemoContextMenu.args = {
   ...Default.args,
@@ -262,6 +275,9 @@ DemoContextMenu.args = {
           </ContextItem>
           <ContextItem onClick={displayItem}>
             <ListItem>Display Info</ListItem>
+          </ContextItem>
+          <ContextItem onClick={copyRow}>
+            <ListItem>Copy row to clipboard</ListItem>
           </ContextItem>
         </ContextMenu>
       );
