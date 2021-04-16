@@ -1,4 +1,10 @@
-import { LinearProgress, Popover, Toolbar, Tooltip, withStyles } from "@material-ui/core";
+import {
+  LinearProgress,
+  Popover,
+  Toolbar,
+  Tooltip,
+  withStyles,
+} from "@material-ui/core";
 import PropTypes from "prop-types";
 import React, { useCallback, useMemo, useState } from "react";
 import ReactDataGrid from "react-data-grid";
@@ -12,18 +18,19 @@ import CheckboxProvider, {
 } from "../CheckList/checklistContext";
 import { actions as dataGridActions, DataGridContext } from "./DataGridContext";
 import { DraggableHeaderRenderer } from "./DraggableHeaderRenderer";
-import { TextFilterRenderer } from "./FilterRenderer";
+import {
+  OptionFilterRenderer,
+  TextFilterRenderer,
+} from "./FilterRenderer";
 
-const styles = (theme) => ({
-  
-});
+const styles = (theme) => ({});
 const LightTooltip = withStyles((theme) => ({
   tooltip: {
-    backgroundColor: '#f5f5f9',
-    color: 'rgba(0, 0, 0, 0.87)',
+    backgroundColor: "#f5f5f9",
+    color: "rgba(0, 0, 0, 0.87)",
     maxWidth: 220,
     fontSize: theme.typography.pxToRem(14),
-    border: '1px solid #dadde9',
+    border: "1px solid #dadde9",
   },
 }))(Tooltip);
 
@@ -140,37 +147,38 @@ function DataGrid({
           if (!c.noTooltip) {
             return (
               <LightTooltip
-                title={props.row[props.column.key]??""}
+                title={props.row[props.column.key] ?? ""}
                 placement="bottom-start"
                 className={classes.tooltip}
               >
                 {c.cellRenderer ? (
                   c.cellRenderer(props)
                 ) : (
-                  <span style={c.cellStyles}>{props.row[props.column.key]}</span>
+                  <span style={c.cellStyles}>
+                    {props.row[props.column.key]}
+                  </span>
                 )}
               </LightTooltip>
             );
           } else {
-            return <span style={c.cellStyles}>{props.row[props.column.key]}</span>
+            return (
+              <span style={c.cellStyles}>{props.row[props.column.key]}</span>
+            );
           }
         };
       }
-      switch (c.filter) {
+
+      c.headerRenderer = HeaderRenderer;
+      switch (c.filter?.type) {
         case "text":
-          c = {
-            ...c,
-            headerRenderer: HeaderRenderer,
-            filterRenderer: TextFilterRenderer,
-          };
+          c.filterRenderer = TextFilterRenderer;
           break;
-
+        case "option":
+          c.filterRenderer = (args) => (
+            <OptionFilterRenderer {...args} filter={c?.filter} />
+          );
+          break;
         default:
-          c = {
-            ...c,
-            headerRenderer: HeaderRenderer,
-          };
-
           break;
       }
       return c;
@@ -214,7 +222,7 @@ function DataGrid({
           <></>
         )}
       </StyledAppBar>
-      {dataGridState.loading ? <LinearProgress/> : null}
+      {dataGridState.loading ? <LinearProgress /> : null}
       <ReactDataGrid
         {...gridProps}
         style={{ ...style }}

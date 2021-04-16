@@ -1,13 +1,17 @@
 import {
+  FormControl,
   IconButton,
   Input,
   InputAdornment,
+  InputLabel,
+  MenuItem,
+  Select,
   TextField,
 } from "@material-ui/core";
 import React from "react";
-import { Cancel, Visibility, Close } from "@material-ui/icons";
+import { Close } from "@material-ui/icons";
 
-export function TextFilterRenderer({ onChange, value }) {
+function TextFilterRenderer({ onChange, value }) {
   return (
     <Input
       placeholder="Filter"
@@ -29,3 +33,26 @@ export function TextFilterRenderer({ onChange, value }) {
     />
   );
 }
+
+function OptionFilterRenderer({ onChange, value, filter }) {
+  return (
+    <FormControl fullWidth size="small">
+      <InputLabel>{filter.label}</InputLabel>
+      <Select
+        fullWidth
+        defaultValue={""}
+        value={value ?? ""}
+        onChange={(e) => onChange(e.target.value)}
+      >
+        <MenuItem value=""><em>None</em></MenuItem>
+        {filter.options.map((option, idx) => (
+          <MenuItem key={idx} value={option.value}>
+            {option.label}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
+  );
+}
+
+export { TextFilterRenderer, OptionFilterRenderer };
