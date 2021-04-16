@@ -1,13 +1,15 @@
 import {
   LinearProgress,
+  MenuItem,
   Popover,
   Toolbar,
   Tooltip,
   withStyles,
 } from "@material-ui/core";
 import PropTypes from "prop-types";
-import React, { useCallback, useMemo, useState } from "react";
-import ReactDataGrid from "react-data-grid";
+import React, { useCallback, useContext, useMemo, useState } from "react";
+import ReactDataGrid, { Row } from "react-data-grid";
+import { createPortal } from "react-dom";
 import styled from "styled-components";
 import { Button } from "../Button";
 import { status } from "../Checkbox/Checkbox";
@@ -22,6 +24,15 @@ import {
   OptionFilterRenderer,
   TextFilterRenderer,
 } from "./FilterRenderer";
+
+import {
+  Menu,
+  Item,
+  Separator,
+  Submenu,
+  useContextMenu
+} from "react-contexify";
+import "./context.scss";
 
 const styles = (theme) => ({});
 const LightTooltip = withStyles((theme) => ({
@@ -48,12 +59,21 @@ function DataGrid({
   style,
   containerStyle,
   gridProps,
+  contextMenu,
 }) {
   const [checkListState, checkListDispatch] = React.useContext(CheckboxContext);
   const [dataGridState, dataGridDispatch] = React.useContext(DataGridContext);
 
   const [columns, setColumns] = useState(dataGridState.columns);
   const [filters, setFilters] = useState(null);
+
+  const {show:showContextMenu} = useContextMenu({
+    id: contextMenu?.menuId??"CONTEXT_MENU_ID"
+  })
+
+  function displayMenu(e, row) {
+    showContextMenu(e, { props: { row } });
+  }
 
   React.useEffect(() => {
     const defaultItems = dataGridState.columns.map((col) => {
@@ -93,6 +113,12 @@ function DataGrid({
 
   const [[sortColumn, sortDirection], setSort] = useState(["", "NONE"]);
 
+  function RowRenderer(props){
+    return (
+      <Row onContextMenu={(e)=> displayMenu(e, props.row)} {...props}/>
+    )
+  }
+  
   const handleSort = useCallback(
     (sortColumn, sortDirection) => {
       dataGridDispatch({
@@ -235,7 +261,9 @@ function DataGrid({
         enableFilterRow={filterable}
         filters={filters}
         onFiltersChange={setFilters}
+        rowRenderer={RowRenderer}
       />
+      {contextMenu?.contextItems()??<></>}
     </div>
   );
 }

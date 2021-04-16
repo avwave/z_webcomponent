@@ -1,4 +1,4 @@
-import { Chip } from "@material-ui/core";
+import { Chip , ListItem} from "@material-ui/core";
 
 import React, { useState } from "react";
 import { withReactContext } from "storybook-react-context";
@@ -16,6 +16,8 @@ import DataGridProvider, {
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { SelectColumn } from "react-data-grid";
+
+import { Menu as ContextMenu, Item as ContextItem } from "react-contexify";
 
 const DataGridStory = {
   component: DataGrid,
@@ -239,3 +241,33 @@ Selectable.args = {
   },
   style: { flex: "1 1 auto" },
 };
+
+function displayId({props:{row}}) {
+  alert(`selected row with id: ${row.id}`)
+}
+function displayItem({props:{row}}) {
+  alert(`selected row with: ${JSON.stringify(row, null, 2)}`)
+}
+
+export const DemoContextMenu = DefaultStory.bind({});
+DemoContextMenu.args = {
+  ...Default.args,
+  contextMenu: {
+    menuId: 'CONTEXT_MENU_ID',
+    contextItems(props){
+      return (
+        <ContextMenu id={"CONTEXT_MENU_ID"}>
+          <ContextItem onClick={displayId}>
+            <ListItem>Display ID</ListItem>
+          </ContextItem>
+          <ContextItem onClick={displayItem}>
+            <ListItem>Display Info</ListItem>
+          </ContextItem>
+        </ContextMenu>
+      );
+    } 
+      
+  }
+};
+
+
