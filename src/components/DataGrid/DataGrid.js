@@ -18,7 +18,7 @@ import "./context.scss";
 import { actions as dataGridActions, DataGridContext } from "./DataGridContext";
 import DataGridToolbar from "./DataGridToolbar";
 import { DraggableHeaderRenderer } from "./DraggableHeaderRenderer";
-import { OptionFilterRenderer, TextFilterRenderer } from "./FilterRenderer";
+import { FilterRendererWrapper, OptionFilterRenderer, TextFilterRenderer } from "./FilterRenderer";
 import { Tooltip as Tippy } from "react-tippy";
 import "react-tippy/dist/tippy.css";
 import { isEmpty } from "lodash";
@@ -124,27 +124,28 @@ function DataGrid({
         };
       }
 
-      const filterItem = dataGridState.filterColumn[c.key]
-      
       switch (c.filter?.type) {
         case "text":
           c.filterRenderer = (args) => {
-            return <TextFilterRenderer {...args} value={filterItem}/>;
+            return <TextFilterRenderer {...args} filter={c?.filter}/>;
           };
           break;
         case "option":
           c.filterRenderer = (args) => (
-            <OptionFilterRenderer {...args} filter={c?.filter} value={filterItem}/>
+            <OptionFilterRenderer
+              {...args}
+              filter={c?.filter}
+            />
           );
           break;
-    
         default:
           break;
       }
+
       return c;
     });
     setColumns(cols);
-  }, [dataGridState.columns, dataGridState.filterColumn]);
+  }, [dataGridState.columns]);
 
   React.useEffect(() => {
     let copyColumns = dataGridState.columns;
@@ -199,7 +200,7 @@ function DataGrid({
       },
     });
   }, [dataGridDispatch, filters]);
-
+  
   return (
     <div style={{ ...containerStyle }}>
       <DataGridToolbar
@@ -210,6 +211,7 @@ function DataGrid({
       />
       {dataGridState.loading ? <LinearProgress /> : null}
       <ReactDataGrid
+        headerFiltersHeight={50}
         {...gridProps}
         style={{ ...style }}
         columns={draggableColumns}
@@ -219,9 +221,9 @@ function DataGrid({
         enableCellSelect={true}
         onSort={handleSort}
         enableFilterRow={filterable}
-        filters={dataGridState.filters}
-        onFiltersChange={(a)=>{
-          setFilters({...filters, ...a})
+        filters={dataGridState.filterColumn}
+        onFiltersChange={(a) => {
+          setFilters({ ...filters, ...a });
         }}
         rowRenderer={RowRenderer}
       />

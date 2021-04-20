@@ -19,6 +19,7 @@ const columnData = [
     sortable: false,
     filter: {
       type: "text",
+      label: "Contains",
       default: "",
     },
     align: "flex-start",
@@ -96,7 +97,6 @@ const columnData = [
       default: null,
     },
     filterRenderer: ({ onChange, value }) => {
-      console.log("📢[gridData.js:98]:", value);
       return (
         <FormControlLabel
           control={
