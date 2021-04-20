@@ -25,9 +25,7 @@ const useStyles = makeStyles((theme) => ({
     whiteSpace: "pre-line",
     overflowWrap: "anywhere",
     verticalAlign: "middle",
-    textAlign: "center",
     width: "100%",
-    
     ...theme.typography.caption
   },
 }));
