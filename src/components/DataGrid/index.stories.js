@@ -1,4 +1,4 @@
-import { Chip } from "@material-ui/core";
+import { Chip , ListItem} from "@material-ui/core";
 
 import React, { useState } from "react";
 import { withReactContext } from "storybook-react-context";
@@ -16,6 +16,8 @@ import DataGridProvider, {
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { SelectColumn } from "react-data-grid";
+
+import { Menu as ContextMenu, Item as ContextItem } from "react-contexify";
 
 const DataGridStory = {
   component: DataGrid,
@@ -159,22 +161,16 @@ const ServerFilterSortStory = ({ ...args }) => {
   }, [state.sortColumn, state.sortDirection]);
 
   React.useEffect(() => {
-    if (isEmpty(state.filterColumn)) {
-      console.log("ue filter init state");
-      return;
-    }
-    const searchKeys = Object.keys(state.filterColumn);
+    const searchKeys = isEmpty(state.filterColumn)?[]:Object.keys(state.filterColumn);
 
     let filteredRows = args.rows;
-    searchKeys.map((searchKey) => {
+    searchKeys.forEach((searchKey) => {
       filteredRows = filteredRows.filter((row) => {
         switch (typeof state.filterColumn[searchKey]) {
           case "boolean":
             return isEmpty(row[searchKey]) === state.filterColumn[searchKey];
           case 'object':
-            if (state.filterColumn[searchKey] === null)
-              return true
-            break
+            return (state.filterColumn[searchKey] === null)
           default:
             return row[searchKey]
               .toLowerCase()
@@ -239,3 +235,49 @@ Selectable.args = {
   },
   style: { flex: "1 1 auto" },
 };
+
+function displayId({props:{row}}) {
+  alert(`selected row with id: ${row.id}`)
+}
+function displayItem({props:{row}}) {
+  alert(`selected row with: ${JSON.stringify(row, null, 2)}`)
+}
+
+function copyRow({props:{row}}) {
+  const rowcsv = Object.entries(row).map(([k,v] )=>{
+    return `"${v}"`
+  }).join(',')
+  const dummy = document.createElement("input");
+  document.body.appendChild(dummy);
+  dummy.setAttribute('value', rowcsv);
+  dummy.select();
+  document.execCommand("copy");
+  document.body.removeChild(dummy);
+  alert(`copied to clipboard`)
+}
+
+export const DemoContextMenu = DefaultStory.bind({});
+DemoContextMenu.args = {
+  ...Default.args,
+  contextMenu: {
+    menuId: 'CONTEXT_MENU_ID',
+    contextItems(props){
+      return (
+        <ContextMenu id={"CONTEXT_MENU_ID"}>
+          <ContextItem onClick={displayId}>
+            <ListItem>Display ID</ListItem>
+          </ContextItem>
+          <ContextItem onClick={displayItem}>
+            <ListItem>Display Info</ListItem>
+          </ContextItem>
+          <ContextItem onClick={copyRow}>
+            <ListItem>Copy row to clipboard</ListItem>
+          </ContextItem>
+        </ContextMenu>
+      );
+    } 
+      
+  }
+};
+
+

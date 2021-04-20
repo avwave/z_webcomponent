@@ -3,7 +3,7 @@ import React, { createContext, useReducer } from "react";
 export const initState = {
   rows: [],
   columns: [],
-  filterColumn: null,
+  filterColumn: {},
   sortColumn: null,
   sortDirection: null,
   loading: false,
@@ -16,13 +16,24 @@ export const actions = {
   LOAD_COLUMNS: 'LOAD_COLUMNS',
   LOAD_DATA: 'LOAD_DATA',
   SET_LOADING: 'SET_LOADING',
-  SET_DONE_LOADING: 'SET_DONE_LOADING'
+  SET_DONE_LOADING: 'SET_DONE_LOADING',
+  CLEAR_FILTER_COLUMN: 'CLEAR_FILTER_COLUMN'
 };
 
 export const DataGridContext = createContext();
 
+function setDefaultFilterValues(columns, filterColumns) {
+  const keystore = Object.keys(filterColumns)
+  const keys = keystore.map(keyItem => {
+    const colKey = columns.find( ({key}) => key===keyItem)
+    return [keyItem, colKey?.filter?.default]
+  })
+  const newKeys = Object.fromEntries(keys)
+  return newKeys
+}
 
 export function dataGridReducer(state, action) {
+  console.log("📢[DataGridContext.js:28]:", action.type);
   switch (action.type) {
     case actions.SET_LOADING:
       return { ...state, loading: true };
@@ -37,7 +48,13 @@ export function dataGridReducer(state, action) {
     case actions.FILTER_COLUMN:
       return {
         ...state,
-        filterColumn: action.payload.filterColumn,
+        filterColumn: action.payload.filterColumn??{},
+      };
+    case actions.CLEAR_FILTER_COLUMN:
+      const filters = setDefaultFilterValues(state.columns, state.filterColumn)
+      return {
+        ...state,
+        filterColumn: filters,
       };
     case actions.SORT_COLUMN:
       return {
