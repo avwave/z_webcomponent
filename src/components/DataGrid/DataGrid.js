@@ -85,17 +85,18 @@ function DataGrid({
 
       setColumns(reorderedColumns);
     }
-    function HeaderRenderer(props) {
+    function HeaderRenderer({component, ...props}) {
       return (
         <DraggableHeaderRenderer
           {...props}
           onColumnsReorder={handleColumnReorder}
+          component={component}
         />
       );
     }
 
     return columns.map((c) => {
-      c.headerRenderer = HeaderRenderer;
+      c.headerRenderer = (args) => <HeaderRenderer {...args} component={c.columnHeaderRenderer}/>;
       return c;
     });
   }, [columns]);
@@ -113,6 +114,7 @@ function DataGrid({
               trigger="mouseenter"
               interactive
               sticky
+              hideon
               distance={0}
               theme="light"
               // className={classes.tooltip}
@@ -220,6 +222,7 @@ function DataGrid({
       {dataGridState.loading ? <LinearProgress /> : null}
       <ReactDataGrid
         headerFiltersHeight={50}
+        
         {...gridProps}
         style={{ ...style }}
         columns={draggableColumns}

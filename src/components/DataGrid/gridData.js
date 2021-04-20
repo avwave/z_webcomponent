@@ -2,6 +2,7 @@ import faker from "faker";
 import { FormControlLabel, MenuItem, Select } from "@material-ui/core";
 import Checkbox from "../../shared/Checkbox";
 import { TriStateSelect } from "../TriStateSelect";
+import { HotTubSharp, LocalHospital } from "@material-ui/icons";
 const columnData = [
   {
     key: "id",
@@ -46,6 +47,10 @@ const columnData = [
     cellStyles: {
       fontStyle: "italic",
     },
+    columnHeaderRenderer: (props) => {
+      console.log("📢[gridData.js:50]:", props);
+      return <div {...props}><LocalHospital style={{ color: '#6A99CA' }}/>Column4 </div>
+    }
   },
   {
     key: "col5Type",

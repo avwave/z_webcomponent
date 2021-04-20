@@ -19,16 +19,21 @@ function useCombinedRefs(...refs) {
 const useStyles = makeStyles((theme) => ({
   headerCell: {
     textTransform: "uppercase",
-    display: "inline-block",
+    display: "inline-flex",
+    justifyContent:'center',
+    alignItems:'center',
     whiteSpace: "pre-line",
     overflowWrap: "anywhere",
-    verticalAlign: 'middle',
-    textAlign:'center',
-    width: '100%'
-  }
+    verticalAlign: "middle",
+    textAlign: "center",
+    width: "100%",
+    
+    ...theme.typography.caption
+  },
 }));
 
 export function DraggableHeaderRenderer({
+  component: Component,
   onColumnsReorder,
   column,
   sortColumn,
@@ -63,6 +68,7 @@ export function DraggableHeaderRenderer({
         opacity: isDragging ? 0.5 : 1,
         backgroundColor: isOver ? "#ececec" : "inherit",
         cursor: "move",
+        display:'inline-block'
       }}
     >
       {column.sortable ? (
@@ -73,13 +79,19 @@ export function DraggableHeaderRenderer({
             sortDirection={sortDirection}
             onSort={onSort}
           >
-            <Typography variant='caption' className={classes.headerCell}>
-              {column.name}
-            </Typography>
+            {Component ? (
+              <Component className={classes.headerCell}/>
+            ) : (
+              <Typography variant="caption" className={classes.headerCell}>
+                {column.name}
+              </Typography>
+            )}
           </SortableHeaderCell>
         </>
+      ) : Component ? (
+        <Component className={classes.headerCell}/>
       ) : (
-        <Typography variant='caption' className={classes.headerCell}>
+        <Typography variant="caption" className={classes.headerCell}>
           {column.name}
         </Typography>
       )}
