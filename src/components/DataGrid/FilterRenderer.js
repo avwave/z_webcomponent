@@ -12,12 +12,11 @@ import React from "react";
 import { Close } from "@material-ui/icons";
 
 function TextFilterRenderer({ onChange, value }) {
-  console.log("📢[FilterRenderer.js:14]:", value);
   return (
       <Input
         placeholder="Filter"
         onChange={(e) => onChange(e.target.value)}
-        value={value}
+        value={value ?? ""}
         endAdornment={
           value ? (
             <InputAdornment position="end">
@@ -41,7 +40,7 @@ function OptionFilterRenderer({ onChange, value, filter }) {
       <InputLabel>{filter.label}</InputLabel>
       <Select
         fullWidth
-        value={value}
+        value={value ?? ""}
         onChange={(e) => onChange(e.target.value)}
       >
         <MenuItem value=""><em>None</em></MenuItem>

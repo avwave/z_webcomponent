@@ -21,6 +21,7 @@ import { DraggableHeaderRenderer } from "./DraggableHeaderRenderer";
 import { OptionFilterRenderer, TextFilterRenderer } from "./FilterRenderer";
 import { Tooltip as Tippy } from "react-tippy";
 import "react-tippy/dist/tippy.css";
+import { isEmpty } from "lodash";
 
 const styles = (theme) => ({
   tooltip: {
@@ -123,24 +124,27 @@ function DataGrid({
         };
       }
 
+      const filterItem = dataGridState.filterColumn[c.key]
+      
       switch (c.filter?.type) {
         case "text":
           c.filterRenderer = (args) => {
-            return <TextFilterRenderer {...args}/>;
+            return <TextFilterRenderer {...args} value={filterItem}/>;
           };
           break;
         case "option":
           c.filterRenderer = (args) => (
-            <OptionFilterRenderer {...args} filter={c?.filter} />
+            <OptionFilterRenderer {...args} filter={c?.filter} value={filterItem}/>
           );
           break;
+    
         default:
           break;
       }
       return c;
     });
     setColumns(cols);
-  }, [dataGridState.columns]);
+  }, [dataGridState.columns, dataGridState.filterColumn]);
 
   React.useEffect(() => {
     let copyColumns = dataGridState.columns;
@@ -214,8 +218,10 @@ function DataGrid({
         enableCellSelect={true}
         onSort={handleSort}
         enableFilterRow={filterable}
-        filters={filters}
-        onFiltersChange={setFilters}
+        filters={dataGridState.filters}
+        onFiltersChange={(a)=>{
+          setFilters({...filters, ...a})
+        }}
         rowRenderer={RowRenderer}
       />
       {contextMenu?.contextItems() ?? <></>}

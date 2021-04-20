@@ -78,19 +78,11 @@ function DataGridToolbar({ classes, columns, showSelector, onFilterChange }) {
   }
 
   useEffect(() => {
-    console.log("📢[DataGridToolbar.js:81]:", filterValues);
     onFilterChange(filterValues);
   }, [filterValues]);
 
   const renderFilters = () => {
     return filterColumnSettings.map((col, idx) => {
-      console.log(
-        "📢[DataGridToolbar.js:87]:",
-        col, 
-        dataGridState.filterColumn,
-        dataGridState.filterColumn[col.key],
-        col.key
-      );
       return (
         <FormControl
           key={`filter-${col.id}-${idx}`}

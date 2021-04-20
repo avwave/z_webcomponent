@@ -52,6 +52,7 @@ export function dataGridReducer(state, action) {
       };
     case actions.CLEAR_FILTER_COLUMN:
       const filters = setDefaultFilterValues(state.columns, state.filterColumn)
+      console.log("📢[DataGridContext.js:54]: CLEAR_FILTER_COLUMN", filters);
       return {
         ...state,
         filterColumn: filters,

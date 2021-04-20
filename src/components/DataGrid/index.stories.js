@@ -168,7 +168,7 @@ const ServerFilterSortStory = ({ ...args }) => {
       filteredRows = filteredRows.filter((row) => {
         switch (typeof state.filterColumn[searchKey]) {
           case "boolean":
-            return isEmpty(row[searchKey]) === state.filterColumn[searchKey];
+            return !isEmpty(row[searchKey]) === state.filterColumn[searchKey];
           case 'object':
             return (state.filterColumn[searchKey] === null)
           default:

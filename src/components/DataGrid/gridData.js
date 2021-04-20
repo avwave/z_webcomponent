@@ -57,7 +57,7 @@ const columnData = [
     key: "col6Type",
     colId: "col6",
     name: "Column6",
-    sortable: false,
+    sortable: true,
     filter: {
       type: "option",
       default: "",
@@ -92,23 +92,25 @@ const columnData = [
     name: "Column9",
     sortable: false,
     filter: {
-      type: "boolean",
-      default: null
+      type: "custom",
+      default: null,
     },
-    filterRenderer: ({ onChange, value }) => (
-      <FormControlLabel
-        control={
-          <TriStateSelect
-            checked={value}
-            onChange={(e) => {
-              console.log("📢[gridData.js:95]:", e);
-              onChange(e)
-            }}
-          />
-        }
-        label="has"
-      />
-    ),
+    filterRenderer: ({ onChange, value }) => {
+      console.log("📢[gridData.js:98]:", value);
+      return (
+        <FormControlLabel
+          control={
+            <TriStateSelect
+              checked={value ?? null}
+              onChange={(e) => {
+                onChange(e);
+              }}
+            />
+          }
+          label="has"
+        />
+      );
+    },
   },
 ];
 
