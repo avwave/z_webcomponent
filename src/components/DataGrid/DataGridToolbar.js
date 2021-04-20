@@ -37,7 +37,13 @@ const styles = (theme) => ({
   },
 });
 
-function DataGridToolbar({ classes, columns, showSelector, onFilterChange }) {
+function DataGridToolbar({
+  classes,
+  columns,
+  showSelector,
+  filterable,
+  onFilterChange,
+}) {
   const [columnAnchor, setColumnAnchor] = useState();
   const [filterAnchor, setFilterAnchor] = useState();
   const isCheckListOpen = Boolean(columnAnchor);
@@ -105,12 +111,10 @@ function DataGridToolbar({ classes, columns, showSelector, onFilterChange }) {
       <div style={{ flex: 1 }} />
       {showSelector ? (
         <>
-          <IconButton variant="default" onClick={handleOpenFilterList}>
-            <FilterList />
-          </IconButton>
           <IconButton variant="default" onClick={handleOpenCheckList}>
             <ViewColumn />
           </IconButton>
+
           <Popover
             id={columnPopoverId}
             open={isCheckListOpen}
@@ -121,6 +125,15 @@ function DataGridToolbar({ classes, columns, showSelector, onFilterChange }) {
           >
             <Checklist />
           </Popover>
+        </>
+      ) : (
+        <></>
+      )}
+      {filterable ? (
+        <>
+          <IconButton variant="default" onClick={handleOpenFilterList}>
+            <FilterList />
+          </IconButton>
           <Popover
             id={filterPopoverId}
             open={isFilterListOpen}

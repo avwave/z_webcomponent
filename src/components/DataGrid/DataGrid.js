@@ -205,6 +205,7 @@ function DataGrid({
       <DataGridToolbar
         columns={draggableColumns}
         showSelector={showSelector}
+        filterable={filterable}
         onFilterChange={setFilters}
       />
       {dataGridState.loading ? <LinearProgress /> : null}
