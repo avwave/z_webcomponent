@@ -1,3 +1,5 @@
+import { makeStyles, Typography } from "@material-ui/core";
+import { Sort } from "@material-ui/icons";
 import React, { useCallback } from "react";
 import { SortableHeaderCell } from "react-data-grid";
 import { useDrag, useDrop } from "react-dnd";
@@ -14,6 +16,18 @@ function useCombinedRefs(...refs) {
   }, refs);
 }
 
+const useStyles = makeStyles((theme) => ({
+  headerCell: {
+    textTransform: "uppercase",
+    display: "inline-block",
+    whiteSpace: "pre-line",
+    overflowWrap: "anywhere",
+    verticalAlign: 'middle',
+    textAlign:'center',
+    width: '100%'
+  }
+}));
+
 export function DraggableHeaderRenderer({
   onColumnsReorder,
   column,
@@ -21,6 +35,7 @@ export function DraggableHeaderRenderer({
   sortDirection,
   onSort,
 }) {
+  const classes = useStyles();
   const [{ isDragging }, drag] = useDrag({
     item: { key: column.key, type: "COLUMN_DRAG" },
     collect: (monitor) => ({
@@ -58,11 +73,15 @@ export function DraggableHeaderRenderer({
             sortDirection={sortDirection}
             onSort={onSort}
           >
-            {column.name}
+            <Typography variant='caption' className={classes.headerCell}>
+              {column.name}
+            </Typography>
           </SortableHeaderCell>
         </>
       ) : (
-        <>{column.name}</>
+        <Typography variant='caption' className={classes.headerCell}>
+          {column.name}
+        </Typography>
       )}
     </div>
   );

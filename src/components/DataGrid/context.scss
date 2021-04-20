@@ -59,3 +59,12 @@
 .tippy-tooltip {
   line-height: 1.5em;
 }
+
+.rdg-cell {
+  border-right: 0px;
+  &.rdg-cell-resizable {
+    &:hover {
+      border-right: 1px solid;
+    }
+  }
+}

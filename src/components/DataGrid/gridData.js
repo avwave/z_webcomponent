@@ -14,7 +14,7 @@ const columnData = [
   {
     key: "title",
     colId: "col2",
-    name: "Column2",
+    name: "matrixparsedigital",
     type: "text",
     sortable: false,
     filter: {
@@ -31,12 +31,12 @@ const columnData = [
   {
     key: "col3Type",
     colId: "col3",
-    name: "Column3",
-    sortable: false,
+    name: "wireless Games tan",
     cellStyles: {
       color: "green",
       fontWeight: "bold",
     },
+    resizable: true,
   },
   {
     key: "col4Type",
