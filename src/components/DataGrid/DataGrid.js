@@ -18,7 +18,11 @@ import "./context.scss";
 import { actions as dataGridActions, DataGridContext } from "./DataGridContext";
 import DataGridToolbar from "./DataGridToolbar";
 import { DraggableHeaderRenderer } from "./DraggableHeaderRenderer";
-import { FilterRendererWrapper, OptionFilterRenderer, TextFilterRenderer } from "./FilterRenderer";
+import {
+  FilterRendererWrapper,
+  OptionFilterRenderer,
+  TextFilterRenderer,
+} from "./FilterRenderer";
 import { Tooltip as Tippy } from "react-tippy";
 import "react-tippy/dist/tippy.css";
 import { isEmpty } from "lodash";
@@ -102,9 +106,8 @@ function DataGrid({
 
       if (!c.formatter) {
         c.formatter = (props) => {
-          return (
+          return !c.noTooltip ? (
             <Tippy
-              disabled={c.noTooltip}
               title={props.row[props.column.key] ?? "  "}
               position="bottom-start"
               trigger="mouseenter"
@@ -120,6 +123,14 @@ function DataGrid({
                 <span style={c.cellStyles}>{props.row[props.column.key]}</span>
               )}
             </Tippy>
+          ) : (
+            <>
+              {c.cellRenderer ? (
+                c.cellRenderer(props)
+              ) : (
+                <span style={c.cellStyles}>{props.row[props.column.key]}</span>
+              )}
+            </>
           );
         };
       }
@@ -127,15 +138,12 @@ function DataGrid({
       switch (c.filter?.type) {
         case "text":
           c.filterRenderer = (args) => {
-            return <TextFilterRenderer {...args} filter={c?.filter}/>;
+            return <TextFilterRenderer {...args} filter={c?.filter} />;
           };
           break;
         case "option":
           c.filterRenderer = (args) => (
-            <OptionFilterRenderer
-              {...args}
-              filter={c?.filter}
-            />
+            <OptionFilterRenderer {...args} filter={c?.filter} />
           );
           break;
         default:
@@ -200,7 +208,7 @@ function DataGrid({
       },
     });
   }, [dataGridDispatch, filters]);
-  
+
   return (
     <div style={{ ...containerStyle }}>
       <DataGridToolbar
