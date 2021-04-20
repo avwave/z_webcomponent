@@ -161,22 +161,16 @@ const ServerFilterSortStory = ({ ...args }) => {
   }, [state.sortColumn, state.sortDirection]);
 
   React.useEffect(() => {
-    if (isEmpty(state.filterColumn)) {
-      console.log("ue filter init state");
-      return;
-    }
-    const searchKeys = Object.keys(state.filterColumn);
+    const searchKeys = isEmpty(state.filterColumn)?[]:Object.keys(state.filterColumn);
 
     let filteredRows = args.rows;
-    searchKeys.map((searchKey) => {
+    searchKeys.forEach((searchKey) => {
       filteredRows = filteredRows.filter((row) => {
         switch (typeof state.filterColumn[searchKey]) {
           case "boolean":
             return isEmpty(row[searchKey]) === state.filterColumn[searchKey];
           case 'object':
-            if (state.filterColumn[searchKey] === null)
-              return true
-            break
+            return (state.filterColumn[searchKey] === null)
           default:
             return row[searchKey]
               .toLowerCase()

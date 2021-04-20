@@ -1,55 +1,32 @@
 import {
   LinearProgress,
-  MenuItem,
-  Popover,
   Toolbar,
   Tooltip,
   withStyles,
 } from "@material-ui/core";
 import PropTypes from "prop-types";
-import React, { useCallback, useContext, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
+import { useContextMenu } from "react-contexify";
 import ReactDataGrid, { Row } from "react-data-grid";
-import { createPortal } from "react-dom";
 import styled from "styled-components";
-import { Button } from "../Button";
 import { status } from "../Checkbox/Checkbox";
-import { Checklist } from "../CheckList";
 import CheckboxProvider, {
   actions as checkboxActions,
   CheckboxContext,
 } from "../CheckList/checklistContext";
-import { actions as dataGridActions, DataGridContext } from "./DataGridContext";
-import { DraggableHeaderRenderer } from "./DraggableHeaderRenderer";
-import {
-  OptionFilterRenderer,
-  TextFilterRenderer,
-} from "./FilterRenderer";
-
-import {
-  Menu,
-  Item,
-  Separator,
-  Submenu,
-  useContextMenu
-} from "react-contexify";
 import "./context.scss";
+import { actions as dataGridActions, DataGridContext } from "./DataGridContext";
+import DataGridToolbar from "./DataGridToolbar";
+import { DraggableHeaderRenderer } from "./DraggableHeaderRenderer";
+import { OptionFilterRenderer, TextFilterRenderer } from "./FilterRenderer";
+import { Tooltip as Tippy } from "react-tippy";
+import "react-tippy/dist/tippy.css";
 
-const styles = (theme) => ({});
-const LightTooltip = withStyles((theme) => ({
+const styles = (theme) => ({
   tooltip: {
-    backgroundColor: "#f5f5f9",
-    color: "rgba(0, 0, 0, 0.87)",
-    maxWidth: 220,
-    fontSize: theme.typography.pxToRem(14),
-    border: "1px solid #dadde9",
+    lineHeight: theme.typography.caption.lineHeight,
   },
-}))(Tooltip);
-
-const StyledAppBar = styled(Toolbar)`
-  && {
-    background-color: #fff;
-  }
-`;
+});
 
 function DataGrid({
   classes,
@@ -65,11 +42,11 @@ function DataGrid({
   const [dataGridState, dataGridDispatch] = React.useContext(DataGridContext);
 
   const [columns, setColumns] = useState(dataGridState.columns);
-  const [filters, setFilters] = useState(null);
+  const [filters, setFilters] = useState({});
 
-  const {show:showContextMenu} = useContextMenu({
-    id: contextMenu?.menuId??"CONTEXT_MENU_ID"
-  })
+  const { show: showContextMenu } = useContextMenu({
+    id: contextMenu?.menuId ?? "CONTEXT_MENU_ID",
+  });
 
   function displayMenu(e, row) {
     showContextMenu(e, { props: { row } });
@@ -88,6 +65,82 @@ function DataGrid({
       type: checkboxActions.LOAD_ITEMS,
     });
   }, [checkListDispatch, dataGridState.columns]);
+
+  const draggableColumns = useMemo(() => {
+    function handleColumnReorder(sourceKey, targetKey) {
+      const sourceColumnIndex = columns.findIndex((c) => c.key === sourceKey);
+      const targetColumnIndex = columns.findIndex((c) => c.key === targetKey);
+      const reorderedColumns = [...columns];
+
+      reorderedColumns.splice(
+        targetColumnIndex,
+        0,
+        reorderedColumns.splice(sourceColumnIndex, 1)[0]
+      );
+
+      setColumns(reorderedColumns);
+    }
+    function HeaderRenderer(props) {
+      return (
+        <DraggableHeaderRenderer
+          {...props}
+          onColumnsReorder={handleColumnReorder}
+        />
+      );
+    }
+
+    return columns.map((c) => {
+      c.headerRenderer = HeaderRenderer;
+      return c;
+    });
+  }, [columns]);
+
+  React.useEffect(() => {
+    const cols = dataGridState.columns.map((c) => {
+      if (c.key === "id") return c;
+
+      if (!c.formatter) {
+        c.formatter = (props) => {
+          return (
+            <Tippy
+              disabled={c.noTooltip}
+              title={props.row[props.column.key] ?? "  "}
+              position="bottom-start"
+              trigger="mouseenter"
+              interactive
+              sticky
+              distance={0}
+              theme="light"
+              // className={classes.tooltip}
+            >
+              {c.cellRenderer ? (
+                c.cellRenderer(props)
+              ) : (
+                <span style={c.cellStyles}>{props.row[props.column.key]}</span>
+              )}
+            </Tippy>
+          );
+        };
+      }
+
+      switch (c.filter?.type) {
+        case "text":
+          c.filterRenderer = (args) => {
+            return <TextFilterRenderer {...args}/>;
+          };
+          break;
+        case "option":
+          c.filterRenderer = (args) => (
+            <OptionFilterRenderer {...args} filter={c?.filter} />
+          );
+          break;
+        default:
+          break;
+      }
+      return c;
+    });
+    setColumns(cols);
+  }, [dataGridState.columns]);
 
   React.useEffect(() => {
     let copyColumns = dataGridState.columns;
@@ -113,12 +166,13 @@ function DataGrid({
 
   const [[sortColumn, sortDirection], setSort] = useState(["", "NONE"]);
 
-  function RowRenderer(props){
-    return (
-      <Row onContextMenu={(e)=> displayMenu(e, props.row)} {...props}/>
-    )
+  function RowRenderer(props) {
+    const contextProp = contextMenu
+      ? { onContextMenu: (e) => displayMenu(e, props.row) }
+      : {};
+    return <Row {...contextProp} {...props} />;
   }
-  
+
   const handleSort = useCallback(
     (sortColumn, sortDirection) => {
       dataGridDispatch({
@@ -142,112 +196,13 @@ function DataGrid({
     });
   }, [dataGridDispatch, filters]);
 
-  const draggableColumns = useMemo(() => {
-    function HeaderRenderer(props) {
-      return (
-        <DraggableHeaderRenderer
-          {...props}
-          onColumnsReorder={handleColumnReorder}
-        />
-      );
-    }
-
-    function handleColumnReorder(sourceKey, targetKey) {
-      const sourceColumnIndex = columns.findIndex((c) => c.key === sourceKey);
-      const targetColumnIndex = columns.findIndex((c) => c.key === targetKey);
-      const reorderedColumns = [...columns];
-
-      reorderedColumns.splice(
-        targetColumnIndex,
-        0,
-        reorderedColumns.splice(sourceColumnIndex, 1)[0]
-      );
-
-      setColumns(reorderedColumns);
-    }
-
-    return columns.map((c) => {
-      if (c.key === "id") return c;
-      if (!c.formatter) {
-        c.formatter = (props) => {
-          if (!c.noTooltip) {
-            return (
-              <LightTooltip
-                title={props.row[props.column.key] ?? ""}
-                placement="bottom-start"
-                className={classes.tooltip}
-              >
-                {c.cellRenderer ? (
-                  c.cellRenderer(props)
-                ) : (
-                  <span style={c.cellStyles}>
-                    {props.row[props.column.key]}
-                  </span>
-                )}
-              </LightTooltip>
-            );
-          } else {
-            return (
-              <span style={c.cellStyles}>{props.row[props.column.key]}</span>
-            );
-          }
-        };
-      }
-
-      c.headerRenderer = HeaderRenderer;
-      switch (c.filter?.type) {
-        case "text":
-          c.filterRenderer = TextFilterRenderer;
-          break;
-        case "option":
-          c.filterRenderer = (args) => (
-            <OptionFilterRenderer {...args} filter={c?.filter} />
-          );
-          break;
-        default:
-          break;
-      }
-      return c;
-    });
-  }, [columns]);
-
-  const [anchorEl, setAnchorEl] = useState(null);
-  const isCheckListOpen = Boolean(anchorEl);
-  const popoverId = isCheckListOpen ? "simple-popover" : undefined;
-
-  const handleOpenCheckList = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleChecklistClose = () => {
-    setAnchorEl(null);
-  };
-
   return (
     <div style={{ ...containerStyle }}>
-      <StyledAppBar>
-        <div style={{ flex: 1 }} />
-        {showSelector ? (
-          <>
-            <Button
-              title="Edit Columns"
-              variant="default"
-              onClick={handleOpenCheckList}
-            />
-            <Popover
-              id={popoverId}
-              open={isCheckListOpen}
-              anchorEl={anchorEl}
-              onClose={handleChecklistClose}
-              anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-              transformOrigin={{ vertical: "top", horizontal: "right" }}
-            >
-              <Checklist />
-            </Popover>
-          </>
-        ) : (
-          <></>
-        )}
-      </StyledAppBar>
+      <DataGridToolbar
+        columns={draggableColumns}
+        showSelector={showSelector}
+        onFilterChange={setFilters}
+      />
       {dataGridState.loading ? <LinearProgress /> : null}
       <ReactDataGrid
         {...gridProps}
@@ -263,7 +218,7 @@ function DataGrid({
         onFiltersChange={setFilters}
         rowRenderer={RowRenderer}
       />
-      {contextMenu?.contextItems()??<></>}
+      {contextMenu?.contextItems() ?? <></>}
     </div>
   );
 }

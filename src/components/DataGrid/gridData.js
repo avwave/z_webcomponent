@@ -17,7 +17,10 @@ const columnData = [
     name: "Column2",
     type: "text",
     sortable: false,
-    filter: "text",
+    filter: {
+      type: "text",
+      default: "",
+    },
     align: "flex-start",
     noTooltip: true,
     cellStyles: {
@@ -57,6 +60,7 @@ const columnData = [
     sortable: false,
     filter: {
       type: "option",
+      default: "",
       label: "Is type of",
       options: [
         {
@@ -87,6 +91,10 @@ const columnData = [
     colId: "col9",
     name: "Column9",
     sortable: false,
+    filter: {
+      type: "boolean",
+      default: null
+    },
     filterRenderer: ({ onChange, value }) => (
       <FormControlLabel
         control={
