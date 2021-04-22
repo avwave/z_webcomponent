@@ -2,6 +2,7 @@ import faker from "faker";
 import { FormControlLabel, MenuItem, Select } from "@material-ui/core";
 import Checkbox from "../../shared/Checkbox";
 import { TriStateSelect } from "../TriStateSelect";
+import { HotTubSharp, LocalHospital } from "@material-ui/icons";
 const columnData = [
   {
     key: "id",
@@ -14,10 +15,14 @@ const columnData = [
   {
     key: "title",
     colId: "col2",
-    name: "Column2",
+    name: "matrixparsedigital",
     type: "text",
     sortable: false,
-    filter: "text",
+    filter: {
+      type: "text",
+      label: "Contains",
+      default: "",
+    },
     align: "flex-start",
     noTooltip: true,
     cellStyles: {
@@ -27,12 +32,12 @@ const columnData = [
   {
     key: "col3Type",
     colId: "col3",
-    name: "Column3",
-    sortable: false,
+    name: "wireless Games tan",
     cellStyles: {
       color: "green",
       fontWeight: "bold",
     },
+    resizable: true,
   },
   {
     key: "col4Type",
@@ -42,6 +47,10 @@ const columnData = [
     cellStyles: {
       fontStyle: "italic",
     },
+    columnHeaderRenderer: (props) => {
+      console.log("📢[gridData.js:50]:", props);
+      return <div {...props}><LocalHospital style={{ color: '#6A99CA' }}/>Column4 </div>
+    }
   },
   {
     key: "col5Type",
@@ -54,9 +63,10 @@ const columnData = [
     key: "col6Type",
     colId: "col6",
     name: "Column6",
-    sortable: false,
+    sortable: true,
     filter: {
       type: "option",
+      default: "",
       label: "Is type of",
       options: [
         {
@@ -87,20 +97,25 @@ const columnData = [
     colId: "col9",
     name: "Column9",
     sortable: false,
-    filterRenderer: ({ onChange, value }) => (
-      <FormControlLabel
-        control={
-          <TriStateSelect
-            checked={value}
-            onChange={(e) => {
-              console.log("📢[gridData.js:95]:", e);
-              onChange(e)
-            }}
-          />
-        }
-        label="has"
-      />
-    ),
+    filter: {
+      type: "custom",
+      default: null,
+    },
+    filterRenderer: ({ onChange, value }) => {
+      return (
+        <FormControlLabel
+          control={
+            <TriStateSelect
+              checked={value ?? null}
+              onChange={(e) => {
+                onChange(e);
+              }}
+            />
+          }
+          label="has"
+        />
+      );
+    },
   },
 ];
 

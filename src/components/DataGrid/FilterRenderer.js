@@ -4,47 +4,61 @@ import {
   Input,
   InputAdornment,
   InputLabel,
+  makeStyles,
   MenuItem,
   Select,
-  TextField,
 } from "@material-ui/core";
-import React from "react";
 import { Close } from "@material-ui/icons";
+import React from "react";
 
-function TextFilterRenderer({ onChange, value }) {
+const useStyles = makeStyles((theme) => ({
+  formControl: {
+    margin: theme.spacing(0),
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  },
+}));
+
+function TextFilterRenderer({ onChange, value, filter }) {
+  const classes = useStyles();
   return (
-    <Input
-      placeholder="Filter"
-      onChange={(e) => onChange(e.target.value)}
-      value={value}
-      endAdornment={
-        value ? (
-          <InputAdornment position="end">
-            <IconButton
-              aria-label="close"
-              size="small"
-              onClick={() => onChange("")}
-            >
-              <Close />
-            </IconButton>
-          </InputAdornment>
-        ) : null
-      }
-    />
+    <FormControl fullWidth className={classes.formControl}>
+      <InputLabel>{filter?.label}</InputLabel>
+      <Input
+        onChange={(e) => onChange(e.target.value)}
+        value={value ?? ""}
+        endAdornment={
+          value ? (
+            <InputAdornment position="end">
+              <IconButton
+                aria-label="close"
+                size="small"
+                onClick={() => onChange("")}
+              >
+                <Close />
+              </IconButton>
+            </InputAdornment>
+          ) : null
+        }
+      />
+    </FormControl>
   );
 }
 
 function OptionFilterRenderer({ onChange, value, filter }) {
+  const classes = useStyles();
   return (
-    <FormControl fullWidth size="small">
-      <InputLabel>{filter.label}</InputLabel>
+    <FormControl fullWidth className={classes.formControl}>
+      <InputLabel>{filter?.label}</InputLabel>
       <Select
         fullWidth
-        defaultValue={""}
         value={value ?? ""}
         onChange={(e) => onChange(e.target.value)}
       >
-        <MenuItem value=""><em>None</em></MenuItem>
+        <MenuItem value="">
+          <em>None</em>
+        </MenuItem>
         {filter.options.map((option, idx) => (
           <MenuItem key={idx} value={option.value}>
             {option.label}
@@ -52,6 +66,7 @@ function OptionFilterRenderer({ onChange, value, filter }) {
         ))}
       </Select>
     </FormControl>
+    
   );
 }
 
