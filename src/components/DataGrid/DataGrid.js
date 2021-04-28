@@ -52,6 +52,9 @@ function DataGrid({
   containerStyle,
   gridProps,
   contextMenu,
+  leftAccessory,
+  rightAccessory,
+  centerAccessory
 }) {
   const [checkListState, checkListDispatch] = React.useContext(CheckboxContext);
   const [dataGridState, dataGridDispatch] = React.useContext(DataGridContext);
@@ -224,11 +227,14 @@ function DataGrid({
         showSelector={showSelector}
         filterable={filterable}
         onFilterChange={setFilters}
+        rightAccessory={rightAccessory}
+        leftAccessory={leftAccessory}
+        centerAccessory={centerAccessory}
       />
       {dataGridState.loading ? <LinearProgress /> : null}
       <ReactDataGrid
         headerFiltersHeight={50}
-        
+        rowRenderer={RowRenderer}        
         {...gridProps}
         style={{ ...style }}
         columns={draggableColumns}
@@ -242,7 +248,6 @@ function DataGrid({
         onFiltersChange={(a) => {
           setFilters({ ...filters, ...a });
         }}
-        rowRenderer={RowRenderer}
       />
       {contextMenu?.contextItems() ?? <></>}
     </div>

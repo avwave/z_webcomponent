@@ -43,6 +43,9 @@ function DataGridToolbar({
   showSelector,
   filterable,
   onFilterChange,
+  rightAccessory,
+  leftAccessory,
+  centerAccessory
 }) {
   const [columnAnchor, setColumnAnchor] = useState();
   const [filterAnchor, setFilterAnchor] = useState();
@@ -107,7 +110,10 @@ function DataGridToolbar({
   };
 
   return (
-    <Toolbar className={classes.toolbar}>
+    <Toolbar className={classes.toolbar} disableGutters>
+      {leftAccessory?leftAccessory():<></>}
+      <div style={{ flex: 1 }} />
+      {centerAccessory?centerAccessory():<></>}
       <div style={{ flex: 1 }} />
       {showSelector ? (
         <>
@@ -173,6 +179,7 @@ function DataGridToolbar({
       ) : (
         <></>
       )}
+      {rightAccessory?rightAccessory():<></>}
     </Toolbar>
   );
 }
