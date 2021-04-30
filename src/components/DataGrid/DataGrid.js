@@ -33,6 +33,16 @@ const styles = (theme) => ({
   },
 });
 
+const LightTooltip = withStyles((theme) => ({
+  tooltip: {
+    backgroundColor: '#f5f5f9',
+    color: 'rgba(0, 0, 0, 0.87)',
+    maxWidth: 220,
+    fontSize: theme.typography.pxToRem(14),
+    border: '1px solid #dadde9',
+  },
+}))(Tooltip);
+
 function DataGrid({
   classes,
   draggable,
@@ -42,6 +52,9 @@ function DataGrid({
   containerStyle,
   gridProps,
   contextMenu,
+  leftAccessory,
+  rightAccessory,
+  centerAccessory
 }) {
   const [checkListState, checkListDispatch] = React.useContext(CheckboxContext);
   const [dataGridState, dataGridDispatch] = React.useContext(DataGridContext);
@@ -108,23 +121,19 @@ function DataGrid({
       if (!c.formatter) {
         c.formatter = (props) => {
           return !c.noTooltip ? (
-            <Tippy
-              title={props.row[props.column.key] ?? "  "}
-              position="bottom-start"
-              trigger="mouseenter"
-              interactive
-              sticky
-              hideon
-              distance={0}
-              theme="light"
-              // className={classes.tooltip}
-            >
+            <LightTooltip
+                title={props.row[props.column.key] ?? " "}
+                placement="bottom-start"
+                className={classes.tooltip}
+              >
+                
               {c.cellRenderer ? (
                 c.cellRenderer(props)
               ) : (
                 <span style={c.cellStyles}>{props.row[props.column.key]}</span>
               )}
-            </Tippy>
+              
+            </LightTooltip>
           ) : (
             <>
               {c.cellRenderer ? (
@@ -218,11 +227,14 @@ function DataGrid({
         showSelector={showSelector}
         filterable={filterable}
         onFilterChange={setFilters}
+        rightAccessory={rightAccessory}
+        leftAccessory={leftAccessory}
+        centerAccessory={centerAccessory}
       />
       {dataGridState.loading ? <LinearProgress /> : null}
       <ReactDataGrid
         headerFiltersHeight={50}
-        
+        rowRenderer={RowRenderer}        
         {...gridProps}
         style={{ ...style }}
         columns={draggableColumns}
@@ -236,7 +248,6 @@ function DataGrid({
         onFiltersChange={(a) => {
           setFilters({ ...filters, ...a });
         }}
-        rowRenderer={RowRenderer}
       />
       {contextMenu?.contextItems() ?? <></>}
     </div>

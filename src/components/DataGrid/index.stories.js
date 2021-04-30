@@ -1,9 +1,14 @@
-import { Chip , ListItem} from "@material-ui/core";
-
+import {
+  Button,
+  ButtonGroup,
+  Chip,
+  ListItem,
+  Typography,
+} from "@material-ui/core";
+import { Row } from "react-data-grid";
 import React, { useState } from "react";
 import { withReactContext } from "storybook-react-context";
 import { DataGrid } from ".";
-import { Button } from "../Button";
 import isEmpty from "lodash.isempty";
 
 import { columnData, rows } from "./gridData";
@@ -18,6 +23,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import { SelectColumn } from "react-data-grid";
 
 import { Menu as ContextMenu, Item as ContextItem } from "react-contexify";
+import { action } from "@storybook/addon-actions";
 
 const DataGridStory = {
   component: DataGrid,
@@ -62,6 +68,8 @@ Default.args = {
     flexDirection: "column",
   },
   style: { flex: "1 1 auto" },
+  gridProps: {
+  },
 };
 
 export const CellFormatter = DefaultStory.bind({});
@@ -161,7 +169,9 @@ const ServerFilterSortStory = ({ ...args }) => {
   }, [state.sortColumn, state.sortDirection]);
 
   React.useEffect(() => {
-    const searchKeys = isEmpty(state.filterColumn)?[]:Object.keys(state.filterColumn);
+    const searchKeys = isEmpty(state.filterColumn)
+      ? []
+      : Object.keys(state.filterColumn);
 
     let filteredRows = args.rows;
     searchKeys.forEach((searchKey) => {
@@ -169,8 +179,8 @@ const ServerFilterSortStory = ({ ...args }) => {
         switch (typeof state.filterColumn[searchKey]) {
           case "boolean":
             return !isEmpty(row[searchKey]) === state.filterColumn[searchKey];
-          case 'object':
-            return (state.filterColumn[searchKey] === null)
+          case "object":
+            return state.filterColumn[searchKey] === null;
           default:
             return row[searchKey]
               .toLowerCase()
@@ -236,32 +246,34 @@ Selectable.args = {
   style: { flex: "1 1 auto" },
 };
 
-function displayId({props:{row}}) {
-  alert(`selected row with id: ${row.id}`)
+function displayId({ props: { row } }) {
+  alert(`selected row with id: ${row.id}`);
 }
-function displayItem({props:{row}}) {
-  alert(`selected row with: ${JSON.stringify(row, null, 2)}`)
+function displayItem({ props: { row } }) {
+  alert(`selected row with: ${JSON.stringify(row, null, 2)}`);
 }
 
-function copyRow({props:{row}}) {
-  const rowcsv = Object.entries(row).map(([k,v] )=>{
-    return `"${v}"`
-  }).join(',')
+function copyRow({ props: { row } }) {
+  const rowcsv = Object.entries(row)
+    .map(([k, v]) => {
+      return `"${v}"`;
+    })
+    .join(",");
   const dummy = document.createElement("input");
   document.body.appendChild(dummy);
-  dummy.setAttribute('value', rowcsv);
+  dummy.setAttribute("value", rowcsv);
   dummy.select();
   document.execCommand("copy");
   document.body.removeChild(dummy);
-  alert(`copied to clipboard`)
+  alert(`copied to clipboard`);
 }
 
 export const DemoContextMenu = DefaultStory.bind({});
 DemoContextMenu.args = {
   ...Default.args,
   contextMenu: {
-    menuId: 'CONTEXT_MENU_ID',
-    contextItems(props){
+    menuId: "CONTEXT_MENU_ID",
+    contextItems(props) {
       return (
         <ContextMenu id={"CONTEXT_MENU_ID"}>
           <ContextItem onClick={displayId}>
@@ -275,9 +287,25 @@ DemoContextMenu.args = {
           </ContextItem>
         </ContextMenu>
       );
-    } 
-      
-  }
+    },
+  },
 };
 
+export const ToolbarAccessory = DefaultStory.bind({});
+ToolbarAccessory.args = {
+  ...Default.args,
+  filterable: true,
+  showSelector: true,
+  rightAccessory: () => (
+    <ButtonGroup>
+      <Button onClick={action("Right Button onClick")}>Right</Button>
+    </ButtonGroup>
+  ),
+  leftAccessory: () => (
+    <ButtonGroup>
+      <Button onClick={action("Left Button onClick")}>Left</Button>
+    </ButtonGroup>
+  ),
 
+  centerAccessory: () => <Typography variant="h6">Heading</Typography>,
+};

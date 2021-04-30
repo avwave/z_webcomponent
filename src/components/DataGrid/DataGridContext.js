@@ -33,7 +33,6 @@ function setDefaultFilterValues(columns, filterColumns) {
 }
 
 export function dataGridReducer(state, action) {
-  console.log("📢[DataGridContext.js:28]:", action.type);
   switch (action.type) {
     case actions.SET_LOADING:
       return { ...state, loading: true };
@@ -52,7 +51,6 @@ export function dataGridReducer(state, action) {
       };
     case actions.CLEAR_FILTER_COLUMN:
       const filters = setDefaultFilterValues(state.columns, state.filterColumn)
-      console.log("📢[DataGridContext.js:54]: CLEAR_FILTER_COLUMN", filters);
       return {
         ...state,
         filterColumn: filters,
