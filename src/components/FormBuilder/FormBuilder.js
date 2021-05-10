@@ -45,6 +45,7 @@ const FormBuilder = ({
   resetLabel = "Reset",
   columns = 1,
   onSubmit = () => {},
+  readOnly,
 }) => {
   const validationSchema = useMemo(() => {
     const validatorMap = Object.fromEntries(
@@ -77,6 +78,7 @@ const FormBuilder = ({
               label={fieldParams.label}
               value={formik.values[fieldName]}
               onChange={formik.handleChange}
+              disabled={fieldParams.readOnly}
               error={
                 formik.touched[fieldName] && Boolean(formik.errors[fieldName])
               }
@@ -92,6 +94,7 @@ const FormBuilder = ({
               component={KeyboardDatePicker}
               label={fieldParams.label}
               name={fieldName}
+              disabled={fieldParams.readOnly}
               autoOk
               format="MM/dd/yyyy"
               variant="inline"
@@ -107,6 +110,7 @@ const FormBuilder = ({
               component={KeyboardDateTimePicker}
               label={fieldParams.label}
               name={fieldName}
+              disabled={fieldParams.readOnly}
               autoOk
               variant="inline"
               format="MM/dd/yyyy hh:mm a"
@@ -116,7 +120,7 @@ const FormBuilder = ({
           break;
         case "select":
           Component = () => (
-            <div style={{display:'inline-block'}}>
+            <div style={{ display: "inline-block" }}>
               <InputLabel>{fieldParams.label}</InputLabel>
               <Select
                 name={fieldName}
@@ -125,6 +129,7 @@ const FormBuilder = ({
                 value={formik.values[fieldName]}
                 onChange={formik.handleChange}
                 multiple={fieldParams.settings.multiple}
+                disabled={fieldParams.readOnly}
               >
                 {fieldParams.options.map((item, idx) => {
                   return (
@@ -140,16 +145,19 @@ const FormBuilder = ({
             </div>
           );
           break;
-        case 'switch':
+        case "switch":
         case "checkbox":
           Component = () => (
             <>
               <FormControlLabel
                 name={fieldName}
                 checked={formik.values[fieldName]}
-                control={fieldParams.type==='switch'?<Switch />:<Checkbox/>}
+                control={
+                  fieldParams.type === "switch" ? <Switch /> : <Checkbox />
+                }
                 onChange={formik.handleChange}
                 label={fieldParams.label}
+                disabled={fieldParams.readOnly}
               />
             </>
           );
@@ -165,6 +173,7 @@ const FormBuilder = ({
               >
                 {fieldParams.options.map((item, idx) => (
                   <FormControlLabel
+                    disabled={fieldParams.readOnly}
                     key={idx}
                     value={item[fieldParams.settings.valueField]}
                     control={<Radio />}
@@ -178,8 +187,9 @@ const FormBuilder = ({
         case "autocomplete":
           Component = () => (
             <Autocomplete
-            style={{verticalAlign: 'bottom'}}
-            size="small"
+              style={{ verticalAlign: "bottom" }}
+              size="small"
+              disabled={fieldParams.readOnly}
               disableCloseOnSelect
               name={fieldName}
               label={fieldParams.label}
@@ -213,7 +223,6 @@ const FormBuilder = ({
 
       return () => (
         <FormControl
-        
           fullWidth
           component="fieldset"
           error={formik.touched[fieldName] && Boolean(formik.errors[fieldName])}

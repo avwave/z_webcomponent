@@ -37,6 +37,13 @@ Default.args = {
   columns: 2,
   formFactor: "card",
   form: {
+    readOnly: {
+      type: "text",
+      label: "Read Only",
+      initialValues: "not editable",
+      validator: () => Yup.string().required(),
+      readOnly: true,
+    },
     name: {
       type: "text",
       label: "Name",
