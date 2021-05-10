@@ -4,6 +4,7 @@ import * as Yup from "yup";
 import { action, actions } from "@storybook/addon-actions";
 import { FormBuilder } from ".";
 import { min } from "moment";
+import { Avatar } from "@material-ui/core";
 
 const FormBuilderStory = {
   component: FormBuilder,
@@ -36,7 +37,20 @@ Default.args = {
   resetLabel: "Reset",
   columns: 2,
   formFactor: "card",
+  formLayout: [
+    ["plainComponent", "readOnly"],
+    ["firstName", "middleName", "lastName"],
+    ["startDate", "startTime"],
+    "aNumber",
+    ["selection", "multipleSelection"],
+    "autocomplete",
+    ["radio", "checkbox", "switch"],
+  ],
   form: {
+    plainComponent: {
+      type: "component",
+      component: () => (<Avatar>H</Avatar>),
+    },
     readOnly: {
       type: "text",
       label: "Read Only",
@@ -44,9 +58,24 @@ Default.args = {
       validator: () => Yup.string().required(),
       readOnly: true,
     },
-    name: {
+    firstName: {
       type: "text",
-      label: "Name",
+      label: "First Name",
+      initialValues: "",
+      validator: () => Yup.string().required(),
+      fieldProps: {
+        variant:'outlined'
+      }
+    },
+    middleName: {
+      type: "text",
+      label: "Middle Name",
+      initialValues: "",
+      validator: () => Yup.string().required(),
+    },
+    lastName: {
+      type: "text",
+      label: "Last Name",
       initialValues: "",
       validator: () => Yup.string().required(),
     },
@@ -65,7 +94,6 @@ Default.args = {
     startDate: {
       type: "date",
       label: "Start-Date",
-
       disableFuture: true,
       disablePast: false,
       initialValues: new Date(),
@@ -164,7 +192,7 @@ Default.args = {
         labelField: "label",
         valueField: "id",
       },
-      validator: () => Yup.boolean()
+      validator: () => Yup.boolean(),
     },
     switch: {
       type: "switch",
@@ -175,7 +203,7 @@ Default.args = {
         labelField: "label",
         valueField: "id",
       },
-      validator: () => Yup.boolean()
+      validator: () => Yup.boolean(),
     },
   },
   onSubmit: (values) => {

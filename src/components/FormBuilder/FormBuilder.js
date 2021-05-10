@@ -16,6 +16,7 @@ import {
   Grid,
   InputLabel,
   LinearProgress,
+  makeStyles,
   MenuItem,
   Radio,
   RadioGroup,
@@ -33,12 +34,20 @@ import {
   KeyboardDatePicker,
   KeyboardDateTimePicker,
 } from "formik-material-ui-pickers";
+import { isEmpty } from "lodash";
 import PropTypes from "prop-types";
 import React, { useMemo } from "react";
 import * as Yup from "yup";
 
+const useStyles = makeStyles((theme) => ({
+  controlContainer: {
+    paddingBottom: theme.spacing(2),
+  },
+}));
+
 const FormBuilder = ({
   form,
+  formLayout = [],
   formFactor = "default",
   formLabel,
   submitLabel = "Submit",
@@ -47,9 +56,12 @@ const FormBuilder = ({
   onSubmit = () => {},
   readOnly,
 }) => {
+  const classes = useStyles();
   const validationSchema = useMemo(() => {
     const validatorMap = Object.fromEntries(
-      Object.entries(form).map(([k, v]) => [k, v.validator()])
+      Object.entries(form).filter(([k, v])=>!!v.validator).map(([k, v]) => {
+        return [k, v.validator()];
+      })
     );
     const validator = Yup.object().shape({
       ...validatorMap,
@@ -59,197 +71,231 @@ const FormBuilder = ({
 
   const initialValues = useMemo(() => {
     return Object.fromEntries(
-      Object.entries(form).map(([k, v]) => [k, v.initialValues])
+      Object.entries(form).map(([k, v]) => {
+        return [k, v.initialValues];
+      })
     );
   }, [form]);
 
-  const buildFields = (formik) => {
-    const formParams = Object.entries(form).map(([fieldName, fieldParams]) => {
-      let Component = <></>;
+  const renderField = (formik, fieldName, fieldParams) => {
+    switch (fieldParams.type) {
+      case 'component':
+        console.log("📢[FormBuilder.js:83]:", fieldParams.component);
+        return <fieldParams.component/>
+      case "text":
+      case "email":
+      case "number":
+        return (
+          <TextField
+            name={fieldName}
+            type={fieldParams.type}
+            label={fieldParams.label}
+            value={formik.values[fieldName]}
+            onChange={formik.handleChange}
+            disabled={fieldParams.readOnly}
+            error={
+              formik.touched[fieldName] && Boolean(formik.errors[fieldName])
+            }
+            InputLabelProps={{
+              shrink: true,
+            }}
+            {...fieldParams?.fieldProps}
+          />
+        );
 
-      switch (fieldParams.type) {
-        case "text":
-        case "email":
-        case "number":
-          Component = () => (
-            <TextField
+      case "date":
+        return (
+          <Field
+            disablePast={fieldParams.disablePast}
+            disableFuture={fieldParams.disableFuture}
+            component={KeyboardDatePicker}
+            label={fieldParams.label}
+            name={fieldName}
+            disabled={fieldParams.readOnly}
+            autoOk
+            format="MM/dd/yyyy"
+            variant="inline"
+            mask="__/__/____"
+            {...fieldParams?.fieldProps}
+          />
+        );
+
+      case "time":
+        return (
+          <Field
+            disablePast={fieldParams.disablePast}
+            disableFuture={fieldParams.disableFuture}
+            component={KeyboardDateTimePicker}
+            label={fieldParams.label}
+            name={fieldName}
+            disabled={fieldParams.readOnly}
+            autoOk
+            variant="inline"
+            format="MM/dd/yyyy hh:mm a"
+            mask="__/__/____ __:__ _M"
+            {...fieldParams?.fieldProps}
+          />
+        );
+
+      case "select":
+        return (
+          <div style={{ display: "inline-block" }}>
+            <InputLabel shrink>{fieldParams.label}</InputLabel>
+            <Select
               name={fieldName}
-              type={fieldParams.type}
+              fullWidth
               label={fieldParams.label}
               value={formik.values[fieldName]}
               onChange={formik.handleChange}
+              multiple={fieldParams.settings.multiple}
               disabled={fieldParams.readOnly}
-              error={
-                formik.touched[fieldName] && Boolean(formik.errors[fieldName])
-              }
-            />
-          );
-
-          break;
-        case "date":
-          Component = () => (
-            <Field
-              disablePast={fieldParams.disablePast}
-              disableFuture={fieldParams.disableFuture}
-              component={KeyboardDatePicker}
-              label={fieldParams.label}
-              name={fieldName}
-              disabled={fieldParams.readOnly}
-              autoOk
-              format="MM/dd/yyyy"
-              variant="inline"
-              mask="__/__/____"
-            />
-          );
-          break;
-        case "time":
-          Component = () => (
-            <Field
-              disablePast={fieldParams.disablePast}
-              disableFuture={fieldParams.disableFuture}
-              component={KeyboardDateTimePicker}
-              label={fieldParams.label}
-              name={fieldName}
-              disabled={fieldParams.readOnly}
-              autoOk
-              variant="inline"
-              format="MM/dd/yyyy hh:mm a"
-              mask="__/__/____ __:__ _M"
-            />
-          );
-          break;
-        case "select":
-          Component = () => (
-            <div style={{ display: "inline-block" }}>
-              <InputLabel>{fieldParams.label}</InputLabel>
-              <Select
-                name={fieldName}
-                fullWidth
-                label={fieldParams.label}
-                value={formik.values[fieldName]}
-                onChange={formik.handleChange}
-                multiple={fieldParams.settings.multiple}
-                disabled={fieldParams.readOnly}
-              >
-                {fieldParams.options.map((item, idx) => {
-                  return (
-                    <MenuItem
-                      key={idx}
-                      value={item[fieldParams.settings.valueField]}
-                    >
-                      {item[fieldParams.settings.labelField]}
-                    </MenuItem>
-                  );
-                })}
-              </Select>
-            </div>
-          );
-          break;
-        case "switch":
-        case "checkbox":
-          Component = () => (
-            <>
-              <FormControlLabel
-                name={fieldName}
-                checked={formik.values[fieldName]}
-                control={
-                  fieldParams.type === "switch" ? <Switch /> : <Checkbox />
-                }
-                onChange={formik.handleChange}
-                label={fieldParams.label}
-                disabled={fieldParams.readOnly}
-              />
-            </>
-          );
-          break;
-        case "radio":
-          Component = () => (
-            <>
-              <FormLabel component="legend">{fieldParams.label}</FormLabel>
-              <RadioGroup
-                name={fieldName}
-                value={formik.values[fieldName]}
-                onChange={formik.handleChange}
-              >
-                {fieldParams.options.map((item, idx) => (
-                  <FormControlLabel
-                    disabled={fieldParams.readOnly}
+              {...fieldParams?.fieldProps}
+            >
+              {fieldParams.options.map((item, idx) => {
+                return (
+                  <MenuItem
                     key={idx}
                     value={item[fieldParams.settings.valueField]}
-                    control={<Radio />}
-                    label={item[fieldParams.settings.labelField]}
-                  />
-                ))}
-              </RadioGroup>
-            </>
-          );
-          break;
-        case "autocomplete":
-          Component = () => (
-            <Autocomplete
-              style={{ verticalAlign: "bottom" }}
-              size="small"
-              disabled={fieldParams.readOnly}
-              disableCloseOnSelect
+                  >
+                    {item[fieldParams.settings.labelField]}
+                  </MenuItem>
+                );
+              })}
+            </Select>
+          </div>
+        );
+
+      case "switch":
+      case "checkbox":
+        return (
+          <>
+            <FormControlLabel
               name={fieldName}
+              checked={formik.values[fieldName]}
+              control={
+                fieldParams.type === "switch" ? <Switch /> : <Checkbox />
+              }
+              onChange={formik.handleChange}
               label={fieldParams.label}
-              value={formik.values[fieldName]}
-              onChange={(evt, val) => {
-                formik.setFieldValue(fieldName, val);
-              }}
-              multiple={fieldParams.settings.multiple}
-              options={fieldParams.options}
-              getOptionLabel={(option) => {
-                return option[fieldParams.settings.labelField] ?? "";
-              }}
-              closeIcon={<Backspace fontSize="small" />}
-              renderInput={(iParams) => (
-                <TextField
-                  {...iParams}
-                  label={fieldParams.label}
-                  error={
-                    formik.touched[fieldName] &&
-                    Boolean(formik.errors[fieldName])
-                  }
-                  fullWidth
-                />
-              )}
+              disabled={fieldParams.readOnly}
+              {...fieldParams?.fieldProps}
             />
-          );
-          break;
-        default:
-          Component = () => <></>;
-      }
+          </>
+        );
 
-      return () => (
-        <FormControl
-          fullWidth
-          component="fieldset"
-          error={formik.touched[fieldName] && Boolean(formik.errors[fieldName])}
-        >
-          <Component />
-          <FormHelperText>
-            {formik.touched[fieldName] && formik.errors[fieldName]}
-          </FormHelperText>
-        </FormControl>
-      );
-    });
+      case "radio":
+        return (
+          <>
+            <FormLabel component="legend">{fieldParams.label}</FormLabel>
+            <RadioGroup
+              name={fieldName}
+              value={formik.values[fieldName]}
+              onChange={formik.handleChange}
+              {...fieldParams?.fieldProps}
+            >
+              {fieldParams.options.map((item, idx) => (
+                <FormControlLabel
+                  disabled={fieldParams.readOnly}
+                  key={idx}
+                  value={item[fieldParams.settings.valueField]}
+                  control={<Radio />}
+                  label={item[fieldParams.settings.labelField]}
+                  {...fieldParams?.fieldProps}
+                />
+              ))}
+            </RadioGroup>
+          </>
+        );
 
-    return formParams.map((Formlet, idx) => {
+      case "autocomplete":
+        return (
+          <Autocomplete
+            style={{ verticalAlign: "bottom" }}
+            size="small"
+            disabled={fieldParams.readOnly}
+            disableCloseOnSelect
+            name={fieldName}
+            label={fieldParams.label}
+            value={formik.values[fieldName]}
+            onChange={(evt, val) => {
+              formik.setFieldValue(fieldName, val);
+            }}
+            multiple={fieldParams.settings.multiple}
+            options={fieldParams.options}
+            getOptionLabel={(option) => {
+              return option[fieldParams.settings.labelField] ?? "";
+            }}
+            closeIcon={<Backspace fontSize="small" />}
+            {...fieldParams?.fieldProps}
+            renderInput={(iParams) => (
+              <TextField
+                {...iParams}
+                label={fieldParams.label}
+                placeholder="type to search"
+                error={
+                  formik.touched[fieldName] && Boolean(formik.errors[fieldName])
+                }
+                fullWidth
+              />
+            )}
+          />
+        );
+
+      default:
+        return <></>;
+    }
+  };
+
+  const buildComponent = (formik, layout, formParams, colCount, index) => {
+    if (Array.isArray(layout)) {
       return (
-        <Grid key={idx} item xs={12} sm={12 / columns}>
-          <Formlet />
+        <Grid key={`container-${index}`} container spacing={2}>
+          {layout.map((subLayout, idx) =>
+            buildComponent(
+              formik,
+              subLayout,
+              formParams,
+              layout.length,
+              `${idx}-${index}`
+            )
+          )}
         </Grid>
       );
-    });
+    } else {
+      const field = formParams[layout];
+      if (field) {
+        return (
+          <Grid key={layout.id} item xs={12} sm={12 > colCount}>
+            <FormControl
+              className={classes.controlContainer}
+              fullWidth
+              component="fieldset"
+              error={formik.touched[layout] && Boolean(formik.errors[layout])}
+            >
+              {renderField(formik, layout, field)}
+              <FormHelperText>
+                {formik.touched[layout] && formik.errors[layout]}
+              </FormHelperText>
+            </FormControl>
+          </Grid>
+        );
+      }
+    }
+  };
+
+  const buildFields = (formik) => {
+    const built = formLayout.map((layout, idx) =>
+      buildComponent(formik, layout, form, columns, idx)
+    );
+    return built;
   };
 
   const buildFormFactor = (formik) => {
     const FormContainer = () => (
-      <Grid spacing={2} container>
+      <>
         {buildFields(formik)}
         {formik.isSubmitting && <LinearProgress />}
-      </Grid>
+      </>
     );
 
     const ActionButtons = () => {
