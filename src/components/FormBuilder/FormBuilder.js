@@ -71,7 +71,7 @@ const FormBuilder = ({
           Component = () => (
             <TextField
               name={fieldName}
-              type={fieldParams.format}
+              type={fieldParams.type}
               label={fieldParams.label}
               value={formik.values[fieldName]}
               onChange={formik.handleChange}
@@ -85,6 +85,8 @@ const FormBuilder = ({
         case "date":
           Component = () => (
             <Field
+              disablePast={fieldParams.disablePast}
+              disableFuture={fieldParams.disableFuture}
               component={KeyboardDatePicker}
               label={fieldParams.label}
               name={fieldName}
@@ -98,6 +100,8 @@ const FormBuilder = ({
         case "time":
           Component = () => (
             <Field
+              disablePast={fieldParams.disablePast}
+              disableFuture={fieldParams.disableFuture}
               component={KeyboardDateTimePicker}
               label={fieldParams.label}
               name={fieldName}
