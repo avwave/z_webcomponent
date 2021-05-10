@@ -38,7 +38,7 @@ Default.args = {
   columns: 2,
   formFactor: "card",
   formLayout: [
-    ["plainComponent", "readOnly"],
+    ["plainComponent", "readOnly", "email"],
     ["firstName", "middleName", "lastName"],
     ["startDate", "startTime"],
     "aNumber",
@@ -49,7 +49,7 @@ Default.args = {
   form: {
     plainComponent: {
       type: "component",
-      component: () => (<Avatar>H</Avatar>),
+      component: () => <Avatar>H</Avatar>,
     },
     readOnly: {
       type: "text",
@@ -64,8 +64,8 @@ Default.args = {
       initialValues: "",
       validator: () => Yup.string().required(),
       fieldProps: {
-        variant:'outlined'
-      }
+        variant: "outlined",
+      },
     },
     middleName: {
       type: "text",
@@ -142,6 +142,9 @@ Default.args = {
         labelField: "label",
         valueField: "id",
       },
+      onChange: (fieldName, event) => {
+        console.log("📢[index.stories.js:150]:", fieldName, event);
+      },
       validator: () => Yup.array().min(1), //required
     },
     autocomplete: {
@@ -180,8 +183,9 @@ Default.args = {
       settings: {
         labelField: "label",
         valueField: "id",
-        inline: true
+        inline: true,
       },
+
       validator: () => Yup.string().required(), //required
     },
     checkbox: {

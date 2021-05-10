@@ -28,12 +28,13 @@ import {
 } from "@material-ui/core";
 import { Backspace, CheckBox } from "@material-ui/icons";
 import { Autocomplete } from "@material-ui/lab";
-import { MuiPickersUtilsProvider } from "@material-ui/pickers";
-import { Field, Form, Formik } from "formik";
 import {
   KeyboardDatePicker,
   KeyboardDateTimePicker,
-} from "formik-material-ui-pickers";
+  MuiPickersUtilsProvider,
+} from "@material-ui/pickers";
+import { Field, Form, Formik } from "formik";
+
 import { isEmpty } from "lodash";
 import PropTypes from "prop-types";
 import React, { useMemo } from "react";
@@ -59,9 +60,11 @@ const FormBuilder = ({
   const classes = useStyles();
   const validationSchema = useMemo(() => {
     const validatorMap = Object.fromEntries(
-      Object.entries(form).filter(([k, v])=>!!v.validator).map(([k, v]) => {
-        return [k, v.validator()];
-      })
+      Object.entries(form)
+        .filter(([k, v]) => !!v.validator)
+        .map(([k, v]) => {
+          return [k, v.validator()];
+        })
     );
     const validator = Yup.object().shape({
       ...validatorMap,
@@ -78,10 +81,20 @@ const FormBuilder = ({
   }, [form]);
 
   const renderField = (formik, fieldName, fieldParams) => {
+    const onChangeOverride = fieldParams.onChange
+      ? (evt, value) => {
+          console.log("📢[FormBuilder.js:81]:", evt, evt?.target?.value, value);
+          fieldParams.onChange(fieldName, evt?.target?.value ?? evt);
+          formik.setFieldValue(fieldName, evt?.target?.value ?? evt);
+        }
+      : (evt, value) => {
+          console.log("📢[FormBuilder.js:86]:", evt, evt?.target?.value, value);
+          formik.setFieldValue(fieldName, evt?.target?.value ?? evt);
+        };
+
     switch (fieldParams.type) {
-      case 'component':
-        console.log("📢[FormBuilder.js:83]:", fieldParams.component);
-        return <fieldParams.component/>
+      case "component":
+        return <fieldParams.component />;
       case "text":
       case "email":
       case "number":
@@ -91,7 +104,7 @@ const FormBuilder = ({
             type={fieldParams.type}
             label={fieldParams.label}
             value={formik.values[fieldName]}
-            onChange={formik.handleChange}
+            onChange={onChangeOverride}
             disabled={fieldParams.readOnly}
             error={
               formik.touched[fieldName] && Boolean(formik.errors[fieldName])
@@ -105,12 +118,19 @@ const FormBuilder = ({
 
       case "date":
         return (
-          <Field
+          <KeyboardDatePicker
             disablePast={fieldParams.disablePast}
             disableFuture={fieldParams.disableFuture}
-            component={KeyboardDatePicker}
             label={fieldParams.label}
             name={fieldName}
+            onChange={(evt, val) => {
+              console.log("📢[FormBuilder.js:122]:", evt, val);
+              if (fieldParams.onChange) {
+                fieldParams.onChange(fieldName, val);
+              }
+              formik.setFieldValue(fieldName, val);
+            }}
+            value={formik.values[fieldName]}
             disabled={fieldParams.readOnly}
             autoOk
             format="MM/dd/yyyy"
@@ -122,12 +142,19 @@ const FormBuilder = ({
 
       case "time":
         return (
-          <Field
+          <KeyboardDateTimePicker
             disablePast={fieldParams.disablePast}
             disableFuture={fieldParams.disableFuture}
-            component={KeyboardDateTimePicker}
             label={fieldParams.label}
             name={fieldName}
+            onChange={(evt, val) => {
+              console.log("📢[FormBuilder.js:145]:", evt, val);
+              if (fieldParams.onChange) {
+                fieldParams.onChange(fieldName, val);
+              }
+              formik.setFieldValue(fieldName, val);
+            }}
+            value={formik.values[fieldName]}
             disabled={fieldParams.readOnly}
             autoOk
             variant="inline"
@@ -146,7 +173,7 @@ const FormBuilder = ({
               fullWidth
               label={fieldParams.label}
               value={formik.values[fieldName]}
-              onChange={formik.handleChange}
+              onChange={onChangeOverride}
               multiple={fieldParams.settings.multiple}
               disabled={fieldParams.readOnly}
               {...fieldParams?.fieldProps}
@@ -175,7 +202,13 @@ const FormBuilder = ({
               control={
                 fieldParams.type === "switch" ? <Switch /> : <Checkbox />
               }
-              onChange={formik.handleChange}
+              onChange={(evt, val) => {
+                console.log("📢[FormBuilder.js:190]:", evt, val);
+                if (fieldParams.onChange) {
+                  fieldParams.onChange(fieldName, val);
+                }
+                formik.setFieldValue(fieldName, val);
+              }}
               label={fieldParams.label}
               disabled={fieldParams.readOnly}
               {...fieldParams?.fieldProps}
@@ -191,7 +224,7 @@ const FormBuilder = ({
               row={fieldParams.settings.inline}
               name={fieldName}
               value={formik.values[fieldName]}
-              onChange={formik.handleChange}
+              onChange={onChangeOverride}
               {...fieldParams?.fieldProps}
             >
               {fieldParams.options.map((item, idx) => (
@@ -219,6 +252,10 @@ const FormBuilder = ({
             label={fieldParams.label}
             value={formik.values[fieldName]}
             onChange={(evt, val) => {
+              console.log("📢[FormBuilder.js:247]:", evt, val);
+              if (fieldParams.onChange) {
+                fieldParams.onChange(fieldName, val);
+              }
               formik.setFieldValue(fieldName, val);
             }}
             multiple={fieldParams.settings.multiple}
