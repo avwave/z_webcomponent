@@ -1,52 +1,54 @@
-import { Field, Form, Formik, useFormik } from "formik";
-import React, { useMemo } from "react";
-import * as Yup from "yup";
-
+import DateFnsUtils from "@date-io/luxon";
 import {
-  Button,
-  Grid,
-  LinearProgress,
   Box,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  TextField,
-  FormHelperText,
+  Button,
+  ButtonGroup,
   Card,
   CardActions,
   CardContent,
+  CardHeader,
+  Checkbox,
+  Container,
+  FormControl,
+  FormControlLabel,
+  FormHelperText,
+  FormLabel,
+  Grid,
+  InputLabel,
+  LinearProgress,
+  MenuItem,
+  Radio,
+  RadioGroup,
+  Select,
+  Switch,
+  TextField,
   Toolbar,
   Typography,
-  Avatar,
-  CardHeader,
-  IconButton,
-  Container,
-  ButtonGroup,
 } from "@material-ui/core";
+import { Backspace, CheckBox } from "@material-ui/icons";
 import { Autocomplete } from "@material-ui/lab";
-import { isEmpty } from "lodash";
+import { MuiPickersUtilsProvider } from "@material-ui/pickers";
+import { Field, Form, Formik } from "formik";
 import {
-  DatePicker,
   KeyboardDatePicker,
   KeyboardDateTimePicker,
 } from "formik-material-ui-pickers";
-import { MuiPickersUtilsProvider } from "@material-ui/pickers";
-import DateFnsUtils from "@date-io/luxon";
-import { Backspace, MoreVert as MoreVertIcon } from "@material-ui/icons";
+import PropTypes from "prop-types";
+import React, { useMemo } from "react";
+import * as Yup from "yup";
 
 const FormBuilder = ({
   form,
-  formFactor,
+  formFactor = "default",
   formLabel,
-  submitLabel,
-  resetLabel,
-  columns,
+  submitLabel = "Submit",
+  resetLabel = "Reset",
+  columns = 1,
   onSubmit = () => {},
 }) => {
   const validationSchema = useMemo(() => {
     const validatorMap = Object.fromEntries(
-      Object.entries(form).map(([k, v]) => [k, v.validator])
+      Object.entries(form).map(([k, v]) => [k, v.validator()])
     );
     const validator = Yup.object().shape({
       ...validatorMap,
@@ -114,10 +116,11 @@ const FormBuilder = ({
           break;
         case "select":
           Component = () => (
-            <>
+            <div style={{display:'inline-block'}}>
               <InputLabel>{fieldParams.label}</InputLabel>
               <Select
                 name={fieldName}
+                fullWidth
                 label={fieldParams.label}
                 value={formik.values[fieldName]}
                 onChange={formik.handleChange}
@@ -134,12 +137,49 @@ const FormBuilder = ({
                   );
                 })}
               </Select>
+            </div>
+          );
+          break;
+        case 'switch':
+        case "checkbox":
+          Component = () => (
+            <>
+              <FormControlLabel
+                name={fieldName}
+                checked={formik.values[fieldName]}
+                control={fieldParams.type==='switch'?<Switch />:<Checkbox/>}
+                onChange={formik.handleChange}
+                label={fieldParams.label}
+              />
+            </>
+          );
+          break;
+        case "radio":
+          Component = () => (
+            <>
+              <FormLabel component="legend">{fieldParams.label}</FormLabel>
+              <RadioGroup
+                name={fieldName}
+                value={formik.values[fieldName]}
+                onChange={formik.handleChange}
+              >
+                {fieldParams.options.map((item, idx) => (
+                  <FormControlLabel
+                    key={idx}
+                    value={item[fieldParams.settings.valueField]}
+                    control={<Radio />}
+                    label={item[fieldParams.settings.labelField]}
+                  />
+                ))}
+              </RadioGroup>
             </>
           );
           break;
         case "autocomplete":
           Component = () => (
             <Autocomplete
+            style={{verticalAlign: 'bottom'}}
+            size="small"
               disableCloseOnSelect
               name={fieldName}
               label={fieldParams.label}
@@ -173,7 +213,9 @@ const FormBuilder = ({
 
       return () => (
         <FormControl
+        
           fullWidth
+          component="fieldset"
           error={formik.touched[fieldName] && Boolean(formik.errors[fieldName])}
         >
           <Component />
@@ -202,16 +244,14 @@ const FormBuilder = ({
     );
 
     const ActionButtons = () => {
-      let variant = ''
+      let variant = "";
       switch (formFactor) {
-        case 'card':
-          variant='text'
-          break;
-        case 'toolbar':
-          variant='inherit'
+        case "card":
+        case "toolbar":
+          variant = "text";
           break;
         default:
-          variant='contained'
+          variant = "contained";
           break;
       }
       return (
@@ -295,3 +335,12 @@ const FormBuilder = ({
 };
 
 export { FormBuilder };
+
+FormBuilder.propTypes = {
+  formLabel: PropTypes.string.isRequired,
+  formFactor: PropTypes.string,
+  submitLabel: PropTypes.string,
+  resetLabel: PropTypes.string,
+  columns: PropTypes.number,
+  onSubmit: PropTypes.func.isRequired,
+};
