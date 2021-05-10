@@ -188,6 +188,7 @@ const FormBuilder = ({
           <>
             <FormLabel component="legend">{fieldParams.label}</FormLabel>
             <RadioGroup
+              row={fieldParams.settings.inline}
               name={fieldName}
               value={formik.values[fieldName]}
               onChange={formik.handleChange}

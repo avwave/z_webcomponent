@@ -180,6 +180,7 @@ Default.args = {
       settings: {
         labelField: "label",
         valueField: "id",
+        inline: true
       },
       validator: () => Yup.string().required(), //required
     },
