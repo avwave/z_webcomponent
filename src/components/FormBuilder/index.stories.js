@@ -8,6 +8,14 @@ import { min } from "moment";
 const FormBuilderStory = {
   component: FormBuilder,
   title: "Form/FormBuilder",
+  argTypes: {
+    formFactor: {
+      control: {
+        type: "select",
+        options: ['default', 'card', 'toolbar'],
+      },
+    },
+  },
 };
 
 export default FormBuilderStory;
@@ -16,26 +24,27 @@ const DefaultStory = ({ ...args }) => <FormBuilder {...args} />;
 
 export const Default = DefaultStory.bind({});
 Default.args = {
+  formLabel: 'Form Label',
   submitLabel: 'Submit',
+  resetLabel: 'Reset',
+  columns: 2,
+  formFactor: 'card',
   form: {
     name: {
       type: "text",
       label:'Name',
-      format: "text",
       initialValues: '',
       validator: Yup.string().required(),
     },
     email: {
-      type: "text",
+      type: "email",
       label:'Email',
-      format: "email",
       initialValues: '',
       validator: Yup.string().email().required(),
     },
     aNumber: {
-      type: "text",
+      type: "number",
       label:'A-Number',
-      format: "number",
       initialValues: 0,
       validator: Yup.number().required(),
     },

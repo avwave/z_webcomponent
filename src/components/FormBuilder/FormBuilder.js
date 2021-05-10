@@ -13,6 +13,16 @@ import {
   MenuItem,
   TextField,
   FormHelperText,
+  Card,
+  CardActions,
+  CardContent,
+  Toolbar,
+  Typography,
+  Avatar,
+  CardHeader,
+  IconButton,
+  Container,
+  ButtonGroup,
 } from "@material-ui/core";
 import { Autocomplete } from "@material-ui/lab";
 import { isEmpty } from "lodash";
@@ -23,9 +33,17 @@ import {
 } from "formik-material-ui-pickers";
 import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/luxon";
-import { Backspace } from "@material-ui/icons";
+import { Backspace, MoreVert as MoreVertIcon } from "@material-ui/icons";
 
-const FormBuilder = ({ form, submitLabel, onSubmit = () => {} }) => {
+const FormBuilder = ({
+  form,
+  formFactor,
+  formLabel,
+  submitLabel,
+  resetLabel,
+  columns,
+  onSubmit = () => {},
+}) => {
   const validationSchema = useMemo(() => {
     const validatorMap = Object.fromEntries(
       Object.entries(form).map(([k, v]) => [k, v.validator])
@@ -48,9 +66,12 @@ const FormBuilder = ({ form, submitLabel, onSubmit = () => {} }) => {
 
       switch (fieldParams.type) {
         case "text":
+        case "email":
+        case "number":
           Component = () => (
             <TextField
               name={fieldName}
+              type={fieldParams.format}
               label={fieldParams.label}
               value={formik.values[fieldName]}
               onChange={formik.handleChange}
@@ -128,7 +149,6 @@ const FormBuilder = ({ form, submitLabel, onSubmit = () => {} }) => {
                 return option[fieldParams.settings.labelField] ?? "";
               }}
               closeIcon={<Backspace fontSize="small" />}
-              size="small"
               renderInput={(iParams) => (
                 <TextField
                   {...iParams}
@@ -162,11 +182,92 @@ const FormBuilder = ({ form, submitLabel, onSubmit = () => {} }) => {
 
     return formParams.map((Formlet, idx) => {
       return (
-        <Grid key={idx} item xs={12}>
+        <Grid key={idx} item xs={12} sm={12 / columns}>
           <Formlet />
         </Grid>
       );
     });
+  };
+
+  const buildFormFactor = (formik) => {
+    const FormContainer = () => (
+      <Grid spacing={2} container>
+        {buildFields(formik)}
+        {formik.isSubmitting && <LinearProgress />}
+      </Grid>
+    );
+
+    const ActionButtons = () => {
+      let variant = ''
+      switch (formFactor) {
+        case 'card':
+          variant='text'
+          break;
+        case 'toolbar':
+          variant='inherit'
+          break;
+        default:
+          variant='contained'
+          break;
+      }
+      return (
+        <ButtonGroup variant={variant}>
+          <Button
+            color="secondary"
+            onClick={async () => {
+              formik.handleReset();
+            }}
+          >
+            {resetLabel}
+          </Button>
+          <Button
+            color="primary"
+            onClick={async () => {
+              formik.submitForm();
+            }}
+          >
+            {submitLabel}
+          </Button>
+        </ButtonGroup>
+      );
+    };
+
+    switch (formFactor) {
+      case "card":
+        return (
+          <Card>
+            <CardHeader title={formLabel} />
+            <CardContent>
+              <FormContainer />
+            </CardContent>
+            <CardActions>
+              <ActionButtons />
+            </CardActions>
+          </Card>
+        );
+      case "toolbar":
+        return (
+          <Box>
+            <Toolbar>
+              <Typography variant="h6" style={{ flexGrow: 1 }}>
+                {formLabel}
+              </Typography>
+              <ActionButtons />
+            </Toolbar>
+            <Container>
+              <FormContainer />
+            </Container>
+          </Box>
+        );
+      default:
+        return (
+          <>
+            <Typography variant="h6">{formLabel}</Typography>
+            <FormContainer />
+            <ActionButtons />
+          </>
+        );
+    }
   };
 
   return (
@@ -181,24 +282,8 @@ const FormBuilder = ({ form, submitLabel, onSubmit = () => {} }) => {
           }, 500);
         }}
       >
-        {({ submitForm, isSubmitting, ...formProp }) => {
-          return (
-            <Form>
-              <Grid container>{buildFields(formProp)}</Grid>
-              {isSubmitting && <LinearProgress />}
-              <br />
-              <Button
-                // disabled={!isEmpty(formProp.errors) || isSubmitting}
-                variant="contained"
-                color="primary"
-                onClick={async () => {
-                  submitForm();
-                }}
-              >
-                {submitLabel}
-              </Button>
-            </Form>
-          );
+        {(formProp) => {
+          return <Form>{buildFormFactor(formProp)}</Form>;
         }}
       </Formik>
     </MuiPickersUtilsProvider>
