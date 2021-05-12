@@ -24,7 +24,10 @@ import {
   Switch,
   TextField,
   Toolbar,
-  Typography, Avatar, IconButton,
+  Typography,
+  Avatar,
+  IconButton,
+  ListItemText,
 } from "@material-ui/core";
 import { Backspace, MoreVert as MoreVertIcon } from "@material-ui/icons";
 import { Autocomplete } from "@material-ui/lab";
@@ -35,8 +38,9 @@ import {
   MuiPickersUtilsProvider,
 } from "@material-ui/pickers";
 import { useFormik } from "formik";
+import { isEmpty } from "lodash";
 import PropTypes from "prop-types";
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import * as Yup from "yup";
 
 const useStyles = makeStyles((theme) => ({
@@ -44,10 +48,10 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: theme.spacing(2),
   },
   actionBar: {
-    display: 'flex',
-    flexDirection: 'row',
+    display: "flex",
+    flexDirection: "row",
     justifyContent: "space-between",
-  }
+  },
 }));
 
 const FormBuilder = ({
@@ -55,12 +59,14 @@ const FormBuilder = ({
   formLayout = [],
   formFactor = "default",
   formLabel,
+  formSubtitle,
   submitLabel = "Submit",
   resetLabel = "Reset",
   columns = 1,
   onSubmit = () => {},
   readOnly,
-  additionalActions
+  setValues = {},
+  additionalActions,
 }) => {
   const classes = useStyles();
   const validationSchema = useMemo(() => {
@@ -96,6 +102,12 @@ const FormBuilder = ({
       }, 500);
     },
   });
+
+  useEffect(() => {
+    
+    console.log("📢[FormBuilder.js:105]:", formik.values, setValues);
+    formik.setValues({ ...formik.values, ...setValues });
+  }, [setValues]);
 
   const renderField = useCallback(
     (fieldName, fieldParams) => {
@@ -140,6 +152,7 @@ const FormBuilder = ({
               label={fieldParams.label}
               name={fieldName}
               onChange={(evt, val) => {
+                console.log("📢[FormBuilder.js:152]:", evt);
                 if (fieldParams.onChange) {
                   fieldParams.onChange(
                     fieldName,
@@ -428,9 +441,7 @@ const FormBuilder = ({
       case "card":
         return (
           <Card>
-            <CardHeader title={formLabel} 
-            action={additionalActions()}
-            />
+            <CardHeader title={formLabel} subheader={formSubtitle} action={additionalActions()} />
             <CardContent>
               {buildFields()}
               {formik.isSubmitting && <LinearProgress />}
@@ -444,9 +455,7 @@ const FormBuilder = ({
         return (
           <Box>
             <Toolbar>
-              <Typography variant="h6" style={{ flexGrow: 1 }}>
-                {formLabel}
-              </Typography>
+              <ListItemText primary={formLabel} secondary={formSubtitle} />
               <ActionButtons />
               {additionalActions()}
             </Toolbar>
@@ -459,7 +468,7 @@ const FormBuilder = ({
       default:
         return (
           <>
-            <Typography variant="h6">{formLabel}</Typography>
+            <ListItemText primary={formLabel} secondary={formSubtitle} />
             {buildFields()}
             {formik.isSubmitting && <LinearProgress />}
             <div className={classes.actionBar}>
@@ -469,7 +478,16 @@ const FormBuilder = ({
           </>
         );
     }
-  }, [buildFields, formFactor, formLabel, formik, resetLabel, submitLabel]);
+  }, [
+    additionalActions,
+    buildFields,
+    classes.actionBar,
+    formFactor,
+    formLabel,
+    formik,
+    resetLabel,
+    submitLabel,
+  ]);
 
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>

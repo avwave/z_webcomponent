@@ -1,10 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import * as Yup from "yup";
 
 import { action, actions } from "@storybook/addon-actions";
 import { FormBuilder } from ".";
 import { min } from "moment";
-import { Avatar, Button, ButtonGroup , IconButton, ListItemText} from "@material-ui/core";
+import {
+  Avatar,
+  Button,
+  ButtonGroup,
+  IconButton,
+  ListItemText,
+} from "@material-ui/core";
 import { Close } from "@material-ui/icons";
 
 const FormBuilderStory = {
@@ -33,7 +39,8 @@ const DefaultStory = ({ ...args }) => <FormBuilder {...args} />;
 
 export const Default = DefaultStory.bind({});
 Default.args = {
-  formLabel: <ListItemText primary="Primary" secondary="subtitle"/>,
+  formLabel: "primary",
+  formSubtitle: "secondary",
   submitLabel: "Submit",
   resetLabel: "Reset",
   columns: 2,
@@ -42,8 +49,8 @@ Default.args = {
     <ButtonGroup variant="text">
       <Button>CloseAction</Button>
       <IconButton>
-        <Close/>
-        </IconButton>
+        <Close />
+      </IconButton>
     </ButtonGroup>
   ),
   formLayout: [
@@ -230,4 +237,38 @@ Default.args = {
     console.log("📢[index.stories.js:113]:", values);
     alert(`${JSON.stringify(values, null, 2)}`);
   },
+};
+
+const ModifyStory = ({ ...args }) => {
+  const [formState, setFormState] = useState({});
+
+  return (
+    <FormBuilder
+      {...args}
+      setValues={formState}
+      additionalActions={() => (
+        <ButtonGroup variant="text">
+          <Button
+            onClick={() =>
+              setFormState({
+                firstName: "STEEL RAIN",
+                autocomplete: [
+                  { id: 3, label: "three" },
+
+                  { id: 5, label: "five" },
+                ],
+              })
+            }
+          >
+            Modify
+          </Button>
+        </ButtonGroup>
+      )}
+    />
+  );
+};
+
+export const Modify = ModifyStory.bind({});
+Modify.args = {
+  ...Default.args,
 };
