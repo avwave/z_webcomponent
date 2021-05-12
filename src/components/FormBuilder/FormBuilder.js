@@ -104,7 +104,10 @@ const FormBuilder = ({
   });
 
   useEffect(() => {
-    formik.setValues({ ...formik.values, ...setValues });
+    if (!isEmpty(setValues)) {
+      // NOTE: form freaks out with empty/null values
+      formik.setValues({ ...formik.values, ...setValues });
+    }
   }, [setValues]);
 
   const renderField = useCallback(
