@@ -4,7 +4,8 @@ import * as Yup from "yup";
 import { action, actions } from "@storybook/addon-actions";
 import { FormBuilder } from ".";
 import { min } from "moment";
-import { Avatar } from "@material-ui/core";
+import { Avatar, Button, ButtonGroup , IconButton, ListItemText} from "@material-ui/core";
+import { Close } from "@material-ui/icons";
 
 const FormBuilderStory = {
   component: FormBuilder,
@@ -32,11 +33,19 @@ const DefaultStory = ({ ...args }) => <FormBuilder {...args} />;
 
 export const Default = DefaultStory.bind({});
 Default.args = {
-  formLabel: "Form Label",
+  formLabel: <ListItemText primary="Primary" secondary="subtitle"/>,
   submitLabel: "Submit",
   resetLabel: "Reset",
   columns: 2,
   formFactor: "card",
+  additionalActions: () => (
+    <ButtonGroup variant="text">
+      <Button>CloseAction</Button>
+      <IconButton>
+        <Close/>
+        </IconButton>
+    </ButtonGroup>
+  ),
   formLayout: [
     ["plainComponent", "readOnly", "email"],
     ["firstName", "middleName", "lastName"],
@@ -97,7 +106,11 @@ Default.args = {
       disableFuture: true,
       disablePast: false,
       initialValues: new Date(),
+      useLocalTime: true,
       validator: () => Yup.date().max(new Date()),
+      onChange: (field, data) => {
+        console.log("📢[index.stories.js:101]:", field, data, data.toDate());
+      },
     },
     startTime: {
       type: "time",
@@ -106,7 +119,9 @@ Default.args = {
       disableFuture: false,
       disablePast: true,
       initialValues: new Date(),
-      validator: () => Yup.date().min(new Date()),
+      useLocalTime: true,
+      validator: () => Yup.date().required(),
+      onChange: (field, data) => {},
     },
     selection: {
       type: "select",

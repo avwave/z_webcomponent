@@ -1,4 +1,4 @@
-import DateFnsUtils from "@date-io/luxon";
+import DateFnsUtils from "@date-io/moment";
 import {
   Box,
   Button,
@@ -24,13 +24,14 @@ import {
   Switch,
   TextField,
   Toolbar,
-  Typography,
+  Typography, Avatar, IconButton,
 } from "@material-ui/core";
-import { Backspace } from "@material-ui/icons";
+import { Backspace, MoreVert as MoreVertIcon } from "@material-ui/icons";
 import { Autocomplete } from "@material-ui/lab";
 import {
   KeyboardDatePicker,
   KeyboardDateTimePicker,
+  KeyboardTimePicker,
   MuiPickersUtilsProvider,
 } from "@material-ui/pickers";
 import { useFormik } from "formik";
@@ -42,6 +43,11 @@ const useStyles = makeStyles((theme) => ({
   controlContainer: {
     paddingBottom: theme.spacing(2),
   },
+  actionBar: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: "space-between",
+  }
 }));
 
 const FormBuilder = ({
@@ -54,6 +60,7 @@ const FormBuilder = ({
   columns = 1,
   onSubmit = () => {},
   readOnly,
+  additionalActions
 }) => {
   const classes = useStyles();
   const validationSchema = useMemo(() => {
@@ -134,21 +141,27 @@ const FormBuilder = ({
               name={fieldName}
               onChange={(evt, val) => {
                 if (fieldParams.onChange) {
-                  fieldParams.onChange(fieldName, val);
+                  fieldParams.onChange(
+                    fieldName,
+                    fieldParams.useLocalTime ? evt.local(true) : evt.utc(true)
+                  );
                 }
-                formik.setFieldValue(fieldName, val);
+                formik.setFieldValue(
+                  fieldName,
+                  fieldParams.useLocalTime ? evt.local(true) : evt.utc(true)
+                );
               }}
               value={formik.values[fieldName]}
               disabled={fieldParams.readOnly}
               autoOk
-              format="MM/dd/yyyy"
+              format="MM/DD/yyyy"
               variant="inline"
               mask="__/__/____"
               {...fieldParams?.fieldProps}
             />
           );
 
-        case "time":
+        case "datetime":
           return (
             <KeyboardDateTimePicker
               disablePast={fieldParams.disablePast}
@@ -157,15 +170,50 @@ const FormBuilder = ({
               name={fieldName}
               onChange={(evt, val) => {
                 if (fieldParams.onChange) {
-                  fieldParams.onChange(fieldName, val);
+                  fieldParams.onChange(
+                    fieldName,
+                    fieldParams.useLocalTime ? evt.local(true) : evt.utc(true)
+                  );
                 }
-                formik.setFieldValue(fieldName, val);
+                formik.setFieldValue(
+                  fieldName,
+                  fieldParams.useLocalTime ? evt.local(true) : evt.utc(true)
+                );
               }}
               value={formik.values[fieldName]}
               disabled={fieldParams.readOnly}
               autoOk
               variant="inline"
               format="MM/dd/yyyy hh:mm a"
+              mask="__/__/____ __:__ _M"
+              {...fieldParams?.fieldProps}
+            />
+          );
+        case "time":
+          return (
+            <KeyboardTimePicker
+              disablePast={fieldParams.disablePast}
+              disableFuture={fieldParams.disableFuture}
+              label={fieldParams.label}
+              name={fieldName}
+              onChange={(evt, val) => {
+                console.log("📢[FormBuilder.js:181]:", evt, val);
+                if (fieldParams.onChange) {
+                  fieldParams.onChange(
+                    fieldName,
+                    fieldParams.useLocalTime ? evt.local(true) : evt.utc(true)
+                  );
+                }
+                formik.setFieldValue(
+                  fieldName,
+                  fieldParams.useLocalTime ? evt.local(true) : evt.utc(true)
+                );
+              }}
+              value={formik.values[fieldName]}
+              disabled={fieldParams.readOnly}
+              autoOk
+              variant="inline"
+              format="hh:mm a"
               mask="__/__/____ __:__ _M"
               {...fieldParams?.fieldProps}
             />
@@ -269,7 +317,6 @@ const FormBuilder = ({
                 return option[fieldParams.settings.labelField] ?? "";
               }}
               closeIcon={<Backspace fontSize="small" />}
-              {...fieldParams?.fieldProps}
               renderInput={(iParams) => (
                 <TextField
                   {...iParams}
@@ -282,6 +329,7 @@ const FormBuilder = ({
                   fullWidth
                 />
               )}
+              {...fieldParams?.fieldProps}
             />
           );
 
@@ -311,7 +359,12 @@ const FormBuilder = ({
         const field = formParams[layout];
         if (field) {
           return (
-            <Grid key={layout.id} item xs={12} sm={12 > colCount}>
+            <Grid
+              key={`${index}-layout-${layout.id}`}
+              item
+              xs={12}
+              sm={12 > colCount}
+            >
               <FormControl
                 className={classes.controlContainer}
                 fullWidth
@@ -375,7 +428,9 @@ const FormBuilder = ({
       case "card":
         return (
           <Card>
-            <CardHeader title={formLabel} />
+            <CardHeader title={formLabel} 
+            action={additionalActions()}
+            />
             <CardContent>
               {buildFields()}
               {formik.isSubmitting && <LinearProgress />}
@@ -393,6 +448,7 @@ const FormBuilder = ({
                 {formLabel}
               </Typography>
               <ActionButtons />
+              {additionalActions()}
             </Toolbar>
             <Container>
               {buildFields()}
@@ -406,7 +462,10 @@ const FormBuilder = ({
             <Typography variant="h6">{formLabel}</Typography>
             {buildFields()}
             {formik.isSubmitting && <LinearProgress />}
-            <ActionButtons />
+            <div className={classes.actionBar}>
+              <ActionButtons />
+              {additionalActions()}
+            </div>
           </>
         );
     }
