@@ -16,6 +16,7 @@ import {
   Grid,
   InputLabel,
   LinearProgress,
+  ListItemText,
   makeStyles,
   MenuItem,
   Radio,
@@ -24,12 +25,8 @@ import {
   Switch,
   TextField,
   Toolbar,
-  Typography,
-  Avatar,
-  IconButton,
-  ListItemText,
 } from "@material-ui/core";
-import { Backspace, MoreVert as MoreVertIcon } from "@material-ui/icons";
+import { Backspace } from "@material-ui/icons";
 import { Autocomplete } from "@material-ui/lab";
 import {
   KeyboardDatePicker,
@@ -67,6 +64,7 @@ const FormBuilder = ({
   readOnly,
   setValues = {},
   additionalActions,
+  children,
 }) => {
   const classes = useStyles();
   const validationSchema = useMemo(() => {
@@ -442,9 +440,14 @@ const FormBuilder = ({
       case "card":
         return (
           <Card>
-            <CardHeader title={formLabel} subheader={formSubtitle} action={additionalActions()} />
+            <CardHeader
+              title={formLabel}
+              subheader={formSubtitle}
+              action={additionalActions()}
+            />
             <CardContent>
               {buildFields()}
+              {children}
               {formik.isSubmitting && <LinearProgress />}
             </CardContent>
             <CardActions>
@@ -462,6 +465,7 @@ const FormBuilder = ({
             </Toolbar>
             <Container>
               {buildFields()}
+              {children}
               {formik.isSubmitting && <LinearProgress />}
             </Container>
           </Box>
@@ -471,6 +475,7 @@ const FormBuilder = ({
           <>
             <ListItemText primary={formLabel} secondary={formSubtitle} />
             {buildFields()}
+            {children}
             {formik.isSubmitting && <LinearProgress />}
             <div className={classes.actionBar}>
               <ActionButtons />
@@ -479,20 +484,13 @@ const FormBuilder = ({
           </>
         );
     }
-  }, [
-    additionalActions,
-    buildFields,
-    classes.actionBar,
-    formFactor,
-    formLabel,
-    formik,
-    resetLabel,
-    submitLabel,
-  ]);
+  }, [additionalActions, buildFields, children, classes.actionBar, formFactor, formLabel, formSubtitle, formik, resetLabel, submitLabel]);
 
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
-      <form onSubmit={formik.handleSubmit}>{buildFormFactor}</form>
+      <form onSubmit={formik.handleSubmit}>
+        {buildFormFactor}
+      </form>
     </MuiPickersUtilsProvider>
   );
 };

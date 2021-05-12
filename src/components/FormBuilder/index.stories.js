@@ -8,6 +8,7 @@ import {
   Avatar,
   Button,
   ButtonGroup,
+  Card,
   IconButton,
   ListItemText,
 } from "@material-ui/core";
@@ -282,5 +283,66 @@ const ModifyStory = ({ ...args }) => {
 
 export const Modify = ModifyStory.bind({});
 Modify.args = {
+  ...Default.args,
+};
+
+const NestedStory = ({ ...args }) => {
+  const [formState, setFormState] = useState({});
+
+  return (
+    <FormBuilder
+      {...args}
+      setValues={formState}
+      additionalActions={() => (
+        <ButtonGroup variant="text">
+          <Button
+            onClick={() =>
+              setFormState({
+                firstName: "STEEL RAIN",
+                autocomplete: [
+                  { id: 3, label: "three" },
+
+                  { id: 5, label: "five" },
+                ],
+              })
+            }
+          >
+            Nested
+          </Button>
+        </ButtonGroup>
+      )}
+    >
+      <Card>
+
+        <FormBuilder
+        {...args}
+        formFactor='toolbar'
+        setValues={formState}
+        additionalActions={() => (
+          <ButtonGroup variant="text">
+            <Button
+              onClick={() =>
+                setFormState({
+                  firstName: "STEEL RAIN",
+                  autocomplete: [
+                    { id: 3, label: "three" },
+
+                    { id: 5, label: "five" },
+                  ],
+                })
+              }
+            >
+              Nested
+            </Button>
+          </ButtonGroup>
+        )}
+      />
+      </Card>
+    </FormBuilder>
+  );
+};
+
+export const Nested = NestedStory.bind({});
+Nested.args = {
   ...Default.args,
 };
