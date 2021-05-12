@@ -61,6 +61,7 @@ Default.args = {
     ["selection", "multipleSelection"],
     "autocomplete",
     ["radio", "checkbox", "switch"],
+    "multiLine"
   ],
   form: {
     plainComponent: {
@@ -94,6 +95,17 @@ Default.args = {
       label: "Last Name",
       initialValues: "",
       validator: () => Yup.string().required(),
+    },
+    multiLine: {
+      type: "text",
+      label: "Multi line",
+      initialValues: "",
+      validator: () => Yup.string().required(),
+      fieldProps: {
+        multiline: true,
+        rowsMax: 4,
+        variant:"standard"
+      }
     },
     email: {
       type: "email",
