@@ -62,7 +62,7 @@ Default.args = {
     ["selection", "multipleSelection"],
     "autocomplete",
     ["radio", "checkbox", "switch"],
-    "multiLine"
+    "multiLine",
   ],
   form: {
     plainComponent: {
@@ -105,8 +105,8 @@ Default.args = {
       fieldProps: {
         multiline: true,
         rowsMax: 4,
-        variant:"standard"
-      }
+        variant: "standard",
+      },
     },
     email: {
       type: "email",
@@ -311,38 +311,48 @@ const NestedStory = ({ ...args }) => {
           </Button>
         </ButtonGroup>
       )}
-    >
-      <Card>
-
-        <FormBuilder
-        {...args}
-        formFactor='toolbar'
-        setValues={formState}
-        additionalActions={() => (
-          <ButtonGroup variant="text">
-            <Button
-              onClick={() =>
-                setFormState({
-                  firstName: "STEEL RAIN",
-                  autocomplete: [
-                    { id: 3, label: "three" },
-
-                    { id: 5, label: "five" },
-                  ],
-                })
-              }
-            >
-              Nested
-            </Button>
-          </ButtonGroup>
-        )}
-      />
-      </Card>
-    </FormBuilder>
+    ></FormBuilder>
   );
 };
 
 export const Nested = NestedStory.bind({});
 Nested.args = {
   ...Default.args,
+  formLayout: [["form1", "form2"], "subform"],
+  form: {
+    form1: {
+      type: "text",
+      label: "form 1",
+      initialValues: "a",
+      validator: () => Yup.string().nullable().required(),
+    },
+    form2: {
+      type: "text",
+      label: "form 2",
+      initialValues: "b",
+      validator: () => Yup.string().nullable().required(),
+    },
+    subform: {
+      type: "fieldarray",
+      label: "subform",
+      formLayout: ["subform1", "subform2"],
+      formValueTemplate: {
+        subform1: ``,
+        subform2: ``,
+      },
+      formTemplate: {
+        subform1: {
+          type: "text",
+          label: "subform 1",
+          initialValues: "",
+        },
+        subform2: {
+          type: "text",
+          label: "subform 2",
+          initialValues: "",
+        },
+      },
+      form: [],
+    },
+  },
 };
