@@ -323,41 +323,49 @@ const FormFieldSet = ({
             <FieldArray
               name={fieldName}
               render={(arrayHelpers) => {
-                console.log("📢[FormBuilder.js:358]:", arrayHelpers);
-                if (Array.isArray(arrayHelpers.form.values[fieldName])) {
+                if (Array.isArray(get(arrayHelpers.form.values, fieldName))) {
                   return (
-                    <Card>
-                      <CardHeader
-                        action={
-                          <IconButton aria-label="">
-                            <DeleteForever />
-                          </IconButton>
+                    <>
+                      {get(arrayHelpers.form.values, fieldName).map(
+                        (subform, idx) => {
+                          return (
+                            <Box key={`${fieldName}-${idx}`} m={2}>
+                              <Card>
+                                <CardHeader
+                                  action={
+                                      <IconButton
+                                        aria-label=""
+                                        onClick={() => {
+                                          arrayHelpers.remove(idx);
+                                        }}
+                                      >
+                                        <DeleteForever />
+                                      </IconButton>
+                                  }
+                                  title={fieldParams.label}
+                                />
+                                <CardContent>
+                                  {buildComponent(
+                                    fieldParams.formLayout,
+                                    fieldParams.formTemplate,
+                                    fieldParams.formLayout.length,
+                                    `${fieldName}-${idx}`,
+                                    `${fieldName}[${idx}]`
+                                  )}
+                                </CardContent>
+                              </Card>
+                            </Box>
+                          );
                         }
-                        title={fieldParams.label}
-                      />
-                      <CardContent>
-                        {arrayHelpers.form.values[fieldName].map(
-                          (subform, idx) => {
-                            return buildComponent(
-                              fieldParams.formLayout,
-                              fieldParams.formTemplate,
-                              fieldParams.formLayout.length,
-                              `${fieldName}-${idx}`,
-                              `${fieldName}[${idx}]`
-                            );
-                          }
-                        )}
-                      </CardContent>
-                      <CardContent>
-                        <Button
-                          onClick={() =>
-                            arrayHelpers.push(fieldParams.formValueTemplate)
-                          }
-                        >
-                          Add
-                        </Button>
-                      </CardContent>
-                    </Card>
+                      )}
+                      <Button
+                        onClick={() => {
+                          arrayHelpers.push(fieldParams.formValueTemplate);
+                        }}
+                      >
+                        Add
+                      </Button>
+                    </>
                   );
                 }
                 return (
@@ -398,10 +406,11 @@ const FormFieldSet = ({
         );
       } else {
         let field = formParams[layout];
-        if(fieldName) {
-          layout = `${fieldName}.${layout}`
+        if (fieldName) {
+          layout = `${fieldName}.${layout}`;
         }
         if (field) {
+          const err = get(formik.touched, layout) && get(formik.errors, layout);
           return (
             <Grid
               key={`${index}-layout-${layout.id}`}
@@ -420,8 +429,7 @@ const FormFieldSet = ({
               >
                 {renderField(layout, field)}
                 <FormHelperText>
-                  {get(formik.touched, layout) &&
-                    Boolean(get(formik.errors, layout))}
+                  {!Array.isArray(err) ? err : ""}
                 </FormHelperText>
               </FormControl>
             </Grid>
@@ -582,7 +590,6 @@ const FormBuilder = (props) => {
       }}
     >
       {(formik) => {
-        console.log("📢[FormBuilder.js:545]:", formik);
         return (
           <FormContext.Provider
             value={{ validationSchema, initialValues, formik }}

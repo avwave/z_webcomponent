@@ -335,10 +335,23 @@ Nested.args = {
     subform: {
       type: "fieldarray",
       label: "subform",
-      formLayout: ["subform1", "subform2"],
+      validator: () =>
+        Yup.array().of(
+          Yup.object().shape({
+            subform1: Yup.string().nullable().required(),
+            subform2: Yup.string().nullable().required(),
+            subsubform: Yup.array().of(
+              Yup.object().shape({
+                subsubform1: Yup.string().nullable().required(),
+              })
+            ),
+          })
+        ),
+      formLayout: [["subform1", "subform2"], "subsubform"],
       formValueTemplate: {
         subform1: ``,
         subform2: ``,
+        subsubform: [],
       },
       formTemplate: {
         subform1: {
@@ -350,6 +363,22 @@ Nested.args = {
           type: "text",
           label: "subform 2",
           initialValues: "",
+        },
+        subsubform: {
+          type: "fieldarray",
+          label: "subsubform",
+          formLayout: ["subsubform1"],
+          formValueTemplate: {
+            subsubform1: ``,
+          },
+          formTemplate: {
+            subsubform1: {
+              type: "text",
+              label: "subsubform 1",
+              initialValues: "",
+            },
+          },
+          form: [],
         },
       },
       form: [],
