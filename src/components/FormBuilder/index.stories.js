@@ -335,6 +335,7 @@ Nested.args = {
     subform: {
       type: "fieldarray",
       label: "subform",
+      //note: only root level form nodes can have validation
       validator: () =>
         Yup.array().of(
           Yup.object().shape({
