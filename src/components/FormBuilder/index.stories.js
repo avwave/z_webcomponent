@@ -460,17 +460,12 @@ const NestedStory = ({ ...args }) => {
             <FormFieldSet
               formLabel="subform"
               fieldArray="subform"
+              index={idx}
               key={`subform-${idx}`}
               formLayout={i.layout}
               form={subformform}
               formFactor="toolbar"
               setValues={formState}
-              additionalActions={() => (
-                <ButtonGroup variant="text">
-                  <Button onClick={() => removeSubForm(idx)}>Remove</Button>
-                  <Button onClick={() => addSubSubForm(idx)}>Add</Button>
-                </ButtonGroup>
-              )}
             >
               {(subform ?? []).map((x, subidx) => {
                 if (!x) {
@@ -480,17 +475,12 @@ const NestedStory = ({ ...args }) => {
                   <FormFieldSet
                     formLabel="subsubform"
                     fieldArray={`subform[${idx}].subform`}
+                    index={subidx}
                     key={`subform-${idx}-subsubform-${subidx}`}
                     formLayout={x.layout}
                     form={x.form}
                     formFactor="toolbar"
-                    additionalActions={() => (
-                      <ButtonGroup variant="text">
-                        <Button onClick={() => removeSubSubForm(idx, subidx)}>
-                          Remove
-                        </Button>
-                      </ButtonGroup>
-                    )}
+                    
                   />
                 );
               })}

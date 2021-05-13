@@ -14,6 +14,7 @@ import {
   FormHelperText,
   FormLabel,
   Grid,
+  IconButton,
   InputLabel,
   LinearProgress,
   ListItemText,
@@ -26,7 +27,7 @@ import {
   TextField,
   Toolbar,
 } from "@material-ui/core";
-import { Backspace } from "@material-ui/icons";
+import { Backspace, DeleteForever } from "@material-ui/icons";
 import { Autocomplete } from "@material-ui/lab";
 import {
   KeyboardDatePicker,
@@ -71,6 +72,7 @@ const FormFieldSet = ({
   children,
   isSubForm = true,
   fieldArray,
+  index
 }) => {
   const classes = useStyles();
 
@@ -382,7 +384,8 @@ const FormFieldSet = ({
     );
   }, [buildComponent, columns, form, formLayout]);
 
-  const buildFormFactor = useMemo(() => {
+  const buildFormFactor = (arrayHelpers) => {
+    console.log("📢[FormBuilder.js:385]:", arrayHelpers);
     const ActionButtons = () => {
       let variant = "";
       switch (formFactor) {
@@ -425,7 +428,20 @@ const FormFieldSet = ({
             <CardHeader
               title={formLabel}
               subheader={formSubtitle}
-              action={additionalActions()}
+              action={
+                <ButtonGroup>
+                  {additionalActions()}
+                  {!arrayHelpers || (
+                    <IconButton
+                      onClick={() => {
+                        debugger;
+                      }}
+                    >
+                      <DeleteForever />
+                    </IconButton>
+                  )}
+                </ButtonGroup>
+              }
             />
             <CardContent>
               {buildFields()}
@@ -443,7 +459,19 @@ const FormFieldSet = ({
             <Toolbar>
               <ListItemText primary={formLabel} secondary={formSubtitle} />
               <ActionButtons />
-              {additionalActions()}
+              <ButtonGroup>
+                  {additionalActions()}
+                  {!arrayHelpers || (
+                    <IconButton
+                      onClick={() => {
+                        arrayHelpers.replace(index, undefined)
+                        console.log("📢[FormBuilder.js:466]:", arrayHelpers, index);
+                      }}
+                    >
+                      <DeleteForever />
+                    </IconButton>
+                  )}
+                </ButtonGroup>
             </Toolbar>
             <Container>
               {buildFields()}
@@ -461,24 +489,23 @@ const FormFieldSet = ({
             {formik.isSubmitting && <LinearProgress />}
             <div className={classes.actionBar}>
               <ActionButtons />
-              {additionalActions()}
+              <ButtonGroup>
+                  {additionalActions()}
+                  {!arrayHelpers || (
+                    <IconButton
+                      onClick={() => {
+                        debugger;
+                      }}
+                    >
+                      <DeleteForever />
+                    </IconButton>
+                  )}
+                </ButtonGroup>
             </div>
           </>
         );
     }
-  }, [
-    additionalActions,
-    buildFields,
-    children,
-    classes.actionBar,
-    formFactor,
-    formLabel,
-    formSubtitle,
-    formik,
-    isSubForm,
-    resetLabel,
-    submitLabel,
-  ]);
+  };
 
   if (!isEmpty(fieldArray)) {
     return (
@@ -486,7 +513,7 @@ const FormFieldSet = ({
         <FieldArray
           name={fieldArray}
           render={(arrayHelpers) => {
-            return buildFormFactor;
+            return buildFormFactor(arrayHelpers);
           }}
         />
       </MuiPickersUtilsProvider>
@@ -494,7 +521,7 @@ const FormFieldSet = ({
   }
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
-      {buildFormFactor}
+      {buildFormFactor()}
     </MuiPickersUtilsProvider>
   );
 };
