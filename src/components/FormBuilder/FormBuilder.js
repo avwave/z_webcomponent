@@ -363,7 +363,7 @@ const FormFieldSet = ({
                           arrayHelpers.push(fieldParams.formValueTemplate);
                         }}
                       >
-                        Add
+                        Add {fieldParams.label}
                       </Button>
                     </>
                   );
@@ -374,7 +374,7 @@ const FormFieldSet = ({
                       arrayHelpers.push(fieldParams.formValueTemplate)
                     }
                   >
-                    Add
+                    Add {fieldParams.label}
                   </Button>
                 );
               }}
