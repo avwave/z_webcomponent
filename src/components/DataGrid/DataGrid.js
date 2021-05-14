@@ -233,6 +233,7 @@ function DataGrid({
       />
       {dataGridState.loading ? <LinearProgress /> : null}
       <ReactDataGrid
+        className={'rdg-light'}
         headerFiltersHeight={50}
         rowRenderer={RowRenderer}        
         {...gridProps}
