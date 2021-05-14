@@ -69,7 +69,7 @@ const FormFieldSet = ({
   onSubmit = () => {},
   readOnly,
   setValues = {},
-  additionalActions,
+  additionalActions = () => {},
   children,
 }) => {
   const classes = useStyles();
@@ -333,14 +333,14 @@ const FormFieldSet = ({
                               <Card>
                                 <CardHeader
                                   action={
-                                      <IconButton
-                                        aria-label=""
-                                        onClick={() => {
-                                          arrayHelpers.remove(idx);
-                                        }}
-                                      >
-                                        <DeleteForever />
-                                      </IconButton>
+                                    <IconButton
+                                      aria-label=""
+                                      onClick={() => {
+                                        arrayHelpers.remove(idx);
+                                      }}
+                                    >
+                                      <DeleteForever />
+                                    </IconButton>
                                   }
                                   title={fieldParams.label}
                                 />
