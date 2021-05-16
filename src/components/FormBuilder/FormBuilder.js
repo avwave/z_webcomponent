@@ -66,7 +66,6 @@ const FormFieldSet = ({
   submitLabel = "Submit",
   resetLabel = "Reset",
   columns = 1,
-  onSubmit = () => {},
   readOnly,
   setValues = {},
   additionalActions = () => {},
@@ -551,7 +550,13 @@ const FormFieldSet = ({
 const FormContext = React.createContext();
 
 const FormBuilder = (props) => {
-  const { onSubmit, form, additionalValidation, additionalInitial } = props;
+  const {
+    onSubmit = () => {},
+    onReset = () => {},
+    form,
+    additionalValidation,
+    additionalInitial,
+  } = props;
 
   const validationSchema = useMemo(() => {
     const validatorSpread = Object.entries({ ...form })
@@ -587,6 +592,10 @@ const FormBuilder = (props) => {
           onSubmit(values);
           setSubmitting(false);
         }, 400);
+      }}
+      onChange
+      onReset={(values) =>{
+        onReset(values)
       }}
     >
       {(formik) => {
