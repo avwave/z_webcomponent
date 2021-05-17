@@ -11,14 +11,16 @@ const reactTestingLibrarySerializer = {
 };
 
 initStoryshots({
-  storyKindRegex: /^((?!.*?Table|Example).)*$/,
+  storyKindRegex: /^((?!.*?Table|Example|FormBuilder).)*$/,
   test: snapshotWithOptions((story) => ({
     createNodeMock: (element) => {
         if (element.type === 'div') {
           return {scrollHeight: 0};
           // return document.createElement('div');
         }
-      
+        if (element.type === 'input') {
+          return document.createElement('input');
+        }
     },
   })),
 });

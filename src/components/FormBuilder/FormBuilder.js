@@ -1,4 +1,4 @@
-import DateFnsUtils from "@date-io/luxon";
+import DateFnsUtils from "@date-io/moment";
 import {
   Box,
   Button,
@@ -16,6 +16,7 @@ import {
   Grid,
   InputLabel,
   LinearProgress,
+  ListItemText,
   makeStyles,
   MenuItem,
   Radio,
@@ -24,71 +25,61 @@ import {
   Switch,
   TextField,
   Toolbar,
-  Typography,
+  Avatar,
+  IconButton,
 } from "@material-ui/core";
-import { Backspace } from "@material-ui/icons";
+import {
+  Backspace,
+  DeleteForever,
+  MoreVert as MoreVertIcon,
+} from "@material-ui/icons";
 import { Autocomplete } from "@material-ui/lab";
 import {
   KeyboardDatePicker,
   KeyboardDateTimePicker,
+  KeyboardTimePicker,
   MuiPickersUtilsProvider,
 } from "@material-ui/pickers";
-import { useFormik } from "formik";
+import { FieldArray, Formik, useFormik } from "formik";
+import { isEmpty, get } from "lodash";
 import PropTypes from "prop-types";
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useContext, useEffect, useMemo } from "react";
 import * as Yup from "yup";
 
 const useStyles = makeStyles((theme) => ({
   controlContainer: {
     paddingBottom: theme.spacing(2),
   },
+  actionBar: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
 }));
 
-const FormBuilder = ({
+const FormFieldSet = ({
   form,
   formLayout = [],
   formFactor = "default",
   formLabel,
+  formSubtitle,
   submitLabel = "Submit",
   resetLabel = "Reset",
   columns = 1,
-  onSubmit = () => {},
   readOnly,
+  setValues = {},
+  additionalActions = () => {},
+  children,
 }) => {
   const classes = useStyles();
-  const validationSchema = useMemo(() => {
-    const validatorMap = Object.fromEntries(
-      Object.entries(form)
-        .filter(([k, v]) => !!v.validator)
-        .map(([k, v]) => {
-          return [k, v.validator()];
-        })
-    );
-    const validator = Yup.object().shape({
-      ...validatorMap,
-    });
-    return validator;
-  }, [form]);
+  const { formik, validationSchema, initialValues } = useContext(FormContext);
 
-  const initialValues = useMemo(() => {
-    return Object.fromEntries(
-      Object.entries(form).map(([k, v]) => {
-        return [k, v.initialValues];
-      })
-    );
-  }, [form]);
-
-  const formik = useFormik({
-    initialValues: initialValues,
-    validationSchema: validationSchema,
-
-    onSubmit: (values) => {
-      setTimeout(() => {
-        formik.setSubmitting(false);
-        onSubmit(values);
-      }, 500);
-    },
-  });
+  useEffect(() => {
+    if (!isEmpty(setValues)) {
+      // NOTE: form freaks out with empty/null values
+      formik.setValues({ ...formik.values, ...setValues });
+    }
+  }, [setValues]);
 
   const renderField = useCallback(
     (fieldName, fieldParams) => {
@@ -100,7 +91,6 @@ const FormBuilder = ({
         : (evt, value) => {
             formik.setFieldValue(fieldName, evt?.target?.value ?? evt);
           };
-
       switch (fieldParams.type) {
         case "component":
           return <fieldParams.component />;
@@ -112,11 +102,12 @@ const FormBuilder = ({
               name={fieldName}
               type={fieldParams.type}
               label={fieldParams.label}
-              value={formik.values[fieldName]}
+              value={get(formik.values, fieldName)}
               onChange={onChangeOverride}
               disabled={fieldParams.readOnly}
               error={
-                formik.touched[fieldName] && Boolean(formik.errors[fieldName])
+                get(formik.touched, fieldName) &&
+                Boolean(get(formik.errors, fieldName))
               }
               InputLabelProps={{
                 shrink: true,
@@ -133,22 +124,29 @@ const FormBuilder = ({
               label={fieldParams.label}
               name={fieldName}
               onChange={(evt, val) => {
+                console.log("📢[FormBuilder.js:152]:", evt);
                 if (fieldParams.onChange) {
-                  fieldParams.onChange(fieldName, val);
+                  fieldParams.onChange(
+                    fieldName,
+                    fieldParams.useLocalTime ? evt.local(true) : evt.utc(true)
+                  );
                 }
-                formik.setFieldValue(fieldName, val);
+                formik.setFieldValue(
+                  fieldName,
+                  fieldParams.useLocalTime ? evt.local(true) : evt.utc(true)
+                );
               }}
-              value={formik.values[fieldName]}
+              value={get(formik.values, fieldName)}
               disabled={fieldParams.readOnly}
               autoOk
-              format="MM/dd/yyyy"
+              format="MM/DD/yyyy"
               variant="inline"
               mask="__/__/____"
               {...fieldParams?.fieldProps}
             />
           );
 
-        case "time":
+        case "datetime":
           return (
             <KeyboardDateTimePicker
               disablePast={fieldParams.disablePast}
@@ -157,15 +155,50 @@ const FormBuilder = ({
               name={fieldName}
               onChange={(evt, val) => {
                 if (fieldParams.onChange) {
-                  fieldParams.onChange(fieldName, val);
+                  fieldParams.onChange(
+                    fieldName,
+                    fieldParams.useLocalTime ? evt.local(true) : evt.utc(true)
+                  );
                 }
-                formik.setFieldValue(fieldName, val);
+                formik.setFieldValue(
+                  fieldName,
+                  fieldParams.useLocalTime ? evt.local(true) : evt.utc(true)
+                );
               }}
-              value={formik.values[fieldName]}
+              value={get(formik.values, fieldName)}
               disabled={fieldParams.readOnly}
               autoOk
               variant="inline"
               format="MM/dd/yyyy hh:mm a"
+              mask="__/__/____ __:__ _M"
+              {...fieldParams?.fieldProps}
+            />
+          );
+        case "time":
+          return (
+            <KeyboardTimePicker
+              disablePast={fieldParams.disablePast}
+              disableFuture={fieldParams.disableFuture}
+              label={fieldParams.label}
+              name={fieldName}
+              onChange={(evt, val) => {
+                console.log("📢[FormBuilder.js:181]:", evt, val);
+                if (fieldParams.onChange) {
+                  fieldParams.onChange(
+                    fieldName,
+                    fieldParams.useLocalTime ? evt.local(true) : evt.utc(true)
+                  );
+                }
+                formik.setFieldValue(
+                  fieldName,
+                  fieldParams.useLocalTime ? evt.local(true) : evt.utc(true)
+                );
+              }}
+              value={get(formik.values, fieldName)}
+              disabled={fieldParams.readOnly}
+              autoOk
+              variant="inline"
+              format="hh:mm a"
               mask="__/__/____ __:__ _M"
               {...fieldParams?.fieldProps}
             />
@@ -179,7 +212,7 @@ const FormBuilder = ({
                 name={fieldName}
                 fullWidth
                 label={fieldParams.label}
-                value={formik.values[fieldName]}
+                value={get(formik.values, fieldName)}
                 onChange={onChangeOverride}
                 multiple={fieldParams.settings.multiple}
                 disabled={fieldParams.readOnly}
@@ -205,7 +238,7 @@ const FormBuilder = ({
             <>
               <FormControlLabel
                 name={fieldName}
-                checked={formik.values[fieldName]}
+                checked={get(formik.values, fieldName)}
                 control={
                   fieldParams.type === "switch" ? <Switch /> : <Checkbox />
                 }
@@ -229,7 +262,7 @@ const FormBuilder = ({
               <RadioGroup
                 row={fieldParams.settings.inline}
                 name={fieldName}
-                value={formik.values[fieldName]}
+                value={get(formik.values, fieldName)}
                 onChange={onChangeOverride}
                 {...fieldParams?.fieldProps}
               >
@@ -256,7 +289,7 @@ const FormBuilder = ({
               disableCloseOnSelect
               name={fieldName}
               label={fieldParams.label}
-              value={formik.values[fieldName]}
+              value={get(formik.values, fieldName)}
               onChange={(evt, val) => {
                 if (fieldParams.onChange) {
                   fieldParams.onChange(fieldName, val);
@@ -269,19 +302,81 @@ const FormBuilder = ({
                 return option[fieldParams.settings.labelField] ?? "";
               }}
               closeIcon={<Backspace fontSize="small" />}
-              {...fieldParams?.fieldProps}
               renderInput={(iParams) => (
                 <TextField
                   {...iParams}
                   label={fieldParams.label}
                   placeholder="type to search"
                   error={
-                    formik.touched[fieldName] &&
-                    Boolean(formik.errors[fieldName])
+                    get(formik.touched, fieldName) &&
+                    Boolean(get(formik.errors, fieldName))
                   }
                   fullWidth
                 />
               )}
+              {...fieldParams?.fieldProps}
+            />
+          );
+        case "fieldarray":
+          return (
+            <FieldArray
+              name={fieldName}
+              render={(arrayHelpers) => {
+                if (Array.isArray(get(arrayHelpers.form.values, fieldName))) {
+                  return (
+                    <>
+                      {get(arrayHelpers.form.values, fieldName).map(
+                        (subform, idx) => {
+                          return (
+                            <Box key={`${fieldName}-${idx}`} m={2}>
+                              <Card>
+                                <CardHeader
+                                  action={
+                                    <IconButton
+                                      aria-label=""
+                                      onClick={() => {
+                                        arrayHelpers.remove(idx);
+                                      }}
+                                    >
+                                      <DeleteForever />
+                                    </IconButton>
+                                  }
+                                  title={fieldParams.label}
+                                />
+                                <CardContent>
+                                  {buildComponent(
+                                    fieldParams.formLayout,
+                                    fieldParams.formTemplate,
+                                    fieldParams.formLayout.length,
+                                    `${fieldName}-${idx}`,
+                                    `${fieldName}[${idx}]`
+                                  )}
+                                </CardContent>
+                              </Card>
+                            </Box>
+                          );
+                        }
+                      )}
+                      <Button
+                        onClick={() => {
+                          arrayHelpers.push(fieldParams.formValueTemplate);
+                        }}
+                      >
+                        Add {fieldParams.label}
+                      </Button>
+                    </>
+                  );
+                }
+                return (
+                  <Button
+                    onClick={() =>
+                      arrayHelpers.push(fieldParams.formValueTemplate)
+                    }
+                  >
+                    Add {fieldParams.label}
+                  </Button>
+                );
+              }}
             />
           );
 
@@ -293,7 +388,7 @@ const FormBuilder = ({
   );
 
   const buildComponent = useCallback(
-    (layout, formParams, colCount, index) => {
+    (layout, formParams, colCount, index, fieldName) => {
       if (Array.isArray(layout)) {
         return (
           <Grid key={`container-${index}`} container spacing={2}>
@@ -302,25 +397,38 @@ const FormBuilder = ({
                 subLayout,
                 formParams,
                 layout.length,
-                `${idx}-${index}`
+                `${idx}-${index}`,
+                fieldName
               )
             )}
           </Grid>
         );
       } else {
-        const field = formParams[layout];
+        let field = formParams[layout];
+        if (fieldName) {
+          layout = `${fieldName}.${layout}`;
+        }
         if (field) {
+          const err = get(formik.touched, layout) && get(formik.errors, layout);
           return (
-            <Grid key={layout.id} item xs={12} sm={12 > colCount}>
+            <Grid
+              key={`${index}-layout-${layout.id}`}
+              item
+              xs={12}
+              sm={12 > colCount}
+            >
               <FormControl
                 className={classes.controlContainer}
                 fullWidth
                 component="fieldset"
-                error={formik.touched[layout] && Boolean(formik.errors[layout])}
+                error={
+                  get(formik.touched, layout) &&
+                  Boolean(get(formik.errors, layout))
+                }
               >
                 {renderField(layout, field)}
                 <FormHelperText>
-                  {formik.touched[layout] && formik.errors[layout]}
+                  {!Array.isArray(err) ? err : ""}
                 </FormHelperText>
               </FormControl>
             </Grid>
@@ -375,9 +483,14 @@ const FormBuilder = ({
       case "card":
         return (
           <Card>
-            <CardHeader title={formLabel} />
+            <CardHeader
+              title={formLabel}
+              subheader={formSubtitle}
+              action={additionalActions()}
+            />
             <CardContent>
               {buildFields()}
+              {children}
               {formik.isSubmitting && <LinearProgress />}
             </CardContent>
             <CardActions>
@@ -389,13 +502,13 @@ const FormBuilder = ({
         return (
           <Box>
             <Toolbar>
-              <Typography variant="h6" style={{ flexGrow: 1 }}>
-                {formLabel}
-              </Typography>
+              <ListItemText primary={formLabel} secondary={formSubtitle} />
               <ActionButtons />
+              {additionalActions()}
             </Toolbar>
             <Container>
               {buildFields()}
+              {children}
               {formik.isSubmitting && <LinearProgress />}
             </Container>
           </Box>
@@ -403,14 +516,29 @@ const FormBuilder = ({
       default:
         return (
           <>
-            <Typography variant="h6">{formLabel}</Typography>
+            <ListItemText primary={formLabel} secondary={formSubtitle} />
             {buildFields()}
+            {children}
             {formik.isSubmitting && <LinearProgress />}
-            <ActionButtons />
+            <div className={classes.actionBar}>
+              <ActionButtons />
+              {additionalActions()}
+            </div>
           </>
         );
     }
-  }, [buildFields, formFactor, formLabel, formik, resetLabel, submitLabel]);
+  }, [
+    additionalActions,
+    buildFields,
+    children,
+    classes.actionBar,
+    formFactor,
+    formLabel,
+    formSubtitle,
+    formik,
+    resetLabel,
+    submitLabel,
+  ]);
 
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -419,6 +547,69 @@ const FormBuilder = ({
   );
 };
 
+const FormContext = React.createContext();
+
+const FormBuilder = (props) => {
+  const {
+    onSubmit = () => {},
+    onReset = () => {},
+    form,
+    additionalValidation,
+    additionalInitial,
+  } = props;
+
+  const validationSchema = useMemo(() => {
+    const validatorSpread = Object.entries({ ...form })
+      .filter(([k, v]) => !!v.validator)
+      .map(([k, v]) => {
+        return [k, v.validator()];
+      });
+
+    const validatorMap = Object.fromEntries(validatorSpread);
+    const validator = Yup.object().shape({
+      ...validatorMap,
+      ...additionalValidation,
+    });
+    return validator;
+  }, [additionalValidation, form]);
+
+  const initialValues = useMemo(() => {
+    const mapped = Object.fromEntries(
+      Object.entries({ ...form }).map(([k, v]) => {
+        return [k, v.initialValues];
+      })
+    );
+    return { ...mapped, ...additionalInitial };
+  }, [additionalInitial, form]);
+
+  return (
+    <Formik
+      enableReinitialize
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+      onSubmit={(values, { setSubmitting }) => {
+        setTimeout(() => {
+          onSubmit(values);
+          setSubmitting(false);
+        }, 400);
+      }}
+      onChange
+      onReset={(values) =>{
+        onReset(values)
+      }}
+    >
+      {(formik) => {
+        return (
+          <FormContext.Provider
+            value={{ validationSchema, initialValues, formik }}
+          >
+            <FormFieldSet {...props} isSubForm={false} />
+          </FormContext.Provider>
+        );
+      }}
+    </Formik>
+  );
+};
 export { FormBuilder };
 
 FormBuilder.propTypes = {
