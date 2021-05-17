@@ -101,7 +101,7 @@ exports[`Storyshots Agenda/Agenda Agenda Meta Rendering 1`] = `
         <h6
           className="MuiTypography-root makeStyles-title-71 MuiTypography-h6"
         >
-          04/28/2021 – 05/28/2021
+          05/14/2021 – 06/13/2021
         </h6>
         <div
           className="MuiButtonGroup-root makeStyles-rightGroup-70"
@@ -232,7 +232,7 @@ exports[`Storyshots Agenda/Agenda Block View 1`] = `
         <h6
           className="MuiTypography-root makeStyles-title-74 MuiTypography-h6"
         >
-          April 25 – May 01
+          May 09 – 15
         </h6>
         <div
           className="MuiButtonGroup-root makeStyles-rightGroup-73"
@@ -356,7 +356,7 @@ exports[`Storyshots Agenda/Agenda Block View 1`] = `
                   aria-sort="none"
                   role="columnheader"
                 >
-                  25 Sun
+                  09 Sun
                 </span>
               </a>
             </div>
@@ -371,7 +371,7 @@ exports[`Storyshots Agenda/Agenda Block View 1`] = `
                   aria-sort="none"
                   role="columnheader"
                 >
-                  26 Mon
+                  10 Mon
                 </span>
               </a>
             </div>
@@ -386,7 +386,37 @@ exports[`Storyshots Agenda/Agenda Block View 1`] = `
                   aria-sort="none"
                   role="columnheader"
                 >
-                  27 Tue
+                  11 Tue
+                </span>
+              </a>
+            </div>
+            <div
+              className="rbc-header"
+            >
+              <a
+                href="#"
+                onClick={[Function]}
+              >
+                <span
+                  aria-sort="none"
+                  role="columnheader"
+                >
+                  12 Wed
+                </span>
+              </a>
+            </div>
+            <div
+              className="rbc-header"
+            >
+              <a
+                href="#"
+                onClick={[Function]}
+              >
+                <span
+                  aria-sort="none"
+                  role="columnheader"
+                >
+                  13 Thu
                 </span>
               </a>
             </div>
@@ -401,7 +431,7 @@ exports[`Storyshots Agenda/Agenda Block View 1`] = `
                   aria-sort="none"
                   role="columnheader"
                 >
-                  28 Wed
+                  14 Fri
                 </span>
               </a>
             </div>
@@ -416,37 +446,7 @@ exports[`Storyshots Agenda/Agenda Block View 1`] = `
                   aria-sort="none"
                   role="columnheader"
                 >
-                  29 Thu
-                </span>
-              </a>
-            </div>
-            <div
-              className="rbc-header"
-            >
-              <a
-                href="#"
-                onClick={[Function]}
-              >
-                <span
-                  aria-sort="none"
-                  role="columnheader"
-                >
-                  30 Fri
-                </span>
-              </a>
-            </div>
-            <div
-              className="rbc-header"
-            >
-              <a
-                href="#"
-                onClick={[Function]}
-              >
-                <span
-                  aria-sort="none"
-                  role="columnheader"
-                >
-                  01 Sat
+                  15 Sat
                 </span>
               </a>
             </div>
@@ -468,13 +468,13 @@ exports[`Storyshots Agenda/Agenda Block View 1`] = `
                 className="rbc-day-bg"
               />
               <div
+                className="rbc-day-bg"
+              />
+              <div
+                className="rbc-day-bg"
+              />
+              <div
                 className="rbc-day-bg rbc-today"
-              />
-              <div
-                className="rbc-day-bg"
-              />
-              <div
-                className="rbc-day-bg"
               />
               <div
                 className="rbc-day-bg"
@@ -553,6 +553,76 @@ exports[`Storyshots Agenda/Agenda Block View 1`] = `
               </span>
             </div>
           </div>
+        </div>
+        <div
+          className="rbc-day-slot rbc-time-column"
+        >
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-events-container"
+          />
+        </div>
+        <div
+          className="rbc-day-slot rbc-time-column"
+        >
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-events-container"
+          />
         </div>
         <div
           className="rbc-day-slot rbc-time-column"
@@ -803,7 +873,7 @@ exports[`Storyshots Agenda/Agenda Block View 1`] = `
             className="rbc-current-time-indicator"
             style={
               Object {
-                "top": "97.29166666666667%",
+                "top": "18.854166666666668%",
               }
             }
           />
@@ -1229,76 +1299,6 @@ exports[`Storyshots Agenda/Agenda Block View 1`] = `
             </div>
           </div>
         </div>
-        <div
-          className="rbc-day-slot rbc-time-column"
-        >
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-events-container"
-          />
-        </div>
-        <div
-          className="rbc-day-slot rbc-time-column"
-        >
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-events-container"
-          />
-        </div>
       </div>
     </div>
   </div>
@@ -1415,7 +1415,7 @@ exports[`Storyshots Agenda/Agenda Custom Cell Rendering 1`] = `
         <h6
           className="MuiTypography-root makeStyles-title-91 MuiTypography-h6"
         >
-          April 25 – May 01
+          May 09 – 15
         </h6>
         <div
           className="MuiButtonGroup-root makeStyles-rightGroup-90"
@@ -1539,7 +1539,7 @@ exports[`Storyshots Agenda/Agenda Custom Cell Rendering 1`] = `
                   aria-sort="none"
                   role="columnheader"
                 >
-                  25 Sun
+                  09 Sun
                 </span>
               </a>
             </div>
@@ -1554,7 +1554,7 @@ exports[`Storyshots Agenda/Agenda Custom Cell Rendering 1`] = `
                   aria-sort="none"
                   role="columnheader"
                 >
-                  26 Mon
+                  10 Mon
                 </span>
               </a>
             </div>
@@ -1569,7 +1569,37 @@ exports[`Storyshots Agenda/Agenda Custom Cell Rendering 1`] = `
                   aria-sort="none"
                   role="columnheader"
                 >
-                  27 Tue
+                  11 Tue
+                </span>
+              </a>
+            </div>
+            <div
+              className="rbc-header"
+            >
+              <a
+                href="#"
+                onClick={[Function]}
+              >
+                <span
+                  aria-sort="none"
+                  role="columnheader"
+                >
+                  12 Wed
+                </span>
+              </a>
+            </div>
+            <div
+              className="rbc-header"
+            >
+              <a
+                href="#"
+                onClick={[Function]}
+              >
+                <span
+                  aria-sort="none"
+                  role="columnheader"
+                >
+                  13 Thu
                 </span>
               </a>
             </div>
@@ -1584,7 +1614,7 @@ exports[`Storyshots Agenda/Agenda Custom Cell Rendering 1`] = `
                   aria-sort="none"
                   role="columnheader"
                 >
-                  28 Wed
+                  14 Fri
                 </span>
               </a>
             </div>
@@ -1599,37 +1629,7 @@ exports[`Storyshots Agenda/Agenda Custom Cell Rendering 1`] = `
                   aria-sort="none"
                   role="columnheader"
                 >
-                  29 Thu
-                </span>
-              </a>
-            </div>
-            <div
-              className="rbc-header"
-            >
-              <a
-                href="#"
-                onClick={[Function]}
-              >
-                <span
-                  aria-sort="none"
-                  role="columnheader"
-                >
-                  30 Fri
-                </span>
-              </a>
-            </div>
-            <div
-              className="rbc-header"
-            >
-              <a
-                href="#"
-                onClick={[Function]}
-              >
-                <span
-                  aria-sort="none"
-                  role="columnheader"
-                >
-                  01 Sat
+                  15 Sat
                 </span>
               </a>
             </div>
@@ -1651,13 +1651,13 @@ exports[`Storyshots Agenda/Agenda Custom Cell Rendering 1`] = `
                 className="rbc-day-bg"
               />
               <div
+                className="rbc-day-bg"
+              />
+              <div
+                className="rbc-day-bg"
+              />
+              <div
                 className="rbc-day-bg rbc-today"
-              />
-              <div
-                className="rbc-day-bg"
-              />
-              <div
-                className="rbc-day-bg"
               />
               <div
                 className="rbc-day-bg"
@@ -1843,6 +1843,76 @@ exports[`Storyshots Agenda/Agenda Custom Cell Rendering 1`] = `
           />
         </div>
         <div
+          className="rbc-day-slot rbc-time-column"
+        >
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-events-container"
+          />
+        </div>
+        <div
+          className="rbc-day-slot rbc-time-column"
+        >
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-events-container"
+          />
+        </div>
+        <div
           className="rbc-day-slot rbc-time-column rbc-now rbc-today"
         >
           <div
@@ -1907,8 +1977,8 @@ exports[`Storyshots Agenda/Agenda Custom Cell Rendering 1`] = `
                     {
   "id": 4,
   "title": "AM Event Today",
-  "start": "2021-04-28T00:00:00.000Z",
-  "end": "2021-04-28T04:00:00.000Z"
+  "start": "2021-05-14T00:00:00.000Z",
+  "end": "2021-05-14T04:00:00.000Z"
 }
                   </pre>
                 </div>
@@ -1945,8 +2015,8 @@ exports[`Storyshots Agenda/Agenda Custom Cell Rendering 1`] = `
                     {
   "id": 2,
   "title": "1h Event Today",
-  "start": "2021-04-28T05:00:00.000Z",
-  "end": "2021-04-28T06:00:00.000Z"
+  "start": "2021-05-14T05:00:00.000Z",
+  "end": "2021-05-14T06:00:00.000Z"
 }
                   </pre>
                 </div>
@@ -1983,8 +2053,8 @@ exports[`Storyshots Agenda/Agenda Custom Cell Rendering 1`] = `
                     {
   "id": 3,
   "title": "2h Event Today",
-  "start": "2021-04-28T06:00:00.000Z",
-  "end": "2021-04-28T08:00:00.000Z",
+  "start": "2021-05-14T06:00:00.000Z",
+  "end": "2021-05-14T08:00:00.000Z",
   "variant": "warning"
 }
                   </pre>
@@ -1996,7 +2066,7 @@ exports[`Storyshots Agenda/Agenda Custom Cell Rendering 1`] = `
             className="rbc-current-time-indicator"
             style={
               Object {
-                "top": "97.29166666666667%",
+                "top": "18.854166666666668%",
               }
             }
           />
@@ -2066,8 +2136,8 @@ exports[`Storyshots Agenda/Agenda Custom Cell Rendering 1`] = `
                     {
   "id": "fill-8",
   "title": "FillEvent-8",
-  "start": "2021-04-29T00:00:00.000Z",
-  "end": "2021-04-29T01:00:00.000Z",
+  "start": "2021-05-15T00:00:00.000Z",
+  "end": "2021-05-15T01:00:00.000Z",
   "progress": 50,
   "variant": "primary"
 }
@@ -2106,9 +2176,9 @@ exports[`Storyshots Agenda/Agenda Custom Cell Rendering 1`] = `
                     {
   "id": "fill-9",
   "title": "FillEvent-9",
-  "start": "2021-04-29T01:00:00.000Z",
-  "end": "2021-04-29T02:00:00.000Z",
-  "progress": 80,
+  "start": "2021-05-15T01:00:00.000Z",
+  "end": "2021-05-15T02:00:00.000Z",
+  "progress": 50,
   "variant": "primary"
 }
                   </pre>
@@ -2146,9 +2216,9 @@ exports[`Storyshots Agenda/Agenda Custom Cell Rendering 1`] = `
                     {
   "id": "fill-0",
   "title": "FillEvent-0",
-  "start": "2021-04-28T16:00:00.000Z",
-  "end": "2021-04-28T17:00:00.000Z",
-  "progress": 100,
+  "start": "2021-05-14T16:00:00.000Z",
+  "end": "2021-05-14T17:00:00.000Z",
+  "progress": 70,
   "variant": "primary"
 }
                   </pre>
@@ -2186,9 +2256,9 @@ exports[`Storyshots Agenda/Agenda Custom Cell Rendering 1`] = `
                     {
   "id": "fill-1",
   "title": "FillEvent-1",
-  "start": "2021-04-28T17:00:00.000Z",
-  "end": "2021-04-28T18:00:00.000Z",
-  "progress": 10,
+  "start": "2021-05-14T17:00:00.000Z",
+  "end": "2021-05-14T18:00:00.000Z",
+  "progress": 60,
   "variant": "primary"
 }
                   </pre>
@@ -2226,8 +2296,8 @@ exports[`Storyshots Agenda/Agenda Custom Cell Rendering 1`] = `
                     {
   "id": "fill-2",
   "title": "FillEvent-2",
-  "start": "2021-04-28T18:00:00.000Z",
-  "end": "2021-04-28T19:00:00.000Z",
+  "start": "2021-05-14T18:00:00.000Z",
+  "end": "2021-05-14T19:00:00.000Z",
   "progress": 20,
   "variant": "primary"
 }
@@ -2266,9 +2336,9 @@ exports[`Storyshots Agenda/Agenda Custom Cell Rendering 1`] = `
                     {
   "id": "fill-3",
   "title": "FillEvent-3",
-  "start": "2021-04-28T19:00:00.000Z",
-  "end": "2021-04-28T20:00:00.000Z",
-  "progress": 90,
+  "start": "2021-05-14T19:00:00.000Z",
+  "end": "2021-05-14T20:00:00.000Z",
+  "progress": 70,
   "variant": "primary"
 }
                   </pre>
@@ -2306,9 +2376,9 @@ exports[`Storyshots Agenda/Agenda Custom Cell Rendering 1`] = `
                     {
   "id": "fill-4",
   "title": "FillEvent-4",
-  "start": "2021-04-28T20:00:00.000Z",
-  "end": "2021-04-28T21:00:00.000Z",
-  "progress": 70,
+  "start": "2021-05-14T20:00:00.000Z",
+  "end": "2021-05-14T21:00:00.000Z",
+  "progress": 60,
   "variant": "primary"
 }
                   </pre>
@@ -2346,9 +2416,9 @@ exports[`Storyshots Agenda/Agenda Custom Cell Rendering 1`] = `
                     {
   "id": "fill-5",
   "title": "FillEvent-5",
-  "start": "2021-04-28T21:00:00.000Z",
-  "end": "2021-04-28T22:00:00.000Z",
-  "progress": 30,
+  "start": "2021-05-14T21:00:00.000Z",
+  "end": "2021-05-14T22:00:00.000Z",
+  "progress": 100,
   "variant": "primary"
 }
                   </pre>
@@ -2386,9 +2456,9 @@ exports[`Storyshots Agenda/Agenda Custom Cell Rendering 1`] = `
                     {
   "id": "fill-6",
   "title": "FillEvent-6",
-  "start": "2021-04-28T22:00:00.000Z",
-  "end": "2021-04-28T23:00:00.000Z",
-  "progress": 30,
+  "start": "2021-05-14T22:00:00.000Z",
+  "end": "2021-05-14T23:00:00.000Z",
+  "progress": 20,
   "variant": "primary"
 }
                   </pre>
@@ -2426,9 +2496,9 @@ exports[`Storyshots Agenda/Agenda Custom Cell Rendering 1`] = `
                     {
   "id": "fill-7",
   "title": "FillEvent-7",
-  "start": "2021-04-28T23:00:00.000Z",
-  "end": "2021-04-29T00:00:00.000Z",
-  "progress": 100,
+  "start": "2021-05-14T23:00:00.000Z",
+  "end": "2021-05-15T00:00:00.000Z",
+  "progress": 90,
   "variant": "primary"
 }
                   </pre>
@@ -2466,9 +2536,9 @@ exports[`Storyshots Agenda/Agenda Custom Cell Rendering 1`] = `
                     {
   "id": "fill-10",
   "title": "FillEvent-10",
-  "start": "2021-04-29T02:00:00.000Z",
-  "end": "2021-04-29T03:00:00.000Z",
-  "progress": 20,
+  "start": "2021-05-15T02:00:00.000Z",
+  "end": "2021-05-15T03:00:00.000Z",
+  "progress": 70,
   "variant": "primary"
 }
                   </pre>
@@ -2476,76 +2546,6 @@ exports[`Storyshots Agenda/Agenda Custom Cell Rendering 1`] = `
               </div>
             </div>
           </div>
-        </div>
-        <div
-          className="rbc-day-slot rbc-time-column"
-        >
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-events-container"
-          />
-        </div>
-        <div
-          className="rbc-day-slot rbc-time-column"
-        >
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-events-container"
-          />
         </div>
       </div>
     </div>
@@ -2663,7 +2663,7 @@ exports[`Storyshots Agenda/Agenda Custom Day Header 1`] = `
         <h6
           className="MuiTypography-root makeStyles-title-20 MuiTypography-h6"
         >
-          April 25 – May 01
+          May 09 – 15
         </h6>
         <div
           className="MuiButtonGroup-root makeStyles-rightGroup-19"
@@ -2787,7 +2787,7 @@ exports[`Storyshots Agenda/Agenda Custom Day Header 1`] = `
                   aria-sort="none"
                   role="columnheader"
                 >
-                  25 Sun
+                  09 Sun
                 </span>
               </a>
             </div>
@@ -2802,7 +2802,7 @@ exports[`Storyshots Agenda/Agenda Custom Day Header 1`] = `
                   aria-sort="none"
                   role="columnheader"
                 >
-                  26 Mon
+                  10 Mon
                 </span>
               </a>
             </div>
@@ -2817,7 +2817,37 @@ exports[`Storyshots Agenda/Agenda Custom Day Header 1`] = `
                   aria-sort="none"
                   role="columnheader"
                 >
-                  27 Tue
+                  11 Tue
+                </span>
+              </a>
+            </div>
+            <div
+              className="rbc-header"
+            >
+              <a
+                href="#"
+                onClick={[Function]}
+              >
+                <span
+                  aria-sort="none"
+                  role="columnheader"
+                >
+                  12 Wed
+                </span>
+              </a>
+            </div>
+            <div
+              className="rbc-header"
+            >
+              <a
+                href="#"
+                onClick={[Function]}
+              >
+                <span
+                  aria-sort="none"
+                  role="columnheader"
+                >
+                  13 Thu
                 </span>
               </a>
             </div>
@@ -2832,7 +2862,7 @@ exports[`Storyshots Agenda/Agenda Custom Day Header 1`] = `
                   aria-sort="none"
                   role="columnheader"
                 >
-                  28 Wed
+                  14 Fri
                 </span>
               </a>
             </div>
@@ -2847,37 +2877,7 @@ exports[`Storyshots Agenda/Agenda Custom Day Header 1`] = `
                   aria-sort="none"
                   role="columnheader"
                 >
-                  29 Thu
-                </span>
-              </a>
-            </div>
-            <div
-              className="rbc-header"
-            >
-              <a
-                href="#"
-                onClick={[Function]}
-              >
-                <span
-                  aria-sort="none"
-                  role="columnheader"
-                >
-                  30 Fri
-                </span>
-              </a>
-            </div>
-            <div
-              className="rbc-header"
-            >
-              <a
-                href="#"
-                onClick={[Function]}
-              >
-                <span
-                  aria-sort="none"
-                  role="columnheader"
-                >
-                  01 Sat
+                  15 Sat
                 </span>
               </a>
             </div>
@@ -2899,13 +2899,13 @@ exports[`Storyshots Agenda/Agenda Custom Day Header 1`] = `
                 className="rbc-day-bg"
               />
               <div
+                className="rbc-day-bg"
+              />
+              <div
+                className="rbc-day-bg"
+              />
+              <div
                 className="rbc-day-bg rbc-today"
-              />
-              <div
-                className="rbc-day-bg"
-              />
-              <div
-                className="rbc-day-bg"
               />
               <div
                 className="rbc-day-bg"
@@ -3136,6 +3136,356 @@ exports[`Storyshots Agenda/Agenda Custom Day Header 1`] = `
               className="rbc-time-slot"
             />
           </div>
+        </div>
+        <div
+          className="rbc-day-slot rbc-time-column"
+        >
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-events-container"
+          />
+        </div>
+        <div
+          className="rbc-day-slot rbc-time-column"
+        >
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-events-container"
+          />
         </div>
         <div
           className="rbc-day-slot rbc-time-column"
@@ -3946,7 +4296,7 @@ exports[`Storyshots Agenda/Agenda Custom Day Header 1`] = `
             className="rbc-current-time-indicator"
             style={
               Object {
-                "top": "98.19444444444444%",
+                "top": "45.90277777777778%",
               }
             }
           />
@@ -4512,356 +4862,6 @@ exports[`Storyshots Agenda/Agenda Custom Day Header 1`] = `
             </div>
           </div>
         </div>
-        <div
-          className="rbc-day-slot rbc-time-column"
-        >
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-events-container"
-          />
-        </div>
-        <div
-          className="rbc-day-slot rbc-time-column"
-        >
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-events-container"
-          />
-        </div>
       </div>
     </div>
   </div>
@@ -4978,7 +4978,7 @@ exports[`Storyshots Agenda/Agenda Default 1`] = `
         <h6
           className="MuiTypography-root makeStyles-title-3 MuiTypography-h6"
         >
-          April 25 – May 01
+          May 09 – 15
         </h6>
         <div
           className="MuiButtonGroup-root makeStyles-rightGroup-2"
@@ -5102,7 +5102,7 @@ exports[`Storyshots Agenda/Agenda Default 1`] = `
                   aria-sort="none"
                   role="columnheader"
                 >
-                  25 Sun
+                  09 Sun
                 </span>
               </a>
             </div>
@@ -5117,7 +5117,7 @@ exports[`Storyshots Agenda/Agenda Default 1`] = `
                   aria-sort="none"
                   role="columnheader"
                 >
-                  26 Mon
+                  10 Mon
                 </span>
               </a>
             </div>
@@ -5132,7 +5132,37 @@ exports[`Storyshots Agenda/Agenda Default 1`] = `
                   aria-sort="none"
                   role="columnheader"
                 >
-                  27 Tue
+                  11 Tue
+                </span>
+              </a>
+            </div>
+            <div
+              className="rbc-header"
+            >
+              <a
+                href="#"
+                onClick={[Function]}
+              >
+                <span
+                  aria-sort="none"
+                  role="columnheader"
+                >
+                  12 Wed
+                </span>
+              </a>
+            </div>
+            <div
+              className="rbc-header"
+            >
+              <a
+                href="#"
+                onClick={[Function]}
+              >
+                <span
+                  aria-sort="none"
+                  role="columnheader"
+                >
+                  13 Thu
                 </span>
               </a>
             </div>
@@ -5147,7 +5177,7 @@ exports[`Storyshots Agenda/Agenda Default 1`] = `
                   aria-sort="none"
                   role="columnheader"
                 >
-                  28 Wed
+                  14 Fri
                 </span>
               </a>
             </div>
@@ -5162,37 +5192,7 @@ exports[`Storyshots Agenda/Agenda Default 1`] = `
                   aria-sort="none"
                   role="columnheader"
                 >
-                  29 Thu
-                </span>
-              </a>
-            </div>
-            <div
-              className="rbc-header"
-            >
-              <a
-                href="#"
-                onClick={[Function]}
-              >
-                <span
-                  aria-sort="none"
-                  role="columnheader"
-                >
-                  30 Fri
-                </span>
-              </a>
-            </div>
-            <div
-              className="rbc-header"
-            >
-              <a
-                href="#"
-                onClick={[Function]}
-              >
-                <span
-                  aria-sort="none"
-                  role="columnheader"
-                >
-                  01 Sat
+                  15 Sat
                 </span>
               </a>
             </div>
@@ -5214,13 +5214,13 @@ exports[`Storyshots Agenda/Agenda Default 1`] = `
                 className="rbc-day-bg"
               />
               <div
+                className="rbc-day-bg"
+              />
+              <div
+                className="rbc-day-bg"
+              />
+              <div
                 className="rbc-day-bg rbc-today"
-              />
-              <div
-                className="rbc-day-bg"
-              />
-              <div
-                className="rbc-day-bg"
               />
               <div
                 className="rbc-day-bg"
@@ -5451,6 +5451,356 @@ exports[`Storyshots Agenda/Agenda Default 1`] = `
               className="rbc-time-slot"
             />
           </div>
+        </div>
+        <div
+          className="rbc-day-slot rbc-time-column"
+        >
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-events-container"
+          />
+        </div>
+        <div
+          className="rbc-day-slot rbc-time-column"
+        >
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-events-container"
+          />
         </div>
         <div
           className="rbc-day-slot rbc-time-column"
@@ -6261,7 +6611,7 @@ exports[`Storyshots Agenda/Agenda Default 1`] = `
             className="rbc-current-time-indicator"
             style={
               Object {
-                "top": "98.19444444444444%",
+                "top": "45.90277777777778%",
               }
             }
           />
@@ -6827,356 +7177,6 @@ exports[`Storyshots Agenda/Agenda Default 1`] = `
             </div>
           </div>
         </div>
-        <div
-          className="rbc-day-slot rbc-time-column"
-        >
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-events-container"
-          />
-        </div>
-        <div
-          className="rbc-day-slot rbc-time-column"
-        >
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-events-container"
-          />
-        </div>
       </div>
     </div>
   </div>
@@ -7293,7 +7293,7 @@ exports[`Storyshots Agenda/Agenda Progress Event 1`] = `
         <h6
           className="MuiTypography-root makeStyles-title-54 MuiTypography-h6"
         >
-          April 25 – May 01
+          May 09 – 15
         </h6>
         <div
           className="MuiButtonGroup-root makeStyles-rightGroup-53"
@@ -7417,7 +7417,7 @@ exports[`Storyshots Agenda/Agenda Progress Event 1`] = `
                   aria-sort="none"
                   role="columnheader"
                 >
-                  25 Sun
+                  09 Sun
                 </span>
               </a>
             </div>
@@ -7432,7 +7432,7 @@ exports[`Storyshots Agenda/Agenda Progress Event 1`] = `
                   aria-sort="none"
                   role="columnheader"
                 >
-                  26 Mon
+                  10 Mon
                 </span>
               </a>
             </div>
@@ -7447,7 +7447,37 @@ exports[`Storyshots Agenda/Agenda Progress Event 1`] = `
                   aria-sort="none"
                   role="columnheader"
                 >
-                  27 Tue
+                  11 Tue
+                </span>
+              </a>
+            </div>
+            <div
+              className="rbc-header"
+            >
+              <a
+                href="#"
+                onClick={[Function]}
+              >
+                <span
+                  aria-sort="none"
+                  role="columnheader"
+                >
+                  12 Wed
+                </span>
+              </a>
+            </div>
+            <div
+              className="rbc-header"
+            >
+              <a
+                href="#"
+                onClick={[Function]}
+              >
+                <span
+                  aria-sort="none"
+                  role="columnheader"
+                >
+                  13 Thu
                 </span>
               </a>
             </div>
@@ -7462,7 +7492,7 @@ exports[`Storyshots Agenda/Agenda Progress Event 1`] = `
                   aria-sort="none"
                   role="columnheader"
                 >
-                  28 Wed
+                  14 Fri
                 </span>
               </a>
             </div>
@@ -7477,37 +7507,7 @@ exports[`Storyshots Agenda/Agenda Progress Event 1`] = `
                   aria-sort="none"
                   role="columnheader"
                 >
-                  29 Thu
-                </span>
-              </a>
-            </div>
-            <div
-              className="rbc-header"
-            >
-              <a
-                href="#"
-                onClick={[Function]}
-              >
-                <span
-                  aria-sort="none"
-                  role="columnheader"
-                >
-                  30 Fri
-                </span>
-              </a>
-            </div>
-            <div
-              className="rbc-header"
-            >
-              <a
-                href="#"
-                onClick={[Function]}
-              >
-                <span
-                  aria-sort="none"
-                  role="columnheader"
-                >
-                  01 Sat
+                  15 Sat
                 </span>
               </a>
             </div>
@@ -7529,13 +7529,13 @@ exports[`Storyshots Agenda/Agenda Progress Event 1`] = `
                 className="rbc-day-bg"
               />
               <div
+                className="rbc-day-bg"
+              />
+              <div
+                className="rbc-day-bg"
+              />
+              <div
                 className="rbc-day-bg rbc-today"
-              />
-              <div
-                className="rbc-day-bg"
-              />
-              <div
-                className="rbc-day-bg"
               />
               <div
                 className="rbc-day-bg"
@@ -7766,6 +7766,356 @@ exports[`Storyshots Agenda/Agenda Progress Event 1`] = `
               className="rbc-time-slot"
             />
           </div>
+        </div>
+        <div
+          className="rbc-day-slot rbc-time-column"
+        >
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-events-container"
+          />
+        </div>
+        <div
+          className="rbc-day-slot rbc-time-column"
+        >
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-events-container"
+          />
         </div>
         <div
           className="rbc-day-slot rbc-time-column"
@@ -8576,7 +8926,7 @@ exports[`Storyshots Agenda/Agenda Progress Event 1`] = `
             className="rbc-current-time-indicator"
             style={
               Object {
-                "top": "98.19444444444444%",
+                "top": "45.90277777777778%",
               }
             }
           />
@@ -9142,356 +9492,6 @@ exports[`Storyshots Agenda/Agenda Progress Event 1`] = `
             </div>
           </div>
         </div>
-        <div
-          className="rbc-day-slot rbc-time-column"
-        >
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-events-container"
-          />
-        </div>
-        <div
-          className="rbc-day-slot rbc-time-column"
-        >
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-events-container"
-          />
-        </div>
       </div>
     </div>
   </div>
@@ -9608,7 +9608,7 @@ exports[`Storyshots Agenda/Agenda Variable Height Events Bug 1`] = `
         <h6
           className="MuiTypography-root makeStyles-title-37 MuiTypography-h6"
         >
-          April 25 – May 01
+          May 09 – 15
         </h6>
         <div
           className="MuiButtonGroup-root makeStyles-rightGroup-36"
@@ -9732,7 +9732,7 @@ exports[`Storyshots Agenda/Agenda Variable Height Events Bug 1`] = `
                   aria-sort="none"
                   role="columnheader"
                 >
-                  25 Sun
+                  09 Sun
                 </span>
               </a>
             </div>
@@ -9747,7 +9747,7 @@ exports[`Storyshots Agenda/Agenda Variable Height Events Bug 1`] = `
                   aria-sort="none"
                   role="columnheader"
                 >
-                  26 Mon
+                  10 Mon
                 </span>
               </a>
             </div>
@@ -9762,7 +9762,37 @@ exports[`Storyshots Agenda/Agenda Variable Height Events Bug 1`] = `
                   aria-sort="none"
                   role="columnheader"
                 >
-                  27 Tue
+                  11 Tue
+                </span>
+              </a>
+            </div>
+            <div
+              className="rbc-header"
+            >
+              <a
+                href="#"
+                onClick={[Function]}
+              >
+                <span
+                  aria-sort="none"
+                  role="columnheader"
+                >
+                  12 Wed
+                </span>
+              </a>
+            </div>
+            <div
+              className="rbc-header"
+            >
+              <a
+                href="#"
+                onClick={[Function]}
+              >
+                <span
+                  aria-sort="none"
+                  role="columnheader"
+                >
+                  13 Thu
                 </span>
               </a>
             </div>
@@ -9777,7 +9807,7 @@ exports[`Storyshots Agenda/Agenda Variable Height Events Bug 1`] = `
                   aria-sort="none"
                   role="columnheader"
                 >
-                  28 Wed
+                  14 Fri
                 </span>
               </a>
             </div>
@@ -9792,37 +9822,7 @@ exports[`Storyshots Agenda/Agenda Variable Height Events Bug 1`] = `
                   aria-sort="none"
                   role="columnheader"
                 >
-                  29 Thu
-                </span>
-              </a>
-            </div>
-            <div
-              className="rbc-header"
-            >
-              <a
-                href="#"
-                onClick={[Function]}
-              >
-                <span
-                  aria-sort="none"
-                  role="columnheader"
-                >
-                  30 Fri
-                </span>
-              </a>
-            </div>
-            <div
-              className="rbc-header"
-            >
-              <a
-                href="#"
-                onClick={[Function]}
-              >
-                <span
-                  aria-sort="none"
-                  role="columnheader"
-                >
-                  01 Sat
+                  15 Sat
                 </span>
               </a>
             </div>
@@ -9844,13 +9844,13 @@ exports[`Storyshots Agenda/Agenda Variable Height Events Bug 1`] = `
                 className="rbc-day-bg"
               />
               <div
+                className="rbc-day-bg"
+              />
+              <div
+                className="rbc-day-bg"
+              />
+              <div
                 className="rbc-day-bg rbc-today"
-              />
-              <div
-                className="rbc-day-bg"
-              />
-              <div
-                className="rbc-day-bg"
               />
               <div
                 className="rbc-day-bg"
@@ -10081,6 +10081,356 @@ exports[`Storyshots Agenda/Agenda Variable Height Events Bug 1`] = `
               className="rbc-time-slot"
             />
           </div>
+        </div>
+        <div
+          className="rbc-day-slot rbc-time-column"
+        >
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-events-container"
+          />
+        </div>
+        <div
+          className="rbc-day-slot rbc-time-column"
+        >
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-timeslot-group"
+          >
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+            <div
+              className="rbc-time-slot"
+            />
+          </div>
+          <div
+            className="rbc-events-container"
+          />
         </div>
         <div
           className="rbc-day-slot rbc-time-column"
@@ -10893,7 +11243,7 @@ exports[`Storyshots Agenda/Agenda Variable Height Events Bug 1`] = `
             className="rbc-current-time-indicator"
             style={
               Object {
-                "top": "98.19444444444444%",
+                "top": "45.90277777777778%",
               }
             }
           />
@@ -11459,356 +11809,6 @@ exports[`Storyshots Agenda/Agenda Variable Height Events Bug 1`] = `
             </div>
           </div>
         </div>
-        <div
-          className="rbc-day-slot rbc-time-column"
-        >
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-events-container"
-          />
-        </div>
-        <div
-          className="rbc-day-slot rbc-time-column"
-        >
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-timeslot-group"
-          >
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-            <div
-              className="rbc-time-slot"
-            />
-          </div>
-          <div
-            className="rbc-events-container"
-          />
-        </div>
       </div>
     </div>
   </div>
@@ -12344,14 +12344,13 @@ exports[`Storyshots DataGrid/DataGrid Cell Formatter 1`] = `
   <div
     aria-colcount={0}
     aria-rowcount={1}
-    className="rdg r104f42s700-canary38"
+    className="rdg r104f42s700-canary46"
     onScroll={[Function]}
     role="grid"
     style={
       Object {
         "--filter-row-height": "50px",
         "--header-row-height": "35px",
-        "--row-height": "35px",
         "--row-width": "0px",
         "--summary-row-height": "35px",
         "--template-columns": "",
@@ -12361,11 +12360,11 @@ exports[`Storyshots DataGrid/DataGrid Cell Formatter 1`] = `
   >
     <div
       aria-rowindex={1}
-      className="rdg-header-row h1fquj5h700-canary38 h19m9p7h700-canary38"
+      className="rdg-header-row h1fquj5h700-canary46 h19m9p7h700-canary46"
       role="row"
     />
     <div
-      className="rdg-focus-sink f7ly7s700-canary38"
+      className="rdg-focus-sink f7ly7s700-canary46"
       onFocus={[Function]}
       onKeyDown={[Function]}
       tabIndex={0}
@@ -12412,14 +12411,13 @@ exports[`Storyshots DataGrid/DataGrid Client Sortable 1`] = `
   <div
     aria-colcount={0}
     aria-rowcount={1}
-    className="rdg r104f42s700-canary38"
+    className="rdg r104f42s700-canary46"
     onScroll={[Function]}
     role="grid"
     style={
       Object {
         "--filter-row-height": "50px",
         "--header-row-height": "35px",
-        "--row-height": "35px",
         "--row-width": "0px",
         "--summary-row-height": "35px",
         "--template-columns": "",
@@ -12429,11 +12427,11 @@ exports[`Storyshots DataGrid/DataGrid Client Sortable 1`] = `
   >
     <div
       aria-rowindex={1}
-      className="rdg-header-row h1fquj5h700-canary38 h19m9p7h700-canary38"
+      className="rdg-header-row h1fquj5h700-canary46 h19m9p7h700-canary46"
       role="row"
     />
     <div
-      className="rdg-focus-sink f7ly7s700-canary38"
+      className="rdg-focus-sink f7ly7s700-canary46"
       onFocus={[Function]}
       onKeyDown={[Function]}
       tabIndex={0}
@@ -12514,14 +12512,13 @@ exports[`Storyshots DataGrid/DataGrid Column Display Selection 1`] = `
   <div
     aria-colcount={0}
     aria-rowcount={1}
-    className="rdg r104f42s700-canary38"
+    className="rdg r104f42s700-canary46"
     onScroll={[Function]}
     role="grid"
     style={
       Object {
         "--filter-row-height": "50px",
         "--header-row-height": "35px",
-        "--row-height": "35px",
         "--row-width": "0px",
         "--summary-row-height": "35px",
         "--template-columns": "",
@@ -12531,11 +12528,11 @@ exports[`Storyshots DataGrid/DataGrid Column Display Selection 1`] = `
   >
     <div
       aria-rowindex={1}
-      className="rdg-header-row h1fquj5h700-canary38 h19m9p7h700-canary38"
+      className="rdg-header-row h1fquj5h700-canary46 h19m9p7h700-canary46"
       role="row"
     />
     <div
-      className="rdg-focus-sink f7ly7s700-canary38"
+      className="rdg-focus-sink f7ly7s700-canary46"
       onFocus={[Function]}
       onKeyDown={[Function]}
       tabIndex={0}
@@ -12582,14 +12579,13 @@ exports[`Storyshots DataGrid/DataGrid Default 1`] = `
   <div
     aria-colcount={0}
     aria-rowcount={1}
-    className="rdg r104f42s700-canary38"
+    className="rdg r104f42s700-canary46"
     onScroll={[Function]}
     role="grid"
     style={
       Object {
         "--filter-row-height": "50px",
         "--header-row-height": "35px",
-        "--row-height": "35px",
         "--row-width": "0px",
         "--summary-row-height": "35px",
         "--template-columns": "",
@@ -12599,11 +12595,11 @@ exports[`Storyshots DataGrid/DataGrid Default 1`] = `
   >
     <div
       aria-rowindex={1}
-      className="rdg-header-row h1fquj5h700-canary38 h19m9p7h700-canary38"
+      className="rdg-header-row h1fquj5h700-canary46 h19m9p7h700-canary46"
       role="row"
     />
     <div
-      className="rdg-focus-sink f7ly7s700-canary38"
+      className="rdg-focus-sink f7ly7s700-canary46"
       onFocus={[Function]}
       onKeyDown={[Function]}
       tabIndex={0}
@@ -12650,14 +12646,13 @@ exports[`Storyshots DataGrid/DataGrid Demo Context Menu 1`] = `
   <div
     aria-colcount={0}
     aria-rowcount={1}
-    className="rdg r104f42s700-canary38"
+    className="rdg r104f42s700-canary46"
     onScroll={[Function]}
     role="grid"
     style={
       Object {
         "--filter-row-height": "50px",
         "--header-row-height": "35px",
-        "--row-height": "35px",
         "--row-width": "0px",
         "--summary-row-height": "35px",
         "--template-columns": "",
@@ -12667,11 +12662,11 @@ exports[`Storyshots DataGrid/DataGrid Demo Context Menu 1`] = `
   >
     <div
       aria-rowindex={1}
-      className="rdg-header-row h1fquj5h700-canary38 h19m9p7h700-canary38"
+      className="rdg-header-row h1fquj5h700-canary46 h19m9p7h700-canary46"
       role="row"
     />
     <div
-      className="rdg-focus-sink f7ly7s700-canary38"
+      className="rdg-focus-sink f7ly7s700-canary46"
       onFocus={[Function]}
       onKeyDown={[Function]}
       tabIndex={0}
@@ -12718,14 +12713,13 @@ exports[`Storyshots DataGrid/DataGrid Grid Props 1`] = `
   <div
     aria-colcount={0}
     aria-rowcount={1}
-    className="rdg r104f42s700-canary38"
+    className="rdg r104f42s700-canary46"
     onScroll={[Function]}
     role="grid"
     style={
       Object {
         "--filter-row-height": "50px",
         "--header-row-height": "60px",
-        "--row-height": "60px",
         "--row-width": "0px",
         "--summary-row-height": "60px",
         "--template-columns": "",
@@ -12735,11 +12729,11 @@ exports[`Storyshots DataGrid/DataGrid Grid Props 1`] = `
   >
     <div
       aria-rowindex={1}
-      className="rdg-header-row h1fquj5h700-canary38 h19m9p7h700-canary38"
+      className="rdg-header-row h1fquj5h700-canary46 h19m9p7h700-canary46"
       role="row"
     />
     <div
-      className="rdg-focus-sink f7ly7s700-canary38"
+      className="rdg-focus-sink f7ly7s700-canary46"
       onFocus={[Function]}
       onKeyDown={[Function]}
       tabIndex={0}
@@ -12751,6 +12745,91 @@ exports[`Storyshots DataGrid/DataGrid Grid Props 1`] = `
         }
       }
     />
+  </div>
+</div>
+`;
+
+exports[`Storyshots DataGrid/DataGrid Redraw Bug 1`] = `
+<div
+  className="MuiGrid-root MuiGrid-container"
+>
+  <div
+    className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12"
+  >
+    <div
+      style={
+        Object {
+          "display": "flex",
+          "flexDirection": "column",
+          "height": "70vh",
+        }
+      }
+    >
+      <div
+        style={
+          Object {
+            "display": "flex",
+            "flex": "1 1 auto",
+            "flexDirection": "column",
+          }
+        }
+      >
+        <div
+          className="MuiToolbar-root MuiToolbar-regular"
+        >
+          <div
+            style={
+              Object {
+                "flex": 1,
+              }
+            }
+          />
+          <div
+            style={
+              Object {
+                "flex": 1,
+              }
+            }
+          />
+        </div>
+        <div
+          aria-colcount={0}
+          aria-rowcount={1}
+          className="rdg r104f42s700-canary46"
+          onScroll={[Function]}
+          role="grid"
+          style={
+            Object {
+              "--filter-row-height": "50px",
+              "--header-row-height": "35px",
+              "--row-width": "0px",
+              "--summary-row-height": "35px",
+              "--template-columns": "",
+              "flex": "1 1 auto",
+            }
+          }
+        >
+          <div
+            aria-rowindex={1}
+            className="rdg-header-row h1fquj5h700-canary46 h19m9p7h700-canary46"
+            role="row"
+          />
+          <div
+            className="rdg-focus-sink f7ly7s700-canary46"
+            onFocus={[Function]}
+            onKeyDown={[Function]}
+            tabIndex={0}
+          />
+          <div
+            style={
+              Object {
+                "height": 0,
+              }
+            }
+          />
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 `;
@@ -12786,14 +12865,13 @@ exports[`Storyshots DataGrid/DataGrid Reorderable 1`] = `
   <div
     aria-colcount={0}
     aria-rowcount={1}
-    className="rdg r104f42s700-canary38"
+    className="rdg r104f42s700-canary46"
     onScroll={[Function]}
     role="grid"
     style={
       Object {
         "--filter-row-height": "50px",
         "--header-row-height": "35px",
-        "--row-height": "35px",
         "--row-width": "0px",
         "--summary-row-height": "35px",
         "--template-columns": "",
@@ -12803,11 +12881,11 @@ exports[`Storyshots DataGrid/DataGrid Reorderable 1`] = `
   >
     <div
       aria-rowindex={1}
-      className="rdg-header-row h1fquj5h700-canary38 h19m9p7h700-canary38"
+      className="rdg-header-row h1fquj5h700-canary46 h19m9p7h700-canary46"
       role="row"
     />
     <div
-      className="rdg-focus-sink f7ly7s700-canary38"
+      className="rdg-focus-sink f7ly7s700-canary46"
       onFocus={[Function]}
       onKeyDown={[Function]}
       tabIndex={0}
@@ -12855,14 +12933,13 @@ exports[`Storyshots DataGrid/DataGrid Selectable 1`] = `
     aria-colcount={0}
     aria-multiselectable={true}
     aria-rowcount={1}
-    className="rdg r104f42s700-canary38"
+    className="rdg r104f42s700-canary46"
     onScroll={[Function]}
     role="grid"
     style={
       Object {
         "--filter-row-height": "50px",
         "--header-row-height": "35px",
-        "--row-height": "35px",
         "--row-width": "0px",
         "--summary-row-height": "35px",
         "--template-columns": "",
@@ -12872,11 +12949,11 @@ exports[`Storyshots DataGrid/DataGrid Selectable 1`] = `
   >
     <div
       aria-rowindex={1}
-      className="rdg-header-row h1fquj5h700-canary38 h19m9p7h700-canary38"
+      className="rdg-header-row h1fquj5h700-canary46 h19m9p7h700-canary46"
       role="row"
     />
     <div
-      className="rdg-focus-sink f7ly7s700-canary38"
+      className="rdg-focus-sink f7ly7s700-canary46"
       onFocus={[Function]}
       onKeyDown={[Function]}
       tabIndex={0}
@@ -12991,14 +13068,13 @@ exports[`Storyshots DataGrid/DataGrid Server Filter Sort 1`] = `
   <div
     aria-colcount={0}
     aria-rowcount={2}
-    className="rdg r104f42s700-canary38"
+    className="rdg r104f42s700-canary46"
     onScroll={[Function]}
     role="grid"
     style={
       Object {
         "--filter-row-height": "50px",
         "--header-row-height": "35px",
-        "--row-height": "35px",
         "--row-width": "0px",
         "--summary-row-height": "35px",
         "--template-columns": "",
@@ -13008,16 +13084,16 @@ exports[`Storyshots DataGrid/DataGrid Server Filter Sort 1`] = `
   >
     <div
       aria-rowindex={1}
-      className="rdg-header-row h1fquj5h700-canary38 h19m9p7h700-canary38"
+      className="rdg-header-row h1fquj5h700-canary46 h19m9p7h700-canary46"
       role="row"
     />
     <div
       aria-rowindex={2}
-      className="rdg-filter-row h1fquj5h700-canary38 fkdzs1h700-canary38"
+      className="rdg-filter-row h1fquj5h700-canary46 fkdzs1h700-canary46"
       role="row"
     />
     <div
-      className="rdg-focus-sink f7ly7s700-canary38"
+      className="rdg-focus-sink f7ly7s700-canary46"
       onFocus={[Function]}
       onKeyDown={[Function]}
       tabIndex={0}
@@ -13195,14 +13271,13 @@ exports[`Storyshots DataGrid/DataGrid Toolbar Accessory 1`] = `
   <div
     aria-colcount={0}
     aria-rowcount={2}
-    className="rdg r104f42s700-canary38"
+    className="rdg r104f42s700-canary46"
     onScroll={[Function]}
     role="grid"
     style={
       Object {
         "--filter-row-height": "50px",
         "--header-row-height": "35px",
-        "--row-height": "35px",
         "--row-width": "0px",
         "--summary-row-height": "35px",
         "--template-columns": "",
@@ -13212,16 +13287,16 @@ exports[`Storyshots DataGrid/DataGrid Toolbar Accessory 1`] = `
   >
     <div
       aria-rowindex={1}
-      className="rdg-header-row h1fquj5h700-canary38 h19m9p7h700-canary38"
+      className="rdg-header-row h1fquj5h700-canary46 h19m9p7h700-canary46"
       role="row"
     />
     <div
       aria-rowindex={2}
-      className="rdg-filter-row h1fquj5h700-canary38 fkdzs1h700-canary38"
+      className="rdg-filter-row h1fquj5h700-canary46 fkdzs1h700-canary46"
       role="row"
     />
     <div
-      className="rdg-focus-sink f7ly7s700-canary38"
+      className="rdg-focus-sink f7ly7s700-canary46"
       onFocus={[Function]}
       onKeyDown={[Function]}
       tabIndex={0}
@@ -13916,7 +13991,7 @@ exports[`Storyshots StateButton Warning 1`] = `
 exports[`Storyshots TriStateSelect Checked 1`] = `
 <span
   aria-disabled={false}
-  className="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-140 MuiCheckbox-root MuiCheckbox-colorSecondary PrivateSwitchBase-checked-141 Mui-checked MuiIconButton-colorSecondary"
+  className="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-143 MuiCheckbox-root MuiCheckbox-colorSecondary PrivateSwitchBase-checked-144 Mui-checked MuiIconButton-colorSecondary"
   onBlur={[Function]}
   onDragLeave={[Function]}
   onFocus={[Function]}
@@ -13935,7 +14010,7 @@ exports[`Storyshots TriStateSelect Checked 1`] = `
   >
     <input
       checked={true}
-      className="PrivateSwitchBase-input-143"
+      className="PrivateSwitchBase-input-146"
       data-indeterminate={false}
       onChange={[Function]}
       type="checkbox"
@@ -13957,7 +14032,7 @@ exports[`Storyshots TriStateSelect Checked 1`] = `
 exports[`Storyshots TriStateSelect Default 1`] = `
 <span
   aria-disabled={false}
-  className="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-136 MuiCheckbox-root MuiCheckbox-colorSecondary MuiCheckbox-indeterminate MuiIconButton-colorSecondary"
+  className="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-139 MuiCheckbox-root MuiCheckbox-colorSecondary MuiCheckbox-indeterminate MuiIconButton-colorSecondary"
   onBlur={[Function]}
   onDragLeave={[Function]}
   onFocus={[Function]}
@@ -13976,7 +14051,7 @@ exports[`Storyshots TriStateSelect Default 1`] = `
   >
     <input
       checked={false}
-      className="PrivateSwitchBase-input-139"
+      className="PrivateSwitchBase-input-142"
       data-indeterminate={true}
       onChange={[Function]}
       type="checkbox"
@@ -13998,7 +14073,7 @@ exports[`Storyshots TriStateSelect Default 1`] = `
 exports[`Storyshots TriStateSelect Unchecked 1`] = `
 <span
   aria-disabled={false}
-  className="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-144 MuiCheckbox-root MuiCheckbox-colorSecondary MuiIconButton-colorSecondary"
+  className="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-147 MuiCheckbox-root MuiCheckbox-colorSecondary MuiIconButton-colorSecondary"
   onBlur={[Function]}
   onDragLeave={[Function]}
   onFocus={[Function]}
@@ -14017,7 +14092,7 @@ exports[`Storyshots TriStateSelect Unchecked 1`] = `
   >
     <input
       checked={false}
-      className="PrivateSwitchBase-input-147"
+      className="PrivateSwitchBase-input-150"
       data-indeterminate={false}
       onChange={[Function]}
       type="checkbox"
@@ -14039,7 +14114,7 @@ exports[`Storyshots TriStateSelect Unchecked 1`] = `
 exports[`Storyshots TriStateSelect Undefined 1`] = `
 <span
   aria-disabled={false}
-  className="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-148 MuiCheckbox-root MuiCheckbox-colorSecondary MuiCheckbox-indeterminate MuiIconButton-colorSecondary"
+  className="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-151 MuiCheckbox-root MuiCheckbox-colorSecondary MuiCheckbox-indeterminate MuiIconButton-colorSecondary"
   onBlur={[Function]}
   onDragLeave={[Function]}
   onFocus={[Function]}
@@ -14058,7 +14133,7 @@ exports[`Storyshots TriStateSelect Undefined 1`] = `
   >
     <input
       checked={false}
-      className="PrivateSwitchBase-input-151"
+      className="PrivateSwitchBase-input-154"
       data-indeterminate={true}
       onChange={[Function]}
       type="checkbox"

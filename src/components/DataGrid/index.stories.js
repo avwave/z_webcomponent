@@ -2,6 +2,7 @@ import {
   Button,
   ButtonGroup,
   Chip,
+  Grid,
   ListItem,
   Typography,
 } from "@material-ui/core";
@@ -68,8 +69,7 @@ Default.args = {
     flexDirection: "column",
   },
   style: { flex: "1 1 auto" },
-  gridProps: {
-  },
+  gridProps: {},
 };
 
 export const CellFormatter = DefaultStory.bind({});
@@ -308,4 +308,37 @@ ToolbarAccessory.args = {
   ),
 
   centerAccessory: () => <Typography variant="h6">Heading</Typography>,
+};
+
+const RedrawBugStory = ({ ...args }) => {
+  const [state, dispatch] = React.useContext(DataGridContext);
+  React.useEffect(() => {
+    dispatch({
+      payload: { rows: args.rows, columns: args.columns },
+      type: actions.LOAD_DATA,
+    });
+  }, [args.columns, args.rows, dispatch]);
+
+  return (
+    <Grid container>
+      <Grid item xs={12}>
+      <div style={{ display: "flex", flexDirection: "column", height: "70vh" }}>
+        <DataGrid {...args} />
+      </div>
+      </Grid>
+    </Grid>
+  );
+};
+
+export const RedrawBug = RedrawBugStory.bind({});
+RedrawBug.args = {
+  rows: rows,
+  columns: columnData,
+  containerStyle: {
+    flex: "1 1 auto",
+    display: "flex",
+    flexDirection: "column",
+  },
+  style: { flex: "1 1 auto" },
+  gridProps: {},
 };
