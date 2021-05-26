@@ -27,8 +27,12 @@ import {
   Toolbar,
   Avatar,
   IconButton,
+  OutlinedInput,
+  Input,
+  InputAdornment,
 } from "@material-ui/core";
 import {
+  AccountCircle,
   Backspace,
   DeleteForever,
   MoreVert as MoreVertIcon,
@@ -70,6 +74,7 @@ const FormFieldSet = ({
   setValues = {},
   additionalActions = () => {},
   children,
+  variant = "standard",
 }) => {
   const classes = useStyles();
   const { formik, validationSchema, initialValues } = useContext(FormContext);
@@ -112,6 +117,14 @@ const FormFieldSet = ({
               InputLabelProps={{
                 shrink: true,
               }}
+              InputProps={{
+                startAdornment: fieldParams.icon ? (
+                  <InputAdornment position="start">
+                    {fieldParams.icon}
+                  </InputAdornment>
+                ) : undefined,
+              }}
+              variant={variant}
               {...fieldParams?.fieldProps}
             />
           );
@@ -123,6 +136,13 @@ const FormFieldSet = ({
               disableFuture={fieldParams.disableFuture}
               label={fieldParams.label}
               name={fieldName}
+              InputProps={{
+                startAdornment: fieldParams.icon ? (
+                  <InputAdornment position="start">
+                    {fieldParams.icon}
+                  </InputAdornment>
+                ) : undefined,
+              }}
               onChange={(evt, val) => {
                 console.log("📢[FormBuilder.js:152]:", evt);
                 if (fieldParams.onChange) {
@@ -141,6 +161,7 @@ const FormFieldSet = ({
               autoOk
               format="MM/DD/yyyy"
               variant="inline"
+              inputVariant={variant}
               mask="__/__/____"
               {...fieldParams?.fieldProps}
             />
@@ -153,6 +174,13 @@ const FormFieldSet = ({
               disableFuture={fieldParams.disableFuture}
               label={fieldParams.label}
               name={fieldName}
+              InputProps={{
+                startAdornment: fieldParams.icon ? (
+                  <InputAdornment position="start">
+                    {fieldParams.icon}
+                  </InputAdornment>
+                ) : undefined,
+              }}
               onChange={(evt, val) => {
                 if (fieldParams.onChange) {
                   fieldParams.onChange(
@@ -169,6 +197,7 @@ const FormFieldSet = ({
               disabled={fieldParams.readOnly}
               autoOk
               variant="inline"
+              inputVariant={variant}
               format="MM/dd/yyyy hh:mm a"
               mask="__/__/____ __:__ _M"
               {...fieldParams?.fieldProps}
@@ -181,6 +210,13 @@ const FormFieldSet = ({
               disableFuture={fieldParams.disableFuture}
               label={fieldParams.label}
               name={fieldName}
+              InputProps={{
+                startAdornment: fieldParams.icon ? (
+                  <InputAdornment position="start">
+                    {fieldParams.icon}
+                  </InputAdornment>
+                ) : undefined,
+              }}
               onChange={(evt, val) => {
                 console.log("📢[FormBuilder.js:181]:", evt, val);
                 if (fieldParams.onChange) {
@@ -198,6 +234,7 @@ const FormFieldSet = ({
               disabled={fieldParams.readOnly}
               autoOk
               variant="inline"
+              inputVariant={variant}
               format="hh:mm a"
               mask="__/__/____ __:__ _M"
               {...fieldParams?.fieldProps}
@@ -206,15 +243,26 @@ const FormFieldSet = ({
 
         case "select":
           return (
-            <div style={{ display: "inline-block" }}>
-              <InputLabel shrink>{fieldParams.label}</InputLabel>
-              <Select
+            <>
+              <TextField
                 name={fieldName}
+                variant={variant}
                 fullWidth
+                select
                 label={fieldParams.label}
                 value={get(formik.values, fieldName)}
                 onChange={onChangeOverride}
-                multiple={fieldParams.settings.multiple}
+                SelectProps={{
+                  multiple: fieldParams.settings.multiple,
+                }}
+                InputLabelProps={{ shrink: true }}
+                InputProps={{
+                  startAdornment: fieldParams.icon ? (
+                    <InputAdornment position="start">
+                      {fieldParams.icon}
+                    </InputAdornment>
+                  ) : undefined,
+                }}
                 disabled={fieldParams.readOnly}
                 {...fieldParams?.fieldProps}
               >
@@ -228,10 +276,9 @@ const FormFieldSet = ({
                     </MenuItem>
                   );
                 })}
-              </Select>
-            </div>
+              </TextField>
+            </>
           );
-
         case "switch":
         case "checkbox":
           return (
@@ -305,8 +352,19 @@ const FormFieldSet = ({
               renderInput={(iParams) => (
                 <TextField
                   {...iParams}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  InputProps={{
+                    startAdornment: fieldParams.icon ? (
+                      <InputAdornment position="start">
+                        {fieldParams.icon}
+                      </InputAdornment>
+                    ) : undefined,
+                  }}
                   label={fieldParams.label}
                   placeholder="type to search"
+                  variant={variant}
                   error={
                     get(formik.touched, fieldName) &&
                     Boolean(get(formik.errors, fieldName))
@@ -421,6 +479,7 @@ const FormFieldSet = ({
                 className={classes.controlContainer}
                 fullWidth
                 component="fieldset"
+                variant={variant}
                 error={
                   get(formik.touched, layout) &&
                   Boolean(get(formik.errors, layout))
@@ -594,8 +653,8 @@ const FormBuilder = (props) => {
         }, 400);
       }}
       onChange
-      onReset={(values) =>{
-        onReset(values)
+      onReset={(values) => {
+        onReset(values);
       }}
     >
       {(formik) => {
