@@ -263,6 +263,10 @@ const FormFieldSet = ({
                 label={fieldParams.label}
                 value={get(formik.values, fieldName)}
                 onChange={onChangeOverride}
+                error={
+                  get(formik.touched, fieldName) &&
+                  Boolean(get(formik.errors, fieldName))
+                }
                 SelectProps={{
                   multiple: fieldParams.settings.multiple,
                 }}

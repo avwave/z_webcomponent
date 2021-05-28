@@ -246,7 +246,7 @@ Default.args = {
         labelField: "label",
         valueField: "id",
       },
-      validator: () => Yup.boolean(),
+      validator: () => Yup.bool().oneOf([true]),
     },
     switch: {
       type: "switch",
@@ -257,7 +257,7 @@ Default.args = {
         labelField: "label",
         valueField: "id",
       },
-      validator: () => Yup.boolean(),
+      validator: () => Yup.bool().oneOf([true]),
     },
   },
   onSubmit: (values) => {
