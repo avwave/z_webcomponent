@@ -14,29 +14,19 @@ import {
   FormHelperText,
   FormLabel,
   Grid,
-  InputLabel,
+  IconButton,
+  InputAdornment,
   LinearProgress,
   ListItemText,
   makeStyles,
   MenuItem,
   Radio,
   RadioGroup,
-  Select,
   Switch,
   TextField,
   Toolbar,
-  Avatar,
-  IconButton,
-  OutlinedInput,
-  Input,
-  InputAdornment,
 } from "@material-ui/core";
-import {
-  AccountCircle,
-  Backspace,
-  DeleteForever,
-  MoreVert as MoreVertIcon,
-} from "@material-ui/icons";
+import { Backspace, DeleteForever } from "@material-ui/icons";
 import { Autocomplete } from "@material-ui/lab";
 import {
   KeyboardDatePicker,
@@ -44,8 +34,8 @@ import {
   KeyboardTimePicker,
   MuiPickersUtilsProvider,
 } from "@material-ui/pickers";
-import { FieldArray, Formik, useFormik } from "formik";
-import { isEmpty, get } from "lodash";
+import { FieldArray, Formik } from "formik";
+import { get, isEmpty } from "lodash";
 import PropTypes from "prop-types";
 import React, { useCallback, useContext, useEffect, useMemo } from "react";
 import * as Yup from "yup";
@@ -75,6 +65,11 @@ const FormFieldSet = ({
   additionalActions = () => {},
   children,
   variant = "standard",
+  onTriggerReset = () => {},
+  onTriggerSubmit = () => {},
+  triggerReset,
+  triggerSubmit,
+  decouple,
 }) => {
   const classes = useStyles();
   const { formik, validationSchema, initialValues } = useContext(FormContext);
@@ -85,6 +80,20 @@ const FormFieldSet = ({
       formik.setValues({ ...formik.values, ...setValues });
     }
   }, [setValues]);
+
+  useEffect(() => {
+    if (!!triggerReset) {
+      formik.handleReset();
+      onTriggerReset()
+    }
+  }, [formik, onTriggerReset, triggerReset]);
+
+  useEffect(() => {
+    if (!!triggerSubmit) {
+      formik.submitForm();
+      onTriggerSubmit()
+    }
+  }, [formik, onTriggerSubmit, triggerSubmit]);
 
   const renderField = useCallback(
     (fieldName, fieldParams) => {
@@ -516,12 +525,14 @@ const FormFieldSet = ({
           variant = "contained";
           break;
       }
+      if (decouple) return <></>;
       return (
         <ButtonGroup variant={variant}>
           <Button
             color="secondary"
             onClick={async () => {
               formik.handleReset();
+              onTriggerReset()
             }}
           >
             {resetLabel}
@@ -530,6 +541,7 @@ const FormFieldSet = ({
             color="primary"
             onClick={async () => {
               formik.submitForm();
+              onTriggerSubmit()
             }}
           >
             {submitLabel}
@@ -587,6 +599,7 @@ const FormFieldSet = ({
         );
     }
   }, [
+    decouple,
     additionalActions,
     buildFields,
     children,
