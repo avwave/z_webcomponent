@@ -26,7 +26,7 @@ import {
   TextField,
   Toolbar,
 } from "@material-ui/core";
-import { Backspace, DeleteForever } from "@material-ui/icons";
+import { ArrowBack, Backspace, DeleteForever } from "@material-ui/icons";
 import { Autocomplete } from "@material-ui/lab";
 import {
   KeyboardDatePicker,
@@ -71,6 +71,7 @@ const FormFieldSet = ({
   triggerSubmit,
   decouple,
   reverse=false,
+  hasReset=true,
 }) => {
   const classes = useStyles();
   const { formik, validationSchema, initialValues } = useContext(FormContext);
@@ -534,7 +535,7 @@ const FormFieldSet = ({
       }
       if (decouple) return <></>;
       return (
-        <ButtonGroup>
+        <ButtonGroup>{hasReset?(
           <Button
             color="secondary"
             variant={variant}
@@ -545,6 +546,7 @@ const FormFieldSet = ({
           >
             {resetLabel}
           </Button>
+        ):<></>}
           <Button
             color="primary"
             variant={variant}
