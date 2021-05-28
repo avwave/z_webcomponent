@@ -328,6 +328,33 @@ const NestedStory = ({ ...args }) => {
   );
 };
 
+const DecoupleStory = ({ ...args }) => {
+  const [triggerSubmit, setTriggerSubmit] = useState(false);
+  const [triggerReset, setTriggerReset] = useState(false);
+
+  return (
+    <>
+    <FormBuilder
+      {...args}
+      triggerReset={triggerReset}
+      triggerSubmit={triggerSubmit}
+      onTriggerReset={()=>setTriggerReset(false)}
+      onTriggerSubmit={()=>setTriggerSubmit(false)}
+    />
+    <ButtonGroup>
+      <Button onClick={()=>setTriggerSubmit(true)}>Trigger Submit</Button>
+      <Button onClick={()=>setTriggerReset(true)}>Trigger Reset</Button>
+    </ButtonGroup>
+    </>
+  );
+};
+
+
+export const Decouple = DecoupleStory.bind({});
+Decouple.args = {
+  ...Default.args,
+  decouple: true,
+}
 export const Nested = NestedStory.bind({});
 Nested.args = {
   ...Default.args,
