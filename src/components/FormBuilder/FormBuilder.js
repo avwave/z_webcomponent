@@ -90,7 +90,7 @@ const FormFieldSet = ({
 
   useEffect(() => {
     if (!!triggerSubmit) {
-      formik.submitForm();
+      formik.handleSubmit();
       onTriggerSubmit()
     }
   }, [formik, onTriggerSubmit, triggerSubmit]);
@@ -540,7 +540,7 @@ const FormFieldSet = ({
           <Button
             color="primary"
             onClick={async () => {
-              formik.submitForm();
+              formik.handleSubmit();
               onTriggerSubmit()
             }}
           >
