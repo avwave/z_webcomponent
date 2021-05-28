@@ -46,6 +46,7 @@ const DefaultStory = ({ ...args }) => <FormBuilder {...args} />;
 
 export const Default = DefaultStory.bind({});
 Default.args = {
+  reverse: true,
   formLabel: "primary",
   formSubtitle: "secondary",
   submitLabel: "Submit",
@@ -355,6 +356,15 @@ Decouple.args = {
   ...Default.args,
   decouple: true,
 }
+
+export const Reversed = DecoupleStory.bind({});
+Reversed.args = {
+  ...Default.args,
+  reverse: true,
+  additionalActions: () => {},
+}
+
+
 export const Nested = NestedStory.bind({});
 Nested.args = {
   ...Default.args,
