@@ -26,7 +26,7 @@ import {
   TextField,
   Toolbar,
 } from "@material-ui/core";
-import { Backspace, DeleteForever } from "@material-ui/icons";
+import { ArrowBack, Backspace, DeleteForever } from "@material-ui/icons";
 import { Autocomplete } from "@material-ui/lab";
 import {
   KeyboardDatePicker,
@@ -70,6 +70,8 @@ const FormFieldSet = ({
   triggerReset,
   triggerSubmit,
   decouple,
+  reverse=false,
+  hasReset=true,
 }) => {
   const classes = useStyles();
   const { formik, validationSchema, initialValues } = useContext(FormContext);
@@ -84,14 +86,14 @@ const FormFieldSet = ({
   useEffect(() => {
     if (!!triggerReset) {
       formik.handleReset();
-      onTriggerReset()
+      onTriggerReset();
     }
   }, [formik, onTriggerReset, triggerReset]);
 
   useEffect(() => {
     if (!!triggerSubmit) {
-      formik.submitForm();
-      onTriggerSubmit()
+      formik.handleSubmit();
+      onTriggerSubmit();
     }
   }, [formik, onTriggerSubmit, triggerSubmit]);
 
@@ -451,7 +453,7 @@ const FormFieldSet = ({
           return <></>;
       }
     },
-    [formik]
+    [formik, variant]
   );
 
   const buildComponent = useCallback(
@@ -504,7 +506,13 @@ const FormFieldSet = ({
         }
       }
     },
-    [classes.controlContainer, formik, renderField]
+    [
+      classes.controlContainer,
+      formik.errors,
+      formik.touched,
+      renderField,
+      variant,
+    ]
   );
 
   const buildFields = useCallback(() => {
@@ -527,21 +535,24 @@ const FormFieldSet = ({
       }
       if (decouple) return <></>;
       return (
-        <ButtonGroup variant={variant}>
+        <ButtonGroup>{hasReset?(
           <Button
             color="secondary"
+            variant={variant}
             onClick={async () => {
               formik.handleReset();
-              onTriggerReset()
+              onTriggerReset();
             }}
           >
             {resetLabel}
           </Button>
+        ):<></>}
           <Button
             color="primary"
+            variant={variant}
             onClick={async () => {
-              formik.submitForm();
-              onTriggerSubmit()
+              formik.handleSubmit();
+              onTriggerSubmit();
             }}
           >
             {submitLabel}
@@ -592,24 +603,38 @@ const FormFieldSet = ({
             {children}
             {formik.isSubmitting && <LinearProgress />}
             <div className={classes.actionBar}>
-              <ActionButtons />
-              {additionalActions()}
+              {reverse ? (
+                <>
+                  <ActionButtons />
+                  <div/>
+                  {additionalActions()}
+                </>
+              ) : (
+                <>
+                  {additionalActions()}
+                  <div/>
+                  <ActionButtons />
+                </>
+              )}
             </div>
           </>
         );
     }
   }, [
+    formFactor,
     decouple,
+    resetLabel,
+    submitLabel,
+    formik,
+    onTriggerReset,
+    onTriggerSubmit,
+    formLabel,
+    formSubtitle,
     additionalActions,
     buildFields,
     children,
+    reverse,
     classes.actionBar,
-    formFactor,
-    formLabel,
-    formSubtitle,
-    formik,
-    resetLabel,
-    submitLabel,
   ]);
 
   return (
