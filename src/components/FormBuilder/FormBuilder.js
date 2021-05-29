@@ -70,8 +70,8 @@ const FormFieldSet = ({
   triggerReset,
   triggerSubmit,
   decouple,
-  reverse=false,
-  hasReset=true,
+  reverse = false,
+  hasReset = true,
 }) => {
   const classes = useStyles();
   const { formik, validationSchema, initialValues } = useContext(FormContext);
@@ -369,13 +369,18 @@ const FormFieldSet = ({
                   InputLabelProps={{
                     shrink: true,
                   }}
-                  InputProps={{
-                    startAdornment: fieldParams.icon ? (
-                      <InputAdornment position="start">
-                        {fieldParams.icon}
-                      </InputAdornment>
-                    ) : undefined,
-                  }}
+                  {...(fieldParams.icon
+                    ? {
+                        InputProps: {
+                          ...iParams.InputProps,
+                          startAdornment: fieldParams.icon ? (
+                            <InputAdornment position="start">
+                              {fieldParams.icon}
+                            </InputAdornment>
+                          ) : undefined,
+                        },
+                      }
+                    : {})}
                   label={fieldParams.label}
                   placeholder="type to search"
                   variant={variant}
@@ -538,18 +543,21 @@ const FormFieldSet = ({
       }
       if (decouple) return <></>;
       return (
-        <ButtonGroup>{hasReset?(
-          <Button
-            color="secondary"
-            variant={variant}
-            onClick={async () => {
-              formik.handleReset();
-              onTriggerReset();
-            }}
-          >
-            {resetLabel}
-          </Button>
-        ):<></>}
+        <ButtonGroup>
+          {hasReset ? (
+            <Button
+              color="secondary"
+              variant={variant}
+              onClick={async () => {
+                formik.handleReset();
+                onTriggerReset();
+              }}
+            >
+              {resetLabel}
+            </Button>
+          ) : (
+            <></>
+          )}
           <Button
             color="primary"
             variant={variant}
@@ -609,13 +617,13 @@ const FormFieldSet = ({
               {reverse ? (
                 <>
                   <ActionButtons />
-                  <div/>
+                  <div />
                   {additionalActions()}
                 </>
               ) : (
                 <>
                   {additionalActions()}
-                  <div/>
+                  <div />
                   <ActionButtons />
                 </>
               )}
