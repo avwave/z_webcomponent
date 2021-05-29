@@ -198,7 +198,6 @@ Default.args = {
     autocomplete: {
       type: "autocomplete",
       label: "Autocomplete",
-      icon: <AccountTree/>,
       initialValues: [],
       options: [
         { id: 1, label: "one" },

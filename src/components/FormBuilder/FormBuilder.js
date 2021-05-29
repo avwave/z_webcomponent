@@ -346,7 +346,6 @@ const FormFieldSet = ({
           return (
             <Autocomplete
               style={{ verticalAlign: "bottom" }}
-              size="small"
               disabled={fieldParams.readOnly}
               disableCloseOnSelect
               name={fieldName}
