@@ -37,8 +37,15 @@ import {
 import { FieldArray, Formik } from "formik";
 import { get, isEmpty } from "lodash";
 import PropTypes from "prop-types";
-import React, { useCallback, useContext, useEffect, useMemo } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import * as Yup from "yup";
+import { FormikPersist } from "./FormikPersist";
 
 const useStyles = makeStyles((theme) => ({
   controlContainer: {
@@ -666,6 +673,8 @@ const FormBuilder = (props) => {
     additionalValidation,
     additionalInitial,
     formProps,
+    formId = "fid",
+    usePersist = false,
   } = props;
 
   const validationSchema = useMemo(() => {
@@ -692,6 +701,7 @@ const FormBuilder = (props) => {
     return { ...mapped, ...additionalInitial };
   }, [additionalInitial, form]);
 
+  const [reset, setReset] = useState(false);
   return (
     <Formik
       // enableReinitialize
@@ -704,7 +714,8 @@ const FormBuilder = (props) => {
         }, 400);
       }}
       onChange
-      onReset={(values) => {
+      onReset={async (values) => {
+        setReset(true);
         onReset(values);
       }}
       {...formProps}
@@ -715,6 +726,17 @@ const FormBuilder = (props) => {
             value={{ validationSchema, initialValues, formik }}
           >
             <FormFieldSet {...props} isSubForm={false} />
+            {usePersist ? (
+              <FormikPersist
+                name={formId}
+                clearOnOnmount={false}
+                clearData={() => {}}
+                reset={reset}
+                resetCallback={() => setReset(false)}
+              />
+            ) : (
+              <></>
+            )}
           </FormContext.Provider>
         );
       }}
@@ -724,10 +746,12 @@ const FormBuilder = (props) => {
 export { FormBuilder };
 
 FormBuilder.propTypes = {
+  formId: PropTypes.string.isRequired,
   formLabel: PropTypes.string.isRequired,
   formFactor: PropTypes.string,
   submitLabel: PropTypes.string,
   resetLabel: PropTypes.string,
   columns: PropTypes.number,
   onSubmit: PropTypes.func.isRequired,
+  usePersist: PropTypes.bool
 };
