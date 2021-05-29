@@ -542,34 +542,35 @@ const FormFieldSet = ({
           break;
       }
       if (decouple) return <></>;
-      return (
-        <ButtonGroup>
-          {hasReset ? (
-            <Button
-              color="secondary"
-              variant={variant}
-              onClick={async () => {
-                formik.handleReset();
-                onTriggerReset();
-              }}
-            >
-              {resetLabel}
-            </Button>
-          ) : (
-            <></>
-          )}
-          <Button
-            color="primary"
-            variant={variant}
-            onClick={async () => {
-              formik.handleSubmit();
-              onTriggerSubmit();
-            }}
-          >
-            {submitLabel}
-          </Button>
-        </ButtonGroup>
-      );
+      const buttonArray = [
+        ...(hasReset
+          ? [
+              <Button
+                key="reset"
+                color="secondary"
+                variant={variant}
+                onClick={async () => {
+                  formik.handleReset();
+                  onTriggerReset();
+                }}
+              >
+                {resetLabel}
+              </Button>,
+            ]
+          : []),
+        <Button
+          key="submit"
+          color="primary"
+          variant={variant}
+          onClick={async () => {
+            formik.handleSubmit();
+            onTriggerSubmit();
+          }}
+        >
+          {submitLabel}
+        </Button>,
+      ];
+      return <ButtonGroup>{buttonArray}</ButtonGroup>;
     };
 
     switch (formFactor) {
@@ -664,6 +665,7 @@ const FormBuilder = (props) => {
     form,
     additionalValidation,
     additionalInitial,
+    formProps,
   } = props;
 
   const validationSchema = useMemo(() => {
@@ -692,7 +694,7 @@ const FormBuilder = (props) => {
 
   return (
     <Formik
-      enableReinitialize
+      // enableReinitialize
       initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={(values, { setSubmitting }) => {
@@ -705,6 +707,7 @@ const FormBuilder = (props) => {
       onReset={(values) => {
         onReset(values);
       }}
+      {...formProps}
     >
       {(formik) => {
         return (
