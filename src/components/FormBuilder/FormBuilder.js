@@ -675,6 +675,7 @@ const FormBuilder = (props) => {
     formProps,
     formId = "fid",
     usePersist = false,
+    onPersistLoad = () => {},
   } = props;
 
   const validationSchema = useMemo(() => {
@@ -733,6 +734,7 @@ const FormBuilder = (props) => {
                 clearData={() => {}}
                 reset={reset}
                 resetCallback={() => setReset(false)}
+                onLoaded={(values) => onPersistLoad(values)}
               />
             ) : (
               <></>
@@ -753,5 +755,5 @@ FormBuilder.propTypes = {
   resetLabel: PropTypes.string,
   columns: PropTypes.number,
   onSubmit: PropTypes.func.isRequired,
-  usePersist: PropTypes.bool
+  usePersist: PropTypes.bool,
 };
