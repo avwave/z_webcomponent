@@ -14,25 +14,19 @@ import {
   FormHelperText,
   FormLabel,
   Grid,
-  InputLabel,
+  IconButton,
+  InputAdornment,
   LinearProgress,
   ListItemText,
   makeStyles,
   MenuItem,
   Radio,
   RadioGroup,
-  Select,
   Switch,
   TextField,
   Toolbar,
-  Avatar,
-  IconButton,
 } from "@material-ui/core";
-import {
-  Backspace,
-  DeleteForever,
-  MoreVert as MoreVertIcon,
-} from "@material-ui/icons";
+import { ArrowBack, Backspace, DeleteForever } from "@material-ui/icons";
 import { Autocomplete } from "@material-ui/lab";
 import {
   KeyboardDatePicker,
@@ -40,8 +34,8 @@ import {
   KeyboardTimePicker,
   MuiPickersUtilsProvider,
 } from "@material-ui/pickers";
-import { FieldArray, Formik, useFormik } from "formik";
-import { isEmpty, get } from "lodash";
+import { FieldArray, Formik } from "formik";
+import { get, isEmpty } from "lodash";
 import PropTypes from "prop-types";
 import React, { useCallback, useContext, useEffect, useMemo } from "react";
 import * as Yup from "yup";
@@ -70,6 +64,14 @@ const FormFieldSet = ({
   setValues = {},
   additionalActions = () => {},
   children,
+  variant = "standard",
+  onTriggerReset = () => {},
+  onTriggerSubmit = () => {},
+  triggerReset,
+  triggerSubmit,
+  decouple,
+  reverse = false,
+  hasReset = true,
 }) => {
   const classes = useStyles();
   const { formik, validationSchema, initialValues } = useContext(FormContext);
@@ -80,6 +82,20 @@ const FormFieldSet = ({
       formik.setValues({ ...formik.values, ...setValues });
     }
   }, [setValues]);
+
+  useEffect(() => {
+    if (!!triggerReset) {
+      formik.handleReset();
+      onTriggerReset();
+    }
+  }, [formik, onTriggerReset, triggerReset]);
+
+  useEffect(() => {
+    if (!!triggerSubmit) {
+      formik.handleSubmit();
+      onTriggerSubmit();
+    }
+  }, [formik, onTriggerSubmit, triggerSubmit]);
 
   const renderField = useCallback(
     (fieldName, fieldParams) => {
@@ -112,6 +128,14 @@ const FormFieldSet = ({
               InputLabelProps={{
                 shrink: true,
               }}
+              InputProps={{
+                startAdornment: fieldParams.icon ? (
+                  <InputAdornment position="start">
+                    {fieldParams.icon}
+                  </InputAdornment>
+                ) : undefined,
+              }}
+              variant={variant}
               {...fieldParams?.fieldProps}
             />
           );
@@ -123,6 +147,13 @@ const FormFieldSet = ({
               disableFuture={fieldParams.disableFuture}
               label={fieldParams.label}
               name={fieldName}
+              InputProps={{
+                startAdornment: fieldParams.icon ? (
+                  <InputAdornment position="start">
+                    {fieldParams.icon}
+                  </InputAdornment>
+                ) : undefined,
+              }}
               onChange={(evt, val) => {
                 console.log("📢[FormBuilder.js:152]:", evt);
                 if (fieldParams.onChange) {
@@ -141,6 +172,7 @@ const FormFieldSet = ({
               autoOk
               format="MM/DD/yyyy"
               variant="inline"
+              inputVariant={variant}
               mask="__/__/____"
               {...fieldParams?.fieldProps}
             />
@@ -153,6 +185,13 @@ const FormFieldSet = ({
               disableFuture={fieldParams.disableFuture}
               label={fieldParams.label}
               name={fieldName}
+              InputProps={{
+                startAdornment: fieldParams.icon ? (
+                  <InputAdornment position="start">
+                    {fieldParams.icon}
+                  </InputAdornment>
+                ) : undefined,
+              }}
               onChange={(evt, val) => {
                 if (fieldParams.onChange) {
                   fieldParams.onChange(
@@ -169,6 +208,7 @@ const FormFieldSet = ({
               disabled={fieldParams.readOnly}
               autoOk
               variant="inline"
+              inputVariant={variant}
               format="MM/dd/yyyy hh:mm a"
               mask="__/__/____ __:__ _M"
               {...fieldParams?.fieldProps}
@@ -181,6 +221,13 @@ const FormFieldSet = ({
               disableFuture={fieldParams.disableFuture}
               label={fieldParams.label}
               name={fieldName}
+              InputProps={{
+                startAdornment: fieldParams.icon ? (
+                  <InputAdornment position="start">
+                    {fieldParams.icon}
+                  </InputAdornment>
+                ) : undefined,
+              }}
               onChange={(evt, val) => {
                 console.log("📢[FormBuilder.js:181]:", evt, val);
                 if (fieldParams.onChange) {
@@ -198,6 +245,7 @@ const FormFieldSet = ({
               disabled={fieldParams.readOnly}
               autoOk
               variant="inline"
+              inputVariant={variant}
               format="hh:mm a"
               mask="__/__/____ __:__ _M"
               {...fieldParams?.fieldProps}
@@ -206,15 +254,30 @@ const FormFieldSet = ({
 
         case "select":
           return (
-            <div style={{ display: "inline-block" }}>
-              <InputLabel shrink>{fieldParams.label}</InputLabel>
-              <Select
+            <>
+              <TextField
                 name={fieldName}
+                variant={variant}
                 fullWidth
+                select
                 label={fieldParams.label}
                 value={get(formik.values, fieldName)}
                 onChange={onChangeOverride}
-                multiple={fieldParams.settings.multiple}
+                error={
+                  get(formik.touched, fieldName) &&
+                  Boolean(get(formik.errors, fieldName))
+                }
+                SelectProps={{
+                  multiple: fieldParams.settings.multiple,
+                }}
+                InputLabelProps={{ shrink: true }}
+                InputProps={{
+                  startAdornment: fieldParams.icon ? (
+                    <InputAdornment position="start">
+                      {fieldParams.icon}
+                    </InputAdornment>
+                  ) : undefined,
+                }}
                 disabled={fieldParams.readOnly}
                 {...fieldParams?.fieldProps}
               >
@@ -228,10 +291,9 @@ const FormFieldSet = ({
                     </MenuItem>
                   );
                 })}
-              </Select>
-            </div>
+              </TextField>
+            </>
           );
-
         case "switch":
         case "checkbox":
           return (
@@ -284,7 +346,6 @@ const FormFieldSet = ({
           return (
             <Autocomplete
               style={{ verticalAlign: "bottom" }}
-              size="small"
               disabled={fieldParams.readOnly}
               disableCloseOnSelect
               name={fieldName}
@@ -305,8 +366,24 @@ const FormFieldSet = ({
               renderInput={(iParams) => (
                 <TextField
                   {...iParams}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  {...(fieldParams.icon
+                    ? {
+                        InputProps: {
+                          ...iParams.InputProps,
+                          startAdornment: fieldParams.icon ? (
+                            <InputAdornment position="start">
+                              {fieldParams.icon}
+                            </InputAdornment>
+                          ) : undefined,
+                        },
+                      }
+                    : {})}
                   label={fieldParams.label}
                   placeholder="type to search"
+                  variant={variant}
                   error={
                     get(formik.touched, fieldName) &&
                     Boolean(get(formik.errors, fieldName))
@@ -384,7 +461,7 @@ const FormFieldSet = ({
           return <></>;
       }
     },
-    [formik]
+    [formik, variant]
   );
 
   const buildComponent = useCallback(
@@ -421,6 +498,7 @@ const FormFieldSet = ({
                 className={classes.controlContainer}
                 fullWidth
                 component="fieldset"
+                variant={variant}
                 error={
                   get(formik.touched, layout) &&
                   Boolean(get(formik.errors, layout))
@@ -436,7 +514,13 @@ const FormFieldSet = ({
         }
       }
     },
-    [classes.controlContainer, formik, renderField]
+    [
+      classes.controlContainer,
+      formik.errors,
+      formik.touched,
+      renderField,
+      variant,
+    ]
   );
 
   const buildFields = useCallback(() => {
@@ -457,20 +541,29 @@ const FormFieldSet = ({
           variant = "contained";
           break;
       }
+      if (decouple) return <></>;
       return (
-        <ButtonGroup variant={variant}>
-          <Button
-            color="secondary"
-            onClick={async () => {
-              formik.handleReset();
-            }}
-          >
-            {resetLabel}
-          </Button>
+        <ButtonGroup>
+          {hasReset ? (
+            <Button
+              color="secondary"
+              variant={variant}
+              onClick={async () => {
+                formik.handleReset();
+                onTriggerReset();
+              }}
+            >
+              {resetLabel}
+            </Button>
+          ) : (
+            <></>
+          )}
           <Button
             color="primary"
+            variant={variant}
             onClick={async () => {
-              formik.submitForm();
+              formik.handleSubmit();
+              onTriggerSubmit();
             }}
           >
             {submitLabel}
@@ -521,23 +614,38 @@ const FormFieldSet = ({
             {children}
             {formik.isSubmitting && <LinearProgress />}
             <div className={classes.actionBar}>
-              <ActionButtons />
-              {additionalActions()}
+              {reverse ? (
+                <>
+                  <ActionButtons />
+                  <div />
+                  {additionalActions()}
+                </>
+              ) : (
+                <>
+                  {additionalActions()}
+                  <div />
+                  <ActionButtons />
+                </>
+              )}
             </div>
           </>
         );
     }
   }, [
+    formFactor,
+    decouple,
+    resetLabel,
+    submitLabel,
+    formik,
+    onTriggerReset,
+    onTriggerSubmit,
+    formLabel,
+    formSubtitle,
     additionalActions,
     buildFields,
     children,
+    reverse,
     classes.actionBar,
-    formFactor,
-    formLabel,
-    formSubtitle,
-    formik,
-    resetLabel,
-    submitLabel,
   ]);
 
   return (
@@ -594,8 +702,8 @@ const FormBuilder = (props) => {
         }, 400);
       }}
       onChange
-      onReset={(values) =>{
-        onReset(values)
+      onReset={(values) => {
+        onReset(values);
       }}
     >
       {(formik) => {
