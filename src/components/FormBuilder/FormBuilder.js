@@ -56,6 +56,9 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "row",
     justifyContent: "space-between",
   },
+  hidden: {
+    display: "none",
+  },
 }));
 
 const FormFieldSet = ({
@@ -106,7 +109,6 @@ const FormFieldSet = ({
 
   const renderField = useCallback(
     (fieldName, fieldParams) => {
-      
       const onChangeOverride = fieldParams.onChange
         ? (evt, value) => {
             fieldParams.onChange(fieldName, evt?.target?.value ?? evt);
@@ -497,6 +499,7 @@ const FormFieldSet = ({
           const err = get(formik.touched, layout) && get(formik.errors, layout);
           return (
             <Grid
+              className={field.hidden ? classes.hidden : ""}
               key={`${index}-layout-${layout.id}`}
               item
               xs={12}
@@ -523,6 +526,7 @@ const FormFieldSet = ({
       }
     },
     [
+      classes.hidden,
       classes.controlContainer,
       formik.errors,
       formik.touched,
@@ -656,13 +660,6 @@ const FormFieldSet = ({
     reverse,
     classes.actionBar,
   ]);
-
-  useEffect(() => {
-    console.log(formLayout.flat())
-    formLayout.flat().forEach(f => {
-      formik.setFieldTouched(f, true, false)
-    });
-  }, [formLayout]);
 
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
