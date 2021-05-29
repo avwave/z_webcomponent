@@ -106,6 +106,7 @@ const FormFieldSet = ({
 
   const renderField = useCallback(
     (fieldName, fieldParams) => {
+      
       const onChangeOverride = fieldParams.onChange
         ? (evt, value) => {
             fieldParams.onChange(fieldName, evt?.target?.value ?? evt);
@@ -655,6 +656,13 @@ const FormFieldSet = ({
     reverse,
     classes.actionBar,
   ]);
+
+  useEffect(() => {
+    console.log(formLayout.flat())
+    formLayout.flat().forEach(f => {
+      formik.setFieldTouched(f, true, false)
+    });
+  }, [formLayout]);
 
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
