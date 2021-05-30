@@ -46,6 +46,7 @@ const DefaultStory = ({ ...args }) => <FormBuilder {...args} />;
 
 export const Default = DefaultStory.bind({});
 Default.args = {
+  formId:'default',
   reverse: true,
   formLabel: "primary",
   formSubtitle: "secondary",
@@ -298,6 +299,14 @@ const ModifyStory = ({ ...args }) => {
 export const Modify = ModifyStory.bind({});
 Modify.args = {
   ...Default.args,
+  formId:'modify',
+};
+
+export const Persist = DefaultStory.bind({});
+Persist.args = {
+  ...Default.args,
+  formId:'persist',
+  usePersist: true
 };
 
 const NestedStory = ({ ...args }) => {
@@ -354,11 +363,13 @@ export const Decouple = DecoupleStory.bind({});
 Decouple.args = {
   ...Default.args,
   decouple: true,
+  formId:'decouple',
 };
 
 export const Reversed = DecoupleStory.bind({});
 Reversed.args = {
   ...Default.args,
+  formId:'reversed',
   reverse: true,
   additionalActions: () => {},
 };
@@ -366,6 +377,7 @@ Reversed.args = {
 export const Nested = NestedStory.bind({});
 Nested.args = {
   ...Default.args,
+  formId:'nested',
   formLayout: [["form1", "form2"], "subform"],
   form: {
     form1: {

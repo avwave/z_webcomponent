@@ -37,8 +37,15 @@ import {
 import { FieldArray, Formik } from "formik";
 import { get, isEmpty } from "lodash";
 import PropTypes from "prop-types";
-import React, { useCallback, useContext, useEffect, useMemo } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import * as Yup from "yup";
+import { FormikPersist } from "./FormikPersist";
 
 const useStyles = makeStyles((theme) => ({
   controlContainer: {
@@ -48,6 +55,9 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
+  },
+  hidden: {
+    display: "none",
   },
 }));
 
@@ -489,6 +499,7 @@ const FormFieldSet = ({
           const err = get(formik.touched, layout) && get(formik.errors, layout);
           return (
             <Grid
+              className={field.hidden ? classes.hidden : ""}
               key={`${index}-layout-${layout.id}`}
               item
               xs={12}
@@ -515,6 +526,7 @@ const FormFieldSet = ({
       }
     },
     [
+      classes.hidden,
       classes.controlContainer,
       formik.errors,
       formik.touched,
@@ -666,6 +678,9 @@ const FormBuilder = (props) => {
     additionalValidation,
     additionalInitial,
     formProps,
+    formId = "fid",
+    usePersist = false,
+    onPersistLoad = () => {},
   } = props;
 
   const validationSchema = useMemo(() => {
@@ -692,6 +707,7 @@ const FormBuilder = (props) => {
     return { ...mapped, ...additionalInitial };
   }, [additionalInitial, form]);
 
+  const [reset, setReset] = useState(false);
   return (
     <Formik
       // enableReinitialize
@@ -704,7 +720,8 @@ const FormBuilder = (props) => {
         }, 400);
       }}
       onChange
-      onReset={(values) => {
+      onReset={async (values) => {
+        setReset(true);
         onReset(values);
       }}
       {...formProps}
@@ -715,6 +732,18 @@ const FormBuilder = (props) => {
             value={{ validationSchema, initialValues, formik }}
           >
             <FormFieldSet {...props} isSubForm={false} />
+            {usePersist ? (
+              <FormikPersist
+                name={formId}
+                clearOnOnmount={false}
+                clearData={() => {}}
+                reset={reset}
+                resetCallback={() => setReset(false)}
+                onLoaded={(values) => onPersistLoad(values)}
+              />
+            ) : (
+              <></>
+            )}
           </FormContext.Provider>
         );
       }}
@@ -724,10 +753,12 @@ const FormBuilder = (props) => {
 export { FormBuilder };
 
 FormBuilder.propTypes = {
+  formId: PropTypes.string.isRequired,
   formLabel: PropTypes.string.isRequired,
   formFactor: PropTypes.string,
   submitLabel: PropTypes.string,
   resetLabel: PropTypes.string,
   columns: PropTypes.number,
   onSubmit: PropTypes.func.isRequired,
+  usePersist: PropTypes.bool,
 };
