@@ -82,9 +82,15 @@ const FormFieldSet = ({
   decouple,
   reverse = false,
   hasReset = true,
+  onChange,
 }) => {
   const classes = useStyles();
   const { formik, validationSchema, initialValues } = useContext(FormContext);
+
+  useEffect(() => {
+    console.log("📢[FormBuilder.js:90formikvalues]:", formik.values);
+    onChange(formik.values);
+  }, [formik.values, onChange]);
 
   useEffect(() => {
     if (!isEmpty(setValues)) {
@@ -681,6 +687,7 @@ const FormBuilder = (props) => {
     formId = "fid",
     usePersist = false,
     onPersistLoad = () => {},
+    onChange = () => {},
   } = props;
 
   const validationSchema = useMemo(() => {
@@ -731,7 +738,11 @@ const FormBuilder = (props) => {
           <FormContext.Provider
             value={{ validationSchema, initialValues, formik }}
           >
-            <FormFieldSet {...props} isSubForm={false} />
+            <FormFieldSet
+              {...props}
+              onChange={(values) => onChange(values)}
+              isSubForm={false}
+            />
             {usePersist ? (
               <FormikPersist
                 name={formId}

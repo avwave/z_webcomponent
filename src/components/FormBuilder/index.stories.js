@@ -46,6 +46,7 @@ const DefaultStory = ({ ...args }) => <FormBuilder {...args} />;
 
 export const Default = DefaultStory.bind({});
 Default.args = {
+  onChange:(values)=>{console.log(values)},
   formId:'default',
   reverse: true,
   formLabel: "primary",
@@ -125,6 +126,7 @@ Default.args = {
       label: "Email",
       initialValues: "",
       validator: () => Yup.string().email().required(),
+      hidden: true,
     },
     aNumber: {
       type: "number",
