@@ -88,7 +88,6 @@ const FormFieldSet = ({
   const { formik, validationSchema, initialValues } = useContext(FormContext);
 
   useEffect(() => {
-    console.log("📢[FormBuilder.js:90formikvalues]:", formik.values);
     onChange(formik.values);
   }, [formik.values, onChange]);
 
@@ -171,7 +170,7 @@ const FormFieldSet = ({
                 ) : undefined,
               }}
               onChange={(evt, val) => {
-                console.log("📢[FormBuilder.js:152]:", evt);
+                // console.log("📢[FormBuilder.js:152]:", evt);
                 if (fieldParams.onChange) {
                   fieldParams.onChange(
                     fieldName,
@@ -245,7 +244,7 @@ const FormFieldSet = ({
                 ) : undefined,
               }}
               onChange={(evt, val) => {
-                console.log("📢[FormBuilder.js:181]:", evt, val);
+                // console.log("📢[FormBuilder.js:181]:", evt, val);
                 if (fieldParams.onChange) {
                   fieldParams.onChange(
                     fieldName,
@@ -398,7 +397,7 @@ const FormFieldSet = ({
                       }
                     : {})}
                   label={fieldParams.label}
-                  placeholder="type to search"
+                  placeholder={fieldParams.placeholder??"type to search"}
                   variant={variant}
                   error={
                     get(formik.touched, fieldName) &&
@@ -726,7 +725,6 @@ const FormBuilder = (props) => {
           setSubmitting(false);
         }, 400);
       }}
-      onChange
       onReset={async (values) => {
         setReset(true);
         onReset(values);
