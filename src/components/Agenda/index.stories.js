@@ -71,7 +71,7 @@ Default.args = {
   lockSlotStartTime: "00:00",
   lockSlotEndTime: "23:59",
   popup: true,
-  views: [views.WEEK, views.WORK_WEEK, views.AGENDA],
+  views: [views.MONTH,views.WEEK, views.WORK_WEEK, views.AGENDA],
   defaultView: views.WEEK,
   style: { flex: "1 1 auto" },
   events: [...baseEvents],
