@@ -30,3 +30,8 @@ $event-zindex: 4 !default;
 .rbc-event-content > *{
   pointer-events: none;
 }
+
+.rbc-time-gutter + div {
+  background-color: $out-of-range-bg-color;
+}
+

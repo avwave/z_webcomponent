@@ -1,5 +1,5 @@
 import React from "react";
-import BigCalendar, { Calendar, momentLocalizer } from "react-big-calendar";
+import BigCalendar, { Calendar, dateFnsLocalizer, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import { AgendaContext } from "./AgendaContext";
 
@@ -22,7 +22,18 @@ import AgendaToolbar from "./AgendaToolbar";
 import { ProgressContainer } from "../ProgressContainer";
 import { EdgeContainer } from "../EdgeContainer";
 
-const localizer = momentLocalizer(moment);
+import format from 'date-fns/format';
+import startOfWeek from 'date-fns/startOfWeek';
+import getDay from 'date-fns/getDay';
+import enLocale from 'date-fns/locale/en-US';
+import sub from 'date-fns/sub'
+
+const dateFnsLocales = {
+  'en-US': enLocale,
+};
+// const localizer = momentLocalizer(moment);
+const sOfWeek = () => startOfWeek(new Date(), { weekStartsOn: getDay(sub(new Date(), {days:1})) });
+const localizer = dateFnsLocalizer({ format, startOfWeek: sOfWeek, getDay, locales:dateFnsLocales });
 
 export function isBetween(value, start, end) {
   const getTime = (dateTime) => {
@@ -141,7 +152,6 @@ function Agenda(props) {
         </DialogActions>
       </Dialog>
       <Calendar
-        {...props}
         localizer={localizer}
         events={state.events||defaultEvents}
         startAccessor="start"
@@ -162,6 +172,7 @@ function Agenda(props) {
         min={moment(lockSlotStartTime, "HH:mm").toDate()}
         max={moment(lockSlotEndTime, "HH:mm").toDate()}
         showMultiDayTimes
+        {...props}
       />
     </Paper>
   );
