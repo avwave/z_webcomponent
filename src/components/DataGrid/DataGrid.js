@@ -35,11 +35,11 @@ const styles = (theme) => ({
 
 const LightTooltip = withStyles((theme) => ({
   tooltip: {
-    backgroundColor: '#f5f5f9',
-    color: 'rgba(0, 0, 0, 0.87)',
+    backgroundColor: "#f5f5f9",
+    color: "rgba(0, 0, 0, 0.87)",
     maxWidth: 220,
     fontSize: theme.typography.pxToRem(14),
-    border: '1px solid #dadde9',
+    border: "1px solid #dadde9",
   },
 }))(Tooltip);
 
@@ -54,7 +54,7 @@ function DataGrid({
   contextMenu,
   leftAccessory,
   rightAccessory,
-  centerAccessory
+  centerAccessory,
 }) {
   const [checkListState, checkListDispatch] = React.useContext(CheckboxContext);
   const [dataGridState, dataGridDispatch] = React.useContext(DataGridContext);
@@ -98,7 +98,7 @@ function DataGrid({
 
       setColumns(reorderedColumns);
     }
-    function HeaderRenderer({component, ...props}) {
+    function HeaderRenderer({ component, ...props }) {
       return (
         <DraggableHeaderRenderer
           {...props}
@@ -109,7 +109,9 @@ function DataGrid({
     }
 
     return columns.map((c) => {
-      c.headerRenderer = (args) => <HeaderRenderer {...args} component={c.columnHeaderRenderer}/>;
+      c.headerRenderer = (args) => (
+        <HeaderRenderer {...args} component={c.columnHeaderRenderer} />
+      );
       return c;
     });
   }, [columns]);
@@ -120,29 +122,25 @@ function DataGrid({
 
       if (!c.formatter) {
         c.formatter = (props) => {
-          return !c.noTooltip ? (
-            <LightTooltip
-                title={props.row[props.column.key] ?? " "}
+          const tooltip = typeof props.row[props.column.key] === 'object' ? JSON.stringify(props.row[props.column.key]): props.row[props.column.key]
+          const cellRenderer = !!c.cellRenderer ? (
+            c.cellRenderer(props)
+          ) : (
+            <span style={c.cellStyles}>{tooltip}</span>
+          );
+          if (c.noTooltip) {
+            return cellRenderer;
+          } else {
+            return (
+              <LightTooltip
+                title={tooltip ?? " "}
                 placement="bottom-start"
                 className={classes.tooltip}
               >
-                
-              {c.cellRenderer ? (
-                c.cellRenderer(props)
-              ) : (
-                <span style={c.cellStyles}>{props.row[props.column.key]}</span>
-              )}
-              
-            </LightTooltip>
-          ) : (
-            <>
-              {c.cellRenderer ? (
-                c.cellRenderer(props)
-              ) : (
-                <span style={c.cellStyles}>{props.row[props.column.key]}</span>
-              )}
-            </>
-          );
+                {cellRenderer}
+              </LightTooltip>
+            );
+          }
         };
       }
 
@@ -233,9 +231,9 @@ function DataGrid({
       />
       {dataGridState.loading ? <LinearProgress /> : null}
       <ReactDataGrid
-        className={'rdg-light'}
+        className={"rdg-light"}
         headerFiltersHeight={50}
-        rowRenderer={RowRenderer}        
+        rowRenderer={RowRenderer}
         {...gridProps}
         style={{ ...style }}
         columns={draggableColumns}

@@ -85,6 +85,9 @@ const columnData = [
     colId: "col7",
     name: "Column7",
     sortable: false,
+    cellRenderer({row}) {
+      return <span>stringified{JSON.stringify(row.col7Type)}</span>
+    }
   },
   {
     key: "col8Type",
@@ -120,7 +123,7 @@ const columnData = [
 ];
 
 let rows = [];
-
+faker.seed(123);
 for (let i = 0; i < 20; i++) {
   rows.push({
     id: `row${i}`,
@@ -129,8 +132,8 @@ for (let i = 0; i < 20; i++) {
     col4Type: faker.date.recent().toISOString(),
     col5Type: faker.lorem.paragraphs(2),
     col6Type: faker.datatype.boolean() ? "Tip" : "Top",
-    col7Type: faker.random.word(),
-    col8Type: faker.random.word(),
+    col7Type: {obj: 1},
+    col8Type: {obj: 1},
     col9Type: faker.datatype.boolean() ? faker.random.word() : null,
   });
 }
