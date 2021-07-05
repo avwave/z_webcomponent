@@ -133,7 +133,7 @@ for (let i = 0; i < 20; i++) {
     col5Type: faker.lorem.paragraphs(2),
     col6Type: faker.datatype.boolean() ? "Tip" : "Top",
     col7Type: {obj: 1},
-    col8Type: {obj: 1},
+    col8Type: <h1>REACTNODE</h1>,
     col9Type: faker.datatype.boolean() ? faker.random.word() : null,
   });
 }

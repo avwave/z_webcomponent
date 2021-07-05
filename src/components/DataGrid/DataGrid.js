@@ -122,18 +122,20 @@ function DataGrid({
 
       if (!c.formatter) {
         c.formatter = (props) => {
+          const element = props.row[props.column.key]
           const tooltip = typeof props.row[props.column.key] === 'object' ? JSON.stringify(props.row[props.column.key]): props.row[props.column.key]
+          const isReactElem = React.isValidElement(element)
           const cellRenderer = !!c.cellRenderer ? (
             c.cellRenderer(props)
           ) : (
-            <span style={c.cellStyles}>{tooltip}</span>
+            <span style={c.cellStyles}>{isReactElem?element:tooltip}</span>
           );
           if (c.noTooltip) {
             return cellRenderer;
           } else {
             return (
               <LightTooltip
-                title={tooltip ?? " "}
+                title={isReactElem?element:tooltip ?? " "}
                 placement="bottom-start"
                 className={classes.tooltip}
               >
