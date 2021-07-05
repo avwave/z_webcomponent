@@ -38,6 +38,10 @@ const columnData = [
       fontWeight: "bold",
     },
     resizable: true,
+    tooltip: (props) => {
+      console.log("📢[gridData.js:41]:", props);
+      return props.row.col4Type
+    }
   },
   {
     key: "col4Type",
