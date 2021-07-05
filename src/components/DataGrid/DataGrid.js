@@ -30,6 +30,10 @@ import { isEmpty } from "lodash";
 const styles = (theme) => ({
   tooltip: {
     lineHeight: theme.typography.caption.lineHeight,
+    height: "100%",
+    display: "flex",
+    alignItems: "center",
+    alignContent: "center",
   },
 });
 
@@ -122,18 +126,27 @@ function DataGrid({
 
       if (!c.formatter) {
         c.formatter = (props) => {
-          const tooltip = typeof props.row[props.column.key] === 'object' ? JSON.stringify(props.row[props.column.key]): props.row[props.column.key]
+          const element = props.row[props.column.key];
+          const isReactElem = React.isValidElement(element);
+          const tooltip =
+            typeof props.row[props.column.key] === "object"
+              ? isReactElem
+                ? element
+                : JSON.stringify(element)
+              : element;
           const cellRenderer = !!c.cellRenderer ? (
             c.cellRenderer(props)
           ) : (
-            <span style={c.cellStyles}>{tooltip}</span>
+            <span style={c.cellStyles}>{isReactElem ? element : tooltip}</span>
           );
+          const renderedTooltip =
+            typeof c.tooltip === "function" ? c?.tooltip(props) : tooltip
           if (c.noTooltip) {
             return cellRenderer;
           } else {
             return (
               <LightTooltip
-                title={tooltip ?? " "}
+                title={renderedTooltip}
                 placement="bottom-start"
                 className={classes.tooltip}
               >
