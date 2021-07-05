@@ -30,6 +30,10 @@ import { isEmpty } from "lodash";
 const styles = (theme) => ({
   tooltip: {
     lineHeight: theme.typography.caption.lineHeight,
+    height: "100%",
+    display: "flex",
+    alignItems: "center",
+    alignContent: "center",
   },
 });
 
