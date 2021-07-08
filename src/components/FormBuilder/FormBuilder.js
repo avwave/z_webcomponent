@@ -284,6 +284,20 @@ const FormFieldSet = ({
                 }
                 SelectProps={{
                   multiple: fieldParams.settings.multiple,
+                  renderValue: (selected, b) => {
+                    if (fieldParams.settings.multiple) {
+                      return selected
+                        .map((s) => {
+                          return fieldParams.options[s][
+                            fieldParams.settings.labelField
+                          ];
+                        })
+                        .join(", ");
+                    }
+                    return fieldParams.options[selected][
+                      fieldParams.settings.labelField
+                    ];
+                  },
                 }}
                 InputLabelProps={{ shrink: true }}
                 InputProps={{
@@ -302,7 +316,16 @@ const FormFieldSet = ({
                       key={idx}
                       value={item[fieldParams.settings.valueField]}
                     >
-                      {item[fieldParams.settings.labelField]}
+                      {fieldParams.settings.multiple && (
+                        <Checkbox
+                          checked={get(formik.values, fieldName).includes(
+                            item[fieldParams.settings.valueField]
+                          )}
+                        />
+                      )}
+                      <ListItemText
+                        primary={item[fieldParams.settings.labelField]}
+                      />
                     </MenuItem>
                   );
                 })}
@@ -377,6 +400,17 @@ const FormFieldSet = ({
               getOptionLabel={(option) => {
                 return option[fieldParams.settings.labelField] ?? "";
               }}
+              renderOption={(option, { selected }) => {
+                if (fieldParams.settings.multiple) {
+                  return (
+                    <React.Fragment>
+                      <Checkbox checked={selected} />
+                      {option[fieldParams.settings.labelField]}
+                    </React.Fragment>
+                  );
+                }
+                return option[fieldParams.settings.labelField];
+              }}
               closeIcon={<Backspace fontSize="small" />}
               renderInput={(iParams) => (
                 <TextField
@@ -384,26 +418,26 @@ const FormFieldSet = ({
                   InputLabelProps={{
                     shrink: true,
                   }}
-                  {...(fieldParams.icon
-                    ? {
-                        InputProps: {
-                          ...iParams.InputProps,
-                          startAdornment: fieldParams.icon ? (
-                            <InputAdornment position="start">
-                              {fieldParams.icon}
-                            </InputAdornment>
-                          ) : undefined,
-                        },
-                      }
-                    : {})}
+                  // {...(fieldParams.icon
+                  //   ? {
+                  //       InputProps: {
+                  //         ...iParams.InputProps,
+                  //         startAdornment: fieldParams.icon ? (
+                  //           <InputAdornment position="start">
+                  //             {fieldParams.icon}
+                  //           </InputAdornment>
+                  //         ) : undefined,
+                  //       },
+                  //     }
+                  //   : {})}
                   label={fieldParams.label}
-                  placeholder={fieldParams.placeholder??"type to search"}
+                  placeholder={fieldParams.placeholder ?? "type to search"}
                   variant={variant}
                   error={
                     get(formik.touched, fieldName) &&
                     Boolean(get(formik.errors, fieldName))
                   }
-                  fullWidth
+                  
                 />
               )}
               {...fieldParams?.fieldProps}
