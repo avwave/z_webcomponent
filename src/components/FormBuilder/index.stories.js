@@ -165,9 +165,9 @@ Default.args = {
       icon: <AccountTree />,
       initialValues: "",
       options: [
-        { value: 0, label: "Thing one" },
-        { value: 1, label: "Thing two" },
-        { value: 2, label: "Thing three" },
+        { value: 10, label: "Thing one" },
+        { value: 11, label: "Thing two" },
+        { value: 12, label: "Thing three" },
       ],
       settings: {
         default: "",
@@ -183,9 +183,9 @@ Default.args = {
 
       initialValues: [],
       options: [
-        { id: "0", label: "Thing one" },
-        { id: "1", label: "Thing two" },
-        { id: "2", label: "Thing three" },
+        { id: "10", label: "Thing one" },
+        { id: "11", label: "Thing two" },
+        { id: "12", label: "Thing three" },
       ],
       settings: {
         default: "",
@@ -204,10 +204,10 @@ Default.args = {
       icon: <AccountTree />,
       initialValues: [],
       options: [
-        { id: 1, label: "one" },
-        { id: 2, label: "two" },
-        { id: 3, label: "three" },
-        { id: 4, label: "four" },
+        { id: 101, label: "one" },
+        { id: 102, label: "two" },
+        { id: 103, label: "three" },
+        { id: 104, label: "four" },
         { id: 5, label: "five" },
         { id: 6, label: "six" },
       ],
