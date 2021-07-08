@@ -288,15 +288,13 @@ const FormFieldSet = ({
                     if (fieldParams.settings.multiple) {
                       return selected
                         .map((s) => {
-                          return fieldParams.options[s][
-                            fieldParams.settings.labelField
-                          ];
+                          const item = fieldParams.options.find(item=>item[fieldParams.settings.valueField] === s)
+                          return item[fieldParams.settings.labelField]
                         })
                         .join(", ");
                     }
-                    return fieldParams.options[selected][
-                      fieldParams.settings.labelField
-                    ];
+                    const item = fieldParams.options.find(item=>item[fieldParams.settings.valueField] === selected)
+                    return item[fieldParams.settings.labelField]
                   },
                 }}
                 InputLabelProps={{ shrink: true }}
