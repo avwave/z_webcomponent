@@ -284,6 +284,14 @@ const FormFieldSet = ({
                 }
                 SelectProps={{
                   multiple: fieldParams.settings.multiple,
+                  renderValue: (selected, b) => {
+                    if (fieldParams.settings.multiple) {
+                      return selected.map(s=>{
+                        return fieldParams.options[s][fieldParams.settings.labelField]
+                      }).join(', ')
+                    }
+                    return fieldParams.options[selected][fieldParams.settings.labelField]
+                  }
                 }}
                 InputLabelProps={{ shrink: true }}
                 InputProps={{
@@ -302,7 +310,8 @@ const FormFieldSet = ({
                       key={idx}
                       value={item[fieldParams.settings.valueField]}
                     >
-                      {item[fieldParams.settings.labelField]}
+                      {fieldParams.settings.multiple && <Checkbox checked={get(formik.values, fieldName).includes(item[fieldParams.settings.valueField])}/>}
+                      <ListItemText primary={item[fieldParams.settings.labelField]} />
                     </MenuItem>
                   );
                 })}
