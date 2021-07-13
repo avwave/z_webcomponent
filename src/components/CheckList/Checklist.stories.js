@@ -29,11 +29,7 @@ const ChecklistStory = {
   component: Checklist,
   title: "Checklist/List",
   decorators: [
-    withReactContext({
-      reducer: checkboxReducer,
-      context: CheckboxContext,
-      initialState: { items: [] },
-    }),
+    withReactContext(),
     (Story) => (
       <CheckboxProvider>
         <Story />

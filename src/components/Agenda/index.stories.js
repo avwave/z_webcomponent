@@ -34,11 +34,7 @@ const AgendaStory = {
     },
   },
   decorators: [
-    withReactContext({
-      reducer: AgendaReducer,
-      context: AgendaContext,
-      initialState: { ...initState },
-    }),
+    withReactContext(),
     (Story) => (
       <AgendaProvider>
         <Story />
