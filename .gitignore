@@ -21,7 +21,6 @@ dist/
 
 # Maven
 target/
-dist/
 
 # JetBrains IDE
 .idea/
@@ -51,3 +50,4 @@ Thumbs.db
 .vscode
 storybook-static
 yarn.lock
+/.vscode/settings.json
