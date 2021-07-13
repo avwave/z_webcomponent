@@ -7,11 +7,7 @@ const GridStory = {
   component: Grid,
   title: "Grid/Grid",
   decorators: [
-    withReactContext({
-      reducer: gridReducer,
-      context: GridContext,
-      initialState: { columns: [] },
-    }),
+    withReactContext(),
     (Story) => (
       <GridProvider>
         <Story />

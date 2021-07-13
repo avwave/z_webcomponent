@@ -22,7 +22,7 @@ exports[`Storyshots Agenda/Agenda Agenda Meta Rendering 1`] = `
         className="MuiToolbar-root MuiToolbar-regular MuiToolbar-gutters"
       >
         <div
-          className="MuiButtonGroup-root makeStyles-leftGroup-69"
+          className="MuiButtonGroup-root makeStyles-leftGroup-2925"
           role="group"
         >
           <button
@@ -99,12 +99,12 @@ exports[`Storyshots Agenda/Agenda Agenda Meta Rendering 1`] = `
           </button>
         </div>
         <h6
-          className="MuiTypography-root makeStyles-title-71 MuiTypography-h6"
+          className="MuiTypography-root makeStyles-title-2927 MuiTypography-h6"
         >
-          05/27/2021 – 06/26/2021
+          07/13/2021 – 08/12/2021
         </h6>
         <div
-          className="MuiButtonGroup-root makeStyles-rightGroup-70"
+          className="MuiButtonGroup-root makeStyles-rightGroup-2926"
           role="group"
         />
       </div>
@@ -112,11 +112,788 @@ exports[`Storyshots Agenda/Agenda Agenda Meta Rendering 1`] = `
     <div
       className="rbc-agenda-view"
     >
-      <span
-        className="rbc-agenda-empty"
+      <table
+        className="rbc-agenda-table"
       >
-        There are no events in this range.
-      </span>
+        <thead>
+          <tr>
+            <th
+              className="rbc-header"
+            >
+              Date
+            </th>
+            <th
+              className="rbc-header"
+            >
+              Time
+            </th>
+            <th
+              className="rbc-header"
+            >
+              Event
+            </th>
+          </tr>
+        </thead>
+      </table>
+      <div
+        className="rbc-agenda-content"
+      >
+        <table
+          className="rbc-agenda-table"
+        >
+          <tbody>
+            <tr
+              style={Object {}}
+            >
+              <td
+                className="rbc-agenda-date-cell"
+                rowSpan={3}
+              >
+                Tue Jul 13
+              </td>
+              <td
+                className="rbc-agenda-time-cell"
+              >
+                <span
+                  className=""
+                >
+                  8:00 AM – 12:00 PM
+                </span>
+              </td>
+              <td
+                className="rbc-agenda-event-cell"
+              >
+                <div
+                  className="sc-hKgILt ehlsxw"
+                >
+                  <div
+                    background="transparent"
+                    className="MuiBox-root MuiBox-root-2928 sc-bdfBwQ dBzZky"
+                  >
+                    <p
+                      className="MuiTypography-root MuiTypography-body1"
+                    >
+                      AM Event Today
+                    </p>
+                    <p
+                      className="MuiTypography-root MuiTypography-body2"
+                    />
+                  </div>
+                  <div
+                    background="transparent"
+                    className="MuiBox-root MuiBox-root-2929 sc-bdfBwQ dBzZky"
+                  >
+                    <div>
+                      event object:
+                      <pre>
+                        {
+  "id": 4,
+  "title": "AM Event Today",
+  "start": "2021-07-13T00:00:00.000Z",
+  "end": "2021-07-13T04:00:00.000Z"
+}
+                      </pre>
+                      ;
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr
+              style={Object {}}
+            >
+              <td
+                className="rbc-agenda-time-cell"
+              >
+                <span
+                  className=""
+                >
+                  1:00 PM – 2:00 PM
+                </span>
+              </td>
+              <td
+                className="rbc-agenda-event-cell"
+              >
+                <div
+                  className="sc-hKgILt ehlsxw"
+                >
+                  <div
+                    background="transparent"
+                    className="MuiBox-root MuiBox-root-2930 sc-bdfBwQ dBzZky"
+                  >
+                    <p
+                      className="MuiTypography-root MuiTypography-body1"
+                    >
+                      1h Event Today
+                    </p>
+                    <p
+                      className="MuiTypography-root MuiTypography-body2"
+                    />
+                  </div>
+                  <div
+                    background="transparent"
+                    className="MuiBox-root MuiBox-root-2931 sc-bdfBwQ dBzZky"
+                  >
+                    <div>
+                      event object:
+                      <pre>
+                        {
+  "id": 2,
+  "title": "1h Event Today",
+  "start": "2021-07-13T05:00:00.000Z",
+  "end": "2021-07-13T06:00:00.000Z"
+}
+                      </pre>
+                      ;
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr
+              style={Object {}}
+            >
+              <td
+                className="rbc-agenda-time-cell"
+              >
+                <span
+                  className=""
+                >
+                  2:00 PM – 4:00 PM
+                </span>
+              </td>
+              <td
+                className="rbc-agenda-event-cell"
+              >
+                <div
+                  className="sc-hKgILt hYCnWC"
+                >
+                  <div
+                    background="transparent"
+                    className="MuiBox-root MuiBox-root-2932 sc-bdfBwQ dBzZky"
+                  >
+                    <p
+                      className="MuiTypography-root MuiTypography-body1"
+                    >
+                      2h Event Today
+                    </p>
+                    <p
+                      className="MuiTypography-root MuiTypography-body2"
+                    />
+                  </div>
+                  <div
+                    background="transparent"
+                    className="MuiBox-root MuiBox-root-2933 sc-bdfBwQ dBzZky"
+                  >
+                    <div>
+                      event object:
+                      <pre>
+                        {
+  "id": 3,
+  "title": "2h Event Today",
+  "start": "2021-07-13T06:00:00.000Z",
+  "end": "2021-07-13T08:00:00.000Z",
+  "variant": "warning"
+}
+                      </pre>
+                      ;
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr
+              style={Object {}}
+            >
+              <td
+                className="rbc-agenda-date-cell"
+                rowSpan={11}
+              >
+                Wed Jul 14
+              </td>
+              <td
+                className="rbc-agenda-time-cell"
+              >
+                <span
+                  className=""
+                >
+                  12:00 AM – 1:00 AM
+                </span>
+              </td>
+              <td
+                className="rbc-agenda-event-cell"
+              >
+                <div
+                  className="sc-hKgILt ehlsxw"
+                >
+                  <div
+                    background="transparent"
+                    className="MuiBox-root MuiBox-root-2934 sc-bdfBwQ dBzZky"
+                  >
+                    <p
+                      className="MuiTypography-root MuiTypography-body1"
+                    >
+                      FillEvent-0
+                    </p>
+                    <p
+                      className="MuiTypography-root MuiTypography-body2"
+                    />
+                  </div>
+                  <div
+                    background="transparent"
+                    className="MuiBox-root MuiBox-root-2935 sc-bdfBwQ dBzZky"
+                  >
+                    <div>
+                      event object:
+                      <pre>
+                        {
+  "id": "fill-0",
+  "title": "FillEvent-0",
+  "start": "2021-07-13T16:00:00.000Z",
+  "end": "2021-07-13T17:00:00.000Z",
+  "progress": 100,
+  "variant": "primary"
+}
+                      </pre>
+                      ;
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr
+              style={Object {}}
+            >
+              <td
+                className="rbc-agenda-time-cell"
+              >
+                <span
+                  className=""
+                >
+                  1:00 AM – 2:00 AM
+                </span>
+              </td>
+              <td
+                className="rbc-agenda-event-cell"
+              >
+                <div
+                  className="sc-hKgILt ehlsxw"
+                >
+                  <div
+                    background="transparent"
+                    className="MuiBox-root MuiBox-root-2936 sc-bdfBwQ dBzZky"
+                  >
+                    <p
+                      className="MuiTypography-root MuiTypography-body1"
+                    >
+                      FillEvent-1
+                    </p>
+                    <p
+                      className="MuiTypography-root MuiTypography-body2"
+                    />
+                  </div>
+                  <div
+                    background="transparent"
+                    className="MuiBox-root MuiBox-root-2937 sc-bdfBwQ dBzZky"
+                  >
+                    <div>
+                      event object:
+                      <pre>
+                        {
+  "id": "fill-1",
+  "title": "FillEvent-1",
+  "start": "2021-07-13T17:00:00.000Z",
+  "end": "2021-07-13T18:00:00.000Z",
+  "progress": 50,
+  "variant": "primary"
+}
+                      </pre>
+                      ;
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr
+              style={Object {}}
+            >
+              <td
+                className="rbc-agenda-time-cell"
+              >
+                <span
+                  className=""
+                >
+                  2:00 AM – 3:00 AM
+                </span>
+              </td>
+              <td
+                className="rbc-agenda-event-cell"
+              >
+                <div
+                  className="sc-hKgILt ehlsxw"
+                >
+                  <div
+                    background="transparent"
+                    className="MuiBox-root MuiBox-root-2938 sc-bdfBwQ dBzZky"
+                  >
+                    <p
+                      className="MuiTypography-root MuiTypography-body1"
+                    >
+                      FillEvent-2
+                    </p>
+                    <p
+                      className="MuiTypography-root MuiTypography-body2"
+                    />
+                  </div>
+                  <div
+                    background="transparent"
+                    className="MuiBox-root MuiBox-root-2939 sc-bdfBwQ dBzZky"
+                  >
+                    <div>
+                      event object:
+                      <pre>
+                        {
+  "id": "fill-2",
+  "title": "FillEvent-2",
+  "start": "2021-07-13T18:00:00.000Z",
+  "end": "2021-07-13T19:00:00.000Z",
+  "progress": 20,
+  "variant": "primary"
+}
+                      </pre>
+                      ;
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr
+              style={Object {}}
+            >
+              <td
+                className="rbc-agenda-time-cell"
+              >
+                <span
+                  className=""
+                >
+                  3:00 AM – 4:00 AM
+                </span>
+              </td>
+              <td
+                className="rbc-agenda-event-cell"
+              >
+                <div
+                  className="sc-hKgILt ehlsxw"
+                >
+                  <div
+                    background="transparent"
+                    className="MuiBox-root MuiBox-root-2940 sc-bdfBwQ dBzZky"
+                  >
+                    <p
+                      className="MuiTypography-root MuiTypography-body1"
+                    >
+                      FillEvent-3
+                    </p>
+                    <p
+                      className="MuiTypography-root MuiTypography-body2"
+                    />
+                  </div>
+                  <div
+                    background="transparent"
+                    className="MuiBox-root MuiBox-root-2941 sc-bdfBwQ dBzZky"
+                  >
+                    <div>
+                      event object:
+                      <pre>
+                        {
+  "id": "fill-3",
+  "title": "FillEvent-3",
+  "start": "2021-07-13T19:00:00.000Z",
+  "end": "2021-07-13T20:00:00.000Z",
+  "progress": 90,
+  "variant": "primary"
+}
+                      </pre>
+                      ;
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr
+              style={Object {}}
+            >
+              <td
+                className="rbc-agenda-time-cell"
+              >
+                <span
+                  className=""
+                >
+                  4:00 AM – 5:00 AM
+                </span>
+              </td>
+              <td
+                className="rbc-agenda-event-cell"
+              >
+                <div
+                  className="sc-hKgILt ehlsxw"
+                >
+                  <div
+                    background="transparent"
+                    className="MuiBox-root MuiBox-root-2942 sc-bdfBwQ dBzZky"
+                  >
+                    <p
+                      className="MuiTypography-root MuiTypography-body1"
+                    >
+                      FillEvent-4
+                    </p>
+                    <p
+                      className="MuiTypography-root MuiTypography-body2"
+                    />
+                  </div>
+                  <div
+                    background="transparent"
+                    className="MuiBox-root MuiBox-root-2943 sc-bdfBwQ dBzZky"
+                  >
+                    <div>
+                      event object:
+                      <pre>
+                        {
+  "id": "fill-4",
+  "title": "FillEvent-4",
+  "start": "2021-07-13T20:00:00.000Z",
+  "end": "2021-07-13T21:00:00.000Z",
+  "progress": 80,
+  "variant": "primary"
+}
+                      </pre>
+                      ;
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr
+              style={Object {}}
+            >
+              <td
+                className="rbc-agenda-time-cell"
+              >
+                <span
+                  className=""
+                >
+                  5:00 AM – 6:00 AM
+                </span>
+              </td>
+              <td
+                className="rbc-agenda-event-cell"
+              >
+                <div
+                  className="sc-hKgILt ehlsxw"
+                >
+                  <div
+                    background="transparent"
+                    className="MuiBox-root MuiBox-root-2944 sc-bdfBwQ dBzZky"
+                  >
+                    <p
+                      className="MuiTypography-root MuiTypography-body1"
+                    >
+                      FillEvent-5
+                    </p>
+                    <p
+                      className="MuiTypography-root MuiTypography-body2"
+                    />
+                  </div>
+                  <div
+                    background="transparent"
+                    className="MuiBox-root MuiBox-root-2945 sc-bdfBwQ dBzZky"
+                  >
+                    <div>
+                      event object:
+                      <pre>
+                        {
+  "id": "fill-5",
+  "title": "FillEvent-5",
+  "start": "2021-07-13T21:00:00.000Z",
+  "end": "2021-07-13T22:00:00.000Z",
+  "progress": 80,
+  "variant": "primary"
+}
+                      </pre>
+                      ;
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr
+              style={Object {}}
+            >
+              <td
+                className="rbc-agenda-time-cell"
+              >
+                <span
+                  className=""
+                >
+                  6:00 AM – 7:00 AM
+                </span>
+              </td>
+              <td
+                className="rbc-agenda-event-cell"
+              >
+                <div
+                  className="sc-hKgILt ehlsxw"
+                >
+                  <div
+                    background="transparent"
+                    className="MuiBox-root MuiBox-root-2946 sc-bdfBwQ dBzZky"
+                  >
+                    <p
+                      className="MuiTypography-root MuiTypography-body1"
+                    >
+                      FillEvent-6
+                    </p>
+                    <p
+                      className="MuiTypography-root MuiTypography-body2"
+                    />
+                  </div>
+                  <div
+                    background="transparent"
+                    className="MuiBox-root MuiBox-root-2947 sc-bdfBwQ dBzZky"
+                  >
+                    <div>
+                      event object:
+                      <pre>
+                        {
+  "id": "fill-6",
+  "title": "FillEvent-6",
+  "start": "2021-07-13T22:00:00.000Z",
+  "end": "2021-07-13T23:00:00.000Z",
+  "progress": 70,
+  "variant": "primary"
+}
+                      </pre>
+                      ;
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr
+              style={Object {}}
+            >
+              <td
+                className="rbc-agenda-time-cell"
+              >
+                <span
+                  className=""
+                >
+                  7:00 AM – 8:00 AM
+                </span>
+              </td>
+              <td
+                className="rbc-agenda-event-cell"
+              >
+                <div
+                  className="sc-hKgILt ehlsxw"
+                >
+                  <div
+                    background="transparent"
+                    className="MuiBox-root MuiBox-root-2948 sc-bdfBwQ dBzZky"
+                  >
+                    <p
+                      className="MuiTypography-root MuiTypography-body1"
+                    >
+                      FillEvent-7
+                    </p>
+                    <p
+                      className="MuiTypography-root MuiTypography-body2"
+                    />
+                  </div>
+                  <div
+                    background="transparent"
+                    className="MuiBox-root MuiBox-root-2949 sc-bdfBwQ dBzZky"
+                  >
+                    <div>
+                      event object:
+                      <pre>
+                        {
+  "id": "fill-7",
+  "title": "FillEvent-7",
+  "start": "2021-07-13T23:00:00.000Z",
+  "end": "2021-07-14T00:00:00.000Z",
+  "progress": 20,
+  "variant": "primary"
+}
+                      </pre>
+                      ;
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr
+              style={Object {}}
+            >
+              <td
+                className="rbc-agenda-time-cell"
+              >
+                <span
+                  className=""
+                >
+                  8:00 AM – 9:00 AM
+                </span>
+              </td>
+              <td
+                className="rbc-agenda-event-cell"
+              >
+                <div
+                  className="sc-hKgILt ehlsxw"
+                >
+                  <div
+                    background="transparent"
+                    className="MuiBox-root MuiBox-root-2950 sc-bdfBwQ dBzZky"
+                  >
+                    <p
+                      className="MuiTypography-root MuiTypography-body1"
+                    >
+                      FillEvent-8
+                    </p>
+                    <p
+                      className="MuiTypography-root MuiTypography-body2"
+                    />
+                  </div>
+                  <div
+                    background="transparent"
+                    className="MuiBox-root MuiBox-root-2951 sc-bdfBwQ dBzZky"
+                  >
+                    <div>
+                      event object:
+                      <pre>
+                        {
+  "id": "fill-8",
+  "title": "FillEvent-8",
+  "start": "2021-07-14T00:00:00.000Z",
+  "end": "2021-07-14T01:00:00.000Z",
+  "progress": 60,
+  "variant": "primary"
+}
+                      </pre>
+                      ;
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr
+              style={Object {}}
+            >
+              <td
+                className="rbc-agenda-time-cell"
+              >
+                <span
+                  className=""
+                >
+                  9:00 AM – 10:00 AM
+                </span>
+              </td>
+              <td
+                className="rbc-agenda-event-cell"
+              >
+                <div
+                  className="sc-hKgILt ehlsxw"
+                >
+                  <div
+                    background="transparent"
+                    className="MuiBox-root MuiBox-root-2952 sc-bdfBwQ dBzZky"
+                  >
+                    <p
+                      className="MuiTypography-root MuiTypography-body1"
+                    >
+                      FillEvent-9
+                    </p>
+                    <p
+                      className="MuiTypography-root MuiTypography-body2"
+                    />
+                  </div>
+                  <div
+                    background="transparent"
+                    className="MuiBox-root MuiBox-root-2953 sc-bdfBwQ dBzZky"
+                  >
+                    <div>
+                      event object:
+                      <pre>
+                        {
+  "id": "fill-9",
+  "title": "FillEvent-9",
+  "start": "2021-07-14T01:00:00.000Z",
+  "end": "2021-07-14T02:00:00.000Z",
+  "progress": 60,
+  "variant": "primary"
+}
+                      </pre>
+                      ;
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr
+              style={Object {}}
+            >
+              <td
+                className="rbc-agenda-time-cell"
+              >
+                <span
+                  className=""
+                >
+                  10:00 AM – 11:00 AM
+                </span>
+              </td>
+              <td
+                className="rbc-agenda-event-cell"
+              >
+                <div
+                  className="sc-hKgILt ehlsxw"
+                >
+                  <div
+                    background="transparent"
+                    className="MuiBox-root MuiBox-root-2954 sc-bdfBwQ dBzZky"
+                  >
+                    <p
+                      className="MuiTypography-root MuiTypography-body1"
+                    >
+                      FillEvent-10
+                    </p>
+                    <p
+                      className="MuiTypography-root MuiTypography-body2"
+                    />
+                  </div>
+                  <div
+                    background="transparent"
+                    className="MuiBox-root MuiBox-root-2955 sc-bdfBwQ dBzZky"
+                  >
+                    <div>
+                      event object:
+                      <pre>
+                        {
+  "id": "fill-10",
+  "title": "FillEvent-10",
+  "start": "2021-07-14T02:00:00.000Z",
+  "end": "2021-07-14T03:00:00.000Z",
+  "progress": 40,
+  "variant": "primary"
+}
+                      </pre>
+                      ;
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>
@@ -13975,7 +14752,7 @@ exports[`Storyshots StateButton Warning 1`] = `
 exports[`Storyshots TriStateSelect Checked 1`] = `
 <span
   aria-disabled={false}
-  className="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-143 MuiCheckbox-root MuiCheckbox-colorSecondary PrivateSwitchBase-checked-144 Mui-checked MuiIconButton-colorSecondary"
+  className="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-4455 MuiCheckbox-root MuiCheckbox-colorSecondary PrivateSwitchBase-checked-4456 Mui-checked MuiIconButton-colorSecondary"
   onBlur={[Function]}
   onDragLeave={[Function]}
   onFocus={[Function]}
@@ -13994,7 +14771,7 @@ exports[`Storyshots TriStateSelect Checked 1`] = `
   >
     <input
       checked={true}
-      className="PrivateSwitchBase-input-146"
+      className="PrivateSwitchBase-input-4458"
       data-indeterminate={false}
       onChange={[Function]}
       type="checkbox"
@@ -14016,7 +14793,7 @@ exports[`Storyshots TriStateSelect Checked 1`] = `
 exports[`Storyshots TriStateSelect Default 1`] = `
 <span
   aria-disabled={false}
-  className="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-139 MuiCheckbox-root MuiCheckbox-colorSecondary MuiCheckbox-indeterminate MuiIconButton-colorSecondary"
+  className="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-4451 MuiCheckbox-root MuiCheckbox-colorSecondary MuiCheckbox-indeterminate MuiIconButton-colorSecondary"
   onBlur={[Function]}
   onDragLeave={[Function]}
   onFocus={[Function]}
@@ -14035,7 +14812,7 @@ exports[`Storyshots TriStateSelect Default 1`] = `
   >
     <input
       checked={false}
-      className="PrivateSwitchBase-input-142"
+      className="PrivateSwitchBase-input-4454"
       data-indeterminate={true}
       onChange={[Function]}
       type="checkbox"
@@ -14057,7 +14834,7 @@ exports[`Storyshots TriStateSelect Default 1`] = `
 exports[`Storyshots TriStateSelect Unchecked 1`] = `
 <span
   aria-disabled={false}
-  className="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-147 MuiCheckbox-root MuiCheckbox-colorSecondary MuiIconButton-colorSecondary"
+  className="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-4459 MuiCheckbox-root MuiCheckbox-colorSecondary MuiIconButton-colorSecondary"
   onBlur={[Function]}
   onDragLeave={[Function]}
   onFocus={[Function]}
@@ -14076,7 +14853,7 @@ exports[`Storyshots TriStateSelect Unchecked 1`] = `
   >
     <input
       checked={false}
-      className="PrivateSwitchBase-input-150"
+      className="PrivateSwitchBase-input-4462"
       data-indeterminate={false}
       onChange={[Function]}
       type="checkbox"
@@ -14098,7 +14875,7 @@ exports[`Storyshots TriStateSelect Unchecked 1`] = `
 exports[`Storyshots TriStateSelect Undefined 1`] = `
 <span
   aria-disabled={false}
-  className="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-151 MuiCheckbox-root MuiCheckbox-colorSecondary MuiCheckbox-indeterminate MuiIconButton-colorSecondary"
+  className="MuiButtonBase-root MuiIconButton-root PrivateSwitchBase-root-4463 MuiCheckbox-root MuiCheckbox-colorSecondary MuiCheckbox-indeterminate MuiIconButton-colorSecondary"
   onBlur={[Function]}
   onDragLeave={[Function]}
   onFocus={[Function]}
@@ -14117,7 +14894,7 @@ exports[`Storyshots TriStateSelect Undefined 1`] = `
   >
     <input
       checked={false}
-      className="PrivateSwitchBase-input-154"
+      className="PrivateSwitchBase-input-4466"
       data-indeterminate={true}
       onChange={[Function]}
       type="checkbox"

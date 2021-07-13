@@ -30,11 +30,7 @@ const DataGridStory = {
   component: DataGrid,
   title: "DataGrid/DataGrid",
   decorators: [
-    withReactContext({
-      reducer: dataGridReducer,
-      context: DataGridContext,
-      initialState: { ...initState },
-    }),
+    withReactContext(),
     (Story) => (
       <DndProvider backend={HTML5Backend}>
         <DataGridProvider>

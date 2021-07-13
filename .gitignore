@@ -51,3 +51,4 @@ Thumbs.db
 storybook-static
 yarn.lock
 /.vscode/settings.json
+build
