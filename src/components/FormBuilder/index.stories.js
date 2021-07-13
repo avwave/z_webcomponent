@@ -304,6 +304,37 @@ Modify.args = {
   formId:'modify',
 };
 
+export const Checkboxes = DefaultStory.bind({});
+Checkboxes.args = {
+  ...Default.args,
+  formLayout: [
+    "checkboxes"
+  ],
+  form: {
+    checkboxes: {
+      type: "checkboxes",
+      label: "CheckBoxes",
+      initialValues: ['2', '5'],
+      options: [
+        { id: "1", label: "one" },
+        { id: "2", label: "two" },
+        { id: "3", label: "three" },
+        { id: "4", label: "four" },
+        { id: "5", label: "five" },
+        { id: "6", label: "six" },
+      ],
+      settings: {
+        labelField: "label",
+        valueField: "id",
+        inline: true,
+      },
+
+      validator: () => Yup.array(), //required
+    },
+  },
+  formId:'chkboxes',
+};
+
 export const Persist = DefaultStory.bind({});
 Persist.args = {
   ...Default.args,
