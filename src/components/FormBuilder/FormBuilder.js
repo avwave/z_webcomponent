@@ -347,6 +347,7 @@ const FormFieldSet = ({
                 control={
                   fieldParams.type === "switch" ? <Switch /> : <Checkbox />
                 }
+                labelPlacement={fieldParams.settings.labelPlacement ?? 'end'}
                 onChange={(evt, val) => {
                   if (fieldParams.onChange) {
                     fieldParams.onChange(fieldName, val);
@@ -376,6 +377,7 @@ const FormFieldSet = ({
                     disabled={fieldParams.readOnly}
                     key={idx}
                     value={item[fieldParams.settings.valueField]}
+                    labelPlacement={fieldParams.settings.labelPlacement ?? 'end'}
                     control={<Radio />}
                     label={item[fieldParams.settings.labelField]}
                     {...fieldParams?.fieldProps}
@@ -404,6 +406,7 @@ const FormFieldSet = ({
                       name={fieldName}
                       control={<Checkbox checked={checked} />}
                       label={item[fieldParams.settings.labelField]}
+                      labelPlacement={fieldParams.settings.labelPlacement ?? 'end'}
                       onChange={(evt, value) => {
                         const valueSet = new Set(get(formik.values, fieldName));
                         value

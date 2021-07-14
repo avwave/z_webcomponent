@@ -327,12 +327,14 @@ Checkboxes.args = {
         labelField: "label",
         valueField: "id",
         inline: true,
+        labelPlacement: 'end'
       },
 
       validator: () => Yup.array(), //required
     },
   },
   formId:'chkboxes',
+  
 };
 
 export const Persist = DefaultStory.bind({});
