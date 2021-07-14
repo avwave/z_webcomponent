@@ -146,7 +146,7 @@ function Agenda(props) {
           <DialogContentText>{alertMessage}</DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseAlert} color="primary">
+          <Button onClick={()=> handleCloseAlert} color="primary">
             Ok
           </Button>
         </DialogActions>

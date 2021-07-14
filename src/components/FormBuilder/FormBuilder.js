@@ -25,6 +25,7 @@ import {
   Switch,
   TextField,
   Toolbar,
+  FormGroup,
 } from "@material-ui/core";
 import { ArrowBack, Backspace, DeleteForever } from "@material-ui/icons";
 import { Autocomplete } from "@material-ui/lab";
@@ -288,13 +289,19 @@ const FormFieldSet = ({
                     if (fieldParams.settings.multiple) {
                       return selected
                         .map((s) => {
-                          const item = fieldParams.options.find(item=>item[fieldParams.settings.valueField] === s)
-                          return item[fieldParams.settings.labelField]
+                          const item = fieldParams.options.find(
+                            (item) =>
+                              item[fieldParams.settings.valueField] === s
+                          );
+                          return item[fieldParams.settings.labelField];
                         })
                         .join(", ");
                     }
-                    const item = fieldParams.options.find(item=>item[fieldParams.settings.valueField] === selected)
-                    return item[fieldParams.settings.labelField]
+                    const item = fieldParams.options.find(
+                      (item) =>
+                        item[fieldParams.settings.valueField] === selected
+                    );
+                    return item[fieldParams.settings.labelField];
                   },
                 }}
                 InputLabelProps={{ shrink: true }}
@@ -340,6 +347,7 @@ const FormFieldSet = ({
                 control={
                   fieldParams.type === "switch" ? <Switch /> : <Checkbox />
                 }
+                labelPlacement={fieldParams.settings.labelPlacement ?? 'end'}
                 onChange={(evt, val) => {
                   if (fieldParams.onChange) {
                     fieldParams.onChange(fieldName, val);
@@ -369,12 +377,48 @@ const FormFieldSet = ({
                     disabled={fieldParams.readOnly}
                     key={idx}
                     value={item[fieldParams.settings.valueField]}
+                    labelPlacement={fieldParams.settings.labelPlacement ?? 'end'}
                     control={<Radio />}
                     label={item[fieldParams.settings.labelField]}
                     {...fieldParams?.fieldProps}
                   />
                 ))}
               </RadioGroup>
+            </>
+          );
+        case "checkboxes":
+          return (
+            <>
+              <FormLabel component="legend">{fieldParams.label}</FormLabel>
+              <FormGroup
+                row={fieldParams.settings.inline}
+                // name={fieldName}
+                // value={get(formik.values, fieldName)}
+                // onChange={onChangeOverride}
+                {...fieldParams?.fieldProps}
+              >
+                {fieldParams.options.map((item, idx) => {
+                  const checked = get(formik.values, fieldName).includes(item[fieldParams.settings.valueField]);
+                  return (
+                    <FormControlLabel
+                      disabled={fieldParams.readOnly}
+                      key={idx}
+                      name={fieldName}
+                      control={<Checkbox checked={checked} />}
+                      label={item[fieldParams.settings.labelField]}
+                      labelPlacement={fieldParams.settings.labelPlacement ?? 'end'}
+                      onChange={(evt, value) => {
+                        const valueSet = new Set(get(formik.values, fieldName));
+                        value
+                          ? valueSet.add(item.id)
+                          : valueSet.delete(item.id);
+                        formik.setFieldValue(fieldName, Array.from(valueSet));
+                      }}
+                      {...fieldParams?.fieldProps}
+                    />
+                  );
+                })}
+              </FormGroup>
             </>
           );
 
@@ -435,7 +479,6 @@ const FormFieldSet = ({
                     get(formik.touched, fieldName) &&
                     Boolean(get(formik.errors, fieldName))
                   }
-                  
                 />
               )}
               {...fieldParams?.fieldProps}
