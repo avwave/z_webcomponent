@@ -301,7 +301,7 @@ const FormFieldSet = ({
                       (item) =>
                         item[fieldParams.settings.valueField] === selected
                     );
-                    return item[fieldParams.settings.labelField];
+                    return item?item[fieldParams.settings.labelField]:"";
                   },
                 }}
                 InputLabelProps={{ shrink: true }}
