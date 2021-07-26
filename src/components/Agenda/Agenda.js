@@ -28,6 +28,10 @@ import getDay from 'date-fns/getDay';
 import enLocale from 'date-fns/locale/en-US';
 import sub from 'date-fns/sub'
 
+import BlockUi from 'react-block-ui';
+import 'react-block-ui/style.css';
+
+
 const dateFnsLocales = {
   'en-US': enLocale,
 };
@@ -139,8 +143,7 @@ function Agenda(props) {
   };
 
   return (
-    <Paper style={{ height: 700, ...containerStyle }}>
-      {state.loading ? <LinearProgress/> : null}
+    <BlockUi tag={Paper} elevation={0} keepInView square blocking={state.loading} style={{ height: 700, ...containerStyle }}>
       <Dialog open={openAlert} onClose={handleCloseAlert}>
         <DialogContent>
           <DialogContentText>{alertMessage}</DialogContentText>
@@ -174,7 +177,7 @@ function Agenda(props) {
         showMultiDayTimes
         {...props}
       />
-    </Paper>
+    </BlockUi>
   );
 }
 

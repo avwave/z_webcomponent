@@ -20,7 +20,8 @@ const StyledList = styled.ul`
 
 const StyledContainer = styled.div`
   background-color: #ffffff;
-  width: 250px;
+  min-width: 250px;
+  max-width: 300px;
   border-radius: 5px;
   box-shadow: 1px 3px 4px 0px rgba(0, 0, 0, 0.1);
   border: solid 1px #c2c2c2;

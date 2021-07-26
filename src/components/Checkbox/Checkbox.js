@@ -11,7 +11,7 @@ export const status = {
 
 const CheckboxContainer = styled.div`
   display: block;
-  height: 28px;
+  min-height: 28px;
   top: -9px;
   padding-bottom: 5px;
   padding-left: 5px;
@@ -53,6 +53,7 @@ const StyledLabel = styled.label`
   size: 14px;
   line-height: 28px;
   vertical-align: middle;
+  overflow-wrap: break-word;
 `;
 
 export default function Checkbox({ item }) {
