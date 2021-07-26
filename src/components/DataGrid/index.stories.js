@@ -338,3 +338,56 @@ RedrawBug.args = {
   style: { flex: "1 1 auto" },
   gridProps: {},
 };
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+const LoaderStory = ({ ...args }) => {
+  const [state, dispatch] = React.useContext(DataGridContext);
+
+  const simulateLoading = React.useCallback(
+    async () => {
+      dispatch({
+        type: actions.SET_LOADING,
+      });
+      await sleep(2000)
+      dispatch({
+        type: actions.SET_DONE_LOADING,
+      });
+    },
+    [dispatch],
+  );
+
+  React.useEffect(() => {
+    dispatch({
+      payload: { rows: args.rows, columns: args.columns },
+      type: actions.LOAD_DATA,
+    });
+  }, [args.columns, args.rows, dispatch]);
+
+  return (
+    <Grid container>
+      <Grid item xs={12}>
+      <div style={{ display: "flex", flexDirection: "column", height: "70vh" }}>
+        <DataGrid {...args} />
+        <Button onClick={()=>simulateLoading()}>Simulate Loading</Button>
+      </div>
+      </Grid>
+    </Grid>
+  );
+};
+
+export const Loader = LoaderStory.bind({});
+Loader.args = {
+  ...Default.args,
+  filterable: true,
+  showSelector: true,
+  leftAccessory: () => (
+    <ButtonGroup>
+      <Button onClick={action("Left Button onClick")}>Left</Button>
+    </ButtonGroup>
+  ),
+
+  centerAccessory: () => <Typography variant="h6">Heading</Typography>,
+};
