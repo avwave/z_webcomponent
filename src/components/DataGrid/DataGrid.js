@@ -1,4 +1,5 @@
 import {
+  Backdrop,
   LinearProgress,
   Toolbar,
   Tooltip,
@@ -26,6 +27,9 @@ import {
 import { Tooltip as Tippy } from "react-tippy";
 import "react-tippy/dist/tippy.css";
 import { isEmpty } from "lodash";
+
+import BlockUi from 'react-block-ui';
+import 'react-block-ui/style.css';
 
 const styles = (theme) => ({
   tooltip: {
@@ -232,7 +236,7 @@ function DataGrid({
   }, [dataGridDispatch, filters]);
 
   return (
-    <div style={{ ...containerStyle }}>
+    <BlockUi tag="div" keepInView blocking={dataGridState.loading} style={{ ...containerStyle }}>
       <DataGridToolbar
         columns={draggableColumns}
         showSelector={showSelector}
@@ -242,7 +246,6 @@ function DataGrid({
         leftAccessory={leftAccessory}
         centerAccessory={centerAccessory}
       />
-      {dataGridState.loading ? <LinearProgress /> : null}
       <ReactDataGrid
         className={"rdg-light"}
         headerFiltersHeight={50}
@@ -262,7 +265,7 @@ function DataGrid({
         }}
       />
       {contextMenu?.contextItems() ?? <></>}
-    </div>
+    </BlockUi>
   );
 }
 
