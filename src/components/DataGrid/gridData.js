@@ -32,7 +32,7 @@ const columnData = [
   {
     key: "col3Type",
     colId: "col3",
-    name: "wireless Games tan",
+    name: "Long column name should really be wrappable up until small screens.  ideally should not be this long",
     cellStyles: {
       color: "green",
       fontWeight: "bold",
