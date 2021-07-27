@@ -323,7 +323,7 @@ const FormFieldSet = ({
                     >
                       {fieldParams.settings.multiple && (
                         <Checkbox
-                          checked={get(formik.values, fieldName).includes(
+                          checked={get(formik.values, fieldName, []).includes(
                             item[fieldParams.settings.valueField]
                           )}
                         />
@@ -398,7 +398,7 @@ const FormFieldSet = ({
                 {...fieldParams?.fieldProps}
               >
                 {fieldParams.options.map((item, idx) => {
-                  const checked = get(formik.values, fieldName).includes(item[fieldParams.settings.valueField]);
+                  const checked = get(formik.values, fieldName, []).includes(item[fieldParams.settings.valueField]);
                   return (
                     <FormControlLabel
                       disabled={fieldParams.readOnly}
