@@ -111,6 +111,12 @@ function Agenda(props) {
 
   const TimeslotWrapper = (slotProp) => {
     const { value, children } = slotProp;
+    if (moment(value).isBefore(moment(), 'day')) {
+      const child = React.Children.only(children);
+      return React.cloneElement(child, {
+        className: child.props.className + " rbc-off-range-bg",
+      });
+    }
     if (lockSlotEndTime || lockSlotStartTime) {
       if (isBetween(value, lockSlotStartTime, lockSlotEndTime)) {
         return children;

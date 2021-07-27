@@ -293,7 +293,7 @@ const FormFieldSet = ({
                             (item) =>
                               item[fieldParams.settings.valueField] === s
                           );
-                          return item[fieldParams.settings.labelField];
+                          return item?item[fieldParams.settings.labelField]:"";
                         })
                         .join(", ");
                     }
