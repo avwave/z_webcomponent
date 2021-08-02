@@ -1,5 +1,6 @@
 import {
   Backdrop,
+  CircularProgress,
   LinearProgress,
   Toolbar,
   Tooltip,
@@ -28,8 +29,8 @@ import { Tooltip as Tippy } from "react-tippy";
 import "react-tippy/dist/tippy.css";
 import { isEmpty } from "lodash";
 
-import BlockUi from 'react-block-ui';
-import 'react-block-ui/style.css';
+import BlockUi from "react-loader-advanced";
+import { findDOMNode } from "react-dom";
 
 const styles = (theme) => ({
   tooltip: {
@@ -63,7 +64,13 @@ function DataGrid({
   leftAccessory,
   rightAccessory,
   centerAccessory,
+  onLoadMore,
+  totalCount,
 }) {
+  const [canvas, setCanvas] = useState(null);
+
+  const domRef = React.useRef();
+
   const [checkListState, checkListDispatch] = React.useContext(CheckboxContext);
   const [dataGridState, dataGridDispatch] = React.useContext(DataGridContext);
 
@@ -77,6 +84,33 @@ function DataGrid({
   function displayMenu(e, row) {
     showContextMenu(e, { props: { row } });
   }
+
+  const scrollListener = React.useCallback(
+    (evt) => {
+      const scrollOffset = evt?.currentTarget?.scrollHeight - (evt?.currentTarget?.scrollTop + evt?.currentTarget?.clientHeight)
+      if (scrollOffset < 100) {
+        onLoadMore();
+      }
+    },
+    [onLoadMore]
+  );
+
+  React.useEffect(() => {
+    if (onLoadMore) {
+      if (domRef.current && !canvas) {
+        // const c = findDOMNode(domRef.current.element).querySelector('.react-grid-Canvas')
+        const c = domRef.current.element;
+        c.addEventListener("scroll", scrollListener);
+        setCanvas(c);
+      }
+    }
+  }, [canvas, onLoadMore, scrollListener]);
+
+  React.useEffect(() => {
+    return function cleanup() {
+      canvas?.removeEventListener("scroll", scrollListener);
+    };
+  }, []);
 
   React.useEffect(() => {
     const defaultItems = dataGridState.columns.map((col) => {
@@ -144,8 +178,8 @@ function DataGrid({
             <span style={c.cellStyles}>{isReactElem ? element : tooltip}</span>
           );
           const renderedTooltip =
-            typeof c.tooltip === "function" ? c?.tooltip(props) : tooltip
-          if (c.noTooltip) {
+            typeof c.tooltip === "function" ? c?.tooltip(props) : tooltip;
+          if (c.noTooltip || isEmpty(renderedTooltip)) {
             return cellRenderer;
           } else {
             return (
@@ -236,7 +270,12 @@ function DataGrid({
   }, [dataGridDispatch, filters]);
 
   return (
-    <BlockUi tag="div" keepInView blocking={dataGridState.loading} style={{ ...containerStyle }}>
+    <BlockUi
+      message={<CircularProgress />}
+      backgroundStyle={{ backgroundColor: "#ffffffcc" }}
+      show={dataGridState.loading}
+      style={{ ...containerStyle }}
+    >
       <DataGridToolbar
         columns={draggableColumns}
         showSelector={showSelector}
@@ -245,8 +284,11 @@ function DataGrid({
         rightAccessory={rightAccessory}
         leftAccessory={leftAccessory}
         centerAccessory={centerAccessory}
+        totalCount={totalCount}
+        loadedCount={dataGridState.rows.length}
       />
       <ReactDataGrid
+        ref={domRef}
         className={"rdg-light"}
         headerFiltersHeight={50}
         rowRenderer={RowRenderer}

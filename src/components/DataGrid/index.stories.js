@@ -4,6 +4,7 @@ import {
   Chip,
   Grid,
   ListItem,
+  Paper,
   Typography,
 } from "@material-ui/core";
 import { Row } from "react-data-grid";
@@ -52,7 +53,7 @@ const DefaultStory = ({ ...args }) => {
     });
   }, [args.columns, args.rows, dispatch]);
 
-  return <DataGrid {...args} />;
+  return <Paper><DataGrid {...args} /></Paper>;
 };
 
 export const Default = DefaultStory.bind({});
@@ -194,7 +195,7 @@ const ServerFilterSortStory = ({ ...args }) => {
     });
   }, [state.filterColumn]);
 
-  return <DataGrid {...args} />;
+  return <Paper><DataGrid {...args} /></Paper>;
 };
 export const ServerFilterSort = ServerFilterSortStory.bind({});
 ServerFilterSort.args = {
@@ -215,6 +216,7 @@ const SelectableStory = ({ ...args }) => {
   }, [args.columns, args.rows, dispatch]);
 
   return (
+    <Paper>
     <DataGrid
       {...args}
       gridProps={{
@@ -227,6 +229,7 @@ const SelectableStory = ({ ...args }) => {
         },
       }}
     />
+    </Paper>
   );
 };
 
@@ -318,9 +321,9 @@ const RedrawBugStory = ({ ...args }) => {
   return (
     <Grid container>
       <Grid item xs={12}>
-      <div style={{ display: "flex", flexDirection: "column", height: "70vh" }}>
+      <Paper style={{ display: "flex", flexDirection: "column", height: "70vh" }}>
         <DataGrid {...args} />
-      </div>
+      </Paper>
       </Grid>
     </Grid>
   );
@@ -369,10 +372,10 @@ const LoaderStory = ({ ...args }) => {
   return (
     <Grid container>
       <Grid item xs={12}>
-      <div style={{ display: "flex", flexDirection: "column", height: "70vh" }}>
+      <Paper style={{ display: "flex", flexDirection: "column", height: "70vh" }}>
         <DataGrid {...args} />
         <Button onClick={()=>simulateLoading()}>Simulate Loading</Button>
-      </div>
+      </Paper>
       </Grid>
     </Grid>
   );
@@ -383,6 +386,82 @@ Loader.args = {
   ...Default.args,
   filterable: true,
   showSelector: true,
+  leftAccessory: () => (
+    <ButtonGroup>
+      <Button onClick={action("Left Button onClick")}>Left</Button>
+    </ButtonGroup>
+  ),
+
+  centerAccessory: () => <Typography variant="h6">Heading</Typography>,
+};
+
+const InfiniteLoaderStory = ({ ...args }) => {
+  const [state, dispatch] = React.useContext(DataGridContext);
+
+  const aggregateRows = React.useRef([]);
+
+  const simulateLoading = React.useCallback(
+    async () => {
+      dispatch({
+        type: actions.SET_LOADING,
+      });
+      const mrows = aggregateRows.current.map((r,i) => {
+        return {
+          ...r,
+          id: i
+        }
+      })
+
+      const arows = args.rows.map((r,i) => {
+        return {
+          ...r,
+          id: i+mrows.length
+        }
+      })
+
+      const rs = [...mrows, ...arows]
+      console.log("📢[index.stories.js:404rsrsrs]: ", mrows, arows, rs);
+
+      aggregateRows.current = rs
+
+      dispatch({
+        payload: { rows: rs },
+        type: actions.LOAD_ROWS,
+      });
+      dispatch({
+        type: actions.SET_DONE_LOADING,
+      });
+    },
+    [aggregateRows, args.rows, dispatch],
+  );
+
+  
+  React.useEffect(() => {
+    dispatch({
+      payload: { columns: args.columns, rows: args.rows },
+      type: actions.LOAD_DATA,
+    });
+  }, [args.columns, args.rows, dispatch]);
+
+  return (
+    <Grid container>
+      <Grid item xs={12}>
+      <Paper style={{ display: "flex", flexDirection: "column", height: "70vh" }}>
+        <DataGrid {...args} 
+          onLoadMore={()=>simulateLoading()}
+        />
+      </Paper>
+      </Grid>
+    </Grid>
+  );
+};
+
+export const InfiniteLoader = InfiniteLoaderStory.bind({});
+InfiniteLoader.args = {
+  ...Default.args,
+  filterable: true,
+  showSelector: true,
+  totalCount: 10000,
   leftAccessory: () => (
     <ButtonGroup>
       <Button onClick={action("Left Button onClick")}>Left</Button>
