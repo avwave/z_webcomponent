@@ -7,7 +7,7 @@ import {
   withStyles,
 } from "@material-ui/core";
 import PropTypes from "prop-types";
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 import { useContextMenu } from "react-contexify";
 import ReactDataGrid, { Row } from "react-data-grid";
 import styled from "styled-components";
@@ -85,25 +85,29 @@ function DataGrid({
     showContextMenu(e, { props: { row } });
   }
 
-  const scrollListener = React.useCallback(
+  const prevScrollY = useRef(0);
+
+  const scrollListener = useCallback(
     (evt) => {
       const scrollOffset = evt?.currentTarget?.scrollHeight - (evt?.currentTarget?.scrollTop + evt?.currentTarget?.clientHeight)
-      if (scrollOffset < 100) {
+      const newScrollTop = evt?.currentTarget?.scrollTop
+      if (scrollOffset < 100 && evt?.currentTarget?.scrollTop > prevScrollY.current) {
+        console.log("📢[DataGrid.js:92]: ", scrollOffset);
         onLoadMore();
       }
-    },
-    [onLoadMore]
+      prevScrollY.current = newScrollTop
+    }, [onLoadMore]
   );
 
   React.useEffect(() => {
+    const c = domRef.current.element;
     if (onLoadMore) {
       if (domRef.current && !canvas) {
-        // const c = findDOMNode(domRef.current.element).querySelector('.react-grid-Canvas')
-        const c = domRef.current.element;
-        c.addEventListener("scroll", scrollListener);
+        c.addEventListener("scroll", scrollListener, { passive: true });
         setCanvas(c);
       }
-    }
+    } 
+      
   }, [canvas, onLoadMore, scrollListener]);
 
   React.useEffect(() => {
@@ -275,6 +279,7 @@ function DataGrid({
       backgroundStyle={{ backgroundColor: "#ffffffcc" }}
       show={dataGridState.loading}
       style={{ ...containerStyle }}
+
     >
       <DataGridToolbar
         columns={draggableColumns}
