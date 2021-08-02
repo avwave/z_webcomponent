@@ -66,6 +66,7 @@ function DataGrid({
   centerAccessory,
   onLoadMore,
   totalCount,
+  resetScroll
 }) {
   const [canvas, setCanvas] = useState(null);
 
@@ -115,6 +116,12 @@ function DataGrid({
       canvas?.removeEventListener("scroll", scrollListener);
     };
   }, []);
+
+  React.useEffect(() => {
+    if (resetScroll) {
+      canvas.scrollTop = 0
+    }
+  }, [canvas, resetScroll])
 
   React.useEffect(() => {
     const defaultItems = dataGridState.columns.map((col) => {
