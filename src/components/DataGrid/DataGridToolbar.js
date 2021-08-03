@@ -1,4 +1,5 @@
 import {
+  Breadcrumbs,
   Button,
   ButtonGroup,
   Chip,
@@ -40,6 +41,7 @@ const styles = (theme) => ({
   },
   filterLabel: {
     paddingLeft: theme.spacing(1),
+    fontWeight: "bold",
   },
 });
 
@@ -199,30 +201,41 @@ function DataGridToolbar({
       {((totalCount && loadedCount) ||
         !isEmpty(dataGridState.filterColumn)) && (
         <Toolbar variant="dense" className={classes.toolbar} disableGutters>
-          {totalCount && loadedCount && (
-            <Typography className={classes.filterLabel} variant="overline">
-              Count: {loadedCount} of {totalCount}
-            </Typography>
-          )}
-          {!isEmpty(dataGridState.filterColumn) && (
-            <Typography variant="overline" className={classes.filterLabel}>
-              Filtered by:{" "}
-            </Typography>
-          )}
-          {Object.entries(dataGridState.filterColumn).map((filter, idx) => {
-            const filterColumn = filterColumnSettings.find((i) => {
-              const ret = i.key === filter[0];
-              return ret;
-            });
-            return (
-              <Chip
-                variant="outlined"
-                label={stringify(filter[1])}
-                key={idx}
-                icon={<Chip size="small" label={filterColumn.name} />}
-              />
-            );
-          })}
+          <Breadcrumbs>
+            {totalCount && loadedCount && (
+              <div>
+              <Typography
+                className={classes.filterLabel}
+                variant="overline"
+              >
+                {loadedCount} of {totalCount}
+              </Typography>
+              </div>
+            )}
+            {!isEmpty(dataGridState.filterColumn) && (
+              <div>
+                <Typography variant="overline" className={classes.filterLabel}>
+                  Filtered by:{" "}
+                </Typography>
+                {Object.entries(dataGridState.filterColumn).map(
+                  (filter, idx) => {
+                    const filterColumn = filterColumnSettings.find((i) => {
+                      const ret = i.key === filter[0];
+                      return ret;
+                    });
+                    return (
+                      <Chip
+                        variant="outlined"
+                        label={stringify(filter[1])}
+                        key={idx}
+                        icon={<Chip size="small" label={filterColumn.name} />}
+                      />
+                    );
+                  }
+                )}
+              </div>
+            )}
+          </Breadcrumbs>
         </Toolbar>
       )}
     </>
