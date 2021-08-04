@@ -104,7 +104,9 @@ function DataGrid({
     const c = domRef.current.element;
     if (onLoadMore) {
       if (domRef.current && !canvas) {
-        c?.addEventListener("scroll", scrollListener, { passive: true });
+        if (c.addEventListener) {
+          c?.addEventListener("scroll", scrollListener, { passive: true });
+        }
         setCanvas(c);
       }
     } 
@@ -113,7 +115,9 @@ function DataGrid({
 
   React.useEffect(() => {
     return function cleanup() {
-      canvas?.removeEventListener("scroll", scrollListener);
+      if (canvas.removeEventListener) {
+        canvas?.removeEventListener("scroll", scrollListener);
+      }
     };
   }, []);
 
