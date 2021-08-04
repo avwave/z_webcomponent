@@ -104,7 +104,7 @@ function DataGrid({
     const c = domRef.current.element;
     if (onLoadMore) {
       if (domRef.current && !canvas) {
-        c.addEventListener("scroll", scrollListener, { passive: true });
+        c?.addEventListener("scroll", scrollListener, { passive: true });
         setCanvas(c);
       }
     } 
