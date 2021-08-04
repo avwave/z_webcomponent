@@ -1,6 +1,8 @@
 import {
+  Breadcrumbs,
   Button,
   ButtonGroup,
+  Chip,
   Container,
   FormControl,
   FormHelperText,
@@ -9,9 +11,11 @@ import {
   InputLabel,
   Popover,
   Toolbar,
+  Typography,
   withStyles,
 } from "@material-ui/core";
 import { FilterList, ViewColumn } from "@material-ui/icons";
+import { stringify } from "javascript-stringify";
 import { isEmpty } from "lodash";
 import React, { useEffect, useState } from "react";
 import { Checklist } from "../CheckList";
@@ -35,6 +39,10 @@ const styles = (theme) => ({
     display: "flex",
     padding: theme.spacing(2),
   },
+  filterLabel: {
+    paddingLeft: theme.spacing(1),
+    fontWeight: "bold",
+  },
 });
 
 function DataGridToolbar({
@@ -45,7 +53,9 @@ function DataGridToolbar({
   onFilterChange,
   rightAccessory,
   leftAccessory,
-  centerAccessory
+  centerAccessory,
+  totalCount,
+  loadedCount,
 }) {
   const [columnAnchor, setColumnAnchor] = useState();
   const [filterAnchor, setFilterAnchor] = useState();
@@ -110,77 +120,125 @@ function DataGridToolbar({
   };
 
   return (
-    <Toolbar className={classes.toolbar} disableGutters>
-      {leftAccessory?leftAccessory():<></>}
-      <div style={{ flex: 1 }} />
-      {centerAccessory?centerAccessory():<></>}
-      <div style={{ flex: 1 }} />
-      {showSelector ? (
-        <>
-          <IconButton variant="default" onClick={handleOpenCheckList}>
-            <ViewColumn />
-          </IconButton>
+    <>
+      {(showSelector ||
+        leftAccessory ||
+        centerAccessory ||
+        rightAccessory ||
+        filterable) && (
+        <Toolbar variant="dense" className={classes.toolbar} disableGutters>
+          {leftAccessory ? leftAccessory() : <></>}
+          <div style={{ flex: 1 }} />
+          {centerAccessory ? centerAccessory() : <></>}
+          <div style={{ flex: 1 }} />
+          {showSelector ? (
+            <>
+              <IconButton variant="default" onClick={handleOpenCheckList}>
+                <ViewColumn />
+              </IconButton>
 
-          <Popover
-            id={columnPopoverId}
-            open={isCheckListOpen}
-            anchorEl={columnAnchor}
-            onClose={handleChecklistClose}
-            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-            transformOrigin={{ vertical: "top", horizontal: "right" }}
-          >
-            <Checklist />
-          </Popover>
-        </>
-      ) : (
-        <></>
-      )}
-      {filterable ? (
-        <>
-          <IconButton variant="default" onClick={handleOpenFilterList}>
-            <FilterList />
-          </IconButton>
-          <Popover
-            id={filterPopoverId}
-            open={isFilterListOpen}
-            anchorEl={filterAnchor}
-            onClose={handleFilterListClose}
-            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-            transformOrigin={{ vertical: "top", horizontal: "right" }}
-          >
-            <Container maxWidth="xs">
-              <form
-                noValidate
-                autoComplete="off"
-                className={classes.filterPopup}
+              <Popover
+                id={columnPopoverId}
+                open={isCheckListOpen}
+                anchorEl={columnAnchor}
+                onClose={handleChecklistClose}
+                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                transformOrigin={{ vertical: "top", horizontal: "right" }}
               >
-                <ButtonGroup
-                  fullWidth
-                  disableElevation
-                  variant="text"
-                  color="primary"
-                >
-                  <Button disabled>Filters</Button>
-                  <Button
-                    onClick={() => {
-                      dataGridDispatch({
-                        type: actions.CLEAR_FILTER_COLUMN,
-                      });
-                    }}
+                <Checklist />
+              </Popover>
+            </>
+          ) : (
+            <></>
+          )}
+          {filterable ? (
+            <>
+              <IconButton variant="default" onClick={handleOpenFilterList}>
+                <FilterList />
+              </IconButton>
+              <Popover
+                id={filterPopoverId}
+                open={isFilterListOpen}
+                anchorEl={filterAnchor}
+                onClose={handleFilterListClose}
+                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                transformOrigin={{ vertical: "top", horizontal: "right" }}
+              >
+                <Container maxWidth="xs">
+                  <form
+                    noValidate
+                    autoComplete="off"
+                    className={classes.filterPopup}
                   >
-                    Reset
-                  </Button>
-                </ButtonGroup>
-                {renderFilters()}
-              </form>
-            </Container>
-          </Popover>
-        </>
-      ) : (
-        <></>
+                    <ButtonGroup
+                      fullWidth
+                      disableElevation
+                      variant="text"
+                      color="primary"
+                    >
+                      <Button disabled>Filters</Button>
+                      <Button
+                        onClick={() => {
+                          dataGridDispatch({
+                            type: actions.CLEAR_FILTER_COLUMN,
+                          });
+                        }}
+                      >
+                        Reset
+                      </Button>
+                    </ButtonGroup>
+                    {renderFilters()}
+                  </form>
+                </Container>
+              </Popover>
+            </>
+          ) : (
+            <></>
+          )}
+          {rightAccessory ? rightAccessory() : <></>}
+        </Toolbar>
       )}
-      {rightAccessory?rightAccessory():<></>}
-    </Toolbar>
+      {((totalCount && loadedCount) ||
+        !isEmpty(dataGridState.filterColumn)) && (
+        <Toolbar variant="dense" className={classes.toolbar} disableGutters>
+          <Breadcrumbs>
+            {totalCount && loadedCount && (
+              <div>
+              <Typography
+                className={classes.filterLabel}
+                variant="overline"
+              >
+                {loadedCount} of {totalCount}
+              </Typography>
+              </div>
+            )}
+            {!isEmpty(dataGridState.filterColumn) && (
+              <div>
+                <Typography variant="overline" className={classes.filterLabel}>
+                  Filtered by:{" "}
+                </Typography>
+                {Object.entries(dataGridState.filterColumn).map(
+                  (filter, idx) => {
+                    const filterColumn = filterColumnSettings.find((i) => {
+                      const ret = i.key === filter[0];
+                      return ret;
+                    });
+                    return (
+                      <Chip
+                        variant="outlined"
+                        label={stringify(filter[1])}
+                        key={idx}
+                        icon={<Chip size="small" label={filterColumn.name} />}
+                      />
+                    );
+                  }
+                )}
+              </div>
+            )}
+          </Breadcrumbs>
+        </Toolbar>
+      )}
+    </>
   );
 }
 export default withStyles(styles)(DataGridToolbar);
