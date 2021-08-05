@@ -170,7 +170,7 @@ function Agenda(props) {
           agenda: {
             event: AgendaEventComponent,
           },
-          toolbar: AgendaToolbar,
+          toolbar: (tprops)=><AgendaToolbar {...tprops} {...props} />,
           month: {
             dateHeader: AgendaDateHeader,
           },
