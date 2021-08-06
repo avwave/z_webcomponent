@@ -65,6 +65,9 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'row',
   },
+  subformContent: {
+    flexGrow: 1,
+  },
   subformHeaderTitle:{
     fontWeight: 'bold',
     paddingLeft: theme.spacing(2)
@@ -541,7 +544,7 @@ const FormFieldSet = ({
                                 </Box>
                                 }
 
-                                <CardContent>
+                                <CardContent className={classes.subformContent}>
                                   {buildComponent(
                                     fieldParams.formLayout,
                                     fieldParams.formTemplate,
