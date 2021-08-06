@@ -477,6 +477,7 @@ Nested.args = {
         subsubform: {
           type: "fieldarray",
           label: "subsubform",
+          inline: true,
           formLayout: ["subsubform1"],
           formValueTemplate: {
             subsubform1: ``,

@@ -61,6 +61,10 @@ const useStyles = makeStyles((theme) => ({
   hidden: {
     display: "none",
   },
+  subformInline: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
   subformHeaderTitle:{
     fontWeight: 'bold',
     paddingLeft: theme.spacing(2)
@@ -72,6 +76,9 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'space-between',
     alignItems: 'center',
     backgroundColor: theme.palette.grey[100]
+  },
+  inlineDelete: {
+    alignSelf: "start"
   }
 }));
 
@@ -516,20 +523,24 @@ const FormFieldSet = ({
                       {get(arrayHelpers.form.values, fieldName).map(
                         (subform, idx) => {
                           return (
-                            <Box component={fieldParams.settings?.formInset?Card:'div'} key={`${fieldName}-${idx}`}>
+                            <Box component={fieldParams.settings?.formInset?Card:'div'} key={`${fieldName}-${idx}`}
+                              className={fieldParams.inline&&classes.subformInline}>
+                                {!fieldParams.inline &&
                                 <Box className={classes.subformHeader} >
                                   <Typography variant="body2" className={classes.subformHeaderTitle}>
                                     {`${fieldParams.label} ${isRequired?'*':''}`}
                                     </Typography>
                                   <IconButton
-                                      aria-label=""
-                                      onClick={() => {
-                                        arrayHelpers.remove(idx);
-                                      }}
-                                    >
-                                      <Close />
-                                    </IconButton>
+                                    aria-label=""
+                                    onClick={() => {
+                                      arrayHelpers.remove(idx);
+                                    }}
+                                  >
+                                    <Close />
+                                  </IconButton>
                                 </Box>
+                                }
+
                                 <CardContent>
                                   {buildComponent(
                                     fieldParams.formLayout,
@@ -539,6 +550,17 @@ const FormFieldSet = ({
                                     `${fieldName}[${idx}]`
                                   )}
                                 </CardContent>
+                                {fieldParams.inline &&
+                                  <IconButton
+                                      className={classes.inlineDelete}
+                                      aria-label=""
+                                      onClick={() => {
+                                        arrayHelpers.remove(idx);
+                                      }}
+                                    >
+                                    <Close />
+                                  </IconButton>
+                                }
                             </Box>
                           );
                         }
