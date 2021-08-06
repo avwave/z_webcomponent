@@ -9,7 +9,9 @@ import {
   baseEvents,
   daySummary,
   heightBugEvents,
-  progressEvents,
+  progressEvents, 
+  resourceEvents,
+  resourceList
 } from "./events";
 
 import AgendaProvider, {
@@ -130,3 +132,35 @@ CustomCellRendering.args= {
     return <pre>{JSON.stringify(event, null, 2)}</pre>
   })
 }
+
+const ResourceStory = ({ ...args }) => {
+  const [state, dispatch] = React.useContext(AgendaContext);
+  React.useEffect(() => {
+    dispatch({
+      payload: { events: args.events, summaries: args.summaries },
+      type: actions.LOAD_DATA,
+    });
+  }, [args.events, args.summaries, dispatch]);
+
+  return <Agenda {...args} />;
+};
+
+export const Resource = ResourceStory.bind({});
+Resource.args = {
+  containerStyle: {
+    height: 750,
+  },
+  timeslots: 1,
+  step: 60,
+  lockSlotStartTime: "06:00",
+  lockSlotEndTime: "23:59",
+  popup: true,
+  views: [views.DAY, views.AGENDA],
+  defaultView: views.DAY,
+  style: { flex: "1 1 auto" },
+  events: resourceEvents[0].slots,
+  resources: resourceList,
+  resourceAccessor: 'resourceId',
+  resourceIdAccessor: 'id',
+  resourceTitleAccessor: 'title',
+};
