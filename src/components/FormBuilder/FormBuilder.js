@@ -544,7 +544,7 @@ const FormFieldSet = ({
                                 </Box>
                                 }
 
-                                <CardContent className={classes.subformContent}>
+                                <Box component={fieldParams.inline?'div':CardContent} dividers className={classes.subformContent}>
                                   {buildComponent(
                                     fieldParams.formLayout,
                                     fieldParams.formTemplate,
@@ -552,7 +552,7 @@ const FormFieldSet = ({
                                     `${fieldName}-${idx}`,
                                     `${fieldName}[${idx}]`
                                   )}
-                                </CardContent>
+                                </Box>
                                 {fieldParams.inline &&
                                   <IconButton
                                       className={classes.inlineDelete}

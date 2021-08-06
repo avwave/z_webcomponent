@@ -452,12 +452,12 @@ Nested.args = {
             subform2: Yup.string().nullable().required(),
             subsubform: Yup.array().min(1).of(
               Yup.object().shape({
-                subsubform1: Yup.string().nullable().required(),
+                subsubform1: Yup.array().min(1).required(),
               })
             ),
           })
         ),
-      formLayout: ["subform1", "subform2", "subsubform"],
+      formLayout: ["subform1", ["subform2", "subsubform"]],
       formValueTemplate: {
         subform1: ``,
         subform2: ``,
