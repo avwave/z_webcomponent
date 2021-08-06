@@ -10,8 +10,7 @@ import {
   Checkbox,
   Container,
   FormControl,
-  FormControlLabel,
-  FormHelperText,
+  FormControlLabel, FormGroup, FormHelperText,
   FormLabel,
   Grid,
   IconButton,
@@ -24,17 +23,15 @@ import {
   RadioGroup,
   Switch,
   TextField,
-  Toolbar,
-  FormGroup,
-  Typography,
+  Toolbar, Typography
 } from "@material-ui/core";
-import { Add, AddBox, ArrowBack, Backspace, Close, DeleteForever, PlusOne } from "@material-ui/icons";
+import { Add, Backspace, Close, DateRange, Schedule } from "@material-ui/icons";
 import { Autocomplete } from "@material-ui/lab";
 import {
   KeyboardDatePicker,
   KeyboardDateTimePicker,
   KeyboardTimePicker,
-  MuiPickersUtilsProvider,
+  MuiPickersUtilsProvider
 } from "@material-ui/pickers";
 import { FieldArray, Formik, getIn } from "formik";
 import { get, isEmpty } from "lodash";
@@ -44,7 +41,7 @@ import React, {
   useContext,
   useEffect,
   useMemo,
-  useState,
+  useState
 } from "react";
 import * as Yup from "yup";
 import { FormikPersist } from "./FormikPersist";
@@ -201,6 +198,7 @@ const FormFieldSet = ({
                   </InputAdornment>
                 ) : undefined,
               }}
+              keyboardIcon={<DateRange/>}
               onChange={(evt, val) => {
                 // console.log("📢[FormBuilder.js:152]:", evt);
                 if (fieldParams.onChange) {
@@ -268,6 +266,7 @@ const FormFieldSet = ({
               disableFuture={fieldParams.disableFuture}
               label={`${fieldParams.label} ${isRequired?'*':''}`}
               name={fieldName}
+              keyboardIcon={<Schedule/>}
               InputProps={{
                 startAdornment: fieldParams.icon ? (
                   <InputAdornment position="start">

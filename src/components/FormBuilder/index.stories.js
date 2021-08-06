@@ -85,14 +85,14 @@ Default.args = {
       label: "Read Only",
       initialValues: "not editable",
       validator: () => Yup.string().required(),
-      icon: <AccountTree />,
+
       readOnly: true,
     },
     firstName: {
       type: "text",
       label: "First Name",
       initialValues: "",
-      icon: <AccountTree />,
+
       validator: () => Yup.string().required(),
       fieldProps: {
         variant: "outlined",
@@ -102,7 +102,7 @@ Default.args = {
       type: "text",
       label: "Middle Name",
       initialValues: "",
-      icon: <AccountTree />,
+
       validator: () => Yup.string().required(),
     },
     lastName: {
@@ -114,7 +114,7 @@ Default.args = {
     multiLine: {
       type: "text",
       label: "Multi line",
-      icon: <AccountTree />,
+
       initialValues: "",
       validator: () => Yup.string().required(),
       fieldProps: {
@@ -132,14 +132,14 @@ Default.args = {
     aNumber: {
       type: "number",
       label: "A-Number",
-      icon: <AccountTree />,
+
       initialValues: 0,
       validator: () => Yup.number().required(),
     },
     startDate: {
       type: "date",
       label: "Start-Date",
-      icon: <AccountTree />,
+
       disableFuture: true,
       disablePast: false,
       initialValues: new Date(),
@@ -152,7 +152,7 @@ Default.args = {
     startTime: {
       type: "time",
       label: "Start-Time",
-      icon: <AccountTree />,
+
       disableFuture: false,
       disablePast: true,
       initialValues: new Date(),
@@ -163,7 +163,7 @@ Default.args = {
     selection: {
       type: "select",
       label: "Selection",
-      icon: <AccountTree />,
+
       initialValues: "",
       options: [
         { value: 10, label: "Thing one" },
@@ -202,7 +202,7 @@ Default.args = {
     autocomplete: {
       type: "autocomplete",
       label: "Autocomplete",
-      icon: <AccountTree />,
+
       initialValues: [],
       options: [
         { id: 101, label: "one" },
