@@ -26,8 +26,9 @@ import {
   TextField,
   Toolbar,
   FormGroup,
+  Typography,
 } from "@material-ui/core";
-import { ArrowBack, Backspace, DeleteForever } from "@material-ui/icons";
+import { Add, AddBox, ArrowBack, Backspace, Close, DeleteForever, PlusOne } from "@material-ui/icons";
 import { Autocomplete } from "@material-ui/lab";
 import {
   KeyboardDatePicker,
@@ -35,7 +36,7 @@ import {
   KeyboardTimePicker,
   MuiPickersUtilsProvider,
 } from "@material-ui/pickers";
-import { FieldArray, Formik } from "formik";
+import { FieldArray, Formik, getIn } from "formik";
 import { get, isEmpty } from "lodash";
 import PropTypes from "prop-types";
 import React, {
@@ -60,6 +61,18 @@ const useStyles = makeStyles((theme) => ({
   hidden: {
     display: "none",
   },
+  subformHeaderTitle:{
+    fontWeight: 'bold',
+    paddingLeft: theme.spacing(2)
+  },
+  subformHeader: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: theme.palette.grey[100]
+  }
 }));
 
 const FormFieldSet = ({
@@ -86,7 +99,8 @@ const FormFieldSet = ({
   onChange,
 }) => {
   const classes = useStyles();
-  const { formik, validationSchema, initialValues } = useContext(FormContext);
+  const formcontext = useContext(FormContext);
+  const { formik, validationSchema, initialValues } = formcontext
 
   useEffect(() => {
     onChange(formik.values);
@@ -115,6 +129,13 @@ const FormFieldSet = ({
 
   const renderField = useCallback(
     (fieldName, fieldParams) => {
+      const description = validationSchema.describe()
+      let isRequired = !!getIn(validationSchema.describe().fields, fieldName)?.tests?.find(
+        testName => {
+          return testName.name === 'required'
+        }
+      )
+      
       const onChangeOverride = fieldParams.onChange
         ? (evt, value) => {
             fieldParams.onChange(fieldName, evt?.target?.value ?? evt);
@@ -133,7 +154,7 @@ const FormFieldSet = ({
             <TextField
               name={fieldName}
               type={fieldParams.type}
-              label={fieldParams.label}
+              label={`${fieldParams.label} ${isRequired?'*':''}`}
               value={get(formik.values, fieldName)}
               onChange={onChangeOverride}
               disabled={fieldParams.readOnly}
@@ -161,7 +182,7 @@ const FormFieldSet = ({
             <KeyboardDatePicker
               disablePast={fieldParams.disablePast}
               disableFuture={fieldParams.disableFuture}
-              label={fieldParams.label}
+              label={`${fieldParams.label} ${isRequired?'*':''}`}
               name={fieldName}
               InputProps={{
                 startAdornment: fieldParams.icon ? (
@@ -199,7 +220,7 @@ const FormFieldSet = ({
             <KeyboardDateTimePicker
               disablePast={fieldParams.disablePast}
               disableFuture={fieldParams.disableFuture}
-              label={fieldParams.label}
+              label={`${fieldParams.label} ${isRequired?'*':''}`}
               name={fieldName}
               InputProps={{
                 startAdornment: fieldParams.icon ? (
@@ -235,7 +256,7 @@ const FormFieldSet = ({
             <KeyboardTimePicker
               disablePast={fieldParams.disablePast}
               disableFuture={fieldParams.disableFuture}
-              label={fieldParams.label}
+              label={`${fieldParams.label} ${isRequired?'*':''}`}
               name={fieldName}
               InputProps={{
                 startAdornment: fieldParams.icon ? (
@@ -276,7 +297,7 @@ const FormFieldSet = ({
                 variant={variant}
                 fullWidth
                 select
-                label={fieldParams.label}
+                label={`${fieldParams.label} ${isRequired?'*':''}`}
                 value={get(formik.values, fieldName)}
                 onChange={onChangeOverride}
                 error={
@@ -284,14 +305,14 @@ const FormFieldSet = ({
                   Boolean(get(formik.errors, fieldName))
                 }
                 SelectProps={{
-                  multiple: fieldParams.settings.multiple,
+                  multiple: fieldParams.settings?.multiple,
                   renderValue: (selected, b) => {
-                    if (fieldParams.settings.multiple) {
+                    if (fieldParams.settings?.multiple) {
                       return selected
                         .map((s) => {
                           const item = fieldParams.options.find(
                             (item) =>
-                              item[fieldParams.settings.valueField] === s
+                              item[fieldParams.settings?.valueField] === s
                           );
                           return item?item[fieldParams.settings.labelField]:"";
                         })
@@ -299,7 +320,7 @@ const FormFieldSet = ({
                     }
                     const item = fieldParams.options.find(
                       (item) =>
-                        item[fieldParams.settings.valueField] === selected
+                        item[fieldParams.settings?.valueField] === selected
                     );
                     return item?item[fieldParams.settings.labelField]:"";
                   },
@@ -319,12 +340,12 @@ const FormFieldSet = ({
                   return (
                     <MenuItem
                       key={idx}
-                      value={item[fieldParams.settings.valueField]}
+                      value={item[fieldParams.settings?.valueField]}
                     >
-                      {fieldParams.settings.multiple && (
+                      {fieldParams.settings?.multiple && (
                         <Checkbox
                           checked={get(formik.values, fieldName, []).includes(
-                            item[fieldParams.settings.valueField]
+                            item[fieldParams.settings?.valueField]
                           )}
                         />
                       )}
@@ -354,7 +375,7 @@ const FormFieldSet = ({
                   }
                   formik.setFieldValue(fieldName, val);
                 }}
-                label={fieldParams.label}
+                label={`${fieldParams.label} ${isRequired?'*':''}`}
                 disabled={fieldParams.readOnly}
                 {...fieldParams?.fieldProps}
               />
@@ -364,7 +385,7 @@ const FormFieldSet = ({
         case "radio":
           return (
             <>
-              <FormLabel component="legend">{fieldParams.label}</FormLabel>
+              <FormLabel component="legend">{`${fieldParams.label} ${isRequired?'*':''}`}</FormLabel>
               <RadioGroup
                 row={fieldParams.settings.inline}
                 name={fieldName}
@@ -376,7 +397,7 @@ const FormFieldSet = ({
                   <FormControlLabel
                     disabled={fieldParams.readOnly}
                     key={idx}
-                    value={item[fieldParams.settings.valueField]}
+                    value={item[fieldParams.settings?.valueField]}
                     labelPlacement={fieldParams.settings.labelPlacement ?? 'end'}
                     control={<Radio />}
                     label={item[fieldParams.settings.labelField]}
@@ -389,7 +410,7 @@ const FormFieldSet = ({
         case "checkboxes":
           return (
             <>
-              <FormLabel component="legend">{fieldParams.label}</FormLabel>
+              <FormLabel component="legend">{`${fieldParams.label} ${isRequired?'*':''}`}</FormLabel>
               <FormGroup
                 row={fieldParams.settings.inline}
                 // name={fieldName}
@@ -398,7 +419,7 @@ const FormFieldSet = ({
                 {...fieldParams?.fieldProps}
               >
                 {fieldParams.options.map((item, idx) => {
-                  const checked = get(formik.values, fieldName, []).includes(item[fieldParams.settings.valueField]);
+                  const checked = get(formik.values, fieldName, []).includes(item[fieldParams.settings?.valueField]);
                   return (
                     <FormControlLabel
                       disabled={fieldParams.readOnly}
@@ -429,7 +450,7 @@ const FormFieldSet = ({
               disabled={fieldParams.readOnly}
               disableCloseOnSelect
               name={fieldName}
-              label={fieldParams.label}
+              label={`${fieldParams.label} ${isRequired?'*':''}`}
               value={get(formik.values, fieldName)}
               onChange={(evt, val) => {
                 if (fieldParams.onChange) {
@@ -437,13 +458,13 @@ const FormFieldSet = ({
                 }
                 formik.setFieldValue(fieldName, val);
               }}
-              multiple={fieldParams.settings.multiple}
+              multiple={fieldParams.settings?.multiple}
               options={fieldParams.options}
               getOptionLabel={(option) => {
                 return option[fieldParams.settings.labelField] ?? "";
               }}
               renderOption={(option, { selected }) => {
-                if (fieldParams.settings.multiple) {
+                if (fieldParams.settings?.multiple) {
                   return (
                     <React.Fragment>
                       <Checkbox checked={selected} />
@@ -472,7 +493,7 @@ const FormFieldSet = ({
                   //       },
                   //     }
                   //   : {})}
-                  label={fieldParams.label}
+                  label={`${fieldParams.label} ${isRequired?'*':''}`}
                   placeholder={fieldParams.placeholder ?? "type to search"}
                   variant={variant}
                   error={
@@ -495,21 +516,20 @@ const FormFieldSet = ({
                       {get(arrayHelpers.form.values, fieldName).map(
                         (subform, idx) => {
                           return (
-                            <Box key={`${fieldName}-${idx}`} m={2}>
-                              <Card>
-                                <CardHeader
-                                  action={
-                                    <IconButton
+                            <Box component={fieldParams.settings?.formInset?Card:'div'} key={`${fieldName}-${idx}`}>
+                                <Box className={classes.subformHeader} >
+                                  <Typography variant="body2" className={classes.subformHeaderTitle}>
+                                    {`${fieldParams.label} ${isRequired?'*':''}`}
+                                    </Typography>
+                                  <IconButton
                                       aria-label=""
                                       onClick={() => {
                                         arrayHelpers.remove(idx);
                                       }}
                                     >
-                                      <DeleteForever />
+                                      <Close />
                                     </IconButton>
-                                  }
-                                  title={fieldParams.label}
-                                />
+                                </Box>
                                 <CardContent>
                                   {buildComponent(
                                     fieldParams.formLayout,
@@ -519,29 +539,40 @@ const FormFieldSet = ({
                                     `${fieldName}[${idx}]`
                                   )}
                                 </CardContent>
-                              </Card>
                             </Box>
                           );
                         }
                       )}
+                      <div>
                       <Button
+                        variant="contained"
+
                         onClick={() => {
                           arrayHelpers.push(fieldParams.formValueTemplate);
                         }}
+                        startIcon={<Add/>}
+                        color="primary"
                       >
-                        Add {fieldParams.label}
+                        Add {`${fieldParams.label}`}
                       </Button>
+                      </div>
                     </>
                   );
                 }
                 return (
+                  <div>
                   <Button
-                    onClick={() =>
+                  variant="contained"
+
+                  onClick={() =>
                       arrayHelpers.push(fieldParams.formValueTemplate)
                     }
+                  startIcon={<Add/>}
+                  color="primary"
                   >
-                    Add {fieldParams.label}
+                    Add {`${fieldParams.label}`}
                   </Button>
+                  </div>
                 );
               }}
             />
