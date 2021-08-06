@@ -15,6 +15,17 @@ import {
 import { AccountTree, Close } from "@material-ui/icons";
 import { useFormikContext } from "formik";
 
+const FormConsumer = (props) => {
+  const formikObject = useFormikContext();
+  const {values, initialValues, setValues, setFieldValue, ...formik} = formikObject
+
+  React.useEffect(() => {
+      const dirty = formik.dirty
+      console.log("📢[index.stories.js:356]: ", values, formik?.errors);
+  }, [formik.dirty, values, formik]);
+  return null;
+};
+
 const FormBuilderStory = {
   component: FormBuilder,
   title: "Form/FormBuilder",
@@ -43,11 +54,10 @@ const FormBuilderStory = {
 
 export default FormBuilderStory;
 
-const DefaultStory = ({ ...args }) => <FormBuilder {...args} />;
+const DefaultStory = ({ ...args }) => <FormBuilder {...args} ><FormConsumer/></FormBuilder>;
 
 export const Default = DefaultStory.bind({});
 Default.args = {
-  onChange:(values)=>{console.log(values)},
   formId:'default',
   reverse: true,
   formLabel: "primary",
@@ -127,7 +137,6 @@ Default.args = {
       label: "Email",
       initialValues: "",
       validator: () => Yup.string().email().required(),
-      hidden: true,
     },
     aNumber: {
       type: "number",
@@ -159,6 +168,9 @@ Default.args = {
       useLocalTime: true,
       validator: () => Yup.date().required(),
       onChange: (field, data) => {},
+      fieldProps: {
+        minTime: new Date(),
+      }
     },
     selection: {
       type: "select",
@@ -345,16 +357,7 @@ Persist.args = {
   usePersist: true
 };
 
-const FormConsumer = (props) => {
-  const formikObject = useFormikContext();
-  const {values, initialValues, setValues, setFieldValue, ...formik} = formikObject
 
-  React.useEffect(() => {
-      const dirty = formik.dirty
-      console.log("📢[index.stories.js:356]: ", values, formik);
-  }, [formik.dirty, values, formik]);
-  return null;
-};
 
 const NestedStory = ({ ...args }) => {
   const [formState, setFormState] = useState({});

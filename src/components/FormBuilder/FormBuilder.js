@@ -27,12 +27,9 @@ import {
 } from "@material-ui/core";
 import { Add, Backspace, Close, DateRange, Schedule } from "@material-ui/icons";
 import { Autocomplete } from "@material-ui/lab";
-import {
-  KeyboardDatePicker,
-  KeyboardDateTimePicker,
-  KeyboardTimePicker,
-  MuiPickersUtilsProvider
-} from "@material-ui/pickers";
+import { DatePicker, DateTimePicker, TimePicker } from "@material-ui/pickers";
+import { LocalizationProvider } from "@material-ui/pickers/LocalizationProvider";
+import DateFnsAdapter from '@material-ui/pickers/adapter/date-fns';
 import { FieldArray, Formik, getIn } from "formik";
 import { get, isEmpty } from "lodash";
 import PropTypes from "prop-types";
@@ -45,6 +42,7 @@ import React, {
 } from "react";
 import * as Yup from "yup";
 import { FormikPersist } from "./FormikPersist";
+import moment from "moment";
 
 const useStyles = makeStyles((theme) => ({
   controlContainer: {
@@ -186,7 +184,7 @@ const FormFieldSet = ({
 
         case "date":
           return (
-            <KeyboardDatePicker
+            <DatePicker
               disablePast={fieldParams.disablePast}
               disableFuture={fieldParams.disableFuture}
               label={`${fieldParams.label} ${isRequired?'*':''}`}
@@ -198,18 +196,19 @@ const FormFieldSet = ({
                   </InputAdornment>
                 ) : undefined,
               }}
+              renderInput={props => <TextField {...props} />}
               keyboardIcon={<DateRange/>}
               onChange={(evt, val) => {
                 // console.log("📢[FormBuilder.js:152]:", evt);
                 if (fieldParams.onChange) {
                   fieldParams.onChange(
                     fieldName,
-                    fieldParams.useLocalTime ? evt.local(true) : evt.utc(true)
+                    fieldParams.useLocalTime ? moment(evt) : moment.utc(evt)
                   );
                 }
                 formik.setFieldValue(
                   fieldName,
-                  fieldParams.useLocalTime ? evt.local(true) : evt.utc(true)
+                  fieldParams.useLocalTime ? moment(evt) : moment.utc(evt)
                 );
               }}
               value={get(formik.values, fieldName)}
@@ -225,11 +224,12 @@ const FormFieldSet = ({
 
         case "datetime":
           return (
-            <KeyboardDateTimePicker
+            <DateTimePicker
               disablePast={fieldParams.disablePast}
               disableFuture={fieldParams.disableFuture}
               label={`${fieldParams.label} ${isRequired?'*':''}`}
               name={fieldName}
+              renderInput={props => <TextField {...props} />}
               InputProps={{
                 startAdornment: fieldParams.icon ? (
                   <InputAdornment position="start">
@@ -241,12 +241,12 @@ const FormFieldSet = ({
                 if (fieldParams.onChange) {
                   fieldParams.onChange(
                     fieldName,
-                    fieldParams.useLocalTime ? evt.local(true) : evt.utc(true)
+                    fieldParams.useLocalTime ? moment(evt) : moment.utc(evt)
                   );
                 }
                 formik.setFieldValue(
                   fieldName,
-                  fieldParams.useLocalTime ? evt.local(true) : evt.utc(true)
+                  fieldParams.useLocalTime ? moment(evt) : moment.utc(evt)
                 );
               }}
               value={get(formik.values, fieldName)}
@@ -261,12 +261,13 @@ const FormFieldSet = ({
           );
         case "time":
           return (
-            <KeyboardTimePicker
+            <TimePicker
               disablePast={fieldParams.disablePast}
               disableFuture={fieldParams.disableFuture}
               label={`${fieldParams.label} ${isRequired?'*':''}`}
               name={fieldName}
               keyboardIcon={<Schedule/>}
+              renderInput={props => <TextField {...props} />}
               InputProps={{
                 startAdornment: fieldParams.icon ? (
                   <InputAdornment position="start">
@@ -279,12 +280,12 @@ const FormFieldSet = ({
                 if (fieldParams.onChange) {
                   fieldParams.onChange(
                     fieldName,
-                    fieldParams.useLocalTime ? evt.local(true) : evt.utc(true)
+                    fieldParams.useLocalTime ? moment(evt) : moment.utc(evt)
                   );
                 }
                 formik.setFieldValue(
                   fieldName,
-                  fieldParams.useLocalTime ? evt.local(true) : evt.utc(true)
+                  fieldParams.useLocalTime ? moment(evt) : moment.utc(evt)
                 );
               }}
               value={get(formik.values, fieldName)}
@@ -797,9 +798,11 @@ const FormFieldSet = ({
   ]);
 
   return (
-    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+    // <MuiPickersUtilsProvider utils={DateFnsUtils}>
+    <LocalizationProvider dateAdapter={DateFnsAdapter}>
       <form onSubmit={formik.handleSubmit}>{buildFormFactor}</form>
-    </MuiPickersUtilsProvider>
+    </LocalizationProvider>
+    // </MuiPickersUtilsProvider>
   );
 };
 
