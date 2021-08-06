@@ -35,3 +35,11 @@ $event-zindex: 4 !default;
   background-color: $out-of-range-bg-color;
 }
 
+.rbc-header {
+  border-bottom: none;
+  white-space: pre-wrap;
+}
+.rbc-time-header-content > .rbc-row.rbc-row-resource {
+  border-bottom: none;
+}
+

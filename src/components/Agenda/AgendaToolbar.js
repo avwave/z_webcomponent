@@ -21,12 +21,15 @@ export default function AgendaToolbar({
   localizer,
   onNavigate,
   onView,
+  resources, 
+  ...props
 }) {
   const classes = useStyles();
 
   return (
     <div className={classes.root}>
       <Toolbar>
+        {!resources ?
         <ButtonGroup variant="text" size="small" className={classes.leftGroup}>
           <Button
             type="button"
@@ -44,6 +47,7 @@ export default function AgendaToolbar({
             {localizer.messages.next}
           </Button>
         </ButtonGroup>
+      : <Typography variant="overline" className={classes.leftGroup}>Services</Typography>}
         <Typography variant="h6" className={classes.title}>
           {label}
         </Typography>
