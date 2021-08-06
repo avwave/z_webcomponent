@@ -13,6 +13,7 @@ import {
   ListItemText,
 } from "@material-ui/core";
 import { AccountTree, Close } from "@material-ui/icons";
+import { useFormikContext } from "formik";
 
 const FormBuilderStory = {
   component: FormBuilder,
@@ -344,6 +345,17 @@ Persist.args = {
   usePersist: true
 };
 
+const FormConsumer = (props) => {
+  const formikObject = useFormikContext();
+  const {values, initialValues, setValues, setFieldValue, ...formik} = formikObject
+
+  React.useEffect(() => {
+      const dirty = formik.dirty
+      console.log("📢[index.stories.js:356]: ", values, formik);
+  }, [formik.dirty, values, formik]);
+  return null;
+};
+
 const NestedStory = ({ ...args }) => {
   const [formState, setFormState] = useState({});
 
@@ -369,7 +381,9 @@ const NestedStory = ({ ...args }) => {
           </Button>
         </ButtonGroup>
       )}
-    ></FormBuilder>
+    >
+      <FormConsumer/>
+    </FormBuilder>
   );
 };
 
@@ -418,13 +432,13 @@ Nested.args = {
     form1: {
       type: "text",
       label: "form 1",
-      initialValues: "a",
+      initialValues: "",
       validator: () => Yup.string().nullable().required(),
     },
     form2: {
       type: "text",
       label: "form 2",
-      initialValues: "b",
+      initialValues: "",
       validator: () => Yup.string().nullable().required(),
     },
     subform: {
@@ -432,18 +446,18 @@ Nested.args = {
       label: "subform",
       //note: only root level form nodes can have validation
       validator: () =>
-        Yup.array().of(
+        Yup.array().required().nullable().min(1).of(
           Yup.object().shape({
             subform1: Yup.string().nullable().required(),
             subform2: Yup.string().nullable().required(),
-            subsubform: Yup.array().of(
+            subsubform: Yup.array().min(1).of(
               Yup.object().shape({
                 subsubform1: Yup.string().nullable().required(),
               })
             ),
           })
         ),
-      formLayout: [["subform1", "subform2"], "subsubform"],
+      formLayout: ["subform1", "subform2", "subsubform"],
       formValueTemplate: {
         subform1: ``,
         subform2: ``,
