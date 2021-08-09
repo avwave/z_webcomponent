@@ -31,9 +31,9 @@ $event-zindex: 4 !default;
   pointer-events: none;
 }
 
-.rbc-time-gutter + div {
-  background-color: $out-of-range-bg-color;
-}
+// .rbc-time-gutter + div {
+//   background-color: $out-of-range-bg-color;
+// }
 
 .rbc-header {
   border-bottom: none;

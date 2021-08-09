@@ -115,7 +115,7 @@ function DataGrid({
 
   React.useEffect(() => {
     return function cleanup() {
-      if (canvas.removeEventListener) {
+      if (canvas?.removeEventListener) {
         canvas?.removeEventListener("scroll", scrollListener);
       }
     };
