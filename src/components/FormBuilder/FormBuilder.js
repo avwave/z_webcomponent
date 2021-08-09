@@ -134,8 +134,7 @@ const FormFieldSet = ({
 
   const renderField = useCallback(
     (fieldName, fieldParams) => {
-      const description = validationSchema.describe()
-      let isRequired = !!getIn(validationSchema.describe().fields, fieldName)?.tests?.find(
+      let isRequired = !!getIn(validationSchema?.describe()?.fields, fieldName)?.tests?.find(
         testName => {
           return testName.name === 'required'
         }
