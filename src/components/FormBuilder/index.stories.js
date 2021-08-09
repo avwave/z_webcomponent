@@ -61,6 +61,7 @@ Default.args = {
   formId:'default',
   reverse: true,
   formLabel: "primary",
+  formReadOnly: false,
   formSubtitle: "secondary",
   submitLabel: "Submit",
   resetLabel: "Reset",

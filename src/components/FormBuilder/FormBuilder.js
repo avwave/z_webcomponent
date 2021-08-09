@@ -89,7 +89,7 @@ const FormFieldSet = ({
   submitLabel = "Submit",
   resetLabel = "Reset",
   columns = 1,
-  readOnly,
+  formReadOnly,
   setValues = {},
   additionalActions = () => {},
   children,
@@ -170,7 +170,7 @@ const FormFieldSet = ({
               label={`${fieldParams.label} ${isRequired?'*':''}`}
               value={get(formik.values, fieldName)}
               onChange={onChangeOverride}
-              disabled={fieldParams.readOnly}
+              disabled={fieldParams.readOnly||formReadOnly}
               error={
                 get(formik.touched, fieldName) &&
                 Boolean(get(formik.errors, fieldName))
@@ -220,7 +220,7 @@ const FormFieldSet = ({
                 );
               }}
               value={get(formik.values, fieldName)}
-              disabled={fieldParams.readOnly}
+              disabled={fieldParams.readOnly||formReadOnly}
               autoOk
               format="MM/DD/yyyy"
               variant="inline"
@@ -258,7 +258,7 @@ const FormFieldSet = ({
                 );
               }}
               value={get(formik.values, fieldName)}
-              disabled={fieldParams.readOnly}
+              disabled={fieldParams.readOnly||formReadOnly}
               autoOk
               variant="inline"
               inputVariant={variant}
@@ -297,7 +297,7 @@ const FormFieldSet = ({
                 );
               }}
               value={get(formik.values, fieldName)}
-              disabled={fieldParams.readOnly}
+              disabled={fieldParams.readOnly||formReadOnly}
               autoOk
               variant="inline"
               inputVariant={variant}
@@ -351,7 +351,7 @@ const FormFieldSet = ({
                     </InputAdornment>
                   ) : undefined,
                 }}
-                disabled={fieldParams.readOnly}
+                disabled={fieldParams.readOnly||formReadOnly}
                 {...fieldParams?.fieldProps}
               >
                 {fieldParams.options.map((item, idx) => {
@@ -394,7 +394,7 @@ const FormFieldSet = ({
                   formik.setFieldValue(fieldName, val);
                 }}
                 label={`${fieldParams.label} ${isRequired?'*':''}`}
-                disabled={fieldParams.readOnly}
+                disabled={fieldParams.readOnly||formReadOnly}
                 {...fieldParams?.fieldProps}
               />
             </>
@@ -413,7 +413,7 @@ const FormFieldSet = ({
               >
                 {fieldParams.options.map((item, idx) => (
                   <FormControlLabel
-                    disabled={fieldParams.readOnly}
+                    disabled={fieldParams.readOnly||formReadOnly}
                     key={idx}
                     value={item[fieldParams.settings?.valueField]}
                     labelPlacement={fieldParams.settings.labelPlacement ?? 'end'}
@@ -440,7 +440,7 @@ const FormFieldSet = ({
                   const checked = get(formik.values, fieldName, []).includes(item[fieldParams.settings?.valueField]);
                   return (
                     <FormControlLabel
-                      disabled={fieldParams.readOnly}
+                      disabled={fieldParams.readOnly||formReadOnly}
                       key={idx}
                       name={fieldName}
                       control={<Checkbox checked={checked} />}
@@ -465,7 +465,7 @@ const FormFieldSet = ({
           return (
             <Autocomplete
               style={{ verticalAlign: "bottom" }}
-              disabled={fieldParams.readOnly}
+              disabled={fieldParams.readOnly||formReadOnly}
               disableCloseOnSelect
               name={fieldName}
               label={`${fieldParams.label} ${isRequired?'*':''}`}
@@ -576,37 +576,40 @@ const FormFieldSet = ({
                           );
                         }
                       )}
-                      <div>
-                      <Button
-                        variant="contained"
+                      { !formReadOnly && 
+                        <div>
+                          <Button
+                            variant="contained"
 
-                        onClick={() => {
-                          arrayHelpers.push(fieldParams.formValueTemplate);
-                        }}
-                        startIcon={<Add/>}
-                        color="primary"
-                      >
-                        Add {`${fieldParams.label}`}
-                      </Button>
-                      </div>
+                            onClick={() => {
+                              arrayHelpers.push(fieldParams.formValueTemplate);
+                            }}
+                            startIcon={<Add/>}
+                            color="primary"
+                          >
+                            Add {`${fieldParams.label}`}
+                          </Button>
+                        </div>
+                      }
                     </>
                   );
                 }
+                if (formReadOnly) return <></>
                 return (
-                  <div>
-                  <Button
-                  variant="contained"
+                    <div>
+                      <Button
+                      variant="contained"
 
-                  onClick={() =>
-                      arrayHelpers.push(fieldParams.formValueTemplate)
-                    }
-                  startIcon={<Add/>}
-                  color="primary"
-                  >
-                    Add {`${fieldParams.label}`}
-                  </Button>
-                  </div>
-                );
+                      onClick={() =>
+                          arrayHelpers.push(fieldParams.formValueTemplate)
+                        }
+                      startIcon={<Add/>}
+                      color="primary"
+                      >
+                        Add {`${fieldParams.label}`}
+                      </Button>
+                    </div>
+                )
               }}
             />
           );
@@ -726,6 +729,7 @@ const FormFieldSet = ({
           {submitLabel}
         </Button>,
       ];
+      if (formReadOnly) return <></>
       return <ButtonGroup>{buttonArray}</ButtonGroup>;
     };
 
