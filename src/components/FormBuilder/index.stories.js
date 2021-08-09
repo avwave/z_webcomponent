@@ -94,7 +94,7 @@ Default.args = {
       type: "text",
       label: "Read Only",
       initialValues: "not editable",
-      validator: () => Yup.string().required(),
+      validator: () => Yup.string(),
 
       readOnly: true,
     },
@@ -103,7 +103,7 @@ Default.args = {
       label: "First Name",
       initialValues: "",
 
-      validator: () => Yup.string().required(),
+      validator: () => Yup.string(),
       fieldProps: {
         variant: "outlined",
       },
@@ -113,20 +113,20 @@ Default.args = {
       label: "Middle Name",
       initialValues: "",
 
-      validator: () => Yup.string().required(),
+      validator: () => Yup.string(),
     },
     lastName: {
       type: "text",
       label: "Last Name",
       initialValues: "",
-      validator: () => Yup.string().required(),
+      validator: () => Yup.string(),
     },
     multiLine: {
       type: "text",
       label: "Multi line",
 
       initialValues: "",
-      validator: () => Yup.string().required(),
+      validator: () => Yup.string(),
       fieldProps: {
         multiline: true,
         rowsMax: 4,
@@ -136,14 +136,14 @@ Default.args = {
       type: "email",
       label: "Email",
       initialValues: "",
-      validator: () => Yup.string().email().required(),
+      validator: () => Yup.string().email(),
     },
     aNumber: {
       type: "number",
       label: "A-Number",
 
       initialValues: 0,
-      validator: () => Yup.number().required(),
+      validator: () => Yup.number(),
     },
     startDate: {
       type: "date",
@@ -161,16 +161,10 @@ Default.args = {
     startTime: {
       type: "time",
       label: "Start-Time",
-
-      disableFuture: false,
-      disablePast: true,
-      initialValues: new Date(),
-      useLocalTime: true,
-      validator: () => Yup.date().required(),
+      initialValues: new Date("2021-06-10T12:00:00"),
+      validator: () => Yup.date(),
       onChange: (field, data) => {},
-      fieldProps: {
-        minTime: new Date(),
-      }
+      
     },
     selection: {
       type: "select",
@@ -188,7 +182,7 @@ Default.args = {
         labelField: "label",
         valueField: "value",
       },
-      validator: () => Yup.number().required(), //required
+      validator: () => Yup.number(), //required
     },
     multipleSelection: {
       type: "select",
@@ -209,7 +203,7 @@ Default.args = {
       onChange: (fieldName, event) => {
         console.log("📢[index.stories.js:150]:", fieldName, event);
       },
-      validator: () => Yup.array().min(1), //required
+      validator: () => Yup.array(), //required
     },
     autocomplete: {
       type: "autocomplete",
@@ -230,7 +224,7 @@ Default.args = {
         labelField: "label",
         valueField: "id",
       },
-      validator: () => Yup.array().min(1), //required
+      validator: () => Yup.array(), //required
     },
     radio: {
       type: "radio",
@@ -251,7 +245,7 @@ Default.args = {
         inline: true,
       },
 
-      validator: () => Yup.string().required(), //required
+      validator: () => Yup.string(), //required
     },
     checkbox: {
       type: "checkbox",
@@ -262,7 +256,7 @@ Default.args = {
         labelField: "label",
         valueField: "id",
       },
-      validator: () => Yup.bool().oneOf([true]),
+      validator: () => Yup.bool(),
     },
     switch: {
       type: "switch",
@@ -273,7 +267,7 @@ Default.args = {
         labelField: "label",
         valueField: "id",
       },
-      validator: () => Yup.bool().oneOf([true]),
+      validator: () => Yup.bool(),
     },
   },
   onSubmit: (values) => {
@@ -436,26 +430,26 @@ Nested.args = {
       type: "text",
       label: "form 1",
       initialValues: "",
-      validator: () => Yup.string().nullable().required(),
+      validator: () => Yup.string().nullable(),
     },
     form2: {
       type: "text",
       label: "form 2",
       initialValues: "",
-      validator: () => Yup.string().nullable().required(),
+      validator: () => Yup.string().nullable(),
     },
     subform: {
       type: "fieldarray",
       label: "subform",
       //note: only root level form nodes can have validation
       validator: () =>
-        Yup.array().required().nullable().min(1).of(
+        Yup.array().nullable().of(
           Yup.object().shape({
-            subform1: Yup.string().nullable().required(),
-            subform2: Yup.string().nullable().required(),
-            subsubform: Yup.array().min(1).of(
+            subform1: Yup.string().nullable(),
+            subform2: Yup.string().nullable(),
+            subsubform: Yup.array().of(
               Yup.object().shape({
-                subsubform1: Yup.array().min(1).required(),
+                subsubform1: Yup.array(),
               })
             ),
           })

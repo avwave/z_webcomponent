@@ -132,6 +132,15 @@ const FormFieldSet = ({
     }
   }, [formik, onTriggerSubmit, triggerSubmit]);
 
+  const mergeTime = useCallback(
+    (_src, _dest) => {
+      const src = moment(_src);
+      const dest = moment(_dest);
+      const newTime = dest.set({ 'hour' : src.get('hour'), 'minute' : src.get('minute'), 'second' : src.get('second') });
+      return newTime.toDate()
+    },
+    [],
+  );
   const renderField = useCallback(
     (fieldName, fieldParams) => {
       let isRequired = !!getIn(validationSchema?.fields, fieldName)?.tests?.find(
@@ -275,16 +284,16 @@ const FormFieldSet = ({
                 ) : undefined,
               }}
               onChange={(evt, val) => {
-                // console.log("📢[FormBuilder.js:181]:", evt, val);
+                const evtTime = mergeTime(evt, get(formik.values, fieldName))
                 if (fieldParams.onChange) {
                   fieldParams.onChange(
                     fieldName,
-                    fieldParams.useLocalTime ? moment(evt).toDate() : moment.utc(evt).toDate()
+                    fieldParams.useLocalTime ? moment(evtTime).toDate() : moment.utc(evtTime).toDate()
                   );
                 }
                 formik.setFieldValue(
                   fieldName,
-                  fieldParams.useLocalTime ? moment(evt).toDate() : moment.utc(evt).toDate()
+                  fieldParams.useLocalTime ? moment(evtTime).toDate() : moment.utc(evtTime).toDate()
                 );
               }}
               value={get(formik.values, fieldName)}
