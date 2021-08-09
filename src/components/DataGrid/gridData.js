@@ -39,7 +39,6 @@ const columnData = [
     },
     resizable: true,
     tooltip: (props) => {
-      console.log("📢[gridData.js:41]:", props);
       return props.row.col4Type
     }
   },
@@ -52,7 +51,6 @@ const columnData = [
       fontStyle: "italic",
     },
     columnHeaderRenderer: (props) => {
-      console.log("📢[gridData.js:50]:", props);
       return <div {...props}><LocalHospital style={{ color: '#6A99CA' }}/>Column4 </div>
     }
   },

@@ -10,8 +10,7 @@ import {
   Checkbox,
   Container,
   FormControl,
-  FormControlLabel,
-  FormHelperText,
+  FormControlLabel, FormGroup, FormHelperText,
   FormLabel,
   Grid,
   IconButton,
@@ -24,18 +23,13 @@ import {
   RadioGroup,
   Switch,
   TextField,
-  Toolbar,
-  FormGroup,
-  Typography,
+  Toolbar, Typography
 } from "@material-ui/core";
-import { Add, AddBox, ArrowBack, Backspace, Close, DeleteForever, PlusOne } from "@material-ui/icons";
+import { Add, Backspace, Close, DateRange, Schedule } from "@material-ui/icons";
 import { Autocomplete } from "@material-ui/lab";
-import {
-  KeyboardDatePicker,
-  KeyboardDateTimePicker,
-  KeyboardTimePicker,
-  MuiPickersUtilsProvider,
-} from "@material-ui/pickers";
+import { DatePicker, DateTimePicker, TimePicker } from "@material-ui/pickers";
+import { LocalizationProvider } from "@material-ui/pickers/LocalizationProvider";
+import DateFnsAdapter from '@material-ui/pickers/adapter/date-fns';
 import { FieldArray, Formik, getIn } from "formik";
 import { get, isEmpty } from "lodash";
 import PropTypes from "prop-types";
@@ -44,10 +38,11 @@ import React, {
   useContext,
   useEffect,
   useMemo,
-  useState,
+  useState
 } from "react";
 import * as Yup from "yup";
 import { FormikPersist } from "./FormikPersist";
+import moment from "moment";
 
 const useStyles = makeStyles((theme) => ({
   controlContainer: {
@@ -61,6 +56,13 @@ const useStyles = makeStyles((theme) => ({
   hidden: {
     display: "none",
   },
+  subformInline: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  subformContent: {
+    flexGrow: 1,
+  },
   subformHeaderTitle:{
     fontWeight: 'bold',
     paddingLeft: theme.spacing(2)
@@ -72,6 +74,9 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'space-between',
     alignItems: 'center',
     backgroundColor: theme.palette.grey[100]
+  },
+  inlineDelete: {
+    alignSelf: "start"
   }
 }));
 
@@ -179,7 +184,7 @@ const FormFieldSet = ({
 
         case "date":
           return (
-            <KeyboardDatePicker
+            <DatePicker
               disablePast={fieldParams.disablePast}
               disableFuture={fieldParams.disableFuture}
               label={`${fieldParams.label} ${isRequired?'*':''}`}
@@ -191,17 +196,19 @@ const FormFieldSet = ({
                   </InputAdornment>
                 ) : undefined,
               }}
+              renderInput={props => <TextField {...props} />}
+              keyboardIcon={<DateRange/>}
               onChange={(evt, val) => {
                 // console.log("📢[FormBuilder.js:152]:", evt);
                 if (fieldParams.onChange) {
                   fieldParams.onChange(
                     fieldName,
-                    fieldParams.useLocalTime ? evt.local(true) : evt.utc(true)
+                    fieldParams.useLocalTime ? moment(evt) : moment.utc(evt)
                   );
                 }
                 formik.setFieldValue(
                   fieldName,
-                  fieldParams.useLocalTime ? evt.local(true) : evt.utc(true)
+                  fieldParams.useLocalTime ? moment(evt) : moment.utc(evt)
                 );
               }}
               value={get(formik.values, fieldName)}
@@ -217,11 +224,12 @@ const FormFieldSet = ({
 
         case "datetime":
           return (
-            <KeyboardDateTimePicker
+            <DateTimePicker
               disablePast={fieldParams.disablePast}
               disableFuture={fieldParams.disableFuture}
               label={`${fieldParams.label} ${isRequired?'*':''}`}
               name={fieldName}
+              renderInput={props => <TextField {...props} />}
               InputProps={{
                 startAdornment: fieldParams.icon ? (
                   <InputAdornment position="start">
@@ -233,12 +241,12 @@ const FormFieldSet = ({
                 if (fieldParams.onChange) {
                   fieldParams.onChange(
                     fieldName,
-                    fieldParams.useLocalTime ? evt.local(true) : evt.utc(true)
+                    fieldParams.useLocalTime ? moment(evt) : moment.utc(evt)
                   );
                 }
                 formik.setFieldValue(
                   fieldName,
-                  fieldParams.useLocalTime ? evt.local(true) : evt.utc(true)
+                  fieldParams.useLocalTime ? moment(evt) : moment.utc(evt)
                 );
               }}
               value={get(formik.values, fieldName)}
@@ -253,11 +261,13 @@ const FormFieldSet = ({
           );
         case "time":
           return (
-            <KeyboardTimePicker
+            <TimePicker
               disablePast={fieldParams.disablePast}
               disableFuture={fieldParams.disableFuture}
               label={`${fieldParams.label} ${isRequired?'*':''}`}
               name={fieldName}
+              keyboardIcon={<Schedule/>}
+              renderInput={props => <TextField {...props} />}
               InputProps={{
                 startAdornment: fieldParams.icon ? (
                   <InputAdornment position="start">
@@ -270,12 +280,12 @@ const FormFieldSet = ({
                 if (fieldParams.onChange) {
                   fieldParams.onChange(
                     fieldName,
-                    fieldParams.useLocalTime ? evt.local(true) : evt.utc(true)
+                    fieldParams.useLocalTime ? moment(evt) : moment.utc(evt)
                   );
                 }
                 formik.setFieldValue(
                   fieldName,
-                  fieldParams.useLocalTime ? evt.local(true) : evt.utc(true)
+                  fieldParams.useLocalTime ? moment(evt) : moment.utc(evt)
                 );
               }}
               value={get(formik.values, fieldName)}
@@ -516,21 +526,25 @@ const FormFieldSet = ({
                       {get(arrayHelpers.form.values, fieldName).map(
                         (subform, idx) => {
                           return (
-                            <Box component={fieldParams.settings?.formInset?Card:'div'} key={`${fieldName}-${idx}`}>
+                            <Box component={fieldParams.settings?.formInset?Card:'div'} key={`${fieldName}-${idx}`}
+                              className={fieldParams.inline&&classes.subformInline}>
+                                {!fieldParams.inline &&
                                 <Box className={classes.subformHeader} >
                                   <Typography variant="body2" className={classes.subformHeaderTitle}>
                                     {`${fieldParams.label} ${isRequired?'*':''}`}
                                     </Typography>
                                   <IconButton
-                                      aria-label=""
-                                      onClick={() => {
-                                        arrayHelpers.remove(idx);
-                                      }}
-                                    >
-                                      <Close />
-                                    </IconButton>
+                                    aria-label=""
+                                    onClick={() => {
+                                      arrayHelpers.remove(idx);
+                                    }}
+                                  >
+                                    <Close />
+                                  </IconButton>
                                 </Box>
-                                <CardContent>
+                                }
+
+                                <Box component={fieldParams.inline?'div':CardContent} dividers className={classes.subformContent}>
                                   {buildComponent(
                                     fieldParams.formLayout,
                                     fieldParams.formTemplate,
@@ -538,7 +552,18 @@ const FormFieldSet = ({
                                     `${fieldName}-${idx}`,
                                     `${fieldName}[${idx}]`
                                   )}
-                                </CardContent>
+                                </Box>
+                                {fieldParams.inline &&
+                                  <IconButton
+                                      className={classes.inlineDelete}
+                                      aria-label=""
+                                      onClick={() => {
+                                        arrayHelpers.remove(idx);
+                                      }}
+                                    >
+                                    <Close />
+                                  </IconButton>
+                                }
                             </Box>
                           );
                         }
@@ -773,9 +798,11 @@ const FormFieldSet = ({
   ]);
 
   return (
-    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+    // <MuiPickersUtilsProvider utils={DateFnsUtils}>
+    <LocalizationProvider dateAdapter={DateFnsAdapter}>
       <form onSubmit={formik.handleSubmit}>{buildFormFactor}</form>
-    </MuiPickersUtilsProvider>
+    </LocalizationProvider>
+    // </MuiPickersUtilsProvider>
   );
 };
 

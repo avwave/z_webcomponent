@@ -1,5 +1,9 @@
 import React from "react";
-import BigCalendar, { Calendar, dateFnsLocalizer, momentLocalizer } from "react-big-calendar";
+import BigCalendar, {
+  Calendar,
+  dateFnsLocalizer,
+  momentLocalizer,
+} from "react-big-calendar";
 import moment from "moment";
 import { AgendaContext } from "./AgendaContext";
 
@@ -8,6 +12,7 @@ import GridBox from "../DataGrid/GridBox";
 import {
   Box,
   Button,
+  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -22,22 +27,28 @@ import AgendaToolbar from "./AgendaToolbar";
 import { ProgressContainer } from "../ProgressContainer";
 import { EdgeContainer } from "../EdgeContainer";
 
-import format from 'date-fns/format';
-import startOfWeek from 'date-fns/startOfWeek';
-import getDay from 'date-fns/getDay';
-import enLocale from 'date-fns/locale/en-US';
-import sub from 'date-fns/sub'
+import format from "date-fns/format";
+import startOfWeek from "date-fns/startOfWeek";
+import getDay from "date-fns/getDay";
+import enLocale from "date-fns/locale/en-US";
+import sub from "date-fns/sub";
 
-import BlockUi from 'react-block-ui';
-import 'react-block-ui/style.css';
-
+import BlockUi from "react-loader-advanced";
 
 const dateFnsLocales = {
-  'en-US': enLocale,
+  "en-US": enLocale,
 };
 // const localizer = momentLocalizer(moment);
-const sOfWeek = () => startOfWeek(new Date(), { weekStartsOn: getDay(sub(new Date(), {days:1})) });
-const localizer = dateFnsLocalizer({ format, startOfWeek: sOfWeek, getDay, locales:dateFnsLocales });
+const sOfWeek = () =>
+  startOfWeek(new Date(), {
+    weekStartsOn: getDay(sub(new Date(), { days: 1 })),
+  });
+const localizer = dateFnsLocalizer({
+  format,
+  startOfWeek: sOfWeek,
+  getDay,
+  locales: dateFnsLocales,
+});
 
 export function isBetween(value, start, end) {
   const getTime = (dateTime) => {
@@ -60,8 +71,8 @@ function Agenda(props) {
     onSelectSlot,
     containerStyle,
     defaultEvents,
-    eventComponent
-    }= props;
+    eventComponent,
+  } = props;
 
   const metaRenderer = metaR ? metaR : () => {};
 
@@ -81,9 +92,11 @@ function Agenda(props) {
     );
   };
   const EventComponent = ({ event }) => {
-    return(
+    return (
       <GridBox align="flex-start" variant={event.variant}>
-        {eventComponent ? eventComponent(event) : (
+        {eventComponent ? (
+          eventComponent(event)
+        ) : (
           <Typography color={event.color} variant="caption">
             {event.title}
           </Typography>
@@ -111,7 +124,7 @@ function Agenda(props) {
 
   const TimeslotWrapper = (slotProp) => {
     const { value, children } = slotProp;
-    if (moment(value).isBefore(moment(), 'day')) {
+    if (moment(value).isBefore(moment(), "day")) {
       const child = React.Children.only(children);
       return React.cloneElement(child, {
         className: child.props.className + " rbc-off-range-bg",
@@ -149,40 +162,46 @@ function Agenda(props) {
   };
 
   return (
-    <BlockUi tag={Paper} elevation={0} keepInView square blocking={state.loading} style={{ height: 700, ...containerStyle }}>
-      <Dialog open={openAlert} onClose={handleCloseAlert}>
-        <DialogContent>
-          <DialogContentText>{alertMessage}</DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={()=> handleCloseAlert} color="primary">
-            Ok
-          </Button>
-        </DialogActions>
-      </Dialog>
-      <Calendar
-        localizer={localizer}
-        events={state.events||defaultEvents}
-        startAccessor="start"
-        endAccessor="end"
-        components={{
-          event: EventComponent,
-          agenda: {
-            event: AgendaEventComponent,
-          },
-          toolbar: (tprops)=><AgendaToolbar {...tprops} {...props} />,
-          month: {
-            dateHeader: AgendaDateHeader,
-          },
-          timeSlotWrapper: TimeslotWrapper,
-        }}
-        eventPropGetter={eventPropGetter}
-        onSelectSlot={onSelectSlot}
-        min={moment(lockSlotStartTime, "HH:mm").toDate()}
-        max={moment(lockSlotEndTime, "HH:mm").toDate()}
-        showMultiDayTimes
-        {...props}
-      />
+    <BlockUi 
+    message={<CircularProgress/>}
+    backgroundStyle={{backgroundColor: '#ffffffcc'}}
+    show={state.loading} style={{ height: 700, ...containerStyle }}
+    >
+      <Paper elevation={0} keepInView square>
+        <Dialog open={openAlert} onClose={handleCloseAlert}>
+          <DialogContent>
+            <DialogContentText>{alertMessage}</DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => handleCloseAlert} color="primary">
+              Ok
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <Calendar
+          localizer={localizer}
+          events={state.events || defaultEvents}
+          startAccessor="start"
+          endAccessor="end"
+          components={{
+            event: EventComponent,
+            agenda: {
+              event: AgendaEventComponent,
+            },
+            toolbar: AgendaToolbar,
+            month: {
+              dateHeader: AgendaDateHeader,
+            },
+            timeSlotWrapper: TimeslotWrapper,
+          }}
+          eventPropGetter={eventPropGetter}
+          onSelectSlot={onSelectSlot}
+          min={moment(lockSlotStartTime, "HH:mm").toDate()}
+          max={moment(lockSlotEndTime, "HH:mm").toDate()}
+          showMultiDayTimes
+          {...props}
+        />
+      </Paper>
     </BlockUi>
   );
 }

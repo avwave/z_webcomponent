@@ -1,12 +1,13 @@
 import {
   Backdrop,
+  CircularProgress,
   LinearProgress,
   Toolbar,
   Tooltip,
   withStyles,
 } from "@material-ui/core";
 import PropTypes from "prop-types";
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 import { useContextMenu } from "react-contexify";
 import ReactDataGrid, { Row } from "react-data-grid";
 import styled from "styled-components";
@@ -28,8 +29,8 @@ import { Tooltip as Tippy } from "react-tippy";
 import "react-tippy/dist/tippy.css";
 import { isEmpty } from "lodash";
 
-import BlockUi from 'react-block-ui';
-import 'react-block-ui/style.css';
+import BlockUi from "react-loader-advanced";
+import { findDOMNode } from "react-dom";
 
 const styles = (theme) => ({
   tooltip: {
@@ -63,7 +64,14 @@ function DataGrid({
   leftAccessory,
   rightAccessory,
   centerAccessory,
+  onLoadMore,
+  totalCount,
+  resetScroll
 }) {
+  const [canvas, setCanvas] = useState(null);
+
+  const domRef = React.useRef();
+
   const [checkListState, checkListDispatch] = React.useContext(CheckboxContext);
   const [dataGridState, dataGridDispatch] = React.useContext(DataGridContext);
 
@@ -77,6 +85,47 @@ function DataGrid({
   function displayMenu(e, row) {
     showContextMenu(e, { props: { row } });
   }
+
+  const prevScrollY = useRef(0);
+
+  const scrollListener = useCallback(
+    (evt) => {
+      const scrollOffset = evt?.currentTarget?.scrollHeight - (evt?.currentTarget?.scrollTop + evt?.currentTarget?.clientHeight)
+      const newScrollTop = evt?.currentTarget?.scrollTop
+      if (scrollOffset < 100 && evt?.currentTarget?.scrollTop > prevScrollY.current) {
+        console.log("📢[DataGrid.js:92]: ", scrollOffset);
+        onLoadMore();
+      }
+      prevScrollY.current = newScrollTop
+    }, [onLoadMore]
+  );
+
+  React.useEffect(() => {
+    const c = domRef.current.element;
+    if (onLoadMore) {
+      if (domRef.current && !canvas) {
+        if (c.addEventListener) {
+          c?.addEventListener("scroll", scrollListener, { passive: true });
+        }
+        setCanvas(c);
+      }
+    } 
+      
+  }, [canvas, onLoadMore, scrollListener]);
+
+  React.useEffect(() => {
+    return function cleanup() {
+      if (canvas.removeEventListener) {
+        canvas?.removeEventListener("scroll", scrollListener);
+      }
+    };
+  }, []);
+
+  React.useEffect(() => {
+    if (resetScroll) {
+      canvas.scrollTop = 0
+    }
+  }, [canvas, resetScroll])
 
   React.useEffect(() => {
     const defaultItems = dataGridState.columns.map((col) => {
@@ -144,8 +193,8 @@ function DataGrid({
             <span style={c.cellStyles}>{isReactElem ? element : tooltip}</span>
           );
           const renderedTooltip =
-            typeof c.tooltip === "function" ? c?.tooltip(props) : tooltip
-          if (c.noTooltip) {
+            typeof c.tooltip === "function" ? c?.tooltip(props) : tooltip;
+          if (c.noTooltip || isEmpty(renderedTooltip)) {
             return cellRenderer;
           } else {
             return (
@@ -236,7 +285,13 @@ function DataGrid({
   }, [dataGridDispatch, filters]);
 
   return (
-    <BlockUi tag="div" keepInView blocking={dataGridState.loading} style={{ ...containerStyle }}>
+    <BlockUi
+      message={<CircularProgress />}
+      backgroundStyle={{ backgroundColor: "#ffffffcc" }}
+      show={dataGridState.loading}
+      style={{ ...containerStyle }}
+
+    >
       <DataGridToolbar
         columns={draggableColumns}
         showSelector={showSelector}
@@ -245,8 +300,11 @@ function DataGrid({
         rightAccessory={rightAccessory}
         leftAccessory={leftAccessory}
         centerAccessory={centerAccessory}
+        totalCount={totalCount}
+        loadedCount={dataGridState.rows.length}
       />
       <ReactDataGrid
+        ref={domRef}
         className={"rdg-light"}
         headerFiltersHeight={50}
         rowRenderer={RowRenderer}
