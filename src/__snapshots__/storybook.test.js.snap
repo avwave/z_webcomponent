@@ -13510,6 +13510,438 @@ exports[`Storyshots DataGrid/DataGrid Grid Props 1`] = `
 </div>
 `;
 
+exports[`Storyshots DataGrid/DataGrid Infinite Loader 1`] = `
+<div
+  className="MuiGrid-root MuiGrid-container"
+>
+  <div
+    className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12"
+  >
+    <div
+      className="MuiPaper-root MuiPaper-elevation1 MuiPaper-rounded"
+      style={
+        Object {
+          "display": "flex",
+          "flexDirection": "column",
+          "height": "70vh",
+        }
+      }
+    >
+      <div
+        className="Loader"
+        style={
+          Object {
+            "display": "flex",
+            "flexDirection": "column",
+            "maxHeight": "100vh",
+            "position": "relative",
+          }
+        }
+      >
+        <div
+          className="Loader__content"
+          style={
+            Object {
+              "opacity": 1,
+            }
+          }
+        >
+          <div
+            className="MuiToolbar-root MuiToolbar-dense"
+          >
+            <div
+              className="MuiButtonGroup-root"
+              role="group"
+            >
+              <button
+                className="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButtonGroup-grouped MuiButtonGroup-groupedHorizontal MuiButtonGroup-groupedOutlined MuiButtonGroup-groupedOutlinedHorizontal MuiButtonGroup-groupedOutlined"
+                disabled={false}
+                onBlur={[Function]}
+                onClick={[Function]}
+                onDragLeave={[Function]}
+                onFocus={[Function]}
+                onKeyDown={[Function]}
+                onKeyUp={[Function]}
+                onMouseDown={[Function]}
+                onMouseLeave={[Function]}
+                onMouseUp={[Function]}
+                onTouchEnd={[Function]}
+                onTouchMove={[Function]}
+                onTouchStart={[Function]}
+                tabIndex={0}
+                type="button"
+              >
+                <span
+                  className="MuiButton-label"
+                >
+                  Left
+                </span>
+              </button>
+            </div>
+            <div
+              style={
+                Object {
+                  "flex": 1,
+                }
+              }
+            />
+            <h6
+              className="MuiTypography-root MuiTypography-h6"
+            >
+              Heading
+            </h6>
+            <div
+              style={
+                Object {
+                  "flex": 1,
+                }
+              }
+            />
+            <button
+              className="MuiButtonBase-root MuiIconButton-root"
+              disabled={false}
+              onBlur={[Function]}
+              onClick={[Function]}
+              onDragLeave={[Function]}
+              onFocus={[Function]}
+              onKeyDown={[Function]}
+              onKeyUp={[Function]}
+              onMouseDown={[Function]}
+              onMouseLeave={[Function]}
+              onMouseUp={[Function]}
+              onTouchEnd={[Function]}
+              onTouchMove={[Function]}
+              onTouchStart={[Function]}
+              tabIndex={0}
+              type="button"
+              variant="default"
+            >
+              <span
+                className="MuiIconButton-label"
+              >
+                <svg
+                  aria-hidden={true}
+                  className="MuiSvgIcon-root"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M10 18h5V5h-5v13zm-6 0h5V5H4v13zM16 5v13h5V5h-5z"
+                  />
+                </svg>
+              </span>
+            </button>
+            <button
+              className="MuiButtonBase-root MuiIconButton-root"
+              disabled={false}
+              onBlur={[Function]}
+              onClick={[Function]}
+              onDragLeave={[Function]}
+              onFocus={[Function]}
+              onKeyDown={[Function]}
+              onKeyUp={[Function]}
+              onMouseDown={[Function]}
+              onMouseLeave={[Function]}
+              onMouseUp={[Function]}
+              onTouchEnd={[Function]}
+              onTouchMove={[Function]}
+              onTouchStart={[Function]}
+              tabIndex={0}
+              type="button"
+              variant="default"
+            >
+              <span
+                className="MuiIconButton-label"
+              >
+                <svg
+                  aria-hidden={true}
+                  className="MuiSvgIcon-root"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"
+                  />
+                </svg>
+              </span>
+            </button>
+          </div>
+          <div
+            aria-colcount={0}
+            aria-rowcount={2}
+            className="rdg r104f42s700-canary46 rdg-light"
+            onScroll={[Function]}
+            role="grid"
+            style={
+              Object {
+                "--filter-row-height": "50px",
+                "--header-row-height": "35px",
+                "--row-width": "0px",
+                "--summary-row-height": "35px",
+                "--template-columns": "",
+                "flex": "1 1 auto",
+              }
+            }
+          >
+            <div
+              aria-rowindex={1}
+              className="rdg-header-row h1fquj5h700-canary46 h19m9p7h700-canary46"
+              role="row"
+            />
+            <div
+              aria-rowindex={2}
+              className="rdg-filter-row h1fquj5h700-canary46 fkdzs1h700-canary46"
+              role="row"
+            />
+            <div
+              className="rdg-focus-sink f7ly7s700-canary46"
+              onFocus={[Function]}
+              onKeyDown={[Function]}
+              tabIndex={0}
+            />
+            <div
+              style={
+                Object {
+                  "height": 0,
+                }
+              }
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Storyshots DataGrid/DataGrid Loader 1`] = `
+<div
+  className="MuiGrid-root MuiGrid-container"
+>
+  <div
+    className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12"
+  >
+    <div
+      className="MuiPaper-root MuiPaper-elevation1 MuiPaper-rounded"
+      style={
+        Object {
+          "display": "flex",
+          "flexDirection": "column",
+          "height": "70vh",
+        }
+      }
+    >
+      <div
+        className="Loader"
+        style={
+          Object {
+            "display": "flex",
+            "flexDirection": "column",
+            "maxHeight": "100vh",
+            "position": "relative",
+          }
+        }
+      >
+        <div
+          className="Loader__content"
+          style={
+            Object {
+              "opacity": 1,
+            }
+          }
+        >
+          <div
+            className="MuiToolbar-root MuiToolbar-dense"
+          >
+            <div
+              className="MuiButtonGroup-root"
+              role="group"
+            >
+              <button
+                className="MuiButtonBase-root MuiButton-root MuiButton-outlined MuiButtonGroup-grouped MuiButtonGroup-groupedHorizontal MuiButtonGroup-groupedOutlined MuiButtonGroup-groupedOutlinedHorizontal MuiButtonGroup-groupedOutlined"
+                disabled={false}
+                onBlur={[Function]}
+                onClick={[Function]}
+                onDragLeave={[Function]}
+                onFocus={[Function]}
+                onKeyDown={[Function]}
+                onKeyUp={[Function]}
+                onMouseDown={[Function]}
+                onMouseLeave={[Function]}
+                onMouseUp={[Function]}
+                onTouchEnd={[Function]}
+                onTouchMove={[Function]}
+                onTouchStart={[Function]}
+                tabIndex={0}
+                type="button"
+              >
+                <span
+                  className="MuiButton-label"
+                >
+                  Left
+                </span>
+              </button>
+            </div>
+            <div
+              style={
+                Object {
+                  "flex": 1,
+                }
+              }
+            />
+            <h6
+              className="MuiTypography-root MuiTypography-h6"
+            >
+              Heading
+            </h6>
+            <div
+              style={
+                Object {
+                  "flex": 1,
+                }
+              }
+            />
+            <button
+              className="MuiButtonBase-root MuiIconButton-root"
+              disabled={false}
+              onBlur={[Function]}
+              onClick={[Function]}
+              onDragLeave={[Function]}
+              onFocus={[Function]}
+              onKeyDown={[Function]}
+              onKeyUp={[Function]}
+              onMouseDown={[Function]}
+              onMouseLeave={[Function]}
+              onMouseUp={[Function]}
+              onTouchEnd={[Function]}
+              onTouchMove={[Function]}
+              onTouchStart={[Function]}
+              tabIndex={0}
+              type="button"
+              variant="default"
+            >
+              <span
+                className="MuiIconButton-label"
+              >
+                <svg
+                  aria-hidden={true}
+                  className="MuiSvgIcon-root"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M10 18h5V5h-5v13zm-6 0h5V5H4v13zM16 5v13h5V5h-5z"
+                  />
+                </svg>
+              </span>
+            </button>
+            <button
+              className="MuiButtonBase-root MuiIconButton-root"
+              disabled={false}
+              onBlur={[Function]}
+              onClick={[Function]}
+              onDragLeave={[Function]}
+              onFocus={[Function]}
+              onKeyDown={[Function]}
+              onKeyUp={[Function]}
+              onMouseDown={[Function]}
+              onMouseLeave={[Function]}
+              onMouseUp={[Function]}
+              onTouchEnd={[Function]}
+              onTouchMove={[Function]}
+              onTouchStart={[Function]}
+              tabIndex={0}
+              type="button"
+              variant="default"
+            >
+              <span
+                className="MuiIconButton-label"
+              >
+                <svg
+                  aria-hidden={true}
+                  className="MuiSvgIcon-root"
+                  focusable="false"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"
+                  />
+                </svg>
+              </span>
+            </button>
+          </div>
+          <div
+            aria-colcount={0}
+            aria-rowcount={2}
+            className="rdg r104f42s700-canary46 rdg-light"
+            onScroll={[Function]}
+            role="grid"
+            style={
+              Object {
+                "--filter-row-height": "50px",
+                "--header-row-height": "35px",
+                "--row-width": "0px",
+                "--summary-row-height": "35px",
+                "--template-columns": "",
+                "flex": "1 1 auto",
+              }
+            }
+          >
+            <div
+              aria-rowindex={1}
+              className="rdg-header-row h1fquj5h700-canary46 h19m9p7h700-canary46"
+              role="row"
+            />
+            <div
+              aria-rowindex={2}
+              className="rdg-filter-row h1fquj5h700-canary46 fkdzs1h700-canary46"
+              role="row"
+            />
+            <div
+              className="rdg-focus-sink f7ly7s700-canary46"
+              onFocus={[Function]}
+              onKeyDown={[Function]}
+              tabIndex={0}
+            />
+            <div
+              style={
+                Object {
+                  "height": 0,
+                }
+              }
+            />
+          </div>
+        </div>
+      </div>
+      <button
+        className="MuiButtonBase-root MuiButton-root MuiButton-text"
+        disabled={false}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onDragLeave={[Function]}
+        onFocus={[Function]}
+        onKeyDown={[Function]}
+        onKeyUp={[Function]}
+        onMouseDown={[Function]}
+        onMouseLeave={[Function]}
+        onMouseUp={[Function]}
+        onTouchEnd={[Function]}
+        onTouchMove={[Function]}
+        onTouchStart={[Function]}
+        tabIndex={0}
+        type="button"
+      >
+        <span
+          className="MuiButton-label"
+        >
+          Simulate Loading
+        </span>
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
 exports[`Storyshots DataGrid/DataGrid Redraw Bug 1`] = `
 <div
   className="MuiGrid-root MuiGrid-container"
