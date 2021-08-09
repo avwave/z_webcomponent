@@ -58,6 +58,7 @@ const DefaultStory = ({ ...args }) => <FormBuilder {...args} ><FormConsumer/></F
 
 export const Default = DefaultStory.bind({});
 Default.args = {
+  loading: false,
   formId:'default',
   reverse: true,
   formLabel: "primary",

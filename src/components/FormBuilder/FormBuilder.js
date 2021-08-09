@@ -23,7 +23,8 @@ import {
   RadioGroup,
   Switch,
   TextField,
-  Toolbar, Typography
+  Toolbar, Typography,
+  CircularProgress
 } from "@material-ui/core";
 import { Add, Backspace, Close, DateRange, Schedule } from "@material-ui/icons";
 import { Autocomplete } from "@material-ui/lab";
@@ -101,6 +102,7 @@ const FormFieldSet = ({
   decouple,
   reverse = false,
   hasReset = true,
+  loading = false,
   onChange,
 }) => {
   const classes = useStyles();
@@ -708,6 +710,8 @@ const FormFieldSet = ({
                 key="reset"
                 color="secondary"
                 variant={variant}
+                disabled={loading}
+                startIcon={loading && <CircularProgress size={20} />}
                 onClick={async () => {
                   formik.handleReset();
                   onTriggerReset();
@@ -720,6 +724,8 @@ const FormFieldSet = ({
         <Button
           key="submit"
           color="primary"
+          disabled={loading}
+          startIcon={loading && <CircularProgress size={20} />}
           variant={variant}
           onClick={async () => {
             formik.handleSubmit();
@@ -807,6 +813,9 @@ const FormFieldSet = ({
     children,
     reverse,
     classes.actionBar,
+    formReadOnly,
+    loading,
+    hasReset
   ]);
 
   return (
