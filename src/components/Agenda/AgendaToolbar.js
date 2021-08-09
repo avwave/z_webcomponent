@@ -47,7 +47,7 @@ export default function AgendaToolbar({
             {localizer.messages.next}
           </Button>
         </ButtonGroup>
-      : <Typography variant="overline" className={classes.leftGroup}>Services</Typography>}
+      : <Typography variant="overline" className={classes.leftGroup}>{" "}</Typography>}
         <Typography variant="h6" className={classes.title}>
           {label}
         </Typography>
