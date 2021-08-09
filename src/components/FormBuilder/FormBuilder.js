@@ -552,7 +552,7 @@ const FormFieldSet = ({
                                 </Box>
                                 }
 
-                                <Box component={fieldParams.inline?'div':CardContent} dividers className={classes.subformContent}>
+                                <Box component={fieldParams.inline?'div':CardContent} className={classes.subformContent}>
                                   {buildComponent(
                                     fieldParams.formLayout,
                                     fieldParams.formTemplate,
