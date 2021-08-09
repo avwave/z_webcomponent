@@ -136,7 +136,7 @@ const FormFieldSet = ({
     (fieldName, fieldParams) => {
       let isRequired = !!getIn(validationSchema?.fields, fieldName)?.tests?.find(
         testName => {
-          return testName.name === 'required'
+          return testName?OPTIONS?.name === 'required'
         }
       )
       
