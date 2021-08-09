@@ -15,6 +15,17 @@ import {
 import { AccountTree, Close } from "@material-ui/icons";
 import { useFormikContext } from "formik";
 
+const FormConsumer = (props) => {
+  const formikObject = useFormikContext();
+  const {values, initialValues, setValues, setFieldValue, ...formik} = formikObject
+
+  React.useEffect(() => {
+      const dirty = formik.dirty
+      console.log("📢[index.stories.js:356]: ", values, formik?.errors);
+  }, [formik.dirty, values, formik]);
+  return null;
+};
+
 const FormBuilderStory = {
   component: FormBuilder,
   title: "Form/FormBuilder",
@@ -43,11 +54,10 @@ const FormBuilderStory = {
 
 export default FormBuilderStory;
 
-const DefaultStory = ({ ...args }) => <FormBuilder {...args} />;
+const DefaultStory = ({ ...args }) => <FormBuilder {...args} ><FormConsumer/></FormBuilder>;
 
 export const Default = DefaultStory.bind({});
 Default.args = {
-  onChange:(values)=>{console.log(values)},
   formId:'default',
   reverse: true,
   formLabel: "primary",
@@ -85,14 +95,14 @@ Default.args = {
       label: "Read Only",
       initialValues: "not editable",
       validator: () => Yup.string().required(),
-      icon: <AccountTree />,
+
       readOnly: true,
     },
     firstName: {
       type: "text",
       label: "First Name",
       initialValues: "",
-      icon: <AccountTree />,
+
       validator: () => Yup.string().required(),
       fieldProps: {
         variant: "outlined",
@@ -102,7 +112,7 @@ Default.args = {
       type: "text",
       label: "Middle Name",
       initialValues: "",
-      icon: <AccountTree />,
+
       validator: () => Yup.string().required(),
     },
     lastName: {
@@ -114,7 +124,7 @@ Default.args = {
     multiLine: {
       type: "text",
       label: "Multi line",
-      icon: <AccountTree />,
+
       initialValues: "",
       validator: () => Yup.string().required(),
       fieldProps: {
@@ -127,19 +137,18 @@ Default.args = {
       label: "Email",
       initialValues: "",
       validator: () => Yup.string().email().required(),
-      hidden: true,
     },
     aNumber: {
       type: "number",
       label: "A-Number",
-      icon: <AccountTree />,
+
       initialValues: 0,
       validator: () => Yup.number().required(),
     },
     startDate: {
       type: "date",
       label: "Start-Date",
-      icon: <AccountTree />,
+
       disableFuture: true,
       disablePast: false,
       initialValues: new Date(),
@@ -152,18 +161,21 @@ Default.args = {
     startTime: {
       type: "time",
       label: "Start-Time",
-      icon: <AccountTree />,
+
       disableFuture: false,
       disablePast: true,
       initialValues: new Date(),
       useLocalTime: true,
       validator: () => Yup.date().required(),
       onChange: (field, data) => {},
+      fieldProps: {
+        minTime: new Date(),
+      }
     },
     selection: {
       type: "select",
       label: "Selection",
-      icon: <AccountTree />,
+
       initialValues: "",
       options: [
         { value: 10, label: "Thing one" },
@@ -202,7 +214,7 @@ Default.args = {
     autocomplete: {
       type: "autocomplete",
       label: "Autocomplete",
-      icon: <AccountTree />,
+
       initialValues: [],
       options: [
         { id: 101, label: "one" },
@@ -345,16 +357,7 @@ Persist.args = {
   usePersist: true
 };
 
-const FormConsumer = (props) => {
-  const formikObject = useFormikContext();
-  const {values, initialValues, setValues, setFieldValue, ...formik} = formikObject
 
-  React.useEffect(() => {
-      const dirty = formik.dirty
-      console.log("📢[index.stories.js:356]: ", values, formik);
-  }, [formik.dirty, values, formik]);
-  return null;
-};
 
 const NestedStory = ({ ...args }) => {
   const [formState, setFormState] = useState({});
@@ -452,12 +455,12 @@ Nested.args = {
             subform2: Yup.string().nullable().required(),
             subsubform: Yup.array().min(1).of(
               Yup.object().shape({
-                subsubform1: Yup.string().nullable().required(),
+                subsubform1: Yup.array().min(1).required(),
               })
             ),
           })
         ),
-      formLayout: ["subform1", "subform2", "subsubform"],
+      formLayout: ["subform1", ["subform2", "subsubform"]],
       formValueTemplate: {
         subform1: ``,
         subform2: ``,
@@ -477,6 +480,7 @@ Nested.args = {
         subsubform: {
           type: "fieldarray",
           label: "subsubform",
+          inline: true,
           formLayout: ["subsubform1"],
           formValueTemplate: {
             subsubform1: ``,

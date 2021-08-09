@@ -162,40 +162,46 @@ function Agenda(props) {
   };
 
   return (
-    <BlockUi tag={Paper} elevation={0} keepInView square blocking={state.loading} style={{ height: 700, ...containerStyle }}>
-      <Dialog open={openAlert} onClose={handleCloseAlert}>
-        <DialogContent>
-          <DialogContentText>{alertMessage}</DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={()=> handleCloseAlert} color="primary">
-            Ok
-          </Button>
-        </DialogActions>
-      </Dialog>
-      <Calendar
-        localizer={localizer}
-        events={state.events||defaultEvents}
-        startAccessor="start"
-        endAccessor="end"
-        components={{
-          event: EventComponent,
-          agenda: {
-            event: AgendaEventComponent,
-          },
-          toolbar: (tprops)=><AgendaToolbar {...tprops} {...props} />,
-          month: {
-            dateHeader: AgendaDateHeader,
-          },
-          timeSlotWrapper: TimeslotWrapper,
-        }}
-        eventPropGetter={eventPropGetter}
-        onSelectSlot={onSelectSlot}
-        min={moment(lockSlotStartTime, "HH:mm").toDate()}
-        max={moment(lockSlotEndTime, "HH:mm").toDate()}
-        showMultiDayTimes
-        {...props}
-      />
+    <BlockUi 
+    message={<CircularProgress/>}
+    backgroundStyle={{backgroundColor: '#ffffffcc'}}
+    show={state.loading} style={{ height: 700, ...containerStyle }}
+    >
+      <Paper elevation={0} keepInView square>
+        <Dialog open={openAlert} onClose={handleCloseAlert}>
+          <DialogContent>
+            <DialogContentText>{alertMessage}</DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => handleCloseAlert} color="primary">
+              Ok
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <Calendar
+          localizer={localizer}
+          events={state.events || defaultEvents}
+          startAccessor="start"
+          endAccessor="end"
+          components={{
+            event: EventComponent,
+            agenda: {
+              event: AgendaEventComponent,
+            },
+            toolbar: AgendaToolbar,
+            month: {
+              dateHeader: AgendaDateHeader,
+            },
+            timeSlotWrapper: TimeslotWrapper,
+          }}
+          eventPropGetter={eventPropGetter}
+          onSelectSlot={onSelectSlot}
+          min={moment(lockSlotStartTime, "HH:mm").toDate()}
+          max={moment(lockSlotEndTime, "HH:mm").toDate()}
+          showMultiDayTimes
+          {...props}
+        />
+      </Paper>
     </BlockUi>
   );
 }
