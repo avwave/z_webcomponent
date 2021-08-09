@@ -167,7 +167,7 @@ function Agenda(props) {
     backgroundStyle={{backgroundColor: '#ffffffcc'}}
     show={state.loading} style={{ height: 700, ...containerStyle }}
     >
-      <Paper elevation={0} keepInView square>
+      <Paper elevation={0} square>
         <Dialog open={openAlert} onClose={handleCloseAlert}>
           <DialogContent>
             <DialogContentText>{alertMessage}</DialogContentText>

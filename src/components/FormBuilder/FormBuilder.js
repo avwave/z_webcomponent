@@ -202,12 +202,12 @@ const FormFieldSet = ({
                 if (fieldParams.onChange) {
                   fieldParams.onChange(
                     fieldName,
-                    fieldParams.useLocalTime ? moment(evt) : moment.utc(evt)
+                    fieldParams.useLocalTime ? moment(evt).toDate() : moment.utc(evt).toDate()
                   );
                 }
                 formik.setFieldValue(
                   fieldName,
-                  fieldParams.useLocalTime ? moment(evt) : moment.utc(evt)
+                  fieldParams.useLocalTime ? moment(evt).toDate() : moment.utc(evt).toDate()
                 );
               }}
               value={get(formik.values, fieldName)}
@@ -240,12 +240,12 @@ const FormFieldSet = ({
                 if (fieldParams.onChange) {
                   fieldParams.onChange(
                     fieldName,
-                    fieldParams.useLocalTime ? moment(evt) : moment.utc(evt)
+                    fieldParams.useLocalTime ? moment(evt).toDate() : moment.utc(evt).toDate()
                   );
                 }
                 formik.setFieldValue(
                   fieldName,
-                  fieldParams.useLocalTime ? moment(evt) : moment.utc(evt)
+                  fieldParams.useLocalTime ? moment(evt).toDate() : moment.utc(evt).toDate()
                 );
               }}
               value={get(formik.values, fieldName)}
@@ -279,12 +279,12 @@ const FormFieldSet = ({
                 if (fieldParams.onChange) {
                   fieldParams.onChange(
                     fieldName,
-                    fieldParams.useLocalTime ? moment(evt) : moment.utc(evt)
+                    fieldParams.useLocalTime ? moment(evt).toDate() : moment.utc(evt).toDate()
                   );
                 }
                 formik.setFieldValue(
                   fieldName,
-                  fieldParams.useLocalTime ? moment(evt) : moment.utc(evt)
+                  fieldParams.useLocalTime ? moment(evt).toDate() : moment.utc(evt).toDate()
                 );
               }}
               value={get(formik.values, fieldName)}
