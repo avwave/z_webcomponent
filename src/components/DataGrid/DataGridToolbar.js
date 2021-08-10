@@ -217,7 +217,7 @@ function DataGridToolbar({
                 <Typography variant="overline" className={classes.filterLabel}>
                   Filtered by:{" "}
                 </Typography>
-                {Object.entries(dataGridState.filterColumn).map(
+                {Object.entries(dataGridState.filterColumn).filter(f=>f[1]!==undefined).map(
                   (filter, idx) => {
                     const filterColumn = filterColumnSettings.find((i) => {
                       const ret = i.key === filter[0];
