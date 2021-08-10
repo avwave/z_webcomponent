@@ -122,7 +122,7 @@ function DataGridToolbar({
   const stateFilters = useMemo(() => {
     return Object.entries(dataGridState.filterColumn).filter(f=>f[1]!==undefined)
   }, [dataGridState.filterColumn]);
-  
+
   return (
     <>
       {(showSelector ||
@@ -203,7 +203,7 @@ function DataGridToolbar({
         </Toolbar>
       )}
       {((totalCount && loadedCount) ||
-        !isEmpty(dataGridState.filterColumn)) && (
+        !isEmpty(stateFilters)) && (
         <Toolbar variant="dense" className={classes.toolbar} disableGutters>
           <Breadcrumbs>
             {totalCount && loadedCount && (
