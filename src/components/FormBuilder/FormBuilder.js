@@ -23,7 +23,8 @@ import {
   RadioGroup,
   Switch,
   TextField,
-  Toolbar, Typography
+  Toolbar, Typography,
+  CircularProgress
 } from "@material-ui/core";
 import { Add, Backspace, Close, DateRange, Schedule } from "@material-ui/icons";
 import { Autocomplete } from "@material-ui/lab";
@@ -89,7 +90,7 @@ const FormFieldSet = ({
   submitLabel = "Submit",
   resetLabel = "Reset",
   columns = 1,
-  readOnly,
+  formReadOnly,
   setValues = {},
   additionalActions = () => {},
   children,
@@ -101,6 +102,7 @@ const FormFieldSet = ({
   decouple,
   reverse = false,
   hasReset = true,
+  loading = false,
   onChange,
 }) => {
   const classes = useStyles();
@@ -132,12 +134,20 @@ const FormFieldSet = ({
     }
   }, [formik, onTriggerSubmit, triggerSubmit]);
 
+  const mergeTime = useCallback(
+    (_src, _dest) => {
+      const src = moment(_src);
+      const dest = moment(_dest);
+      const newTime = dest.set({ 'hour' : src.get('hour'), 'minute' : src.get('minute'), 'second' : src.get('second') });
+      return newTime.toDate()
+    },
+    [],
+  );
   const renderField = useCallback(
     (fieldName, fieldParams) => {
-      const description = validationSchema.describe()
-      let isRequired = !!getIn(validationSchema.describe().fields, fieldName)?.tests?.find(
+      let isRequired = !!getIn(validationSchema?.fields, fieldName)?.tests?.find(
         testName => {
-          return testName.name === 'required'
+          return testName?.OPTIONS?.name === 'required'
         }
       )
       
@@ -162,7 +172,7 @@ const FormFieldSet = ({
               label={`${fieldParams.label} ${isRequired?'*':''}`}
               value={get(formik.values, fieldName)}
               onChange={onChangeOverride}
-              disabled={fieldParams.readOnly}
+              disabled={fieldParams.readOnly||formReadOnly}
               error={
                 get(formik.touched, fieldName) &&
                 Boolean(get(formik.errors, fieldName))
@@ -203,16 +213,16 @@ const FormFieldSet = ({
                 if (fieldParams.onChange) {
                   fieldParams.onChange(
                     fieldName,
-                    fieldParams.useLocalTime ? moment(evt) : moment.utc(evt)
+                    fieldParams.useLocalTime ? moment(evt).toDate() : moment.utc(evt).toDate()
                   );
                 }
                 formik.setFieldValue(
                   fieldName,
-                  fieldParams.useLocalTime ? moment(evt) : moment.utc(evt)
+                  fieldParams.useLocalTime ? moment(evt).toDate() : moment.utc(evt).toDate()
                 );
               }}
               value={get(formik.values, fieldName)}
-              disabled={fieldParams.readOnly}
+              disabled={fieldParams.readOnly||formReadOnly}
               autoOk
               format="MM/DD/yyyy"
               variant="inline"
@@ -241,16 +251,16 @@ const FormFieldSet = ({
                 if (fieldParams.onChange) {
                   fieldParams.onChange(
                     fieldName,
-                    fieldParams.useLocalTime ? moment(evt) : moment.utc(evt)
+                    fieldParams.useLocalTime ? moment(evt).toDate() : moment.utc(evt).toDate()
                   );
                 }
                 formik.setFieldValue(
                   fieldName,
-                  fieldParams.useLocalTime ? moment(evt) : moment.utc(evt)
+                  fieldParams.useLocalTime ? moment(evt).toDate() : moment.utc(evt).toDate()
                 );
               }}
               value={get(formik.values, fieldName)}
-              disabled={fieldParams.readOnly}
+              disabled={fieldParams.readOnly||formReadOnly}
               autoOk
               variant="inline"
               inputVariant={variant}
@@ -276,20 +286,20 @@ const FormFieldSet = ({
                 ) : undefined,
               }}
               onChange={(evt, val) => {
-                // console.log("📢[FormBuilder.js:181]:", evt, val);
+                const evtTime = mergeTime(evt, get(formik.values, fieldName))
                 if (fieldParams.onChange) {
                   fieldParams.onChange(
                     fieldName,
-                    fieldParams.useLocalTime ? moment(evt) : moment.utc(evt)
+                    fieldParams.useLocalTime ? moment(evtTime).toDate() : moment.utc(evtTime).toDate()
                   );
                 }
                 formik.setFieldValue(
                   fieldName,
-                  fieldParams.useLocalTime ? moment(evt) : moment.utc(evt)
+                  fieldParams.useLocalTime ? moment(evtTime).toDate() : moment.utc(evtTime).toDate()
                 );
               }}
               value={get(formik.values, fieldName)}
-              disabled={fieldParams.readOnly}
+              disabled={fieldParams.readOnly||formReadOnly}
               autoOk
               variant="inline"
               inputVariant={variant}
@@ -343,7 +353,7 @@ const FormFieldSet = ({
                     </InputAdornment>
                   ) : undefined,
                 }}
-                disabled={fieldParams.readOnly}
+                disabled={fieldParams.readOnly||formReadOnly}
                 {...fieldParams?.fieldProps}
               >
                 {fieldParams.options.map((item, idx) => {
@@ -386,7 +396,7 @@ const FormFieldSet = ({
                   formik.setFieldValue(fieldName, val);
                 }}
                 label={`${fieldParams.label} ${isRequired?'*':''}`}
-                disabled={fieldParams.readOnly}
+                disabled={fieldParams.readOnly||formReadOnly}
                 {...fieldParams?.fieldProps}
               />
             </>
@@ -405,7 +415,7 @@ const FormFieldSet = ({
               >
                 {fieldParams.options.map((item, idx) => (
                   <FormControlLabel
-                    disabled={fieldParams.readOnly}
+                    disabled={fieldParams.readOnly||formReadOnly}
                     key={idx}
                     value={item[fieldParams.settings?.valueField]}
                     labelPlacement={fieldParams.settings.labelPlacement ?? 'end'}
@@ -432,7 +442,7 @@ const FormFieldSet = ({
                   const checked = get(formik.values, fieldName, []).includes(item[fieldParams.settings?.valueField]);
                   return (
                     <FormControlLabel
-                      disabled={fieldParams.readOnly}
+                      disabled={fieldParams.readOnly||formReadOnly}
                       key={idx}
                       name={fieldName}
                       control={<Checkbox checked={checked} />}
@@ -457,7 +467,7 @@ const FormFieldSet = ({
           return (
             <Autocomplete
               style={{ verticalAlign: "bottom" }}
-              disabled={fieldParams.readOnly}
+              disabled={fieldParams.readOnly||formReadOnly}
               disableCloseOnSelect
               name={fieldName}
               label={`${fieldParams.label} ${isRequired?'*':''}`}
@@ -544,7 +554,7 @@ const FormFieldSet = ({
                                 </Box>
                                 }
 
-                                <Box component={fieldParams.inline?'div':CardContent} dividers className={classes.subformContent}>
+                                <Box component={fieldParams.inline?'div':CardContent} className={classes.subformContent}>
                                   {buildComponent(
                                     fieldParams.formLayout,
                                     fieldParams.formTemplate,
@@ -568,37 +578,40 @@ const FormFieldSet = ({
                           );
                         }
                       )}
-                      <div>
-                      <Button
-                        variant="contained"
+                      { !formReadOnly && 
+                        <div>
+                          <Button
+                            variant="contained"
 
-                        onClick={() => {
-                          arrayHelpers.push(fieldParams.formValueTemplate);
-                        }}
-                        startIcon={<Add/>}
-                        color="primary"
-                      >
-                        Add {`${fieldParams.label}`}
-                      </Button>
-                      </div>
+                            onClick={() => {
+                              arrayHelpers.push(fieldParams.formValueTemplate);
+                            }}
+                            startIcon={<Add/>}
+                            color="primary"
+                          >
+                            Add {`${fieldParams.label}`}
+                          </Button>
+                        </div>
+                      }
                     </>
                   );
                 }
+                if (formReadOnly) return <></>
                 return (
-                  <div>
-                  <Button
-                  variant="contained"
+                    <div>
+                      <Button
+                      variant="contained"
 
-                  onClick={() =>
-                      arrayHelpers.push(fieldParams.formValueTemplate)
-                    }
-                  startIcon={<Add/>}
-                  color="primary"
-                  >
-                    Add {`${fieldParams.label}`}
-                  </Button>
-                  </div>
-                );
+                      onClick={() =>
+                          arrayHelpers.push(fieldParams.formValueTemplate)
+                        }
+                      startIcon={<Add/>}
+                      color="primary"
+                      >
+                        Add {`${fieldParams.label}`}
+                      </Button>
+                    </div>
+                )
               }}
             />
           );
@@ -697,6 +710,8 @@ const FormFieldSet = ({
                 key="reset"
                 color="secondary"
                 variant={variant}
+                disabled={loading}
+                startIcon={loading && <CircularProgress size={20} />}
                 onClick={async () => {
                   formik.handleReset();
                   onTriggerReset();
@@ -709,6 +724,8 @@ const FormFieldSet = ({
         <Button
           key="submit"
           color="primary"
+          disabled={loading}
+          startIcon={loading && <CircularProgress size={20} />}
           variant={variant}
           onClick={async () => {
             formik.handleSubmit();
@@ -718,6 +735,7 @@ const FormFieldSet = ({
           {submitLabel}
         </Button>,
       ];
+      if (formReadOnly) return <></>
       return <ButtonGroup>{buttonArray}</ButtonGroup>;
     };
 
@@ -795,6 +813,9 @@ const FormFieldSet = ({
     children,
     reverse,
     classes.actionBar,
+    formReadOnly,
+    loading,
+    hasReset
   ]);
 
   return (

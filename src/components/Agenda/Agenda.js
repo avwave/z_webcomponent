@@ -123,7 +123,10 @@ function Agenda(props) {
   };
 
   const TimeslotWrapper = (slotProp) => {
-    const { value, children } = slotProp;
+    const {resource, value, children } = slotProp;
+    if (resource) {
+      return children;
+    }
     if (moment(value).isBefore(moment(), "day")) {
       const child = React.Children.only(children);
       return React.cloneElement(child, {
@@ -167,7 +170,7 @@ function Agenda(props) {
     backgroundStyle={{backgroundColor: '#ffffffcc'}}
     show={state.loading} style={{ height: 700, ...containerStyle }}
     >
-      <Paper elevation={0} keepInView square>
+      <Paper elevation={0} square>
         <Dialog open={openAlert} onClose={handleCloseAlert}>
           <DialogContent>
             <DialogContentText>{alertMessage}</DialogContentText>
@@ -188,7 +191,7 @@ function Agenda(props) {
             agenda: {
               event: AgendaEventComponent,
             },
-            toolbar: AgendaToolbar,
+            toolbar: (toolbarProps) => <AgendaToolbar {...toolbarProps} {...props} />,
             month: {
               dateHeader: AgendaDateHeader,
             },
