@@ -17,7 +17,7 @@ import {
 import { FilterList, ViewColumn } from "@material-ui/icons";
 import { stringify } from "javascript-stringify";
 import { isEmpty } from "lodash";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Checklist } from "../CheckList";
 import CheckboxProvider, {
   actions as checkboxActions,
@@ -119,6 +119,10 @@ function DataGridToolbar({
     });
   };
 
+  const stateFilters = useMemo(() => {
+    return Object.entries(dataGridState.filterColumn).filter(f=>f[1]!==undefined)
+  }, [dataGridState.filterColumn]);
+  
   return (
     <>
       {(showSelector ||
@@ -212,12 +216,12 @@ function DataGridToolbar({
               </Typography>
               </div>
             )}
-            {!isEmpty(dataGridState.filterColumn) && (
+            {!isEmpty(stateFilters) && (
               <div>
                 <Typography variant="overline" className={classes.filterLabel}>
                   Filtered by:{" "}
                 </Typography>
-                {Object.entries(dataGridState.filterColumn).filter(f=>f[1]!==undefined).map(
+                {stateFilters.map(
                   (filter, idx) => {
                     const filterColumn = filterColumnSettings.find((i) => {
                       const ret = i.key === filter[0];
