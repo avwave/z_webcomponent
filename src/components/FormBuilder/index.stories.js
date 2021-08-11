@@ -157,7 +157,7 @@ Default.args = {
       useLocalTime: true,
       validator: () => Yup.date().max(new Date()),
       onChange: (field, data) => {
-        console.log("📢[index.stories.js:101]:", field, data, data.toDate());
+        console.log("📢[index.stories.js:101]:", field, data, data);
       },
     },
     startTime: {
