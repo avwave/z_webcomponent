@@ -206,7 +206,7 @@ const FormFieldSet = ({
                   </InputAdornment>
                 ) : undefined,
               }}
-              renderInput={props => <TextField {...props} />}
+              renderInput={props => <TextField variant={variant} {...props} />}
               keyboardIcon={<DateRange/>}
               onChange={(evt, val) => {
                 // console.log("📢[FormBuilder.js:152]:", evt);
@@ -239,7 +239,7 @@ const FormFieldSet = ({
               disableFuture={fieldParams.disableFuture}
               label={`${fieldParams.label} ${isRequired?'*':''}`}
               name={fieldName}
-              renderInput={props => <TextField {...props} />}
+              renderInput={props => <TextField variant={variant} {...props} />}
               InputProps={{
                 startAdornment: fieldParams.icon ? (
                   <InputAdornment position="start">
@@ -277,7 +277,7 @@ const FormFieldSet = ({
               label={`${fieldParams.label} ${isRequired?'*':''}`}
               name={fieldName}
               keyboardIcon={<Schedule/>}
-              renderInput={props => <TextField {...props} />}
+              renderInput={props => <TextField variant={variant} {...props} />}
               InputProps={{
                 startAdornment: fieldParams.icon ? (
                   <InputAdornment position="start">
