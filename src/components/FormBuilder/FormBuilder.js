@@ -159,19 +159,42 @@ const FormFieldSet = ({
         : (evt, value) => {
             formik.setFieldValue(fieldName, evt?.target?.value ?? evt);
           };
+      let formValue = get(formik.values, fieldName)
       switch (fieldParams.type) {
         case "component":
           return <fieldParams.component />;
+        case "datetime-local":
+        case "date":
+        case "time":
         case "text":
         case "email":
         case "number":
+          if(fieldParams.type === 'date') formValue = moment(formValue).format("YYYY-MM-DD");
+          if(fieldParams.type === 'time') formValue = moment(formValue).format("HH:mm");
+          if(fieldParams.type === 'datetime-local') formValue = moment(formValue).format('YYYY-MM-DDTHH:mm:ss');
           return (
             <TextField
               name={fieldName}
               type={fieldParams.type}
               label={`${fieldParams.label} ${isRequired?'*':''}`}
-              value={get(formik.values, fieldName)}
-              onChange={onChangeOverride}
+              value={formValue}
+              onChange={(evt, value) => {
+                let val = evt?.target?.value
+                switch (fieldParams.type) {
+                  case "datetime-local":
+                  case "date":
+                    val = fieldParams.useLocalTime ? moment(evt?.target?.value).toDate() : moment.utc(evt?.target?.value).toDate()
+                    break
+                  case "time":
+                    val = moment(evt?.target?.value, ['hh:mm a', 'HH:mm'])
+                    val = mergeTime(val, get(formik.values, fieldName))
+                    val = fieldParams.useLocalTime ? moment(val).toDate() : moment.utc(val).toDate()
+                    break
+                  default:
+                    break;
+                }
+                onChangeOverride(val, value)
+              }}
               disabled={fieldParams.readOnly||formReadOnly}
               error={
                 get(formik.touched, fieldName) &&
@@ -192,122 +215,122 @@ const FormFieldSet = ({
             />
           );
 
-        case "date":
-          return (
-            <DatePicker
-              disablePast={fieldParams.disablePast}
-              disableFuture={fieldParams.disableFuture}
-              label={`${fieldParams.label} ${isRequired?'*':''}`}
-              name={fieldName}
-              InputProps={{
-                startAdornment: fieldParams.icon ? (
-                  <InputAdornment position="start">
-                    {fieldParams.icon}
-                  </InputAdornment>
-                ) : undefined,
-              }}
-              renderInput={props => <TextField variant={variant} {...props} />}
-              keyboardIcon={<DateRange/>}
-              onChange={(evt, val) => {
-                // console.log("📢[FormBuilder.js:152]:", evt);
-                if (fieldParams.onChange) {
-                  fieldParams.onChange(
-                    fieldName,
-                    fieldParams.useLocalTime ? moment(evt).toDate() : moment.utc(evt).toDate()
-                  );
-                }
-                formik.setFieldValue(
-                  fieldName,
-                  fieldParams.useLocalTime ? moment(evt).toDate() : moment.utc(evt).toDate()
-                );
-              }}
-              value={get(formik.values, fieldName)}
-              disabled={fieldParams.readOnly||formReadOnly}
-              autoOk
-              format="MM/DD/yyyy"
-              variant="inline"
-              inputVariant={variant}
-              mask="__/__/____"
-              {...fieldParams?.fieldProps}
-            />
-          );
+        // case "date":
+        //   return (
+        //     <DatePicker
+        //       disablePast={fieldParams.disablePast}
+        //       disableFuture={fieldParams.disableFuture}
+        //       label={`${fieldParams.label} ${isRequired?'*':''}`}
+        //       name={fieldName}
+        //       InputProps={{
+        //         startAdornment: fieldParams.icon ? (
+        //           <InputAdornment position="start">
+        //             {fieldParams.icon}
+        //           </InputAdornment>
+        //         ) : undefined,
+        //       }}
+        //       renderInput={props => <TextField variant={variant} {...props} />}
+        //       keyboardIcon={<DateRange/>}
+        //       onChange={(evt, val) => {
+        //         // console.log("📢[FormBuilder.js:152]:", evt);
+        //         if (fieldParams.onChange) {
+        //           fieldParams.onChange(
+        //             fieldName,
+        //             fieldParams.useLocalTime ? moment(evt).toDate() : moment.utc(evt).toDate()
+        //           );
+        //         }
+        //         formik.setFieldValue(
+        //           fieldName,
+        //           fieldParams.useLocalTime ? moment(evt).toDate() : moment.utc(evt).toDate()
+        //         );
+        //       }}
+        //       value={get(formik.values, fieldName)}
+        //       disabled={fieldParams.readOnly||formReadOnly}
+        //       autoOk
+        //       format="MM/DD/yyyy"
+        //       variant="inline"
+        //       inputVariant={variant}
+        //       mask="__/__/____"
+        //       {...fieldParams?.fieldProps}
+        //     />
+        //   );
 
-        case "datetime":
-          return (
-            <DateTimePicker
-              disablePast={fieldParams.disablePast}
-              disableFuture={fieldParams.disableFuture}
-              label={`${fieldParams.label} ${isRequired?'*':''}`}
-              name={fieldName}
-              renderInput={props => <TextField variant={variant} {...props} />}
-              InputProps={{
-                startAdornment: fieldParams.icon ? (
-                  <InputAdornment position="start">
-                    {fieldParams.icon}
-                  </InputAdornment>
-                ) : undefined,
-              }}
-              onChange={(evt, val) => {
-                if (fieldParams.onChange) {
-                  fieldParams.onChange(
-                    fieldName,
-                    fieldParams.useLocalTime ? moment(evt).toDate() : moment.utc(evt).toDate()
-                  );
-                }
-                formik.setFieldValue(
-                  fieldName,
-                  fieldParams.useLocalTime ? moment(evt).toDate() : moment.utc(evt).toDate()
-                );
-              }}
-              value={get(formik.values, fieldName)}
-              disabled={fieldParams.readOnly||formReadOnly}
-              autoOk
-              variant="inline"
-              inputVariant={variant}
-              format="MM/dd/yyyy hh:mm a"
-              mask="__/__/____ __:__ _M"
-              {...fieldParams?.fieldProps}
-            />
-          );
-        case "time":
-          return (
-            <TimePicker
-              disablePast={fieldParams.disablePast}
-              disableFuture={fieldParams.disableFuture}
-              label={`${fieldParams.label} ${isRequired?'*':''}`}
-              name={fieldName}
-              keyboardIcon={<Schedule/>}
-              renderInput={props => <TextField variant={variant} {...props} />}
-              InputProps={{
-                startAdornment: fieldParams.icon ? (
-                  <InputAdornment position="start">
-                    {fieldParams.icon}
-                  </InputAdornment>
-                ) : undefined,
-              }}
-              onChange={(evt, val) => {
-                const evtTime = mergeTime(evt, get(formik.values, fieldName))
-                if (fieldParams.onChange) {
-                  fieldParams.onChange(
-                    fieldName,
-                    fieldParams.useLocalTime ? moment(evtTime).toDate() : moment.utc(evtTime).toDate()
-                  );
-                }
-                formik.setFieldValue(
-                  fieldName,
-                  fieldParams.useLocalTime ? moment(evtTime).toDate() : moment.utc(evtTime).toDate()
-                );
-              }}
-              value={get(formik.values, fieldName)}
-              disabled={fieldParams.readOnly||formReadOnly}
-              autoOk
-              variant="inline"
-              inputVariant={variant}
-              format="hh:mm a"
-              mask="__/__/____ __:__ _M"
-              {...fieldParams?.fieldProps}
-            />
-          );
+        // case "datetime":
+        //   return (
+        //     <DateTimePicker
+        //       disablePast={fieldParams.disablePast}
+        //       disableFuture={fieldParams.disableFuture}
+        //       label={`${fieldParams.label} ${isRequired?'*':''}`}
+        //       name={fieldName}
+        //       renderInput={props => <TextField variant={variant} {...props} />}
+        //       InputProps={{
+        //         startAdornment: fieldParams.icon ? (
+        //           <InputAdornment position="start">
+        //             {fieldParams.icon}
+        //           </InputAdornment>
+        //         ) : undefined,
+        //       }}
+        //       onChange={(evt, val) => {
+        //         if (fieldParams.onChange) {
+        //           fieldParams.onChange(
+        //             fieldName,
+        //             fieldParams.useLocalTime ? moment(evt).toDate() : moment.utc(evt).toDate()
+        //           );
+        //         }
+        //         formik.setFieldValue(
+        //           fieldName,
+        //           fieldParams.useLocalTime ? moment(evt).toDate() : moment.utc(evt).toDate()
+        //         );
+        //       }}
+        //       value={get(formik.values, fieldName)}
+        //       disabled={fieldParams.readOnly||formReadOnly}
+        //       autoOk
+        //       variant="inline"
+        //       inputVariant={variant}
+        //       format="MM/dd/yyyy hh:mm a"
+        //       mask="__/__/____ __:__ _M"
+        //       {...fieldParams?.fieldProps}
+        //     />
+        //   );
+        // case "time":
+        //   return (
+        //     <TimePicker
+        //       disablePast={fieldParams.disablePast}
+        //       disableFuture={fieldParams.disableFuture}
+        //       label={`${fieldParams.label} ${isRequired?'*':''}`}
+        //       name={fieldName}
+        //       keyboardIcon={<Schedule/>}
+        //       renderInput={props => <TextField variant={variant} {...props} />}
+        //       InputProps={{
+        //         startAdornment: fieldParams.icon ? (
+        //           <InputAdornment position="start">
+        //             {fieldParams.icon}
+        //           </InputAdornment>
+        //         ) : undefined,
+        //       }}
+        //       onChange={(evt, val) => {
+        //         const evtTime = mergeTime(evt, get(formik.values, fieldName))
+        //         if (fieldParams.onChange) {
+        //           fieldParams.onChange(
+        //             fieldName,
+        //             fieldParams.useLocalTime ? moment(evtTime).toDate() : moment.utc(evtTime).toDate()
+        //           );
+        //         }
+        //         formik.setFieldValue(
+        //           fieldName,
+        //           fieldParams.useLocalTime ? moment(evtTime).toDate() : moment.utc(evtTime).toDate()
+        //         );
+        //       }}
+        //       value={get(formik.values, fieldName)}
+        //       disabled={fieldParams.readOnly||formReadOnly}
+        //       autoOk
+        //       variant="inline"
+        //       inputVariant={variant}
+        //       format="hh:mm a"
+        //       mask="__/__/____ __:__ _M"
+        //       {...fieldParams?.fieldProps}
+        //     />
+        //   );
 
         case "select":
           return (
@@ -646,13 +669,14 @@ const FormFieldSet = ({
         }
         if (field) {
           const err = get(formik.touched, layout) && get(formik.errors, layout);
+          const growFactor = ((field.forceColumnWidth??0) === 0) ? {}:{sm: field.forceColumnWidth}
           return (
             <Grid
               className={field.hidden ? classes.hidden : ""}
               key={`${index}-layout-${layout.id}`}
               item
-              xs={12}
-              sm={12 > colCount}
+              xs
+              {...growFactor}
             >
               <FormControl
                 className={classes.controlContainer}
