@@ -471,6 +471,7 @@ Nested.args = {
       type: "text",
       label: "form 1",
       initialValues: "",
+      forceColumnWidth: 6,
       validator: () => Yup.string().nullable(),
     },
     form2: {
@@ -510,6 +511,7 @@ Nested.args = {
         subform2: {
           type: "text",
           label: "subform 2",
+          forceColumnWidth: 1,
           initialValues: "",
         },
         subsubform: {

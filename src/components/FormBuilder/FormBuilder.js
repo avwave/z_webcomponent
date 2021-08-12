@@ -669,12 +669,14 @@ const FormFieldSet = ({
         }
         if (field) {
           const err = get(formik.touched, layout) && get(formik.errors, layout);
+          const growFactor = ((field.forceColumnWidth??0) === 0) ? {}:{sm: field.forceColumnWidth}
           return (
             <Grid
               className={field.hidden ? classes.hidden : ""}
               key={`${index}-layout-${layout.id}`}
               item
               xs
+              {...growFactor}
             >
               <FormControl
                 className={classes.controlContainer}
