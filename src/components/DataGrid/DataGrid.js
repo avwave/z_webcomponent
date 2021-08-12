@@ -252,7 +252,7 @@ function DataGrid({
     setColumns(filteredColumns);
   }, [checkListState, dataGridState.columns]);
 
-  const [[sortColumn, sortDirection], setSort] = useState(["", "NONE"]);
+  const [[sortColumn, sortDirection], setSort] = useState(["", "All"]);
 
   function RowRenderer(props) {
     const contextProp = contextMenu

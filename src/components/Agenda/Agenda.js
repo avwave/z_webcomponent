@@ -19,6 +19,7 @@ import {
   DialogContentText,
   LinearProgress,
   Link,
+  makeStyles,
   Paper,
   Toolbar,
   Typography,
@@ -38,6 +39,15 @@ import BlockUi from "react-loader-advanced";
 const dateFnsLocales = {
   "en-US": enLocale,
 };
+const useStyles = makeStyles(theme => ({
+  root: {
+    '& .rbc-event': {
+      backgroundColor: theme.palette.primary.main,
+      borderColor: theme.palette.primary.dark,
+    }
+  }
+}));
+
 // const localizer = momentLocalizer(moment);
 const sOfWeek = () =>
   startOfWeek(new Date(), {
@@ -74,6 +84,7 @@ function Agenda(props) {
     eventComponent,
   } = props;
 
+  const classes = useStyles()
   const metaRenderer = metaR ? metaR : () => {};
 
   const [state, dispatch] = React.useContext(AgendaContext);
@@ -182,6 +193,7 @@ function Agenda(props) {
           </DialogActions>
         </Dialog>
         <Calendar
+          className={classes.root}
           localizer={localizer}
           events={state.events || defaultEvents}
           startAccessor="start"

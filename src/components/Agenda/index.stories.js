@@ -64,8 +64,8 @@ Default.args = {
   containerStyle: {
     height: 750,
   },
-  timeslots: 8,
-  step: 30,
+  timeslots: 1,
+  step: 60,
   lockSlotStartTime: "00:00",
   lockSlotEndTime: "23:59",
   popup: true,
