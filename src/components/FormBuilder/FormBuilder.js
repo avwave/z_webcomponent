@@ -651,8 +651,7 @@ const FormFieldSet = ({
               className={field.hidden ? classes.hidden : ""}
               key={`${index}-layout-${layout.id}`}
               item
-              xs={12}
-              sm={12 > colCount}
+              xs
             >
               <FormControl
                 className={classes.controlContainer}
