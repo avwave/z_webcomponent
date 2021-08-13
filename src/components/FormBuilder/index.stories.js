@@ -278,6 +278,8 @@ Default.args = {
   },
 };
 
+
+
 const ModifyStory = ({ ...args }) => {
   const [formState, setFormState] = useState({});
 
@@ -311,6 +313,43 @@ export const Modify = ModifyStory.bind({});
 Modify.args = {
   ...Default.args,
   formId:'modify',
+};
+
+export const Dates = DefaultStory.bind({});
+Dates.args = {
+  ...Default.args,
+  formLayout: [
+    ["date", "time", "datetime"],
+  ],
+  form: {
+    date: {
+      type: "date",
+      label: "Date",
+      disableFuture: true,
+      disablePast: false,
+      initialValues: new Date(),
+      useLocalTime: true,
+      validator: () => Yup.date().max(new Date()),
+      onChange: (field, data) => {
+        console.log("📢[index.stories.js:101]:", field, data, data);
+      },
+    },
+    time: {
+      type: "time",
+      label: "Time",
+      initialValues: new Date("2021-06-10T12:00:00"),
+      validator: () => Yup.date(),
+      onChange: (field, data) => {},
+    },
+    datetime: {
+      type: "datetime-local",
+      label: "DateTime",
+      initialValues: new Date("2021-06-10T12:00:00"),
+      validator: () => Yup.date(),
+      onChange: (field, data) => {},
+    },
+  },
+  formId:'dates',
 };
 
 export const Checkboxes = DefaultStory.bind({});
@@ -432,6 +471,7 @@ Nested.args = {
       type: "text",
       label: "form 1",
       initialValues: "",
+      forceColumnWidth: 6,
       validator: () => Yup.string().nullable(),
     },
     form2: {
@@ -471,6 +511,7 @@ Nested.args = {
         subform2: {
           type: "text",
           label: "subform 2",
+          forceColumnWidth: 1,
           initialValues: "",
         },
         subsubform: {
