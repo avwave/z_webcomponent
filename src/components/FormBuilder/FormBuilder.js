@@ -221,9 +221,6 @@ const FormFieldSet = ({
               name={fieldName}
               type="tel"
               label={`${fieldParams.label} ${isRequired?'*':''}`}
-              country={"PH"}
-              international={true}
-              withCountryCallingCode={true}
               value={formValue}
               onChange={(evt, value) => {
                 onChangeOverride(evt)
