@@ -28,7 +28,8 @@ import {
 } from "@material-ui/core";
 import { Add, Backspace, Close, DateRange, Schedule } from "@material-ui/icons";
 import { Autocomplete } from "@material-ui/lab";
-import { DatePicker, DateTimePicker, TimePicker } from "@material-ui/pickers";
+import "react-phone-number-input/style.css";
+import PhoneInput from "react-phone-number-input/input";
 import { LocalizationProvider } from "@material-ui/pickers/LocalizationProvider";
 import DateFnsAdapter from '@material-ui/pickers/adapter/date-fns';
 import { FieldArray, Formik, getIn } from "formik";
@@ -214,7 +215,44 @@ const FormFieldSet = ({
               {...fieldParams?.fieldProps}
             />
           );
-
+        case "phone":
+          return (
+            <TextField
+              name={fieldName}
+              type="tel"
+              label={`${fieldParams.label} ${isRequired?'*':''}`}
+              country={"PH"}
+              international={true}
+              withCountryCallingCode={true}
+              value={formValue}
+              onChange={(evt, value) => {
+                onChangeOverride(evt)
+              }}
+              disabled={fieldParams.readOnly||formReadOnly}
+              error={
+                get(formik.touched, fieldName) &&
+                Boolean(get(formik.errors, fieldName))
+              }
+              InputLabelProps={{
+                shrink: true,
+              }}
+              InputProps={{
+                startAdornment: fieldParams.icon ? (
+                  <InputAdornment position="start">
+                    {fieldParams.icon}
+                  </InputAdornment>
+                ) : undefined,
+                inputComponent: PhoneInput,
+                inputProps: {
+                    country: "PH",
+                    international: true,
+                    withCountryCallingCode: true
+                }
+              }}
+              variant={variant}
+              {...fieldParams?.fieldProps}
+            />
+          );
         // case "date":
         //   return (
         //     <DatePicker
