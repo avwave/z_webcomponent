@@ -183,8 +183,10 @@ const FormFieldSet = ({
                 let val = evt?.target?.value
                 switch (fieldParams.type) {
                   case "datetime-local":
-                  case "date":
                     val = fieldParams.useLocalTime ? moment(evt?.target?.value).toDate() : moment.utc(evt?.target?.value).toDate()
+                    break
+                  case "date":
+                    val = fieldParams.useLocalTime ? moment(evt?.target?.value).startOf('d').toDate() : moment.utc(evt?.target?.value).startOf('d').toDate()
                     break
                   case "time":
                     val = moment(evt?.target?.value, ['hh:mm a', 'HH:mm'])
