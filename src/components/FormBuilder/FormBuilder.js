@@ -544,6 +544,9 @@ const FormFieldSet = ({
               getOptionLabel={(option) => {
                 return option[fieldParams.settings.labelField] ?? "";
               }}
+              // getOptionSelected={(option, t) => {
+              //   return option[fieldParams.settings.valueField] === t[fieldParams.settings.valueField];
+              // }}
               renderOption={(option, { selected }) => {
                 if (fieldParams.settings?.multiple) {
                   return (
