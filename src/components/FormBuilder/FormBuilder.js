@@ -210,6 +210,9 @@ const FormFieldSet = ({
                     {fieldParams.icon}
                   </InputAdornment>
                 ) : undefined,
+                inputProps: {
+                  ...fieldParams.inputProps??{}
+                }
               }}
               variant={variant}
               {...fieldParams?.fieldProps}
@@ -243,7 +246,8 @@ const FormFieldSet = ({
                 inputProps: {
                     country: "PH",
                     international: true,
-                    withCountryCallingCode: true
+                    withCountryCallingCode: true,
+                    ...fieldParams.inputProps??{}
                 }
               }}
               variant={variant}
