@@ -10,7 +10,7 @@ export const actions = {
   LOAD_ITEMS: "LOAD_ITEMS",
 };
 
-export const CheckboxContext = createContext(initState);
+export const CheckboxContext = createContext([initState, undefined]);
 
 export function toggleItem(itemId, items) {
   return items.map((item) => {

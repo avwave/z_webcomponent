@@ -20,7 +20,7 @@ export const actions = {
   CLEAR_FILTER_COLUMN: 'CLEAR_FILTER_COLUMN'
 };
 
-export const DataGridContext = createContext(initState);
+export const DataGridContext = createContext([initState, undefined]);
 
 function setDefaultFilterValues(columns, filterColumns) {
   const keystore = Object.keys(filterColumns)
