@@ -21,7 +21,6 @@ import { actions as dataGridActions, DataGridContext } from "./DataGridContext";
 import DataGridToolbar from "./DataGridToolbar";
 import { DraggableHeaderRenderer } from "./DraggableHeaderRenderer";
 import {
-  FilterRendererWrapper,
   OptionFilterRenderer,
   TextFilterRenderer,
 } from "./FilterRenderer";
@@ -73,7 +72,7 @@ function DataGrid({
   const domRef = useRef();
 
   const [checkListState, checkListDispatch] = useContext(CheckboxContext);
-  const [dataGridState, dataGridDispatch] = useContext(DataGridContext);
+  const [dataGridState, dataGridDispatch=()=>{}] = useContext(DataGridContext);
 
   const [columns, setColumns] = useState(dataGridState.columns);
   const [filters, setFilters] = useState({});
