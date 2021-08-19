@@ -27,7 +27,7 @@ export function AgendaReducer(state, action) {
   }
 }
 
-const AgendaProvider = ({ children }) => {
+export const AgendaProvider = ({ children }) => {
   const [state, dispatch] = useReducer(AgendaReducer, initState);
   return (
     <AgendaContext.Provider value={[state, dispatch]}>
