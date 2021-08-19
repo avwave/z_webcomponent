@@ -208,6 +208,7 @@ function Agenda(props) {
               dateHeader: AgendaDateHeader,
             },
             timeSlotWrapper: TimeslotWrapper,
+            ...props.components
           }}
           eventPropGetter={eventPropGetter}
           onSelectSlot={onSelectSlot}
