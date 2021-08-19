@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 import {actions, CheckboxContext} from '../CheckList/checklistContext';
@@ -58,7 +58,7 @@ const StyledLabel = styled.label`
 
 export default function Checkbox({ item }) {
   const { id, title, state } = item;
-  const context = React.useContext(CheckboxContext)
+  const context = useContext(CheckboxContext)
   const [ctxstate, dispatch]  = context || [[], ()=>{}]
 
   const onToggle = () => {

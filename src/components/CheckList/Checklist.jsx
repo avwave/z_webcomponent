@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import PropTypes from "prop-types";
 import { Checkbox } from "../Checkbox";
 import styled from "styled-components";
@@ -73,7 +73,7 @@ function Checklist({
 
   const events = { onToggle };
 
-  const [state, dispatch] = React.useContext(CheckboxContext);
+  const [state, dispatch] = useContext(CheckboxContext);
 
   return (
     <StyledContainer>

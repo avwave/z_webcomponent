@@ -7,7 +7,7 @@ import {
   withStyles,
 } from "@material-ui/core";
 import PropTypes from "prop-types";
-import React, { useCallback, useMemo, useRef, useState } from "react";
+import React, { isValidElement, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { useContextMenu } from "react-contexify";
 import ReactDataGrid, { Row } from "react-data-grid";
 import styled from "styled-components";
@@ -70,10 +70,10 @@ function DataGrid({
 }) {
   const [canvas, setCanvas] = useState(null);
 
-  const domRef = React.useRef();
+  const domRef = useRef();
 
-  const [checkListState, checkListDispatch] = React.useContext(CheckboxContext);
-  const [dataGridState, dataGridDispatch] = React.useContext(DataGridContext);
+  const [checkListState, checkListDispatch] = useContext(CheckboxContext);
+  const [dataGridState, dataGridDispatch] = useContext(DataGridContext);
 
   const [columns, setColumns] = useState(dataGridState.columns);
   const [filters, setFilters] = useState({});
@@ -100,7 +100,7 @@ function DataGrid({
     }, [onLoadMore]
   );
 
-  React.useEffect(() => {
+  useEffect(() => {
     const c = domRef.current.element;
     if (onLoadMore) {
       if (domRef.current && !canvas) {
@@ -113,7 +113,7 @@ function DataGrid({
       
   }, [canvas, onLoadMore, scrollListener]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     return function cleanup() {
       if (canvas?.removeEventListener) {
         canvas?.removeEventListener("scroll", scrollListener);
@@ -121,13 +121,13 @@ function DataGrid({
     };
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (resetScroll) {
       canvas.scrollTop = 0
     }
   }, [canvas, resetScroll])
 
-  React.useEffect(() => {
+  useEffect(() => {
     const defaultItems = dataGridState.columns.map((col) => {
       return {
         id: col.colId,
@@ -173,14 +173,14 @@ function DataGrid({
     });
   }, [columns]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const cols = dataGridState.columns.map((c) => {
       if (c.key === "id") return c;
 
       if (!c.formatter) {
         c.formatter = (props) => {
           const element = props.row[props.column.key];
-          const isReactElem = React.isValidElement(element);
+          const isReactElem = isValidElement(element);
           const tooltip =
             typeof props.row[props.column.key] === "object"
               ? isReactElem
@@ -230,7 +230,7 @@ function DataGrid({
     setColumns(cols);
   }, [dataGridState.columns]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     let copyColumns = dataGridState.columns;
     let filteredColumns = [];
 
@@ -275,7 +275,7 @@ function DataGrid({
     [dataGridDispatch]
   );
 
-  React.useEffect(() => {
+  useEffect(() => {
     dataGridDispatch({
       type: dataGridActions.FILTER_COLUMN,
       payload: {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 
@@ -31,7 +31,7 @@ export default function Element({
   id,
   columnId
 }) {
-  const context = React.useContext(GridContext);
+  const context = useContext(GridContext);
   const [ctxstate, dispatch] = context || [[], () => {}];
 
   function onCellClick() {
