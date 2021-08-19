@@ -117,7 +117,7 @@ function Agenda(props) {
   };
 
   const AgendaDateHeader = ({ date, label, onDrillDown }) => {
-    const summaryStatus = state.summaries?.find((summ) => {
+    const summaryStatus = state?.summaries?.find((summ) => {
       const comp = moment(date).isSame(summ.date);
       return comp;
     });
@@ -179,7 +179,7 @@ function Agenda(props) {
     <BlockUi 
     message={<CircularProgress/>}
     backgroundStyle={{backgroundColor: '#ffffffcc'}}
-    show={state.loading} style={{ height: 700, ...containerStyle }}
+    show={state?.loading} style={{ height: 700, ...containerStyle }}
     >
       <Paper elevation={0} square>
         <Dialog open={openAlert} onClose={handleCloseAlert}>
@@ -195,7 +195,7 @@ function Agenda(props) {
         <Calendar
           className={classes.root}
           localizer={localizer}
-          events={state.events || defaultEvents}
+          events={state?.events || defaultEvents}
           startAccessor="start"
           endAccessor="end"
           components={{
