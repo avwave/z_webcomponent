@@ -853,7 +853,7 @@ const FormFieldSet = ({
   );
 };
 
-const FormContext = createContext();
+const FormContext = createContext([]);
 
 const FormBuilder = (props) => {
   const {

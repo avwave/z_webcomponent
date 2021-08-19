@@ -13,7 +13,7 @@ export const actions = {
   SET_ONCOLUMNSELECT: "SET_ONCOLUMNSELECT",
 };
 
-export const GridContext = createContext();
+export const GridContext = createContext([]);
 
 function cellClick(gridItems, cellId) {
   const gc = gridItems.map((column) => {
