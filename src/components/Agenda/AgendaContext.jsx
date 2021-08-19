@@ -11,7 +11,7 @@ export const actions = {
   SET_DONE_LOADING: 'SET_DONE_LOADING'
 };
 
-export const AgendaContext = createContext([]);
+export const AgendaContext = createContext(initState);
 
 export function AgendaReducer(state, action) {
   switch (action.type) {
