@@ -179,7 +179,7 @@ function Agenda(props) {
     <BlockUi 
     message={<CircularProgress/>}
     backgroundStyle={{backgroundColor: '#ffffffcc'}}
-    show={state?.loading} style={{ height: 700, ...containerStyle }}
+    show={!!state?.loading} style={{ height: 700, ...containerStyle }}
     >
       <Paper elevation={0} square>
         <Dialog open={openAlert} onClose={handleCloseAlert}>
