@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 
@@ -15,7 +15,7 @@ const StyledColumn = styled.div`
 `;
 
 export default function Grid({ columns }) {
-  const context = React.useContext(GridContext);
+  const context = useContext(GridContext);
   const [state, dispatch] = context || [{ columns: [] }, () => {}];
   
   return (

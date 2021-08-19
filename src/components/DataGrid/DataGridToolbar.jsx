@@ -17,7 +17,7 @@ import {
 import { FilterList, ViewColumn } from "@material-ui/icons";
 import { stringify } from "javascript-stringify";
 import { isEmpty } from "lodash";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { Checklist } from "../CheckList";
 import CheckboxProvider, {
   actions as checkboxActions,
@@ -65,7 +65,7 @@ function DataGridToolbar({
   const columnPopoverId = isCheckListOpen ? "column-popover" : undefined;
   const filterPopoverId = isFilterListOpen ? "filter-popover" : undefined;
 
-  const [dataGridState, dataGridDispatch] = React.useContext(DataGridContext);
+  const [dataGridState, dataGridDispatch] = useContext(DataGridContext);
 
   const [filterColumnSettings, setFilterColumnSettings] = useState(columns);
 

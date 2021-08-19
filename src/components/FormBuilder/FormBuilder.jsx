@@ -44,6 +44,8 @@ import React, {
 import * as Yup from "yup";
 import { FormikPersist } from "./FormikPersist";
 import moment from "moment";
+import { Fragment } from "react";
+import { createContext } from "react";
 
 const useStyles = makeStyles((theme) => ({
   controlContainer: {
@@ -509,10 +511,10 @@ const FormFieldSet = ({
               renderOption={(option, { selected }) => {
                 if (fieldParams.settings?.multiple) {
                   return (
-                    <React.Fragment>
+                    <Fragment>
                       <Checkbox checked={selected} />
                       {option[fieldParams.settings.labelField]}
-                    </React.Fragment>
+                    </Fragment>
                   );
                 }
                 return option[fieldParams.settings.labelField];
@@ -851,7 +853,7 @@ const FormFieldSet = ({
   );
 };
 
-const FormContext = React.createContext();
+const FormContext = createContext();
 
 const FormBuilder = (props) => {
   const {

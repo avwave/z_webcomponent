@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Children, cloneElement, useContext, useState } from "react";
 import {
   Calendar,
   dateFnsLocalizer,
@@ -87,8 +87,8 @@ function Agenda(props) {
   const classes = useStyles()
   const metaRenderer = metaR ? metaR : () => {};
 
-  const [state, dispatch] = React.useContext(AgendaContext);
-  const [openAlert, setOpenAlert] = React.useState(false);
+  const [state, dispatch] = useContext(AgendaContext);
+  const [openAlert, setOpenAlert] = useState(false);
   const alertMessage = alertM ?? "Outside allowed timerange";
 
   const AgendaEventComponent = ({ event }) => {
@@ -139,8 +139,8 @@ function Agenda(props) {
       return children;
     }
     if (moment(value).isBefore(moment(), "day")) {
-      const child = React.Children.only(children);
-      return React.cloneElement(child, {
+      const child = Children.only(children);
+      return cloneElement(child, {
         className: child.props.className + " rbc-off-range-bg",
       });
     }
@@ -148,8 +148,8 @@ function Agenda(props) {
       if (isBetween(value, lockSlotStartTime, lockSlotEndTime)) {
         return children;
       }
-      const child = React.Children.only(children);
-      return React.cloneElement(child, {
+      const child = Children.only(children);
+      return cloneElement(child, {
         className: child.props.className + " rbc-off-range-bg",
       });
     }
