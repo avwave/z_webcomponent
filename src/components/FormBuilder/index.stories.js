@@ -12,7 +12,7 @@ import {
   IconButton,
   ListItemText,
 } from "@material-ui/core";
-import { AccountTree, Close } from "@material-ui/icons";
+import { AccountTree, Close, MobileFriendly, PhoneAndroid } from "@material-ui/icons";
 import { useFormikContext } from "formik";
 
 const FormConsumer = (props) => {
@@ -327,7 +327,7 @@ Dates.args = {
       label: "Date",
       disableFuture: true,
       disablePast: false,
-      initialValues: new Date(),
+      initialValues: "",
       useLocalTime: true,
       validator: () => Yup.date().max(new Date()),
       onChange: (field, data) => {
@@ -350,6 +350,38 @@ Dates.args = {
     },
   },
   formId:'dates',
+};
+
+export const Phone = DefaultStory.bind({});
+Phone.args = {
+  ...Default.args,
+  formLayout: [
+    ["phone", "fillPhone"],
+  ],
+  form: {
+    phone: {
+      type: "phone",
+      label: "Phone",
+      initialValues: "",
+      validator: () => Yup.string().required().nullable().max(15).matches(/^\+(63\d{10}|(?!63)\d{1,3}\d{10})$/, 'invalid phone number format').label(' '),
+      onChange: (field, data) => {
+        console.log("📢[index.stories.js:101]:", field, data, data);
+      },
+      icon: <MobileFriendly/>
+    },
+    fillPhone: {
+      type: "phone",
+      label: "Phone",
+      initialValues: "+639166831131",
+      validator: () => Yup.string().required().nullable().max(15).matches(/^\+(63\d{10}|(?!63)\d{1,3}\d{10})$/, 'invalid phone number format').label(' '),
+      onChange: (field, data) => {
+        console.log("📢[index.stories.js:101]:", field, data, data);
+      },
+      icon: <PhoneAndroid/>
+    },
+    
+  },
+  formId:'phone',
 };
 
 export const Checkboxes = DefaultStory.bind({});

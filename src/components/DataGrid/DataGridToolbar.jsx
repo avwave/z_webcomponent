@@ -72,10 +72,11 @@ function DataGridToolbar({
   const [filterValues, setFilterValues] = useState({});
 
   useEffect(() => {
-    const filterColumnSettings = columns.filter(
-      (col) => typeof col.filterRenderer === "function"
+    setFilterColumnSettings(
+      columns.filter(
+        (col) => typeof col.filterRenderer === "function"
+      )
     );
-    setFilterColumnSettings(filterColumnSettings);
   }, [columns]);
 
   const handleOpenCheckList = (event) => {
