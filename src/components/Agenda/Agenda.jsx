@@ -1,5 +1,5 @@
 import React from "react";
-import BigCalendar, {
+import {
   Calendar,
   dateFnsLocalizer,
   momentLocalizer,
