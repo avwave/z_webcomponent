@@ -67,7 +67,7 @@ export function dataGridReducer(state, action) {
   }
 }
 
-const DataGridProvider = ({ children }) => {
+export const DataGridProvider = ({ children }) => {
   const [state, dispatch] = useReducer(dataGridReducer, initState);
   return (
     <DataGridContext.Provider value={[state, dispatch]}>
