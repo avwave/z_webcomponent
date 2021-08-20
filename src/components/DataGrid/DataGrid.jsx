@@ -73,6 +73,7 @@ function DataGrid({
 
   const [checkListState, checkListDispatch] = useContext(CheckboxContext);
   const dataContext = useContext(DataGridContext);
+  console.log("📢[DataGrid.jsx:dataContext]: ", dataContext);
   const [dataGridState, dataGridDispatch] = dataContext;
 
   const [columns, setColumns] = useState(dataGridState.columns);
