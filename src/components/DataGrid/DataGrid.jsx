@@ -283,6 +283,7 @@ function DataGrid({
     });
   }, [dataGridDispatch, filters]);
 
+  console.log("📢[DataGrid.jsx:286]: ", draggableColumns, dataGridState);
   return (
     <BlockUi
       message={<CircularProgress />}
