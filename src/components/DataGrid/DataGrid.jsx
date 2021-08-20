@@ -17,7 +17,7 @@ import CheckboxProvider, {
   CheckboxContext,
 } from "../CheckList/checklistContext";
 import "./context.scss";
-import { actions as dataGridActions, DataGridContext } from "./DataGridContext";
+import DataGridProvider, { actions as dataGridActions, DataGridContext } from "./DataGridContext";
 import DataGridToolbar from "./DataGridToolbar";
 import { DraggableHeaderRenderer } from "./DraggableHeaderRenderer";
 import {
@@ -331,7 +331,9 @@ function DataGrid({
 function DGWrapper(props) {
   return (
     <CheckboxProvider>
-      <DataGrid {...props} />
+      <DataGridProvider>
+        <DataGrid {...props} />
+      </DataGridProvider>
     </CheckboxProvider>
   );
 }
