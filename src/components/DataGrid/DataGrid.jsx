@@ -72,7 +72,7 @@ function DataGrid({
   const domRef = useRef();
 
   const [checkListState, checkListDispatch] = useContext(CheckboxContext);
-  const [dataGridState, dataGridDispatch=()=>{}] = useContext(DataGridContext);
+  const [dataGridState, dataGridDispatch] = useContext(DataGridContext);
 
   const [columns, setColumns] = useState(dataGridState.columns);
   const [filters, setFilters] = useState({});
