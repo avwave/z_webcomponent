@@ -33,6 +33,7 @@ function setDefaultFilterValues(columns, filterColumns) {
 }
 
 export function dataGridReducer(state, action) {
+  console.log("📢[DataGridContext.reducer:35]: ", state, action);
   switch (action.type) {
     case actions.SET_LOADING:
       return { ...state, loading: true };
@@ -69,6 +70,7 @@ export function dataGridReducer(state, action) {
 
 export const DataGridProvider = ({ children }) => {
   const [state, dispatch] = useReducer(dataGridReducer, initState);
+  console.log("📢[DataGridContext.provider:72]: ", state, dispatch);
   return (
     <DataGridContext.Provider value={[state, dispatch]}>
       {children}
