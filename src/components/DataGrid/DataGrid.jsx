@@ -309,7 +309,6 @@ function DataGrid({
         className={"rdg-light"}
         headerFiltersHeight={50}
         rowRenderer={RowRenderer}
-        {...gridProps}
         style={{ ...style }}
         columns={draggableColumns}
         rows={dataGridState.rows}
@@ -322,6 +321,7 @@ function DataGrid({
         onFiltersChange={(a) => {
           setFilters({ ...filters, ...a });
         }}
+        {...gridProps}
       />
       {contextMenu?.contextItems() ?? <></>}
     </BlockUi>
