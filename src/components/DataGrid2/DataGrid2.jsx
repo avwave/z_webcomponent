@@ -1,12 +1,13 @@
-import { DataTypeProvider, SortingState, VirtualTableState } from '@devexpress/dx-react-grid';
-import { ColumnChooser, DragDropProvider, Grid, Table, TableColumnReordering, TableColumnResizing, TableColumnVisibility, TableFixedColumns, TableHeaderRow, Toolbar, VirtualTable } from '@devexpress/dx-react-grid-material-ui';
-import { Tooltip, IconButton, makeStyles, withStyles, Paper, TableCell as MuiTableCell, lighten} from '@material-ui/core';
+import { DataTypeProvider, IntegratedSelection, SelectionState, SortingState, VirtualTableState } from '@devexpress/dx-react-grid';
+import { ColumnChooser, DragDropProvider, Grid, Table, TableColumnReordering, TableColumnResizing, TableColumnVisibility, TableFixedColumns, TableHeaderRow, TableSelection, Toolbar, VirtualTable } from '@devexpress/dx-react-grid-material-ui';
+import { CircularProgress, IconButton, lighten, makeStyles, Paper, Tooltip, withStyles } from '@material-ui/core';
 import { ViewColumn } from '@material-ui/icons';
 import clsx from 'clsx';
 import { isEmpty } from 'lodash-es';
-import React, { isValidElement, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import React, { isValidElement, useCallback, useContext, useEffect, useState } from 'react';
+import { SELECT_COLUMN_KEY } from 'react-data-grid';
+import BlockUi from "react-loader-advanced";
 import { actions as dataGridActions, DataGridContext } from "../DataGrid/DataGridContext";
-import DataGridToolbar from '../DataGrid/DataGridToolbar';
 import { DGToolbar } from './DGToolbar';
 
 const useStyles = makeStyles((theme) => {
@@ -24,7 +25,7 @@ const useStyles = makeStyles((theme) => {
       border: "1px solid #dadde9",
     },
     headerRow: {
-      textTransform:'uppercase',
+      textTransform: 'uppercase',
       backgroundColor: lighten(theme.palette.primary.light, 0.75)
     },
     cell: {
@@ -51,9 +52,8 @@ const Root = props => <Grid.Root {...props} style={{ height: '100%' }} />;
 
 const HeaderRowCell = ({ ...restProps }) => {
   const classes = useStyles();
-  console.log(restProps);
   return (
-    <TableHeaderRow.Cell {...restProps} size="small" className={clsx(restProps.className, classes.cell, classes.headerRow)}  />
+    <TableHeaderRow.Cell {...restProps} size="small" className={clsx(restProps.className, classes.cell, classes.headerRow)} />
   )
 }
 
@@ -121,6 +121,9 @@ const DataGrid2 = ({
   const [fixedColumns, setFixedColumns] = useState([]);
   const [hiddenColumnNames, setHiddenColumnNames] = useState([]);
 
+  const [selection, setSelection] = useState([...gridProps?.selectedRows??[]]);
+
+  const [hasSelectable, setHasSelectable] = useState(false);
   useEffect(() => {
     setRows(dataGridState.rows);
   }, [dataGridState.rows]);
@@ -155,13 +158,16 @@ const DataGrid2 = ({
       }
     }));
     setFixedColumns(dataGridState.columns.filter(col => col.frozen).map(col => col.key));
-    setHiddenColumnNames(dataGridState.columns.filter(col => col.hidden).map(col => col.key));
+    setHiddenColumnNames(dataGridState.columns.filter(col => col.hidden || col.key === SELECT_COLUMN_KEY).map(col => col.key));
     setSorting(dataGridState.columns.filter(col => col.sortable).map(col => {
       return {
         columnName: col.key,
         direction: 'asc'
       }
     }))
+    const selable = dataGridState.columns.some(col => col.key === SELECT_COLUMN_KEY)
+    setHasSelectable(selable);
+
   }, [dataGridState.columns]);
 
   useEffect(() => {
@@ -191,13 +197,13 @@ const DataGrid2 = ({
       <Grid {...gridProps} rows={rows}
         columns={columns}
         rootComponent={Root}
-        getRowId={row=>row.id}
+        getRowId={row => row.id}
       >
         <DragDropProvider />
         <DataTypeProvider
           for={columns.map(({ name }) => name)}
-          formatterComponent={TooltipFormatter} {...props} 
-          />
+          formatterComponent={TooltipFormatter} {...props}
+        />
         <SortingState
           sorting={sorting}
           onSortingChange={(sort) => {
@@ -205,16 +211,25 @@ const DataGrid2 = ({
             handleSort(sort[0]?.columnName, sort[0]?.direction)
           }}
         />
-        {onLoadMore && (
-        <VirtualTableState
-          loading={dataGridState.loading}
-          totalRowCount={totalCount}
-          pageSize={pageSize}
-          skip={pageOffset}
-          getRows={(skip, take) => {
-            onLoadMore({pageOffset:skip, pageSize:take})
+
+        <SelectionState
+          selection={selection}
+          onSelectionChange={(selRows) => {
+            setSelection(selRows)
+            gridProps?.onSelectedRowsChange(selRows)
           }}
         />
+        <IntegratedSelection />
+        {onLoadMore && (
+          <VirtualTableState
+            loading={dataGridState.loading}
+            totalRowCount={totalCount}
+            pageSize={pageSize}
+            skip={pageOffset}
+            getRows={(skip, take) => {
+              onLoadMore({ pageOffset: skip, pageSize: take })
+            }}
+          />
         )}
         <VirtualTable
           columnExtensions={tableColumnExtenstions}
@@ -232,9 +247,12 @@ const DataGrid2 = ({
           onColumnWidthsChange={setColumnWidths}
         />
         <TableHeaderRow showSortingControls
-        cellComponent={HeaderRowCell}
+          cellComponent={HeaderRowCell}
         />
         <TableColumnVisibility
+          messages={{
+            noColumns:''
+          }}
           hiddenColumnNames={hiddenColumnNames}
           onHiddenColumnNamesChange={setHiddenColumnNames}
         />
@@ -269,10 +287,13 @@ const DataGrid2 = ({
           totalCount={dataGridState.rows.length}
           loadedCount={dataGridState.rows.length}
         />
+        {hasSelectable && (
+          <TableSelection showSelectAll/>
+        )}
         <TableFixedColumns leftColumns={fixedColumns} />
       </Grid>
     </Paper>
   )
 }
 
-export { DataGrid2 }
+export { DataGrid2 };
