@@ -43,6 +43,16 @@ const styles = (theme) => ({
     paddingLeft: theme.spacing(1),
     fontWeight: "bold",
   },
+  toolbar: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+    alignItems: "center",
+  },
+  root: {
+    width: "100%",
+  }
 });
 
 function DataGridToolbar({
@@ -56,6 +66,7 @@ function DataGridToolbar({
   centerAccessory,
   totalCount,
   loadedCount,
+  children
 }) {
   const [columnAnchor, setColumnAnchor] = useState();
   const [filterAnchor, setFilterAnchor] = useState();
@@ -125,7 +136,7 @@ function DataGridToolbar({
   }, [dataGridState.filterColumn]);
 
   return (
-    <>
+    <div className={classes.root}>
       {(showSelector ||
         leftAccessory ||
         centerAccessory ||
@@ -200,6 +211,7 @@ function DataGridToolbar({
           ) : (
             <></>
           )}
+          {children}
           {rightAccessory ? rightAccessory() : <></>}
         </Toolbar>
       )}
@@ -243,7 +255,7 @@ function DataGridToolbar({
           </Breadcrumbs>
         </Toolbar>
       )}
-    </>
+    </div>
   );
 }
 export default withStyles(styles)(DataGridToolbar);

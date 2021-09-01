@@ -10,7 +10,7 @@ import {
 import { Row } from "react-data-grid";
 import React, { useState } from "react";
 import { withReactContext } from "storybook-react-context";
-import { DataGrid } from ".";
+
 import isEmpty from "lodash.isempty";
 
 import { columnData, rows } from "./gridData";
@@ -19,17 +19,18 @@ import DataGridProvider, {
   DataGridContext,
   actions,
   initState,
-} from "./DataGridContext";
+} from "../DataGrid/DataGridContext";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { SelectColumn } from "react-data-grid";
 
 import { Menu as ContextMenu, Item as ContextItem } from "react-contexify";
 import { action } from "@storybook/addon-actions";
+import { DataGrid2 } from "./DataGrid2";
 
 const DataGridStory = {
-  component: DataGrid,
-  title: "DataGrid/DataGrid",
+  component: DataGrid2,
+  title: "DataGrid/DataGrid2",
   decorators: [
     withReactContext(),
     (Story) => (
@@ -53,7 +54,7 @@ const DefaultStory = ({ ...args }) => {
     });
   }, [args.columns, args.rows, dispatch]);
 
-  return <Paper><DataGrid {...args} /></Paper>;
+  return <Paper><DataGrid2 {...args} /></Paper>;
 };
 
 export const Default = DefaultStory.bind({});
@@ -61,60 +62,58 @@ Default.args = {
   rows: rows,
   columns: columnData,
   containerStyle: {
-    maxHeight: "100vh",
-    display: "flex",
-    flexDirection: "column",
+    height: "90vh",
+    
   },
   style: { flex: "1 1 auto" },
   gridProps: {},
-  totalCount: 10000,
 };
 
-export const CellFormatter = DefaultStory.bind({});
-const CellFormatting = ({ value }) => {
-  return <Chip label={value.row[value.key]} />;
-};
-const applyDateColumn = [
-  {
-    key: "col5Type",
-    colId: "col4",
-    name: "Column4",
-    align: "flex-start",
-    cellRenderer(props) {
-      return <CellFormatting value={{ ...props, key: "col5Type" }} />;
-    },
-  },
-];
+// export const CellFormatter = DefaultStory.bind({});
+// const CellFormatting = ({ value }) => {
+//   return <Chip label={value.row[value.key]} />;
+// };
+// const applyDateColumn = [
+//   {
+//     key: "col5Type",
+//     colId: "col4",
+//     name: "Column4",
+//     align: "flex-start",
+//     cellRenderer(props) {
+//       return <CellFormatting value={{ ...props, key: "col5Type" }} />;
+//     },
+//   },
+// ];
 
-CellFormatter.args = {
-  ...Default.args,
-  columns: applyDateColumn,
-};
+// CellFormatter.args = {
+//   ...Default.args,
+//   columns: applyDateColumn,
+// };
 
-export const Reorderable = DefaultStory.bind({});
-Reorderable.args = {
-  ...Default.args,
-  draggable: true,
-  columns: columnData,
-};
+// export const Reorderable = DefaultStory.bind({});
+// Reorderable.args = {
+//   ...Default.args,
+//   draggable: true,
+//   columns: columnData,
+// };
 
-export const GridProps = DefaultStory.bind({});
-GridProps.args = {
-  ...Default.args,
-  draggable: true,
-  columns: columnData,
-  gridProps: {
-    rowHeight: 60,
-  },
-};
+// export const GridProps = DefaultStory.bind({});
+// GridProps.args = {
+//   ...Default.args,
+//   draggable: true,
+//   columns: columnData,
+//   gridProps: {
+//     rowHeight: 60,
+//   },
+// };
 
-export const ClientSortable = DefaultStory.bind({});
-ClientSortable.args = {
-  ...Default.args,
-  columns: columnData.map((cols) => {
-    return { ...cols, sortable: true };
-  }),
-};
+// export const ClientSortable = DefaultStory.bind({});
+// ClientSortable.args = {
+//   ...Default.args,
+//   columns: columnData.map((cols) => {
+//     return { ...cols, sortable: true };
+//   }),
+// };
 
 export const ColumnDisplaySelection = DefaultStory.bind({});
 ColumnDisplaySelection.args = {
@@ -161,7 +160,7 @@ const ServerFilterSortStory = ({ ...args }) => {
       state.sortDirection === "DESC" ? sortedRows.reverse() : sortedRows;
 
     dispatch({
-      payload: { rows: sortedRows },
+      payload: { rows: [...sortedRows] },
       type: actions.LOAD_ROWS,
     });
   }, [state.sortColumn, state.sortDirection]);
@@ -196,7 +195,7 @@ const ServerFilterSortStory = ({ ...args }) => {
     });
   }, [state.filterColumn]);
 
-  return <Paper><DataGrid {...args} /></Paper>;
+  return <Paper><DataGrid2 {...args} /></Paper>;
 };
 export const ServerFilterSort = ServerFilterSortStory.bind({});
 ServerFilterSort.args = {
@@ -218,7 +217,7 @@ const SelectableStory = ({ ...args }) => {
 
   return (
     <Paper>
-    <DataGrid
+    <DataGrid2
       {...args}
       gridProps={{
         selectedRows: selectedRowIds,
@@ -323,7 +322,7 @@ const RedrawBugStory = ({ ...args }) => {
     <Grid container>
       <Grid item xs={12}>
       <Paper style={{ display: "flex", flexDirection: "column", height: "70vh" }}>
-        <DataGrid {...args} />
+        <DataGrid2 {...args} />
       </Paper>
       </Grid>
     </Grid>
@@ -374,7 +373,7 @@ const LoaderStory = ({ ...args }) => {
     <Grid container>
       <Grid item xs={12}>
       <Paper style={{ display: "flex", flexDirection: "column", height: "70vh" }}>
-        <DataGrid {...args} />
+        <DataGrid2 {...args} />
         <Button onClick={()=>simulateLoading()}>Simulate Loading</Button>
       </Paper>
       </Grid>
@@ -451,7 +450,7 @@ const InfiniteLoaderStory = ({ ...args }) => {
     <Grid container>
       <Grid item xs={12}>
       <Paper style={{ display: "flex", flexDirection: "column", height: "70vh" }}>
-        <DataGrid {...args} 
+        <DataGrid2 {...args} 
           onLoadMore={()=>simulateLoading()}
           resetScroll={resetScroll}
           leftAccessory={ () => (
