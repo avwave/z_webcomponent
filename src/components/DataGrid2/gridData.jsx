@@ -42,7 +42,7 @@ const columnData = [
     resizable: true,
     hidden: true,
     tooltip: (props) => {
-      return props.row.col4Type
+      return props?.row?.col4Type
     }
   },
   {

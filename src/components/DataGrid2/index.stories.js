@@ -402,7 +402,8 @@ const InfiniteLoaderStory = ({ ...args }) => {
 
   const [resetScroll, setResetScroll] = React.useState(false);
   const simulateLoading = React.useCallback(
-    async () => {
+    async (params) => {
+      console.log("📢[index.stories.js:406]: ", params);
       setResetScroll(false)
       dispatch({
         type: actions.SET_LOADING,
@@ -445,14 +446,20 @@ const InfiniteLoaderStory = ({ ...args }) => {
     });
   }, [args.columns, args.rows, dispatch]);
 
+  React.useEffect(() => {
+    simulateLoading()
+  }, []);
+
 
   return (
     <Grid container>
       <Grid item xs={12}>
       <Paper style={{ display: "flex", flexDirection: "column", height: "70vh" }}>
         <DataGrid2 {...args} 
-          onLoadMore={()=>simulateLoading()}
+          onLoadMore={(params)=>simulateLoading(params)}
           resetScroll={resetScroll}
+          pageSize={20}
+          pageOffset={0}
           leftAccessory={ () => (
             <ButtonGroup>
               <Button onClick={()=>setResetScroll(true)}>Left</Button>
@@ -470,6 +477,6 @@ InfiniteLoader.args = {
   ...Default.args,
   filterable: true,
   showSelector: true,
-  totalCount: 10000,
+  totalCount: 300,
   centerAccessory: () => <Typography variant="h6">Heading</Typography>,
 };

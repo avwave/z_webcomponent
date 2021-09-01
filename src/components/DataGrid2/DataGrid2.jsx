@@ -1,7 +1,8 @@
-import { DataTypeProvider, SortingState } from '@devexpress/dx-react-grid';
+import { DataTypeProvider, SortingState, VirtualTableState } from '@devexpress/dx-react-grid';
 import { ColumnChooser, DragDropProvider, Grid, Table, TableColumnReordering, TableColumnResizing, TableColumnVisibility, TableFixedColumns, TableHeaderRow, Toolbar, VirtualTable } from '@devexpress/dx-react-grid-material-ui';
-import { Tooltip, IconButton, makeStyles, withStyles, Paper } from '@material-ui/core';
+import { Tooltip, IconButton, makeStyles, withStyles, Paper, TableCell as MuiTableCell, lighten} from '@material-ui/core';
 import { ViewColumn } from '@material-ui/icons';
+import clsx from 'clsx';
 import { isEmpty } from 'lodash-es';
 import React, { isValidElement, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { actions as dataGridActions, DataGridContext } from "../DataGrid/DataGridContext";
@@ -22,6 +23,13 @@ const useStyles = makeStyles((theme) => {
       fontSize: theme.typography.pxToRem(14),
       border: "1px solid #dadde9",
     },
+    headerRow: {
+      textTransform:'uppercase',
+      backgroundColor: lighten(theme.palette.primary.light, 0.75)
+    },
+    cell: {
+      borderRight: '1px solid #f0f0f0',
+    }
   }
 })
 const LightTooltip = withStyles((theme) => ({
@@ -35,12 +43,22 @@ const LightTooltip = withStyles((theme) => ({
 }))(Tooltip);
 
 const Cell = (props) => {
-  return <Table.Cell {...props} style={{ ...props.style, ...props.column?.cellStyles }} />
+  const classes = useStyles();
+  return <Table.Cell {...props} size="small" className={clsx(props.className, classes.cell)} style={{ ...props.style, ...props.column?.cellStyles }} />
 }
+
 const Root = props => <Grid.Root {...props} style={{ height: '100%' }} />;
 
-const TooltipFormatter = ({ value, row, column, ...props }) => {
+const HeaderRowCell = ({ ...restProps }) => {
   const classes = useStyles();
+  console.log(restProps);
+  return (
+    <TableHeaderRow.Cell {...restProps} size="small" className={clsx(restProps.className, classes.cell, classes.headerRow)}  />
+  )
+}
+
+
+const TooltipFormatter = ({ value, row, column, ...props }) => {
   const element = row[column.key];
   const isReactElem = isValidElement(element);
   const tooltip =
@@ -82,6 +100,8 @@ const DataGrid2 = ({
   onLoadMore,
   totalCount,
   resetScroll,
+  pageOffset,
+  pageSize,
   ...props }) => {
   const classes = useStyles()
   const [dataGridState, dataGridDispatch] = useContext(DataGridContext);
@@ -171,11 +191,13 @@ const DataGrid2 = ({
       <Grid {...gridProps} rows={rows}
         columns={columns}
         rootComponent={Root}
+        getRowId={row=>row.id}
       >
         <DragDropProvider />
         <DataTypeProvider
           for={columns.map(({ name }) => name)}
-          formatterComponent={TooltipFormatter} {...props} />
+          formatterComponent={TooltipFormatter} {...props} 
+          />
         <SortingState
           sorting={sorting}
           onSortingChange={(sort) => {
@@ -183,7 +205,17 @@ const DataGrid2 = ({
             handleSort(sort[0]?.columnName, sort[0]?.direction)
           }}
         />
-
+        {onLoadMore && (
+        <VirtualTableState
+          loading={dataGridState.loading}
+          totalRowCount={totalCount}
+          pageSize={pageSize}
+          skip={pageOffset}
+          getRows={(skip, take) => {
+            onLoadMore({pageOffset:skip, pageSize:take})
+          }}
+        />
+        )}
         <VirtualTable
           columnExtensions={tableColumnExtenstions}
           cellComponent={Cell}
@@ -199,7 +231,9 @@ const DataGrid2 = ({
           columnExtensions={columnExtensions}
           onColumnWidthsChange={setColumnWidths}
         />
-        <TableHeaderRow showSortingControls />
+        <TableHeaderRow showSortingControls
+        cellComponent={HeaderRowCell}
+        />
         <TableColumnVisibility
           hiddenColumnNames={hiddenColumnNames}
           onHiddenColumnNamesChange={setHiddenColumnNames}
