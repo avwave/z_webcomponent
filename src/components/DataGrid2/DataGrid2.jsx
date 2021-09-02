@@ -242,7 +242,7 @@ const DataGrid2 = ({
           selection={selection}
           onSelectionChange={(selRows) => {
             setSelection(selRows)
-            gridProps?.onSelectedRowsChange(selRows)
+            gridProps?.onSelectedRowsChange(new Set(selRows))
           }}
         />
         <IntegratedSelection />
