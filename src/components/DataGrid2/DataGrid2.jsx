@@ -26,11 +26,24 @@ const useStyles = makeStyles((theme) => {
     },
     headerRow: {
       textTransform: 'uppercase',
-      backgroundColor: lighten(theme.palette.primary.light, 0.75)
+      backgroundColor: lighten(theme.palette.primary.light, 0.75),
+      overflowWrap: 'break-word'
     },
     cell: {
       borderRight: '1px solid #f0f0f0',
-    }
+      // backgroundColor: 'inherit',
+    },
+    fixedCell: {
+      backgroundColor: 'inherit',
+    },
+    hover: {
+      backgroundColor: theme.palette.background.paper,
+      '&:hover': {
+        backgroundColor: theme.palette.grey[200],
+      },
+      
+    },
+    
   }
 })
 const LightTooltip = withStyles((theme) => ({
@@ -48,6 +61,12 @@ const Cell = (props) => {
   return <Table.Cell {...props} size="small" className={clsx(props.className, classes.cell)} style={{ ...props.style, ...props.column?.cellStyles }} />
 }
 
+const FixedCell = (props) => {
+  const classes = useStyles();
+  const cls = props?.tableRow?.rowId ? clsx(props.className, classes.fixedCell, classes.cell) : clsx(props.className, classes.cell)
+  return <TableFixedColumns.Cell {...props} size="small" className={cls} style={{ ...props.style, ...props.column?.cellStyles }} />
+}
+
 const Root = props => <Grid.Root {...props} style={{ height: '100%' }} />;
 
 const HeaderRowCell = ({ ...restProps }) => {
@@ -55,6 +74,11 @@ const HeaderRowCell = ({ ...restProps }) => {
   return (
     <TableHeaderRow.Cell {...restProps} size="small" className={clsx(restProps.className, classes.cell, classes.headerRow)} />
   )
+}
+
+const RowComponent = ({row, ...rest}) => {
+  const classes = useStyles()
+  return <Table.Row {...rest} className={classes.hover} />
 }
 
 
@@ -183,7 +207,8 @@ const DataGrid2 = ({
         minWidth: col.minWidth ?? 40
       }
     }));
-    setFixedColumns(dataGridState.columns.filter(col => col.frozen).map(col => col.key));
+    const fx = dataGridState.columns.filter(col => col.frozen).map(col => col.key)
+    setFixedColumns([...fx, TableSelection.COLUMN_TYPE]);
     setHiddenColumnNames(dataGridState.columns.filter(col => col.hidden || col.key === SELECT_COLUMN_KEY).map(col => col.key));
     setSorting(dataGridState.columns.filter(col => col.sortable).map(col => {
       return {
@@ -261,6 +286,7 @@ const DataGrid2 = ({
           columnExtensions={tableColumnExtenstions}
           cellComponent={Cell}
           height="auto"
+          rowComponent={RowComponent}
         />
         <TableColumnReordering
           order={columnOrder}
@@ -314,9 +340,10 @@ const DataGrid2 = ({
           loadedCount={dataGridState.rows.length}
         />
         {hasSelectable && (
-          <TableSelection showSelectAll />
+          <TableSelection showSelectAll/>
         )}
-        <TableFixedColumns leftColumns={fixedColumns} />
+        <TableFixedColumns leftColumns={fixedColumns} 
+        cellComponent={FixedCell}/>
       </Grid>
     </Paper>
   )
