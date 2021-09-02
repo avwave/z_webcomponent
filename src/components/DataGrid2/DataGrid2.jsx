@@ -4,7 +4,7 @@ import { CircularProgress, IconButton, lighten, makeStyles, Paper, Tooltip, with
 import { ViewColumn } from '@material-ui/icons';
 import clsx from 'clsx';
 import { isEmpty } from 'lodash-es';
-import React, { isValidElement, useCallback, useContext, useEffect, useState } from 'react';
+import React, { isValidElement, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { SELECT_COLUMN_KEY } from 'react-data-grid';
 import BlockUi from "react-loader-advanced";
 import { actions as dataGridActions, DataGridContext } from "../DataGrid/DataGridContext";
@@ -85,7 +85,7 @@ const TooltipFormatter = ({ value, row, column, ...props }) => {
   }
 
 }
-
+const ROW_HEGIHT = 53;
 const DataGrid2 = ({
   draggable,
   showSelector,
@@ -121,20 +121,24 @@ const DataGrid2 = ({
   const [fixedColumns, setFixedColumns] = useState([]);
   const [hiddenColumnNames, setHiddenColumnNames] = useState([]);
 
-  const [selection, setSelection] = useState([...gridProps?.selectedRows??[]]);
+  const [selection, setSelection] = useState([...gridProps?.selectedRows ?? []]);
 
   const [hasSelectable, setHasSelectable] = useState(false);
+  const containerRef = useRef();
+
   useEffect(() => {
     setRows(dataGridState.rows);
   }, [dataGridState.rows]);
 
   useEffect(() => {
     setColumns(dataGridState.columns.map((column) => {
-      const celrender = column.cellRenderer ? column.cellRenderer : ()=>{};
-      return column.cellRenderer ? { ...column,
+      const celrender = column.cellRenderer ? column.cellRenderer : () => { };
+      return column.cellRenderer ? {
+        ...column,
         name: column.key, title: column.name,
-        getCellValue: (row) => celrender({row, column:null})
-      }:{ ...column,
+        getCellValue: (row) => celrender({ row, column: null })
+      } : {
+        ...column,
         name: column.key, title: column.name,
       }
     }));
@@ -151,16 +155,32 @@ const DataGrid2 = ({
   }, [dataGridState.columns]);
 
   useEffect(() => {
-    setColumnWidths(dataGridState.columns.map(col => {
-      return {
-        columnName: col.key,
-        width: (col.minWidth ?? col.width) ?? 200
-      }
-    }));
+    if (containerRef.current) {
+      const containerHeight = containerRef.current.clientHeight;
+
+      // "+ 1" - is TableHeaderRow
+      // 15 - scrollbar's width
+      const scrollbarOffset =
+        rows.length + 1 >= containerHeight / ROW_HEGIHT ? 15 : 0;
+      const containerWidth = containerRef.current.clientWidth - scrollbarOffset;
+
+      const visibleColumns = columns.length - hiddenColumnNames.length;
+      setColumnWidths(
+        columns.map((col, index) => {
+          return {
+            columnName: col.key,
+            width: (col.minWidth ?? col.width) ?? (containerWidth / visibleColumns)
+          }
+        })
+      );
+    }
+  }, [columns, hiddenColumnNames.length, rows.length]);
+
+  useEffect(() => {
     setColumnExtensions(dataGridState.columns.map(col => {
       return {
         columnName: col.key,
-        minWidth: col.minWidth ?? 200
+        minWidth: col.minWidth ?? 40
       }
     }));
     setFixedColumns(dataGridState.columns.filter(col => col.frozen).map(col => col.key));
@@ -199,7 +219,7 @@ const DataGrid2 = ({
   );
 
   return (
-    <Paper style={containerStyle}>
+    <Paper ref={containerRef} style={containerStyle}>
       <Grid {...gridProps} rows={rows}
         columns={columns}
         rootComponent={Root}
@@ -247,7 +267,7 @@ const DataGrid2 = ({
           onOrderChange={setColumnOrder}
         />
         <TableColumnResizing
-          resizingMode="nextColumn"
+          resizingMode="widget"
           columnWidths={columnWidths}
           columnExtensions={columnExtensions}
           onColumnWidthsChange={setColumnWidths}
@@ -257,7 +277,7 @@ const DataGrid2 = ({
         />
         <TableColumnVisibility
           messages={{
-            noColumns:''
+            noColumns: ''
           }}
           hiddenColumnNames={hiddenColumnNames}
           onHiddenColumnNamesChange={setHiddenColumnNames}
@@ -294,7 +314,7 @@ const DataGrid2 = ({
           loadedCount={dataGridState.rows.length}
         />
         {hasSelectable && (
-          <TableSelection showSelectAll/>
+          <TableSelection showSelectAll />
         )}
         <TableFixedColumns leftColumns={fixedColumns} />
       </Grid>

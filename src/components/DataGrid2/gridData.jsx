@@ -119,6 +119,7 @@ const columnData = [
     colId: "col8",
     name: "Column8",
     sortable: false,
+    width: 250
   },
   {
     key: "col9Type",
