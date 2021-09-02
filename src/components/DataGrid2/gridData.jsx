@@ -93,11 +93,11 @@ const columnData = [
     name: "Button",
     sortable: false,
     // getCellValue: (row) => JSON.stringify(row.col7Type),
-    cellRenderer(row) {
+    cellRenderer({row, column}) {
       return (
         <IconButton
           onClick={() => {
-            alert(JSON.stringify({row}, null, 2))
+            alert(JSON.stringify({column, row}, null, 2))
           }}>
           <Delete color="secondary" />
         </IconButton>

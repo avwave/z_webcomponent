@@ -130,8 +130,13 @@ const DataGrid2 = ({
 
   useEffect(() => {
     setColumns(dataGridState.columns.map((column) => {
-      return { ...column, name: column.key, title: column.name,
-      getCellValue: column.cellRenderer }
+      const celrender = column.cellRenderer ? column.cellRenderer : ()=>{};
+      return column.cellRenderer ? { ...column,
+        name: column.key, title: column.name,
+        getCellValue: (row) => celrender({row, column:null})
+      }:{ ...column,
+        name: column.key, title: column.name,
+      }
     }));
     setTableColumnExtenstions(dataGridState.columns.map(col => {
       return {
