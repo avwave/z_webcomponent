@@ -10,7 +10,7 @@ import {
 import { Row } from "react-data-grid";
 import React, { useState } from "react";
 import { withReactContext } from "storybook-react-context";
-import { DataGrid } from ".";
+
 import isEmpty from "lodash.isempty";
 
 import { columnData, rows } from "./gridData";
@@ -19,17 +19,18 @@ import DataGridProvider, {
   DataGridContext,
   actions,
   initState,
-} from "./DataGridContext";
+} from "../DataGrid/DataGridContext";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { SelectColumn } from "react-data-grid";
 
 import { Menu as ContextMenu, Item as ContextItem } from "react-contexify";
 import { action } from "@storybook/addon-actions";
+import { DataGrid2 } from "./DataGrid2";
 
 const DataGridStory = {
-  component: DataGrid,
-  title: "DataGrid/DataGrid",
+  component: DataGrid2,
+  title: "DataGrid/DataGrid2",
   decorators: [
     withReactContext(),
     (Story) => (
@@ -53,7 +54,7 @@ const DefaultStory = ({ ...args }) => {
     });
   }, [args.columns, args.rows, dispatch]);
 
-  return <Paper><DataGrid {...args} /></Paper>;
+  return <Paper><DataGrid2 {...args} /></Paper>;
 };
 
 export const Default = DefaultStory.bind({});
@@ -61,13 +62,11 @@ Default.args = {
   rows: rows,
   columns: columnData,
   containerStyle: {
-    maxHeight: "100vh",
-    display: "flex",
-    flexDirection: "column",
+    height: "90vh",
+    
   },
   style: { flex: "1 1 auto" },
   gridProps: {},
-  totalCount: 10000,
 };
 
 export const CellFormatter = DefaultStory.bind({});
@@ -94,6 +93,13 @@ CellFormatter.args = {
 export const Reorderable = DefaultStory.bind({});
 Reorderable.args = {
   ...Default.args,
+  draggable: true,
+  columns: columnData,
+};
+export const Blank = DefaultStory.bind({});
+Blank.args = {
+  ...Default.args,
+  rows:[],
   draggable: true,
   columns: columnData,
 };
@@ -161,7 +167,7 @@ const ServerFilterSortStory = ({ ...args }) => {
       state.sortDirection === "DESC" ? sortedRows.reverse() : sortedRows;
 
     dispatch({
-      payload: { rows: sortedRows },
+      payload: { rows: [...sortedRows] },
       type: actions.LOAD_ROWS,
     });
   }, [state.sortColumn, state.sortDirection]);
@@ -196,7 +202,7 @@ const ServerFilterSortStory = ({ ...args }) => {
     });
   }, [state.filterColumn]);
 
-  return <Paper><DataGrid {...args} /></Paper>;
+  return <Paper><DataGrid2 {...args} /></Paper>;
 };
 export const ServerFilterSort = ServerFilterSortStory.bind({});
 ServerFilterSort.args = {
@@ -218,12 +224,12 @@ const SelectableStory = ({ ...args }) => {
 
   return (
     <Paper>
-    <DataGrid
+    <DataGrid2
       {...args}
       gridProps={{
         selectedRows: selectedRowIds,
         onSelectedRowsChange: (rows) => {
-          console.log("📢[index.stories.js:226]: ", rows);
+          console.log("📢[index.stories.js:231]: ", rows);
           setSelectedRowIds(rows);
         },
         rowKeyGetter: (row) => {
@@ -237,14 +243,9 @@ const SelectableStory = ({ ...args }) => {
 
 export const Selectable = SelectableStory.bind({});
 Selectable.args = {
+  ...Default.args,
   rows: rows,
   columns: [SelectColumn, ...columnData],
-  containerStyle: {
-    maxHeight: "100vh",
-    display: "flex",
-    flexDirection: "column",
-  },
-  style: { flex: "1 1 auto" },
 };
 
 function displayId({ props: { row } }) {
@@ -324,7 +325,7 @@ const RedrawBugStory = ({ ...args }) => {
     <Grid container>
       <Grid item xs={12}>
       <Paper style={{ display: "flex", flexDirection: "column", height: "70vh" }}>
-        <DataGrid {...args} />
+        <DataGrid2 {...args} />
       </Paper>
       </Grid>
     </Grid>
@@ -375,7 +376,7 @@ const LoaderStory = ({ ...args }) => {
     <Grid container>
       <Grid item xs={12}>
       <Paper style={{ display: "flex", flexDirection: "column", height: "70vh" }}>
-        <DataGrid {...args} />
+        <DataGrid2 {...args} />
         <Button onClick={()=>simulateLoading()}>Simulate Loading</Button>
       </Paper>
       </Grid>
@@ -404,7 +405,8 @@ const InfiniteLoaderStory = ({ ...args }) => {
 
   const [resetScroll, setResetScroll] = React.useState(false);
   const simulateLoading = React.useCallback(
-    async () => {
+    async (params) => {
+      console.log("📢[index.stories.js:406]: ", params);
       setResetScroll(false)
       dispatch({
         type: actions.SET_LOADING,
@@ -447,19 +449,36 @@ const InfiniteLoaderStory = ({ ...args }) => {
     });
   }, [args.columns, args.rows, dispatch]);
 
+  React.useEffect(() => {
+    simulateLoading()
+  }, []);
+
+  const [selectedRowIds, setSelectedRowIds] = useState(() => new Set());
 
   return (
     <Grid container>
       <Grid item xs={12}>
       <Paper style={{ display: "flex", flexDirection: "column", height: "70vh" }}>
-        <DataGrid {...args} 
-          onLoadMore={()=>simulateLoading()}
+        <DataGrid2 {...args} 
+          onLoadMore={(params)=>simulateLoading(params)}
           resetScroll={resetScroll}
+          pageSize={20}
+          pageOffset={0}
           leftAccessory={ () => (
             <ButtonGroup>
               <Button onClick={()=>setResetScroll(true)}>Left</Button>
             </ButtonGroup>
           )}
+          gridProps={{
+            selectedRows: selectedRowIds,
+            onSelectedRowsChange: (rows) => {
+              console.log("📢[index.stories.js:231]: ", rows);
+              setSelectedRowIds(rows);
+            },
+            rowKeyGetter: (row) => {
+              return row.id;
+            },
+          }}
         />
       </Paper>
       </Grid>
@@ -472,6 +491,7 @@ InfiniteLoader.args = {
   ...Default.args,
   filterable: true,
   showSelector: true,
-  totalCount: 10000,
+  totalCount: 300,
   centerAccessory: () => <Typography variant="h6">Heading</Typography>,
+  columns: [SelectColumn, ...columnData],
 };

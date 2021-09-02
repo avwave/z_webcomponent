@@ -17,7 +17,7 @@ import {
 import { FilterList, ViewColumn } from "@material-ui/icons";
 import { stringify } from "javascript-stringify";
 import { isEmpty } from "lodash";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { Checklist } from "../CheckList";
 import CheckboxProvider, {
   actions as checkboxActions,
@@ -43,6 +43,16 @@ const styles = (theme) => ({
     paddingLeft: theme.spacing(1),
     fontWeight: "bold",
   },
+  toolbar: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+    alignItems: "center",
+  },
+  root: {
+    width: "100%",
+  }
 });
 
 function DataGridToolbar({
@@ -56,6 +66,7 @@ function DataGridToolbar({
   centerAccessory,
   totalCount,
   loadedCount,
+  children
 }) {
   const [columnAnchor, setColumnAnchor] = useState();
   const [filterAnchor, setFilterAnchor] = useState();
@@ -65,7 +76,7 @@ function DataGridToolbar({
   const columnPopoverId = isCheckListOpen ? "column-popover" : undefined;
   const filterPopoverId = isFilterListOpen ? "filter-popover" : undefined;
 
-  const [dataGridState, dataGridDispatch] = React.useContext(DataGridContext);
+  const [dataGridState, dataGridDispatch] = useContext(DataGridContext);
 
   const [filterColumnSettings, setFilterColumnSettings] = useState(columns);
 
@@ -125,7 +136,7 @@ function DataGridToolbar({
   }, [dataGridState.filterColumn]);
 
   return (
-    <>
+    <div className={classes.root}>
       {(showSelector ||
         leftAccessory ||
         centerAccessory ||
@@ -200,6 +211,7 @@ function DataGridToolbar({
           ) : (
             <></>
           )}
+          {children}
           {rightAccessory ? rightAccessory() : <></>}
         </Toolbar>
       )}
@@ -243,7 +255,7 @@ function DataGridToolbar({
           </Breadcrumbs>
         </Toolbar>
       )}
-    </>
+    </div>
   );
 }
 export default withStyles(styles)(DataGridToolbar);
