@@ -93,7 +93,6 @@ function DataGrid({
       const scrollOffset = evt?.currentTarget?.scrollHeight - (evt?.currentTarget?.scrollTop + evt?.currentTarget?.clientHeight)
       const newScrollTop = evt?.currentTarget?.scrollTop
       if (scrollOffset < 100 && evt?.currentTarget?.scrollTop > prevScrollY.current) {
-        console.log("📢[DataGrid.js:92]: ", scrollOffset);
         onLoadMore();
       }
       prevScrollY.current = newScrollTop

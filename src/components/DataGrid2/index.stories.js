@@ -69,51 +69,58 @@ Default.args = {
   gridProps: {},
 };
 
-// export const CellFormatter = DefaultStory.bind({});
-// const CellFormatting = ({ value }) => {
-//   return <Chip label={value.row[value.key]} />;
-// };
-// const applyDateColumn = [
-//   {
-//     key: "col5Type",
-//     colId: "col4",
-//     name: "Column4",
-//     align: "flex-start",
-//     cellRenderer(props) {
-//       return <CellFormatting value={{ ...props, key: "col5Type" }} />;
-//     },
-//   },
-// ];
+export const CellFormatter = DefaultStory.bind({});
+const CellFormatting = ({ value }) => {
+  return <Chip label={value.row[value.key]} />;
+};
+const applyDateColumn = [
+  {
+    key: "col5Type",
+    colId: "col4",
+    name: "Column4",
+    align: "flex-start",
+    cellRenderer(props) {
+      return <CellFormatting value={{ ...props, key: "col5Type" }} />;
+    },
+  },
+];
 
-// CellFormatter.args = {
-//   ...Default.args,
-//   columns: applyDateColumn,
-// };
+CellFormatter.args = {
+  ...Default.args,
+  columns: applyDateColumn,
+};
 
-// export const Reorderable = DefaultStory.bind({});
-// Reorderable.args = {
-//   ...Default.args,
-//   draggable: true,
-//   columns: columnData,
-// };
+export const Reorderable = DefaultStory.bind({});
+Reorderable.args = {
+  ...Default.args,
+  draggable: true,
+  columns: columnData,
+};
+export const Blank = DefaultStory.bind({});
+Blank.args = {
+  ...Default.args,
+  rows:[],
+  draggable: true,
+  columns: columnData,
+};
 
-// export const GridProps = DefaultStory.bind({});
-// GridProps.args = {
-//   ...Default.args,
-//   draggable: true,
-//   columns: columnData,
-//   gridProps: {
-//     rowHeight: 60,
-//   },
-// };
+export const GridProps = DefaultStory.bind({});
+GridProps.args = {
+  ...Default.args,
+  draggable: true,
+  columns: columnData,
+  gridProps: {
+    rowHeight: 60,
+  },
+};
 
-// export const ClientSortable = DefaultStory.bind({});
-// ClientSortable.args = {
-//   ...Default.args,
-//   columns: columnData.map((cols) => {
-//     return { ...cols, sortable: true };
-//   }),
-// };
+export const ClientSortable = DefaultStory.bind({});
+ClientSortable.args = {
+  ...Default.args,
+  columns: columnData.map((cols) => {
+    return { ...cols, sortable: true };
+  }),
+};
 
 export const ColumnDisplaySelection = DefaultStory.bind({});
 ColumnDisplaySelection.args = {
@@ -222,6 +229,7 @@ const SelectableStory = ({ ...args }) => {
       gridProps={{
         selectedRows: selectedRowIds,
         onSelectedRowsChange: (rows) => {
+          console.log("📢[index.stories.js:231]: ", rows);
           setSelectedRowIds(rows);
         },
         rowKeyGetter: (row) => {
@@ -235,14 +243,9 @@ const SelectableStory = ({ ...args }) => {
 
 export const Selectable = SelectableStory.bind({});
 Selectable.args = {
+  ...Default.args,
   rows: rows,
   columns: [SelectColumn, ...columnData],
-  containerStyle: {
-    maxHeight: "100vh",
-    display: "flex",
-    flexDirection: "column",
-  },
-  style: { flex: "1 1 auto" },
 };
 
 function displayId({ props: { row } }) {
@@ -450,6 +453,7 @@ const InfiniteLoaderStory = ({ ...args }) => {
     simulateLoading()
   }, []);
 
+  const [selectedRowIds, setSelectedRowIds] = useState(() => new Set());
 
   return (
     <Grid container>
@@ -465,6 +469,16 @@ const InfiniteLoaderStory = ({ ...args }) => {
               <Button onClick={()=>setResetScroll(true)}>Left</Button>
             </ButtonGroup>
           )}
+          gridProps={{
+            selectedRows: selectedRowIds,
+            onSelectedRowsChange: (rows) => {
+              console.log("📢[index.stories.js:231]: ", rows);
+              setSelectedRowIds(rows);
+            },
+            rowKeyGetter: (row) => {
+              return row.id;
+            },
+          }}
         />
       </Paper>
       </Grid>
@@ -479,4 +493,5 @@ InfiniteLoader.args = {
   showSelector: true,
   totalCount: 300,
   centerAccessory: () => <Typography variant="h6">Heading</Typography>,
+  columns: [SelectColumn, ...columnData],
 };

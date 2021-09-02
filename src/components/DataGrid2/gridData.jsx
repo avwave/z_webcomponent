@@ -1,8 +1,8 @@
 import faker from "faker";
-import { FormControlLabel, MenuItem, Select } from "@material-ui/core";
+import { FormControlLabel, IconButton, MenuItem, Select } from "@material-ui/core";
 import Checkbox from "../../shared/Checkbox";
 import { TriStateSelect } from "../TriStateSelect";
-import { HotTubSharp, LocalHospital } from "@material-ui/icons";
+import { Delete, HotTubSharp, LocalHospital } from "@material-ui/icons";
 const columnData = [
   {
     key: "id",
@@ -11,7 +11,7 @@ const columnData = [
     type: "text",
     sortable: false,
     noTooltip: true,
-    frozen:true,
+    frozen: true,
   },
   {
     key: "title",
@@ -29,7 +29,7 @@ const columnData = [
     cellStyles: {
       color: "red",
     },
-    frozen:true,
+    frozen: true,
   },
   {
     key: "col3Type",
@@ -55,7 +55,7 @@ const columnData = [
       fontStyle: "italic",
     },
     columnHeaderRenderer: (props) => {
-      return <div {...props}><LocalHospital style={{ color: '#6A99CA' }}/>Column4 </div>
+      return <div {...props}><LocalHospital style={{ color: '#6A99CA' }} />Column4 </div>
     }
   },
   {
@@ -88,6 +88,23 @@ const columnData = [
     },
   },
   {
+    key: "button",
+    colId: "button",
+    name: "Button",
+    sortable: false,
+    // getCellValue: (row) => JSON.stringify(row.col7Type),
+    cellRenderer({row, column}) {
+      return (
+        <IconButton
+          onClick={() => {
+            alert(JSON.stringify({column, row}, null, 2))
+          }}>
+          <Delete color="secondary" />
+        </IconButton>
+      )
+    }
+  },
+  {
     key: "col7Typer",
     colId: "col7r",
     name: "Column7r",
@@ -102,6 +119,7 @@ const columnData = [
     colId: "col8",
     name: "Column8",
     sortable: false,
+    width: 250
   },
   {
     key: "col9Type",
@@ -140,7 +158,7 @@ for (let i = 0; i < 20; i++) {
     col4Type: faker.date.recent().toISOString(),
     col5Type: faker.lorem.paragraphs(2),
     col6Type: faker.datatype.boolean() ? "Tip" : "Top",
-    col7Type: {obj: 1},
+    col7Type: { obj: 1 },
     col8Type: <h1>REACTNODE</h1>,
     col9Type: faker.datatype.boolean() ? faker.random.word() : null,
   });
