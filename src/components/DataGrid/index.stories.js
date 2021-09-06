@@ -475,3 +475,30 @@ InfiniteLoader.args = {
   totalCount: 10000,
   centerAccessory: () => <Typography variant="h6">Heading</Typography>,
 };
+
+export const Expandable = DefaultStory.bind({});
+Expandable.args = {
+  ...Default.args,
+  draggable: true,
+  columns: [
+    {
+      key: "colArray",
+      colId: "colArray",
+      name: "array",
+      sortable: false,
+      resizable: true,
+      minWidth: 150,
+      expandRenderer({row}) {
+        console.log("📢[index.stories.js:489]: ", row);
+        return <ul>
+          {row.colArray.map((d, key)=><li key={key}>{d.value}</li>)}
+        </ul>
+      },
+      cellRenderer({row}) {
+        return <span>{row.colArray.length}</span>
+      },
+      align: "flex-start",
+    },
+    ...columnData
+  ],
+};
