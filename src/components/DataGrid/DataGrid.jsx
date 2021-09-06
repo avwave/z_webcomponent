@@ -178,6 +178,7 @@ function DataGrid({
       if (c.key === "id") return c;
 
       if (!c.formatter) {
+        c.expandRenderer = c.expandRenderer || (() => null);
         c.formatter = (props) => {
           const element = props.row[props.column.key];
           const isReactElem = isValidElement(element);
@@ -208,7 +209,8 @@ function DataGrid({
               </LightTooltip>
             );
           }
-          return c.expandRenderer ? <PortalCell expandCell={c.expandRenderer(props)} renderedCell={finalizedCell} /> : finalizedCell;
+          const renderItem = c.expandRenderer(props)
+          return (renderItem) ? <PortalCell expandCell={c.expandRenderer(props)} renderedCell={finalizedCell} /> : finalizedCell;
         };
       }
 

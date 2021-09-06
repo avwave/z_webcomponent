@@ -9,6 +9,7 @@ const useStyles = makeStyles((theme) => {
       justifyContent: "space-between",
       alignItems: "center",
       position: "relative",
+      height: "100%"
     },
     portal: {
       padding: theme.spacing(1),
