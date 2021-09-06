@@ -137,6 +137,12 @@ for (let i = 0; i < 20; i++) {
     col7Type: {obj: 1},
     col8Type: <h1>REACTNODE</h1>,
     col9Type: faker.datatype.boolean() ? faker.random.word() : null,
+    colArray: [...Array(faker.datatype.number({
+      min:1,
+      max:5
+    })).fill(0).map(d=>{
+      return {value:faker.random.word()}
+    })]
   });
 }
 export { columnData, rows };
