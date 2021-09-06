@@ -489,11 +489,9 @@ Expandable.args = {
       resizable: true,
       minWidth: 150,
       expandRenderer({row}) {
-        return <></>
-        console.log("📢[index.stories.js:489]: ", row);
-        return <ul>
+        return row.colArray.length < 1 ? <ul>
           {row.colArray.map((d, key)=><li key={key}>{d.value}</li>)}
-        </ul>
+        </ul>: null
       },
       cellRenderer({row}) {
         return <span>{row.colArray.length}</span>

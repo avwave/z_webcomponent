@@ -13,6 +13,7 @@ const useStyles = makeStyles((theme) => {
     },
     portal: {
       padding: theme.spacing(1),
+      maxHeight: '300px'
     }
   }
 })
