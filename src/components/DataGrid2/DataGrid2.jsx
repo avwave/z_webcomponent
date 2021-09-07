@@ -66,6 +66,28 @@ const SelectionCell = ({
   );
 };
 
+const useDynamicRowsOptions = ({ rowKeyField }) => {
+  const [renderedRowSizes] = useState({});
+  let estimatedItemSize = 40;
+  const addRowHeight = (rowData, height) => {
+    if (height) {
+      renderedRowSizes[rowData[rowKeyField]] = height;
+    }
+  };
+  const totalHeight = Object.keys(renderedRowSizes).reduce(
+    (sum, key) => sum + parseFloat(renderedRowSizes[key] || 0),
+    0
+  );
+  estimatedItemSize =
+    estimatedItemSize === 40 && Object.keys(renderedRowSizes).length
+      ? Math.floor(totalHeight / Object.keys(renderedRowSizes).length)
+      : estimatedItemSize;
+  return {
+    addRowHeight,
+    itemHeight: rowData =>
+      renderedRowSizes[rowData[rowKeyField]] || estimatedItemSize
+  };
+};
 
 const DataGrid2 = ({
   draggable,
@@ -93,6 +115,8 @@ const DataGrid2 = ({
   const [sortColumn, setSortColumn] = useState("");
   const [sortDirection, setSortDirection] = useState("");
   const [selectedRows, setSelectedRows] = useState(new Set());
+
+  const { itemHeight, addRowHeight } = useDynamicRowsOptions(tableProps);
 
   useEffect(() => {
     onSort(sortColumn, sortDirection);
@@ -228,7 +252,16 @@ const DataGrid2 = ({
       <Table
         {...tableProps}
         dispatch={kaDispatch}
+        virtualScrolling={{
+          ...tableProps.virtualScrolling,
+          itemHeight
+        }}
         childComponents={{
+          dataRow: {
+            elementAttributes: ({ rowData }) => ({
+              ref: ref => addRowHeight(rowData, ref?.offsetHeight)
+            })
+          },
           headCell: {
             content: (props) => {
               if (props.column.key === 'select-row') {
