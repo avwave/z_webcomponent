@@ -252,6 +252,7 @@ const SelectableStory = ({ ...args }) => {
         },
       }}
     />
+    <pre>{JSON.stringify(selectedRowIds, null, 2)}</pre>
     </Paper>
   );
 };
