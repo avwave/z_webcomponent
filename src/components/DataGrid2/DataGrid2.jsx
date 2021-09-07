@@ -172,7 +172,7 @@ const DataGrid2 = ({
                   ...column.style,
                   position: 'sticky',
                   left: 0,
-                  zIndex: 10,
+                  zIndex: 11,
                 }
               }
             }
@@ -184,7 +184,6 @@ const DataGrid2 = ({
                   ...column.style,
                   position: 'sticky',
                   left: 0,
-                  zIndex: 10,
                   backgroundColor: "#fff",
                   overflow: 'hidden'
                 }
