@@ -19,6 +19,7 @@ const columnData = [
     name: "matrixparsedigital",
     type: "text",
     sortable: false,
+    width: 300,
     filter: {
       type: "text",
       label: "Contains",
@@ -110,7 +111,7 @@ const columnData = [
     name: "Column7r",
     sortable: false,
     // getCellValue: (row) => JSON.stringify(row.col7Type),
-    getCellValue(row) {
+    cellRenderer({row}) {
       return <span>stringified{JSON.stringify(row?.col7Type)}</span>
     }
   },

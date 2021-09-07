@@ -48,8 +48,14 @@ const DefaultStory = ({ ...args }) => {
   const [state, dispatch] = React.useContext(DataGridContext);
   React.useEffect(() => {
     dispatch({
+      type: actions.SET_LOADING,
+    });
+    dispatch({
       payload: { rows: args.rows, columns: args.columns },
       type: actions.LOAD_DATA,
+    });
+    dispatch({
+      type: actions.SET_DONE_LOADING,
     });
   }, [args.columns, args.rows, dispatch]);
 
