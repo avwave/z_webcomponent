@@ -31,6 +31,10 @@ import { DataGrid2 } from "./DataGrid2";
 const DataGridStory = {
   component: DataGrid2,
   title: "DataGrid/DataGrid2",
+  parameters: {
+    chromatic: { disable: true },
+    storyshots: { disable: true },
+  },
   decorators: [
     withReactContext(),
     (Story) => (

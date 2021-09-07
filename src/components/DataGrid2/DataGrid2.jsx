@@ -116,7 +116,7 @@ const DataGrid2 = ({
         return red
       })
     },
-    [onLoadMore],
+    [onLoadMore, pageOffset],
   );
 
   useEffect(() => {
