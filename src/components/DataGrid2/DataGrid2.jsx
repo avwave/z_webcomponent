@@ -1,10 +1,10 @@
-import 'ka-table/style.scss'
+import './styles.scss'
 import { kaReducer, Table } from "ka-table";
 import { ActionType, DataType, SortingMode, SortDirection } from "ka-table/enums";
-import { Button, makeStyles, Paper, Typography } from '@material-ui/core';
+import { Button, Checkbox, makeStyles, Paper, Typography } from '@material-ui/core';
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { hideLoading, showLoading, updateData } from "ka-table/actionCreators";
-import { actions as dataGridActions,  DataGridContext } from '../DataGrid/DataGridContext';
+import { deselectRow, selectAllFilteredRows, deselectAllFilteredRows, updateData, selectRowsRange, selectRow } from "ka-table/actionCreators";
+import { actions as dataGridActions, DataGridContext } from '../DataGrid/DataGridContext';
 import Datagrid2Toolbar from './Datagrid2Toolbar';
 import { OptionFilterRenderer, TextFilterRenderer } from '../DataGrid/FilterRenderer';
 
@@ -30,6 +30,43 @@ const tablePropsInit = {
   sortingMode: SortingMode.SingleTripleState
 }
 
+const SelectionHeader = ({
+  dispatch, areAllRowsSelected,
+}) => {
+  return (
+    <Checkbox
+      checked={areAllRowsSelected}
+      onChange={(event) => {
+        if (event.target.checked) {
+          dispatch(selectAllFilteredRows()); // also available: selectAllVisibleRows(), selectAllRows()
+        } else {
+          dispatch(deselectAllFilteredRows()); // also available: deselectAllVisibleRows(), deselectAllRows()
+        }
+      }}
+      inputProps={{ 'aria-label': 'primary checkbox' }}
+    />
+  );
+};
+
+const SelectionCell = ({
+  rowKeyValue, dispatch, isSelectedRow, selectedRows
+}) => {
+  return (
+    <Checkbox
+      checked={isSelectedRow}
+      onChange={(event) => {
+        if (event.target.checked) {
+          dispatch(selectRow(rowKeyValue));
+        } else {
+          dispatch(deselectRow(rowKeyValue));
+        }
+      }}
+      inputProps={{ 'aria-label': 'primary checkbox' }}
+    />
+  );
+};
+
+
 const DataGrid2 = ({
   draggable,
   showSelector,
@@ -41,10 +78,10 @@ const DataGrid2 = ({
   leftAccessory,
   rightAccessory,
   centerAccessory,
-  onLoadMore=()=>{},
+  onLoadMore = () => { },
   totalCount,
   resetScroll,
-  onSort=()=>{},
+  onSort = () => { },
 }) => {
   const classes = useStyles()
 
@@ -55,7 +92,7 @@ const DataGrid2 = ({
 
   const [sortColumn, setSortColumn] = useState("");
   const [sortDirection, setSortDirection] = useState("");
-
+  const [selectedRows, setSelectedRows] = useState(new Set());
 
   useEffect(() => {
     onSort(sortColumn, sortDirection);
@@ -77,24 +114,29 @@ const DataGrid2 = ({
       }
     }
     const cols = dataGridState.columns.map(col => {
-      return {
+      const column = {
         ...col,
         key: col.key,
         title: col.name,
         dataType: DataType.Object,
         visible: !col.hidden,
         filterRenderer: getFilterRenderer(col),
+        isResizable: col.resizable,
+        style:{width: 100, minWidth: 100},
+        ...col.key==='select-row'?{width: 50}:{},
       }
+      return column
     })
-    
-    setTableProps({ ...tablePropsInit,
+
+    setTableProps({
+      ...tablePropsInit,
       columns: cols,
       data: dataGridState.rows,
       sort: ({ column }) => {
-        const sort = column.sortDirection==='ascend'?'ASC':column.sortDirection==='descend'?'DESC':'NONE'
+        const sort = column.sortDirection === 'ascend' ? 'ASC' : column.sortDirection === 'descend' ? 'DESC' : 'NONE'
         setSortColumn(column.key);
         setSortDirection(sort);
-        return (a,b) => 0
+        return (a, b) => 0
       }
     })
   }, [dataGridState.columns]);
@@ -108,16 +150,35 @@ const DataGrid2 = ({
             page_size: PAGE_SIZE
           })
           break
+        case 'SelectRow':
+          setSelectedRows(new Set(selectedRows.add(action.rowKeyValue)))
+          break
+        case 'DeselectRow':
+          const delrows = selectedRows.delete(action.rowKeyValue)
+          setSelectedRows(new Set(selectedRows))
+          break
+        case 'SelectAllFilteredRows':
+          const rowes = dataGridState.rows.map(r => r.id)
+          setSelectedRows(new Set(rowes))
+          break
+        case 'DeselectAllFilteredRows':
+          setSelectedRows(new Set())
+          break
         default:
           break;
       }
       setTableProps(prevState => {
-        const red = kaReducer(prevState, {...prevState, ...action})
+        const red = kaReducer(prevState, { ...prevState, ...action })
         return red
       })
     },
-    [onLoadMore, pageOffset],
+    [onLoadMore, pageOffset, dataGridState.rows],
   );
+
+  useEffect(() => {
+    gridProps?.onSelectedRowsChange && gridProps?.onSelectedRowsChange(Array.from(selectedRows))
+  }, [selectedRows]);
+
 
   useEffect(() => {
     kaDispatch(updateData([...dataGridState.rows]))
@@ -129,8 +190,11 @@ const DataGrid2 = ({
 
   const fetchRenderer = useCallback(
     (cellProps) => {
+      if (cellProps.column.key === "select-row") {
+        return <SelectionCell {...cellProps} />
+      }
       const customCellRenderer = tableProps.columns.find(col => col.key === cellProps.column.key)?.cellRenderer
-      return customCellRenderer?customCellRenderer({...cellProps, row:cellProps.rowData}) : cellProps.value
+      return customCellRenderer ? customCellRenderer({ ...cellProps, row: cellProps.rowData }) : <Typography variant="body1">{cellProps.value}</Typography>
     },
     [tableProps.columns],
   );
@@ -147,7 +211,7 @@ const DataGrid2 = ({
 
   return (
     <Paper>
-      <div style={{display:'none'}}>{sortColumn}{sortDirection}</div>
+      <div style={{ display: 'none' }}>{sortColumn}{sortDirection}</div>
       <Datagrid2Toolbar
         tableProps={tableProps}
         dispatch={kaDispatch}
@@ -166,8 +230,18 @@ const DataGrid2 = ({
         dispatch={kaDispatch}
         childComponents={{
           headCell: {
+            content: (props) => {
+              if (props.column.key === 'select-row') {
+                return (
+                  <SelectionHeader {...props}
+                  // areAllRowsSelected={kaPropsUtils.areAllFilteredRowsSelected(tableProps)}
+                  // areAllRowsSelected={kaPropsUtils.areAllVisibleRowsSelected(tableProps)}
+                  />
+                );
+              }
+            },
             elementAttributes: ({ column }) => {
-              return column.key === 'id' && {
+              return ['id', 'select-row'].includes(column.key) && {
                 style: {
                   ...column.style,
                   position: 'sticky',
@@ -179,7 +253,7 @@ const DataGrid2 = ({
           },
           cell: {
             elementAttributes: ({ column }) => {
-              return column.key === 'id' ? {
+              return ['id', 'select-row'].includes(column.key) ? {
                 style: {
                   ...column.style,
                   position: 'sticky',
