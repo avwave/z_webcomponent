@@ -31,6 +31,7 @@ import { isEmpty } from "lodash";
 
 import BlockUi from "react-loader-advanced";
 import { findDOMNode } from "react-dom";
+import { PortalCell } from "./PortalCell";
 
 const styles = (theme) => ({
   tooltip: {
@@ -177,6 +178,7 @@ function DataGrid({
       if (c.key === "id") return c;
 
       if (!c.formatter) {
+        c.expandRenderer = c.expandRenderer || (() => null);
         c.formatter = (props) => {
           const element = props.row[props.column.key];
           const isReactElem = isValidElement(element);
@@ -193,10 +195,11 @@ function DataGrid({
           );
           const renderedTooltip =
             typeof c.tooltip === "function" ? c?.tooltip(props) : tooltip;
+          let finalizedCell = cellRenderer;
           if (c.noTooltip || isEmpty(renderedTooltip)) {
-            return cellRenderer;
+            finalizedCell = cellRenderer;
           } else {
-            return (
+            finalizedCell = (
               <LightTooltip
                 title={renderedTooltip}
                 placement="bottom-start"
@@ -206,6 +209,8 @@ function DataGrid({
               </LightTooltip>
             );
           }
+          const renderItem = c.expandRenderer(props)
+          return (renderItem) ? <PortalCell expandCell={c.expandRenderer(props)} renderedCell={finalizedCell} /> : finalizedCell;
         };
       }
 

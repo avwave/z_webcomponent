@@ -48,8 +48,14 @@ const DefaultStory = ({ ...args }) => {
   const [state, dispatch] = React.useContext(DataGridContext);
   React.useEffect(() => {
     dispatch({
+      type: actions.SET_LOADING,
+    });
+    dispatch({
       payload: { rows: args.rows, columns: args.columns },
       type: actions.LOAD_DATA,
+    });
+    dispatch({
+      type: actions.SET_DONE_LOADING,
     });
   }, [args.columns, args.rows, dispatch]);
 
@@ -474,4 +480,30 @@ InfiniteLoader.args = {
   showSelector: true,
   totalCount: 10000,
   centerAccessory: () => <Typography variant="h6">Heading</Typography>,
+};
+
+export const Expandable = DefaultStory.bind({});
+Expandable.args = {
+  ...Default.args,
+  draggable: true,
+  columns: [
+    {
+      key: "colArray",
+      colId: "colArray",
+      name: "array",
+      sortable: false,
+      resizable: true,
+      minWidth: 150,
+      expandRenderer({row}) {
+        return row.colArray.length < 1 ? <ul>
+          {row.colArray.map((d, key)=><li key={key}>{d.value}</li>)}
+        </ul>: null
+      },
+      cellRenderer({row}) {
+        return <span>{row.colArray.length}</span>
+      },
+      align: "flex-start",
+    },
+    ...columnData
+  ],
 };

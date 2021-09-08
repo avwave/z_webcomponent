@@ -31,6 +31,10 @@ import { DataGrid2 } from "./DataGrid2";
 const DataGridStory = {
   component: DataGrid2,
   title: "DataGrid/DataGrid2",
+  parameters: {
+    chromatic: { disable: true },
+    storyshots: { disable: true },
+  },
   decorators: [
     withReactContext(),
     (Story) => (
@@ -51,6 +55,9 @@ const DefaultStory = ({ ...args }) => {
     dispatch({
       payload: { rows: args.rows, columns: args.columns },
       type: actions.LOAD_DATA,
+    });
+    dispatch({
+      type: actions.SET_DONE_LOADING,
     });
   }, [args.columns, args.rows, dispatch]);
 
@@ -132,45 +139,46 @@ ColumnDisplaySelection.args = {
 const ServerFilterSortStory = ({ ...args }) => {
   const [state, dispatch] = React.useContext(DataGridContext);
   React.useEffect(() => {
-    async function fetchData() {
       dispatch({
-        payload: { rows: args.rows, columns: args.columns },
-        type: actions.LOAD_DATA,
+        payload: { columns: args.columns },
+        type: actions.LOAD_COLUMNS,
       });
-    }
 
-    // dispatch({
-    //   type: actions.SET_LOADING,
-    // });
-
-    const timer = setTimeout(() => {
-      fetchData();
-    }, 100);
-
-    return () => clearTimeout(timer);
-  }, [args.columns, args.rows]);
+  }, [args.columns]);
 
   React.useEffect(() => {
-    if (state.sortColumn === null || state.sortDirection === null) {
-      return;
-    }
-    if (state.sortDirection === "NONE") return state.rows;
-
-    let sortedRows = state.rows;
-    sortedRows = sortedRows.sort((a, b) =>
-      a[state.sortColumn]
-        .toString()
-        .localeCompare(b[state.sortColumn].toString())
-    );
-
-    sortedRows =
-      state.sortDirection === "DESC" ? sortedRows.reverse() : sortedRows;
-
     dispatch({
-      payload: { rows: [...sortedRows] },
+      payload: { rows: args.rows},
       type: actions.LOAD_ROWS,
     });
-  }, [state.sortColumn, state.sortDirection]);
+  }, [args.rows]);
+
+  const handleSort = React.useCallback(
+    (sortColumn, sortDirection) => {
+      // if (sortColumn === null || sortDirection === null) {
+      //   return;
+      // }
+      // if (sortDirection === "NONE") {
+      //   return state.rows;
+      // }
+  
+      let sortedRows = state.rows;
+      sortedRows = sortedRows.sort((a, b) =>
+        a[sortColumn]
+          .toString()
+          .localeCompare(b[sortColumn].toString())
+      );
+  
+      sortedRows =
+        sortDirection === "DESC" ? sortedRows.reverse() : sortedRows;
+  
+      dispatch({
+        payload: { rows: [...sortedRows] },
+        type: actions.LOAD_ROWS,
+      });
+    },
+    [dispatch, state.rows],
+  );
 
   React.useEffect(() => {
     const searchKeys = isEmpty(state.filterColumn)
@@ -202,7 +210,14 @@ const ServerFilterSortStory = ({ ...args }) => {
     });
   }, [state.filterColumn]);
 
-  return <Paper><DataGrid2 {...args} /></Paper>;
+  return <Paper>
+    <DataGrid2 {...args} 
+      onSort={(col, dir) => {
+        console.log("📢[index.stories.js:211]: ", col, dir);
+        handleSort(col, dir)
+      }}
+    />
+  </Paper>;
 };
 export const ServerFilterSort = ServerFilterSortStory.bind({});
 ServerFilterSort.args = {
@@ -237,6 +252,7 @@ const SelectableStory = ({ ...args }) => {
         },
       }}
     />
+    <pre>{JSON.stringify(selectedRowIds, null, 2)}</pre>
     </Paper>
   );
 };
