@@ -147,7 +147,7 @@ const FormFieldSet = ({
     [],
   );
   const renderField = useCallback(
-    (fieldName, fieldParams) => {
+    (fieldName, fieldParams, fieldSource) => {
       let isRequired = !!getIn(validationSchema?.fields, fieldName)?.tests?.find(
         testName => {
           return testName?.OPTIONS?.name === 'required'
@@ -378,7 +378,7 @@ const FormFieldSet = ({
         case "select":
           let options = fieldParams.options
           if (fieldParams.relatedSource){
-            options = get(formik.values, fieldParams.relatedSource)
+            options = get(formik.values, `${fieldSource}.${fieldParams.relatedSource}`)
           }
           return (
             <>
@@ -738,7 +738,7 @@ const FormFieldSet = ({
                   Boolean(get(formik.errors, layout))
                 }
               >
-                {renderField(layout, field)}
+                {renderField(layout, field, fieldName)}
                 <FormHelperText>
                   {!Array.isArray(err) ? err : ""}
                 </FormHelperText>
