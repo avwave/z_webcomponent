@@ -147,7 +147,7 @@ const FormFieldSet = ({
     [],
   );
   const renderField = useCallback(
-    (fieldName, fieldParams) => {
+    (fieldName, fieldParams, fieldSource) => {
       let isRequired = !!getIn(validationSchema?.fields, fieldName)?.tests?.find(
         testName => {
           return testName?.OPTIONS?.name === 'required'
@@ -163,6 +163,10 @@ const FormFieldSet = ({
             formik.setFieldValue(fieldName, evt?.target?.value ?? evt);
           };
       let formValue = get(formik.values, fieldName)
+      let options = fieldParams.options
+          if (fieldParams.relatedSource){
+            options = get(formik.values, `${fieldSource}.${fieldParams.relatedSource}`, fieldParams.options)
+          }
       switch (fieldParams.type) {
         case "component":
           return <fieldParams.component />;
@@ -376,10 +380,6 @@ const FormFieldSet = ({
         //   );
 
         case "select":
-          let options = fieldParams.options
-          if (fieldParams.relatedSource){
-            options = get(formik.values, fieldParams.relatedSource)
-          }
           return (
             <>
               <TextField
@@ -400,7 +400,7 @@ const FormFieldSet = ({
                     if (fieldParams.settings?.multiple) {
                       return selected
                         .map((s) => {
-                          const item = fieldParams.options.find(
+                          const item = options.find(
                             (item) =>
                               item[fieldParams.settings?.valueField] === s
                           );
@@ -408,7 +408,7 @@ const FormFieldSet = ({
                         })
                         .join(", ");
                     }
-                    const item = fieldParams.options.find(
+                    const item = options.find(
                       (item) =>
                         item[fieldParams.settings?.valueField] === selected
                     );
@@ -483,7 +483,7 @@ const FormFieldSet = ({
                 onChange={onChangeOverride}
                 {...fieldParams?.fieldProps}
               >
-                {fieldParams.options.map((item, idx) => (
+                {options.map((item, idx) => (
                   <FormControlLabel
                     disabled={fieldParams.readOnly||formReadOnly}
                     key={idx}
@@ -508,7 +508,7 @@ const FormFieldSet = ({
                 // onChange={onChangeOverride}
                 {...fieldParams?.fieldProps}
               >
-                {fieldParams.options.map((item, idx) => {
+                {options.map((item, idx) => {
                   const checked = get(formik.values, fieldName, []).includes(item[fieldParams.settings?.valueField]);
                   return (
                     <FormControlLabel
@@ -549,7 +549,7 @@ const FormFieldSet = ({
                 formik.setFieldValue(fieldName, val);
               }}
               multiple={fieldParams.settings?.multiple}
-              options={fieldParams.options}
+              options={options}
               getOptionLabel={(option) => {
                 return option[fieldParams.settings.labelField] ?? "";
               }}
@@ -738,7 +738,7 @@ const FormFieldSet = ({
                   Boolean(get(formik.errors, layout))
                 }
               >
-                {renderField(layout, field)}
+                {renderField(layout, field, fieldName)}
                 <FormHelperText>
                   {!Array.isArray(err) ? err : ""}
                 </FormHelperText>
