@@ -234,8 +234,7 @@ const DataGrid2 = ({
 
 
   return (
-    <Paper>
-      <div style={{ display: 'none' }}>{sortColumn}{sortDirection}</div>
+    <>
       <Datagrid2Toolbar
         tableProps={tableProps}
         dispatch={kaDispatch}
@@ -249,6 +248,7 @@ const DataGrid2 = ({
         totalCount={totalCount}
         loadedCount={dataGridState.rows.length}
       />
+      <div style={{ display: 'none' }}>{sortColumn}{sortDirection}</div>
       <Table
         {...tableProps}
         dispatch={kaDispatch}
@@ -321,12 +321,11 @@ const DataGrid2 = ({
                   kaDispatch({ type: LOAD_MORE_DATA });
                 }
               },
-              style: { maxHeight: 600 }
             })
           }
         }}
       />
-    </Paper>
+    </>
   );
 }
 
