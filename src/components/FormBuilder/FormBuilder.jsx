@@ -616,14 +616,17 @@ const FormFieldSet = ({
                                   <Typography variant="body2" className={classes.subformHeaderTitle}>
                                     {`${fieldParams.label} ${isRequired?'*':''}`}
                                     </Typography>
-                                  <IconButton
-                                    aria-label=""
-                                    onClick={() => {
-                                      arrayHelpers.remove(idx);
-                                    }}
-                                  >
-                                    <Close />
-                                  </IconButton>
+                                    {
+                                    formReadOnly?null:
+                                      <IconButton
+                                        aria-label=""
+                                        onClick={() => {
+                                          arrayHelpers.remove(idx);
+                                        }}
+                                      >
+                                        <Close />
+                                      </IconButton>
+                                    }
                                 </Box>
                                 }
 
