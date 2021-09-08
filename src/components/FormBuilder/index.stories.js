@@ -497,6 +497,7 @@ export const Nested = NestedStory.bind({});
 Nested.args = {
   ...Default.args,
   formId:'nested',
+  formReadOnly: true,
   formLayout: [["form1", "form2"], "subform"],
   form: {
     form1: {
@@ -515,6 +516,11 @@ Nested.args = {
     subform: {
       type: "fieldarray",
       label: "subform",
+      inline:true,
+      initialValues: [{
+          subform1:2,
+          subform2:2,
+      }],
       //note: only root level form nodes can have validation
       validator: () =>
         Yup.array().nullable().of(
