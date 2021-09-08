@@ -378,7 +378,7 @@ const FormFieldSet = ({
         case "select":
           let options = fieldParams.options
           if (fieldParams.relatedSource){
-            options = get(formik.values, `${fieldSource}.${fieldParams.relatedSource}`)
+            options = get(formik.values, `${fieldSource}.${fieldParams.relatedSource}`, fieldParams.options)
           }
           return (
             <>
