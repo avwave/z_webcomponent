@@ -376,6 +376,10 @@ const FormFieldSet = ({
         //   );
 
         case "select":
+          let options = fieldParams.options
+          if (fieldParams.relatedSource){
+            options = get(formik.values, fieldParams.relatedSource)
+          }
           return (
             <>
               <TextField
@@ -422,7 +426,7 @@ const FormFieldSet = ({
                 disabled={fieldParams.readOnly||formReadOnly}
                 {...fieldParams?.fieldProps}
               >
-                {fieldParams.options.map((item, idx) => {
+                {options.map((item, idx) => {
                   return (
                     <MenuItem
                       key={idx}
