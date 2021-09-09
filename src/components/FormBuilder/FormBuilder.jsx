@@ -640,6 +640,8 @@ const FormFieldSet = ({
                                   )}
                                 </Box>
                                 {fieldParams.inline &&
+                                
+                                  formReadOnly?null:
                                   <IconButton
                                       className={classes.inlineDelete}
                                       aria-label=""
