@@ -1,9 +1,16 @@
-@import 'ka-table/style.scss';
 
-.ka-thead-fixed {
-  position: sticky;
-  z-index: 1;
-}
-.ka-thead-cell-content {
-  text-transform: uppercase;
+.datagrid {
+  @import "./variables.scss";
+  @import 'ka-table/style.scss';
+  .ka-thead-fixed {
+    position: sticky;
+    z-index: 1;
+  }
+  .ka-thead-cell-content {
+    text-transform: uppercase;
+  }
+  .ka-cell {
+    border-right: 1px solid lighten($ka-border-color, 3)
+  }
+
 }

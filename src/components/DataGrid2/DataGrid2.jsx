@@ -1,15 +1,20 @@
 import './styles.scss'
 import { kaReducer, Table } from "ka-table";
 import { ActionType, DataType, SortingMode, SortDirection } from "ka-table/enums";
-import { Button, Checkbox, makeStyles, Paper, Typography } from '@material-ui/core';
+import { Button, Checkbox, LinearProgress, makeStyles, Paper, Typography } from '@material-ui/core';
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { deselectRow, selectAllFilteredRows, deselectAllFilteredRows, updateData, selectRowsRange, selectRow } from "ka-table/actionCreators";
 import { actions as dataGridActions, DataGridContext } from '../DataGrid/DataGridContext';
 import Datagrid2Toolbar from './Datagrid2Toolbar';
 import { OptionFilterRenderer, TextFilterRenderer } from '../DataGrid/FilterRenderer';
+import clsx from 'clsx';
 
 const useStyles = makeStyles((theme) => {
-  return {}
+  return {
+    datagrid: {
+      height: '100%'
+    }
+  }
 })
 
 const LOAD_MORE_DATA = "LOAD_MORE_DATA";
@@ -234,8 +239,7 @@ const DataGrid2 = ({
 
 
   return (
-    <Paper>
-      <div style={{ display: 'none' }}>{sortColumn}{sortDirection}</div>
+    <div className={clsx('datagrid', classes.datagrid)}>
       <Datagrid2Toolbar
         tableProps={tableProps}
         dispatch={kaDispatch}
@@ -249,6 +253,8 @@ const DataGrid2 = ({
         totalCount={totalCount}
         loadedCount={dataGridState.rows.length}
       />
+      <div style={{ display: 'none' }}>{sortColumn}{sortDirection}</div>
+      {dataGridState.loading?<LinearProgress/>:<LinearProgress variant="determinate" value={0}/>}
       <Table
         {...tableProps}
         dispatch={kaDispatch}
@@ -321,12 +327,11 @@ const DataGrid2 = ({
                   kaDispatch({ type: LOAD_MORE_DATA });
                 }
               },
-              style: { maxHeight: 600 }
             })
           }
         }}
       />
-    </Paper>
+    </div>
   );
 }
 
