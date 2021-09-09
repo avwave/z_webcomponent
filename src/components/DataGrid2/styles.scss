@@ -9,4 +9,8 @@
   .ka-thead-cell-content {
     text-transform: uppercase;
   }
+  .ka-cell {
+    border-right: 1px solid lighten($ka-border-color, 3)
+  }
+
 }
