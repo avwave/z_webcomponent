@@ -61,18 +61,14 @@ const DefaultStory = ({ ...args }) => {
     });
   }, [args.columns, args.rows, dispatch]);
 
-  return <Paper><DataGrid2 {...args} /></Paper>;
+  return <Paper style={{height: '80vh'}}><DataGrid2 {...args} /></Paper>;
 };
 
 export const Default = DefaultStory.bind({});
 Default.args = {
   rows: rows,
   columns: columnData,
-  containerStyle: {
-    height: "90vh",
-    
-  },
-  style: { flex: "1 1 auto" },
+  
   gridProps: {},
 };
 
@@ -210,7 +206,7 @@ const ServerFilterSortStory = ({ ...args }) => {
     });
   }, [state.filterColumn]);
 
-  return <Paper>
+  return <Paper style={{height: '80vh'}}>
     <DataGrid2 {...args} 
       onSort={(col, dir) => {
         console.log("📢[index.stories.js:211]: ", col, dir);
@@ -238,7 +234,7 @@ const SelectableStory = ({ ...args }) => {
   }, [args.columns, args.rows, dispatch]);
 
   return (
-    <Paper>
+    <Paper style={{height: '80vh'}}>
     <DataGrid2
       {...args}
       gridProps={{
@@ -340,7 +336,7 @@ const RedrawBugStory = ({ ...args }) => {
   return (
     <Grid container>
       <Grid item xs={12}>
-      <Paper style={{ display: "flex", flexDirection: "column", height: "70vh" }}>
+      <Paper style={{height: '80vh'}}>
         <DataGrid2 {...args} />
       </Paper>
       </Grid>
@@ -391,7 +387,7 @@ const LoaderStory = ({ ...args }) => {
   return (
     <Grid container>
       <Grid item xs={12}>
-      <Paper style={{ display: "flex", flexDirection: "column", height: "70vh" }}>
+      <Paper style={{height: '80vh'}}>
         <DataGrid2 {...args} />
         <Button onClick={()=>simulateLoading()}>Simulate Loading</Button>
       </Paper>
@@ -474,7 +470,7 @@ const InfiniteLoaderStory = ({ ...args }) => {
   return (
     <Grid container>
       <Grid item xs={12}>
-      <Paper style={{ display: "flex", flexDirection: "column", height: "70vh" }}>
+      <Paper style={{height: '80vh'}}>
         <DataGrid2 {...args} 
           onLoadMore={(params)=>simulateLoading(params)}
           resetScroll={resetScroll}

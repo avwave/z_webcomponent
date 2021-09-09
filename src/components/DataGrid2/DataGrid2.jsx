@@ -1,13 +1,15 @@
 import './styles.scss'
 import { kaReducer, Table } from "ka-table";
 import { ActionType, DataType, SortingMode, SortDirection } from "ka-table/enums";
-import { Button, Checkbox, LinearProgress, makeStyles, Paper, Typography } from '@material-ui/core';
-import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { Button, Checkbox, LinearProgress, makeStyles, Paper, Tooltip, Typography } from '@material-ui/core';
+import React, { isValidElement, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { deselectRow, selectAllFilteredRows, deselectAllFilteredRows, updateData, selectRowsRange, selectRow } from "ka-table/actionCreators";
 import { actions as dataGridActions, DataGridContext } from '../DataGrid/DataGridContext';
 import Datagrid2Toolbar from './Datagrid2Toolbar';
 import { OptionFilterRenderer, TextFilterRenderer } from '../DataGrid/FilterRenderer';
 import clsx from 'clsx';
+import { isEmpty } from 'lodash';
+import { PortalCell } from '../DataGrid/PortalCell';
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -101,6 +103,7 @@ const DataGrid2 = ({
   style,
   containerStyle,
   gridProps,
+  tableComponents,
   contextMenu,
   leftAccessory,
   rightAccessory,
@@ -151,7 +154,7 @@ const DataGrid2 = ({
         visible: !col.hidden,
         filterRenderer: getFilterRenderer(col),
         isResizable: col.resizable,
-        style:{width: 100, minWidth: 100},
+        style:{width: 200, minWidth: 200},
         ...col.key==='select-row'?{width: 50}:{},
       }
       return column
@@ -219,11 +222,46 @@ const DataGrid2 = ({
 
   const fetchRenderer = useCallback(
     (cellProps) => {
+      cellProps = {...cellProps, row: cellProps.rowData}
       if (cellProps.column.key === "select-row") {
         return <SelectionCell {...cellProps} />
       }
-      const customCellRenderer = tableProps.columns.find(col => col.key === cellProps.column.key)?.cellRenderer
-      return customCellRenderer ? customCellRenderer({ ...cellProps, row: cellProps.rowData }) : <Typography variant="body1">{cellProps.value}</Typography>
+
+      const targetColumn = tableProps.columns.find(col => col.key === cellProps.column.key)
+      
+      const element = cellProps.row[cellProps.column.key];
+      const isReactElem = isValidElement(element);
+      const cellData = cellProps.row[cellProps.column.key]
+      const tooltip =
+        typeof cellData  === "object"
+          ? isReactElem
+            ? element
+            : JSON.stringify(element)
+          : element;
+      const cellRenderer = !!targetColumn?.cellRenderer ? (
+        targetColumn?.cellRenderer(cellProps)
+      ) : (
+        <span style={targetColumn.cellStyles}>{isReactElem ? element : tooltip}</span>
+      );
+      const renderedTooltip =
+        typeof targetColumn.tooltip === "function" ? targetColumn?.tooltip(cellProps) : tooltip;
+      let finalizedCell = cellRenderer;
+      if (targetColumn.noTooltip || isEmpty(renderedTooltip)) {
+        finalizedCell = cellRenderer;
+      } else {
+        finalizedCell = (
+          <Tooltip
+            title={renderedTooltip}
+            placement="bottom-start"
+            className={classes.tooltip}
+          >
+            {cellRenderer}
+          </Tooltip>
+        );
+      }
+      const renderItem = targetColumn?.expandRenderer ? targetColumn?.expandRenderer(cellProps):false
+      return (renderItem) ? <PortalCell expandCell={targetColumn?.expandRenderer(cellProps)} renderedCell={finalizedCell} /> : finalizedCell;
+
     },
     [tableProps.columns],
   );
@@ -328,8 +366,10 @@ const DataGrid2 = ({
                 }
               },
             })
-          }
+          },
+          ...tableComponents
         }}
+        {...gridProps}
       />
     </div>
   );
