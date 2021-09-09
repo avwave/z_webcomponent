@@ -7,9 +7,14 @@ import { deselectRow, selectAllFilteredRows, deselectAllFilteredRows, updateData
 import { actions as dataGridActions, DataGridContext } from '../DataGrid/DataGridContext';
 import Datagrid2Toolbar from './Datagrid2Toolbar';
 import { OptionFilterRenderer, TextFilterRenderer } from '../DataGrid/FilterRenderer';
+import clsx from 'clsx';
 
 const useStyles = makeStyles((theme) => {
-  return {}
+  return {
+    datagrid: {
+      height: '100%'
+    }
+  }
 })
 
 const LOAD_MORE_DATA = "LOAD_MORE_DATA";
@@ -234,7 +239,7 @@ const DataGrid2 = ({
 
 
   return (
-    <>
+    <div className={clsx('datagrid', classes.datagrid)}>
       <Datagrid2Toolbar
         tableProps={tableProps}
         dispatch={kaDispatch}
@@ -325,7 +330,7 @@ const DataGrid2 = ({
           }
         }}
       />
-    </>
+    </div>
   );
 }
 
