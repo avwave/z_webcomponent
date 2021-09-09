@@ -1,7 +1,7 @@
 import './styles.scss'
 import { kaReducer, Table } from "ka-table";
 import { ActionType, DataType, SortingMode, SortDirection } from "ka-table/enums";
-import { Button, Checkbox, makeStyles, Paper, Typography } from '@material-ui/core';
+import { Button, Checkbox, LinearProgress, makeStyles, Paper, Typography } from '@material-ui/core';
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { deselectRow, selectAllFilteredRows, deselectAllFilteredRows, updateData, selectRowsRange, selectRow } from "ka-table/actionCreators";
 import { actions as dataGridActions, DataGridContext } from '../DataGrid/DataGridContext';
@@ -254,6 +254,7 @@ const DataGrid2 = ({
         loadedCount={dataGridState.rows.length}
       />
       <div style={{ display: 'none' }}>{sortColumn}{sortDirection}</div>
+      {dataGridState.loading?<LinearProgress/>:<LinearProgress variant="determinate" value={0}/>}
       <Table
         {...tableProps}
         dispatch={kaDispatch}
