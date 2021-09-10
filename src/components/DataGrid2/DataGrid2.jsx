@@ -1,20 +1,33 @@
-import './styles.scss'
-import { kaReducer, Table } from "ka-table";
-import { ActionType, DataType, SortingMode, SortDirection } from "ka-table/enums";
-import { Button, Checkbox, LinearProgress, makeStyles, Paper, Tooltip, Typography } from '@material-ui/core';
-import React, { isValidElement, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { deselectRow, selectAllFilteredRows, deselectAllFilteredRows, updateData, selectRowsRange, selectRow } from "ka-table/actionCreators";
-import { actions as dataGridActions, DataGridContext } from '../DataGrid/DataGridContext';
-import Datagrid2Toolbar from './Datagrid2Toolbar';
-import { OptionFilterRenderer, TextFilterRenderer } from '../DataGrid/FilterRenderer';
+import { Checkbox, LinearProgress, makeStyles, Tooltip } from '@material-ui/core';
 import clsx from 'clsx';
+import { kaReducer, Table } from "ka-table";
+import { deselectAllFilteredRows, deselectRow, selectAllFilteredRows, selectRow, updateData } from "ka-table/actionCreators";
+import { DataType, SortingMode } from "ka-table/enums";
 import { isEmpty } from 'lodash';
+import React, { isValidElement, useCallback, useContext, useEffect, useState } from 'react';
+import { actions as dataGridActions, DataGridContext } from '../DataGrid/DataGridContext';
+import { OptionFilterRenderer, TextFilterRenderer } from '../DataGrid/FilterRenderer';
 import { PortalCell } from '../DataGrid/PortalCell';
+import Truncate from 'react-truncate';
+
+import Datagrid2Toolbar from './Datagrid2Toolbar';
+import './styles.scss';
+import { Sort, UnfoldMore } from '@material-ui/icons';
+import calc from 'postcss-calc';
 
 const useStyles = makeStyles((theme) => {
   return {
     datagrid: {
       height: '100%'
+    },
+    headerHover: {
+      display: 'inline-flex',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: "center",
+    },
+    headerHoverIcon: {
+      fontSize: 12
     }
   }
 })
@@ -72,6 +85,14 @@ const SelectionCell = ({
     />
   );
 };
+
+const HeaderCell = ({ column, ...props }) => {
+  const [onHover, setOnHover] = useState(false);
+  const classes = useStyles()
+  return <div className={classes.headerHover} onMouseEnter={() => setOnHover(true)}
+    onMouseLeave={() => setOnHover(false)}>
+    <span>{column.title}</span> {onHover && <UnfoldMore className={classes.headerHoverIcon} />}</div>
+}
 
 const useDynamicRowsOptions = ({ rowKeyField }) => {
   const [renderedRowSizes] = useState({});
@@ -154,8 +175,8 @@ const DataGrid2 = ({
         visible: !col.hidden,
         filterRenderer: getFilterRenderer(col),
         isResizable: col.resizable,
-        style:{width: 200, minWidth: 200},
-        ...col.key==='select-row'?{width: 50}:{},
+        style: { width: 200, minWidth: 200 },
+        ...col.key === 'select-row' ? { width: 50 } : {},
       }
       return column
     })
@@ -222,18 +243,18 @@ const DataGrid2 = ({
 
   const fetchRenderer = useCallback(
     (cellProps) => {
-      cellProps = {...cellProps, row: cellProps.rowData}
+      cellProps = { ...cellProps, row: cellProps.rowData }
       if (cellProps.column.key === "select-row") {
         return <SelectionCell {...cellProps} />
       }
 
       const targetColumn = tableProps.columns.find(col => col.key === cellProps.column.key)
-      
+
       const element = cellProps.row[cellProps.column.key];
       const isReactElem = isValidElement(element);
       const cellData = cellProps.row[cellProps.column.key]
       const tooltip =
-        typeof cellData  === "object"
+        typeof cellData === "object"
           ? isReactElem
             ? element
             : JSON.stringify(element)
@@ -241,7 +262,13 @@ const DataGrid2 = ({
       const cellRenderer = !!targetColumn?.cellRenderer ? (
         targetColumn?.cellRenderer(cellProps)
       ) : (
-        <span style={targetColumn.cellStyles}>{isReactElem ? element : tooltip}</span>
+        isReactElem ? <span style={targetColumn.cellStyles}>{element}</span> :
+          <Truncate lines={targetColumn?.truncateLines ?? 2} ellipsis={<span>(...)</span>}
+            style={targetColumn.cellStyles}
+          >
+            {tooltip}
+          </Truncate>
+
       );
       const renderedTooltip =
         typeof targetColumn.tooltip === "function" ? targetColumn?.tooltip(cellProps) : tooltip;
@@ -259,7 +286,7 @@ const DataGrid2 = ({
           </Tooltip>
         );
       }
-      const renderItem = targetColumn?.expandRenderer ? targetColumn?.expandRenderer(cellProps):false
+      const renderItem = targetColumn?.expandRenderer ? targetColumn?.expandRenderer(cellProps) : false
       return (renderItem) ? <PortalCell expandCell={targetColumn?.expandRenderer(cellProps)} renderedCell={finalizedCell} /> : finalizedCell;
 
     },
@@ -292,7 +319,7 @@ const DataGrid2 = ({
         loadedCount={dataGridState.rows.length}
       />
       <div style={{ display: 'none' }}>{sortColumn}{sortDirection}</div>
-      {dataGridState.loading?<LinearProgress/>:<LinearProgress variant="determinate" value={0}/>}
+      {dataGridState.loading ? <LinearProgress /> : <LinearProgress variant="determinate" value={0} />}
       <Table
         {...tableProps}
         dispatch={kaDispatch}
@@ -306,6 +333,9 @@ const DataGrid2 = ({
               ref: ref => addRowHeight(rowData, ref?.offsetHeight)
             })
           },
+          headCellContent: {
+            content: props => <HeaderCell {...props} />
+          },
           headCell: {
             content: (props) => {
               if (props.column.key === 'select-row') {
@@ -318,7 +348,7 @@ const DataGrid2 = ({
               }
             },
             elementAttributes: ({ column }) => {
-              return ['id', 'select-row'].includes(column.key) && {
+              return (['id', 'select-row'].includes(column.key) || column?.frozen) && {
                 style: {
                   ...column.style,
                   position: 'sticky',
@@ -329,14 +359,13 @@ const DataGrid2 = ({
             }
           },
           cell: {
-            elementAttributes: ({ column }) => {
-              return ['id', 'select-row'].includes(column.key) ? {
+            elementAttributes: ({ column, ...props }) => {
+              return (['id', 'select-row'].includes(column.key) || column?.frozen) ? {
                 style: {
                   ...column.style,
                   position: 'sticky',
                   left: 0,
                   backgroundColor: "#fff",
-                  overflow: 'hidden'
                 }
               } : {
                 style: {
@@ -375,4 +404,4 @@ const DataGrid2 = ({
   );
 }
 
-export { DataGrid2 }
+export { DataGrid2 };

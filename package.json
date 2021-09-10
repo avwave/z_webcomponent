@@ -42,7 +42,9 @@
     "react-phone-number-input": "^3.1.25",
     "react-scripts": "4.0.3",
     "react-tippy": "^1.4.0",
+    "react-truncate": "^2.4.0",
     "styled-components": "^5.2.1",
+    "voca": "^1.4.0",
     "web-vitals": "^1.0.1",
     "yup": "^0.32.9"
   },

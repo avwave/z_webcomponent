@@ -31,7 +31,6 @@ const columnData = [
     cellStyles: {
       color: "red",
     },
-    frozen: true,
   },
   {
     key: "col6Type",
@@ -112,10 +111,10 @@ const columnData = [
   {
     key: "col5Type",
     colId: "col5",
-    name: "Hidden Column",
+    name: "Truncate",
     sortable: false,
     align: "flex-start",
-    hidden: true,
+    hidden: false,
   },
   {
     key: "button",
