@@ -1,7 +1,7 @@
-import { Checkbox, LinearProgress, makeStyles, Tooltip } from '@material-ui/core';
+import { Checkbox, IconButton, LinearProgress, makeStyles, Tooltip } from '@material-ui/core';
 import clsx from 'clsx';
 import { kaReducer, Table } from "ka-table";
-import { deselectAllFilteredRows, deselectRow, selectAllFilteredRows, selectRow, updateData } from "ka-table/actionCreators";
+import { hideDetailsRow, showDetailsRow, deselectAllFilteredRows, deselectRow, selectAllFilteredRows, selectRow, updateData } from "ka-table/actionCreators";
 import { DataType, SortingMode } from "ka-table/enums";
 import { isEmpty } from 'lodash';
 import React, { isValidElement, useCallback, useContext, useEffect, useState } from 'react';
@@ -12,7 +12,7 @@ import Truncate from 'react-truncate';
 
 import Datagrid2Toolbar from './Datagrid2Toolbar';
 import './styles.scss';
-import { Sort, UnfoldMore } from '@material-ui/icons';
+import { ArrowDropDown, ArrowDropUp, KeyboardArrowDown, KeyboardArrowUp, Sort, SyncAlt, UnfoldLess, UnfoldMore } from '@material-ui/icons';
 import calc from 'postcss-calc';
 
 const useStyles = makeStyles((theme) => {
@@ -91,9 +91,18 @@ const HeaderCell = ({ column, ...props }) => {
   const classes = useStyles()
   return <div className={classes.headerHover} onMouseEnter={() => setOnHover(true)}
     onMouseLeave={() => setOnHover(false)}>
-    <span>{column.title}</span> {onHover && <UnfoldMore className={classes.headerHoverIcon} />}</div>
+    <span>{column.title}</span> {onHover && <><UnfoldMore className={classes.headerHoverIcon} /><SyncAlt className={classes.headerHoverIcon} /></>}</div>
 }
 
+const RowExpanderButton = ({dispatch, rowKeyValue, isDetailsRowShown}) => {
+  return (
+    <IconButton onClick={() => {
+      dispatch(isDetailsRowShown ? hideDetailsRow(rowKeyValue) : showDetailsRow(rowKeyValue));
+    }}>
+      {isDetailsRowShown ? <UnfoldLess/> : <UnfoldMore/>}
+    </IconButton>
+  ); 
+}
 const useDynamicRowsOptions = ({ rowKeyField }) => {
   const [renderedRowSizes] = useState({});
   let estimatedItemSize = 40;
@@ -379,6 +388,9 @@ const DataGrid2 = ({
           cellText: {
             content: props => {
               const component = fetchRenderer(props)
+              if (props?.column?.expanderControl) {
+                return <RowExpanderButton {...props}/>
+              }
               return component
             }
           },
