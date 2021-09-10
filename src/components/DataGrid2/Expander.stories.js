@@ -18,7 +18,7 @@ import { columnData, rows } from "./gridData";
 
 const DataGridStory = {
   component: DataGrid2,
-  title: "DataGrid/DataGrid2/Complex",
+  title: "DataGrid/DataGrid2/ExpandingCell",
   parameters: {
     chromatic: { disable: true },
     storyshots: { disable: true },
@@ -64,6 +64,8 @@ const PackageRenderer = ({ pack, key, tests }) => {
 
 export const Default = ExpanderCells.bind({});
 Default.args = {
+  filterable: true,
+  showSelector: true,
   rows: rows,
   columns: [{
     colId: 'tests',
