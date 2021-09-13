@@ -1,9 +1,37 @@
-@import 'ka-table/style.scss';
 
-.ka-thead-fixed {
-  position: sticky;
-  z-index: 1;
+.datagrid {
+  @import "./variables.scss";
+  @import 'ka-table/style.scss';
+  
+  .ka-thead-fixed {
+    position: sticky;
+    z-index: 1;
+  }
+
+  .ka-thead-fixed:after,
+  .ka-thead-fixed:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 100%;
+  }
+  .ka-thead-fixed:after {
+    bottom: 0;
+    border: 2px solid transparentize($ka-border-color, .5)
+  }
+
+  .ka-thead-cell-content {
+    // text-transform: uppercase;
+    font-weight: bold;
+  }
+  .ka-cell {
+    padding: 8px 16px;
+    .ka-cell-text {
+      vertical-align: top;;
+    }
+  }
 }
-.ka-thead-cell-content {
-  text-transform: uppercase;
+
+.ka {
+  height: 100%;
 }

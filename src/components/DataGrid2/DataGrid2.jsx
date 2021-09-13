@@ -1,15 +1,35 @@
-import './styles.scss'
+import { Checkbox, IconButton, LinearProgress, makeStyles, Tooltip } from '@material-ui/core';
+import clsx from 'clsx';
 import { kaReducer, Table } from "ka-table";
-import { ActionType, DataType, SortingMode, SortDirection } from "ka-table/enums";
-import { Button, Checkbox, makeStyles, Paper, Typography } from '@material-ui/core';
-import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { deselectRow, selectAllFilteredRows, deselectAllFilteredRows, updateData, selectRowsRange, selectRow } from "ka-table/actionCreators";
+import { hideDetailsRow, showDetailsRow, deselectAllFilteredRows, deselectRow, selectAllFilteredRows, selectRow, updateData } from "ka-table/actionCreators";
+import { DataType, SortingMode } from "ka-table/enums";
+import { isEmpty } from 'lodash';
+import React, { isValidElement, useCallback, useContext, useEffect, useState } from 'react';
 import { actions as dataGridActions, DataGridContext } from '../DataGrid/DataGridContext';
-import Datagrid2Toolbar from './Datagrid2Toolbar';
 import { OptionFilterRenderer, TextFilterRenderer } from '../DataGrid/FilterRenderer';
+import { PortalCell } from '../DataGrid/PortalCell';
+import Truncate from 'react-truncate';
+
+import Datagrid2Toolbar from './Datagrid2Toolbar';
+import './styles.scss';
+import { ArrowDropDown, ArrowDropUp, KeyboardArrowDown, KeyboardArrowUp, Sort, SyncAlt, UnfoldLess, UnfoldMore } from '@material-ui/icons';
+import calc from 'postcss-calc';
 
 const useStyles = makeStyles((theme) => {
-  return {}
+  return {
+    datagrid: {
+      height: '100%'
+    },
+    headerHover: {
+      display: 'inline-flex',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: "center",
+    },
+    headerHoverIcon: {
+      fontSize: 12
+    }
+  }
 })
 
 const LOAD_MORE_DATA = "LOAD_MORE_DATA";
@@ -66,6 +86,23 @@ const SelectionCell = ({
   );
 };
 
+const HeaderCell = ({ column, ...props }) => {
+  const [onHover, setOnHover] = useState(false);
+  const classes = useStyles()
+  return <div className={classes.headerHover} onMouseEnter={() => setOnHover(true)}
+    onMouseLeave={() => setOnHover(false)}>
+    <span>{column.title}</span> {onHover && <><UnfoldMore className={classes.headerHoverIcon} /><SyncAlt className={classes.headerHoverIcon} /></>}</div>
+}
+
+const RowExpanderButton = ({dispatch, rowKeyValue, isDetailsRowShown}) => {
+  return (
+    <IconButton onClick={() => {
+      dispatch(isDetailsRowShown ? hideDetailsRow(rowKeyValue) : showDetailsRow(rowKeyValue));
+    }}>
+      {isDetailsRowShown ? <UnfoldLess/> : <UnfoldMore/>}
+    </IconButton>
+  ); 
+}
 const useDynamicRowsOptions = ({ rowKeyField }) => {
   const [renderedRowSizes] = useState({});
   let estimatedItemSize = 40;
@@ -96,6 +133,7 @@ const DataGrid2 = ({
   style,
   containerStyle,
   gridProps,
+  tableComponents,
   contextMenu,
   leftAccessory,
   rightAccessory,
@@ -146,8 +184,8 @@ const DataGrid2 = ({
         visible: !col.hidden,
         filterRenderer: getFilterRenderer(col),
         isResizable: col.resizable,
-        style:{width: 100, minWidth: 100},
-        ...col.key==='select-row'?{width: 50}:{},
+        style: { width: 200, minWidth: 200 },
+        ...col.key === 'select-row' ? { width: 50 } : {},
       }
       return column
     })
@@ -214,11 +252,52 @@ const DataGrid2 = ({
 
   const fetchRenderer = useCallback(
     (cellProps) => {
+      cellProps = { ...cellProps, row: cellProps.rowData }
       if (cellProps.column.key === "select-row") {
         return <SelectionCell {...cellProps} />
       }
-      const customCellRenderer = tableProps.columns.find(col => col.key === cellProps.column.key)?.cellRenderer
-      return customCellRenderer ? customCellRenderer({ ...cellProps, row: cellProps.rowData }) : <Typography variant="body1">{cellProps.value}</Typography>
+
+      const targetColumn = tableProps.columns.find(col => col.key === cellProps.column.key)
+
+      const element = cellProps.row[cellProps.column.key];
+      const isReactElem = isValidElement(element);
+      const cellData = cellProps.row[cellProps.column.key]
+      const tooltip =
+        typeof cellData === "object"
+          ? isReactElem
+            ? element
+            : JSON.stringify(element)
+          : element;
+      const cellRenderer = !!targetColumn?.cellRenderer ? (
+        targetColumn?.cellRenderer(cellProps)
+      ) : (
+        isReactElem ? <span style={targetColumn.cellStyles}>{element}</span> :
+          <Truncate lines={targetColumn?.truncateLines ?? 2} ellipsis={<span>(...)</span>}
+            style={targetColumn.cellStyles}
+          >
+            {tooltip}
+          </Truncate>
+
+      );
+      const renderedTooltip =
+        typeof targetColumn.tooltip === "function" ? targetColumn?.tooltip(cellProps) : tooltip;
+      let finalizedCell = cellRenderer;
+      if (targetColumn.noTooltip || isEmpty(renderedTooltip)) {
+        finalizedCell = cellRenderer;
+      } else {
+        finalizedCell = (
+          <Tooltip
+            title={renderedTooltip}
+            placement="bottom-start"
+            className={classes.tooltip}
+          >
+            {cellRenderer}
+          </Tooltip>
+        );
+      }
+      const renderItem = targetColumn?.expandRenderer ? targetColumn?.expandRenderer(cellProps) : false
+      return (renderItem) ? <PortalCell expandCell={targetColumn?.expandRenderer(cellProps)} renderedCell={finalizedCell} /> : finalizedCell;
+
     },
     [tableProps.columns],
   );
@@ -234,8 +313,7 @@ const DataGrid2 = ({
 
 
   return (
-    <Paper>
-      <div style={{ display: 'none' }}>{sortColumn}{sortDirection}</div>
+    <div className={clsx('datagrid', classes.datagrid)}>
       <Datagrid2Toolbar
         tableProps={tableProps}
         dispatch={kaDispatch}
@@ -249,6 +327,8 @@ const DataGrid2 = ({
         totalCount={totalCount}
         loadedCount={dataGridState.rows.length}
       />
+      <div style={{ display: 'none' }}>{sortColumn}{sortDirection}</div>
+      {dataGridState.loading ? <LinearProgress /> : <LinearProgress variant="determinate" value={0} />}
       <Table
         {...tableProps}
         dispatch={kaDispatch}
@@ -262,6 +342,9 @@ const DataGrid2 = ({
               ref: ref => addRowHeight(rowData, ref?.offsetHeight)
             })
           },
+          headCellContent: {
+            content: props => <HeaderCell {...props} />
+          },
           headCell: {
             content: (props) => {
               if (props.column.key === 'select-row') {
@@ -274,7 +357,7 @@ const DataGrid2 = ({
               }
             },
             elementAttributes: ({ column }) => {
-              return ['id', 'select-row'].includes(column.key) && {
+              return (['id', 'select-row'].includes(column.key) || column?.frozen) && {
                 style: {
                   ...column.style,
                   position: 'sticky',
@@ -285,14 +368,13 @@ const DataGrid2 = ({
             }
           },
           cell: {
-            elementAttributes: ({ column }) => {
-              return ['id', 'select-row'].includes(column.key) ? {
+            elementAttributes: ({ column, ...props }) => {
+              return (['id', 'select-row'].includes(column.key) || column?.frozen) ? {
                 style: {
                   ...column.style,
                   position: 'sticky',
                   left: 0,
                   backgroundColor: "#fff",
-                  overflow: 'hidden'
                 }
               } : {
                 style: {
@@ -306,6 +388,9 @@ const DataGrid2 = ({
           cellText: {
             content: props => {
               const component = fetchRenderer(props)
+              if (props?.column?.expanderControl) {
+                return <RowExpanderButton {...props}/>
+              }
               return component
             }
           },
@@ -321,13 +406,14 @@ const DataGrid2 = ({
                   kaDispatch({ type: LOAD_MORE_DATA });
                 }
               },
-              style: { maxHeight: 600 }
             })
-          }
+          },
+          ...tableComponents
         }}
+        {...gridProps}
       />
-    </Paper>
+    </div>
   );
 }
 
-export { DataGrid2 }
+export { DataGrid2 };
