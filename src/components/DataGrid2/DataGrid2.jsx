@@ -25,6 +25,7 @@ const useStyles = makeStyles((theme) => {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: "center",
+      fontWeight: 'bold',
     },
     headerHoverIcon: {
       fontSize: 12
@@ -90,8 +91,14 @@ const HeaderCell = ({ column, ...props }) => {
   const [onHover, setOnHover] = useState(false);
   const classes = useStyles()
   return <div className={classes.headerHover} onMouseEnter={() => setOnHover(true)}
-    onMouseLeave={() => setOnHover(false)}>
-    <span>{column.title}</span> {onHover && <><UnfoldMore className={classes.headerHoverIcon} /><SyncAlt className={classes.headerHoverIcon} /></>}</div>
+    onMouseLeave={() => setOnHover(false)}
+    {...props}>
+    <span>{column.title}</span> 
+    {onHover && 
+      <>
+        {column?.sortable && <Sort className={classes.headerHoverIcon} />}
+        <SyncAlt className={classes.headerHoverIcon} />
+      </>}</div>
 }
 
 const RowExpanderButton = ({dispatch, rowKeyValue, isDetailsRowShown}) => {
@@ -354,6 +361,9 @@ const DataGrid2 = ({
                   // areAllRowsSelected={kaPropsUtils.areAllVisibleRowsSelected(tableProps)}
                   />
                 );
+              }
+              if (!props.column?.sortable) {
+                return <HeaderCell {...props} />
               }
             },
             elementAttributes: ({ column }) => {
