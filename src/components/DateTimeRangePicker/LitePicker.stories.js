@@ -24,5 +24,6 @@ export const DefaultStory = ({...args}) => {
 
 export const Default = DefaultStory.bind({});
 Default.args = {
-  inline: false
+  inline: false,
+  variant: 'filled'
 };

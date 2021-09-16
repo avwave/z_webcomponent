@@ -27,6 +27,7 @@ import { SelectColumn } from "react-data-grid";
 import { Menu as ContextMenu, Item as ContextItem } from "react-contexify";
 import { action } from "@storybook/addon-actions";
 import { DataGrid2 } from "./DataGrid2";
+import ReactJson from "react-json-view";
 
 const DataGridStory = {
   component: DataGrid2,
@@ -134,6 +135,8 @@ ColumnDisplaySelection.args = {
 
 const ServerFilterSortStory = ({ ...args }) => {
   const [state, dispatch] = React.useContext(DataGridContext);
+  const [sentFilters, setSentFilters] = useState();
+
   React.useEffect(() => {
       dispatch({
         payload: { columns: args.columns },
@@ -184,6 +187,9 @@ const ServerFilterSortStory = ({ ...args }) => {
     let filteredRows = args.rows;
     searchKeys.forEach((searchKey) => {
       filteredRows = filteredRows.filter((row) => {
+        if(searchKey === 'search') {
+          return true
+        }
         switch (typeof state.filterColumn[searchKey]) {
           case "boolean":
             return !isEmpty(row[searchKey]) === state.filterColumn[searchKey];
@@ -206,13 +212,19 @@ const ServerFilterSortStory = ({ ...args }) => {
     });
   }, [state.filterColumn]);
 
+  React.useEffect(() => {
+    setSentFilters(state.filterColumn)
+  }, [state.filterColumn])
+
   return <Paper style={{height: '80vh'}}>
+    <ReactJson src={sentFilters} />
     <DataGrid2 {...args} 
       onSort={(col, dir) => {
         console.log("📢[index.stories.js:211]: ", col, dir);
         handleSort(col, dir)
       }}
     />
+    
   </Paper>;
 };
 export const ServerFilterSort = ServerFilterSortStory.bind({});

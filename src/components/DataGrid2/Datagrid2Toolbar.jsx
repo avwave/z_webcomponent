@@ -1,31 +1,32 @@
-import 'ka-table/style.scss'
-import { kaReducer, Table } from "ka-table";
-import { ActionType, DataType, EditingMode, SortingMode } from 'ka-table/enums';
-import { hideColumn, showColumn } from "ka-table/actionCreators";
-import CellEditorBoolean from 'ka-table/Components/CellEditorBoolean/CellEditorBoolean';
 import {
   Breadcrumbs,
   Button,
   ButtonGroup,
   Chip,
   Container,
+  debounce,
   FormControl,
   FormHelperText,
-  FormLabel,
+  Grid,
   IconButton,
-  InputLabel,
-  Popover,
-  Toolbar,
+  Input,
+  InputAdornment, Popover, TextField, Toolbar,
   Typography,
-  withStyles,
+  withStyles
 } from "@material-ui/core";
-import { FilterList, ViewColumn } from "@material-ui/icons";
+import { Close, FilterList, Search, ViewColumn } from "@material-ui/icons";
 import { stringify } from "javascript-stringify";
+import { Table } from "ka-table";
+import { hideColumn, showColumn } from "ka-table/actionCreators";
+import CellEditorBoolean from 'ka-table/Components/CellEditorBoolean/CellEditorBoolean';
+import { ActionType, DataType } from 'ka-table/enums';
+import 'ka-table/style.scss';
 import { isEmpty } from "lodash";
+import moment from 'moment'
 import React, { useContext, useEffect, useMemo, useState } from "react";
-import { actions, DataGridContext } from "../DataGrid/DataGridContext";
 import CheckboxProvider from '../CheckList/checklistContext';
-
+import { actions, DataGridContext } from "../DataGrid/DataGridContext";
+import { DateTimeRangePicker } from '../DateTimeRangePicker';
 const POPUP_MODE = {
   FILTER: "FILTER",
   COLUMN: "COLUMN",
@@ -41,18 +42,29 @@ const styles = (theme) => ({
     padding: theme.spacing(2),
   },
   filterLabel: {
-    paddingLeft: theme.spacing(1),
     fontWeight: "bold",
+    justifySelf: 'end',
+    minWidth: 100,
+    textAlign:'right'
   },
   toolbar: {
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
-    width: "100%",
     alignItems: "center",
   },
   root: {
     width: "100%",
+  },
+  chips:{
+    width: "100%",
+    display: "flex",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    alignItems: "center",
+  },
+  clearButton:{
+    
   }
 });
 
@@ -137,6 +149,7 @@ function DataGrid2Toolbar({
   const [filterColumnSettings, setFilterColumnSettings] = useState(columns);
 
   const [filterValues, setFilterValues] = useState({});
+  const [searchField, setSearchField] = useState("");
 
   useEffect(() => {
     setFilterColumnSettings(
@@ -166,6 +179,7 @@ function DataGrid2Toolbar({
 
   useEffect(() => {
     onFilterChange(filterValues);
+    setSearchField(filterValues?.search??"")
   }, [filterValues]);
 
   const renderFilters = () => {
@@ -188,8 +202,12 @@ function DataGrid2Toolbar({
   };
 
   const stateFilters = useMemo(() => {
-    return Object.entries(dataGridState.filterColumn).filter(f=>f[1]!==undefined)
+    return Object.entries(dataGridState.filterColumn).filter(f => f[1] !== undefined)
   }, [dataGridState.filterColumn]);
+
+  const debounceSearch = debounce((event) => {
+    setFilterValues({ ...filterValues, search: event.target.value })
+  }, 500)
 
   return (
     <div className={classes.root}>
@@ -198,120 +216,155 @@ function DataGrid2Toolbar({
         centerAccessory ||
         rightAccessory ||
         filterable) && (
-        <Toolbar variant="dense" className={classes.toolbar} disableGutters>
-          {leftAccessory ? leftAccessory() : <></>}
-          <div style={{ flex: 1 }} />
-          {centerAccessory ? centerAccessory() : <></>}
-          <div style={{ flex: 1 }} />
-          {showSelector ? (
-            <>
-              <IconButton variant="default" onClick={handleOpenCheckList}>
-                <ViewColumn />
-              </IconButton>
+          <Toolbar variant="dense" className={classes.toolbar} disableGutters>
+            {leftAccessory ? leftAccessory() : <></>}
+            <div style={{ flex: 1 }} />
+            {centerAccessory ? centerAccessory() : <></>}
+            <div style={{ flex: 1 }} />
+            {showSelector ? (
+              <>
+                <IconButton variant="default" onClick={handleOpenCheckList}>
+                  <ViewColumn />
+                </IconButton>
 
-              <Popover
-                id={columnPopoverId}
-                open={isCheckListOpen}
-                anchorEl={columnAnchor}
-                onClose={handleChecklistClose}
-                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-                transformOrigin={{ vertical: "top", horizontal: "right" }}
-                keepMounted
-              >
-                <ColumnSettings {...tableProps} dispatch={dispatch} />
-              </Popover>
-            </>
-          ) : (
-            <></>
-          )}
-          {filterable ? (
-            <>
-              <IconButton variant="default" onClick={handleOpenFilterList}>
-                <FilterList />
-              </IconButton>
-              <Popover
-                id={filterPopoverId}
-                open={isFilterListOpen}
-                anchorEl={filterAnchor}
-                onClose={handleFilterListClose}
-                anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-                transformOrigin={{ vertical: "top", horizontal: "right" }}
-              >
-                <Container maxWidth="xs">
-                  <form
-                    noValidate
-                    autoComplete="off"
-                    className={classes.filterPopup}
-                  >
-                    <ButtonGroup
-                      fullWidth
-                      disableElevation
-                      variant="text"
-                      color="primary"
+                <Popover
+                  id={columnPopoverId}
+                  open={isCheckListOpen}
+                  anchorEl={columnAnchor}
+                  onClose={handleChecklistClose}
+                  anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                  transformOrigin={{ vertical: "top", horizontal: "right" }}
+                  keepMounted
+                >
+                  <ColumnSettings {...tableProps} dispatch={dispatch} />
+                </Popover>
+              </>
+            ) : (
+              <></>
+            )}
+            {filterable ? (
+              <>
+                <IconButton variant="default" onClick={handleOpenFilterList}>
+                  <FilterList />
+                </IconButton>
+                <Popover
+                  id={filterPopoverId}
+                  open={isFilterListOpen}
+                  anchorEl={filterAnchor}
+                  onClose={handleFilterListClose}
+                  anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                  transformOrigin={{ vertical: "top", horizontal: "right" }}
+                >
+                  <Container maxWidth="xs">
+                    <form
+                      noValidate
+                      autoComplete="off"
+                      className={classes.filterPopup}
                     >
-                      <Button disabled>Filters</Button>
-                      <Button
-                        onClick={() => {
-                          dataGridDispatch({
-                            type: actions.CLEAR_FILTER_COLUMN,
-                          });
-                        }}
+                      <ButtonGroup
+                        fullWidth
+                        disableElevation
+                        variant="text"
+                        color="primary"
                       >
-                        Reset
-                      </Button>
-                    </ButtonGroup>
-                    {renderFilters()}
-                  </form>
-                </Container>
-              </Popover>
+                        <Button disabled>Filters</Button>
+                        <Button
+                          onClick={() => {
+                            dataGridDispatch({
+                              type: actions.CLEAR_FILTER_COLUMN,
+                            });
+                          }}
+                        >
+                          Reset
+                        </Button>
+                      </ButtonGroup>
+                      {renderFilters()}
+                    </form>
+                  </Container>
+                </Popover>
+              </>
+            ) : (
+              <></>
+            )}
+            {children}
+            {rightAccessory ? rightAccessory() : <></>}
+          </Toolbar>
+        )}
+      <Toolbar variant="dense" className={classes.toolbar}>
+        <Grid container spacing={2}>
+          {filterable && (
+            <>
+              <Grid item xs>
+                <Input
+                  fullWidth
+                  startAdornment={<InputAdornment position="start"><Search /></InputAdornment>}
+                  placeholder="Search"
+                  value={searchField}
+                  onChange={event => {
+                    setSearchField(event.target.value)
+                    debounceSearch(event)
+                  }}
+                />
+              </Grid>
+              <Grid item >
+                <DateTimeRangePicker inline variant="standard" 
+                value={filterValues}
+                onChange={debounce((v) => {
+                  setFilterValues({ ...filterValues, ...v });
+                }, 500)} />
+              </Grid>
             </>
-          ) : (
-            <></>
           )}
-          {children}
-          {rightAccessory ? rightAccessory() : <></>}
-        </Toolbar>
-      )}
+        </Grid>
+      </Toolbar>
       {((totalCount && loadedCount) ||
         !isEmpty(stateFilters)) && (
-        <Toolbar variant="dense" className={classes.toolbar} disableGutters>
-          <Breadcrumbs>
-            {totalCount && loadedCount && (
-              <div>
-              <Typography
-                className={classes.filterLabel}
-                variant="overline"
-              >
-                {loadedCount} of {totalCount}
-              </Typography>
-              </div>
-            )}
-            {!isEmpty(stateFilters) && (
-              <div>
-                <Typography variant="overline" className={classes.filterLabel}>
-                  Filtered by:{" "}
-                </Typography>
-                {stateFilters.map(
-                  (filter, idx) => {
-                    const filterColumn = filterColumnSettings.find((i) => {
-                      const ret = i.key === filter[0];
-                      return ret;
-                    });
-                    return (
-                      <Chip
-                        variant="outlined"
-                        label={stringify(filter[1])}
-                        key={idx}
-                        icon={<Chip size="small" label={filterColumn.name} />}
-                      />
-                    );
-                  }
-                )}
-              </div>
-            )}
-          </Breadcrumbs>
-        </Toolbar>
-      )}
+          <Toolbar variant="dense" className={classes.toolbar}>
+            {!isEmpty(stateFilters) ? (
+              <>
+                <div className={classes.chips} >
+                  <Typography variant="overline" className={classes.filterLabel}>
+                    Filtered by:{" "}
+                  </Typography>
+                  {stateFilters.map(
+                    (filter, idx) => {
+                      // if (!['search', 'endDate', 'startDate'].includes(filter[0])) {
+                      const filterColumn = filterColumnSettings.find((i) => {
+                        const ret = i.key === filter[0];
+                        return ret;
+                      });
+                      let label = stringify(filter[1])
+                      if (filter[1] instanceof Date) {
+                        label = moment(filter[1]).format('L LT')
+                      }
+                      return (
+                        <Chip
+                          variant="outlined"
+                          label={label}
+                          key={idx}
+                          icon={<Chip size="small" label={filterColumn?.name ?? filter[0]} />}
+                        />
+                      );
+                      // }
+                    }
+                  )}
+                </div>
+                <Button className={classes.clearButton} variant="contained" color="secondary" onClick={() => { setFilterValues({}) }}>Clear</Button>
+              </>
+            ) : <div />}
+            <Typography
+              className={classes.filterLabel}
+              variant="overline"
+            >
+              {totalCount && loadedCount &&
+                `${loadedCount} of ${totalCount}`
+
+              }
+            </Typography>
+
+
+          </Toolbar>
+        )}
     </div>
   );
 }
