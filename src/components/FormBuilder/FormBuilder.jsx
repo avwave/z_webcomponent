@@ -190,14 +190,17 @@ const FormFieldSet = ({
                 switch (fieldParams.type) {
                   case "datetime-local":
                     val = fieldParams.useLocalTime ? moment(evt?.target?.value).toDate() : moment.utc(evt?.target?.value).toDate()
+                    val = isEmpty(evt?.target?.value) ? null : val;
                     break
                   case "date":
                     val = fieldParams.useLocalTime ? moment(evt?.target?.value).startOf('d').toDate() : moment.utc(evt?.target?.value).startOf('d').toDate()
+                    val = isEmpty(evt?.target?.value) ? null : val;
                     break
                   case "time":
                     val = moment(evt?.target?.value, ['hh:mm a', 'HH:mm'])
                     val = mergeTime(val, get(formik.values, fieldName))
                     val = fieldParams.useLocalTime ? moment(val).toDate() : moment.utc(val).toDate()
+                    val = isEmpty(evt?.target?.value) ? null : val;
                     break
                   default:
                     break;
