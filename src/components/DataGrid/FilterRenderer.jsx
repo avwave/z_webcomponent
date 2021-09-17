@@ -1,4 +1,5 @@
 import {
+  Checkbox,
   FormControl,
   IconButton,
   Input,
@@ -7,9 +8,11 @@ import {
   makeStyles,
   MenuItem,
   Select,
+  TextField,
 } from "@material-ui/core";
-import { Close } from "@material-ui/icons";
-import React from "react";
+import { Backspace, Close } from "@material-ui/icons";
+import { Autocomplete } from "@material-ui/lab";
+import React, { Fragment, useState } from "react";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -66,8 +69,53 @@ function OptionFilterRenderer({ onChange, value, filter }) {
         ))}
       </Select>
     </FormControl>
-    
   );
 }
+function AuocompleteFilterRenderer({ onChange, value, filter }) {
+  const classes = useStyles();
+  const [internalValues, setInternalValues] = useState(value);
 
-export { TextFilterRenderer, OptionFilterRenderer };
+  return (
+    <FormControl fullWidth className={classes.formControl}>
+      <Autocomplete
+        value={internalValues ?? (filter?.multiple ? [] : '')}
+        onChange={(e, val) => {
+          setInternalValues(val);
+          filter?.multiple ? onChange(val.map(v => v.value)) : onChange(val?.[filter.valueField])
+        }}
+        multiple={filter?.multiple}
+        options={filter?.options}
+        getOptionLabel={(option) => {
+          return option[filter?.labelField] ?? ""
+        }}
+        getOptionSelected={(option, t) => {
+          return option[filter?.valueField] === t[filter?.valueField]
+        }}
+        renderOption={(option, { selected }) => {
+          if (filter?.multiple) {
+            return (
+              <Fragment>
+                <Checkbox checked={selected} />
+                {option[filter?.labelField]}
+              </Fragment>
+            );
+          }
+          return option[filter?.labelField];
+        }}
+        closeIcon={<Backspace fontSize="small" />}
+        renderInput={(iParams) => (
+          <TextField
+            {...iParams}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            label={filter?.label}
+            placeholder={"type to search"}
+          />
+        )}
+      />
+    </FormControl>
+  )
+}
+
+export { TextFilterRenderer, OptionFilterRenderer, AuocompleteFilterRenderer };

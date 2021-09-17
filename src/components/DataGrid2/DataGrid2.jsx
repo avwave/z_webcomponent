@@ -6,7 +6,7 @@ import { DataType, SortingMode } from "ka-table/enums";
 import { isEmpty } from 'lodash';
 import React, { isValidElement, useCallback, useContext, useEffect, useState } from 'react';
 import { actions as dataGridActions, DataGridContext } from '../DataGrid/DataGridContext';
-import { OptionFilterRenderer, TextFilterRenderer } from '../DataGrid/FilterRenderer';
+import { AuocompleteFilterRenderer, OptionFilterRenderer, TextFilterRenderer } from '../DataGrid/FilterRenderer';
 import { PortalCell } from '../DataGrid/PortalCell';
 import Truncate from 'react-truncate';
 
@@ -177,6 +177,10 @@ const DataGrid2 = ({
         case "option":
           return (args) => (
             <OptionFilterRenderer {...args} filter={c?.filter} />
+          );
+        case "autocomplete":
+          return (args) => (
+            <AuocompleteFilterRenderer {...args} filter={c?.filter} />
           );
         default:
           return c?.filterRenderer

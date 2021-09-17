@@ -190,15 +190,22 @@ const ServerFilterSortStory = ({ ...args }) => {
         if(searchKey === 'search') {
           return true
         }
+        const searchItem = row[searchKey]
+
         switch (typeof state.filterColumn[searchKey]) {
           case "boolean":
-            return !isEmpty(row[searchKey]) === state.filterColumn[searchKey];
+            return !isEmpty(searchItem) === state.filterColumn[searchKey];
           case "object":
             return state.filterColumn[searchKey] === null;
+          case "string":
+            if (isEmpty(searchItem)) {
+              return true
+            }
+            const ret = searchItem.toLowerCase().includes(state.filterColumn[searchKey].toString().toLowerCase());
+            return ret
           default:
-            return row[searchKey]
-              .toLowerCase()
-              .includes(state.filterColumn[searchKey].toString().toLowerCase());
+            return true
+            
         }
       });
       console.log(

@@ -254,6 +254,7 @@ function DataGrid2Toolbar({
                   onClose={handleFilterListClose}
                   anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
                   transformOrigin={{ vertical: "top", horizontal: "right" }}
+                  keepMounted
                 >
                   <Container maxWidth="xs">
                     <form

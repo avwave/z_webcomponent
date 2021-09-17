@@ -38,9 +38,12 @@ const columnData = [
     name: "Filter: Option",
     sortable: true,
     filter: {
-      type: "option",
+      type: "autocomplete",
       default: "",
       label: "Is type of",
+      labelField: 'label',
+      valueField: 'value',
+      multiple: true,
       options: [
         {
           label: "Tip",
