@@ -97,7 +97,9 @@ const DateTimeRangePicker = ({ form, inline, onChange = () => { }, ...props }) =
         }}
       >
         <Box p={2}>
-          <LitePicker {...props} onValueChange={(val) => {
+          <LitePicker {...props} 
+          onCancel={() => setAnchorEl(null)}
+          onValueChange={(val) => {
             setDateRange(val)
             onChange(val)
           }} />

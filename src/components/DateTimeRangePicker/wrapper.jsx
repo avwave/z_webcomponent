@@ -21,6 +21,15 @@ const useStyles = makeStyles((theme) => {
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center',
+    },
+    bottomBar: {
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    },
+    spacer: {
+      flex: '1 1 auto'
     }
   }
 })
@@ -33,7 +42,7 @@ const RANGE_CONST = {
   LAST_MONTH: "Last Month",
 }
 
-const LitePicker = ({ onValueChange = () => { }, containerProps, variant = "outlined", ...props }) => {
+const LitePicker = ({ onCancel = () => { }, onValueChange = () => { }, containerProps, variant = "outlined", ...props }) => {
   const classes = useStyles()
   const startElement = useRef(null)
   const endElement = useRef(null)
@@ -45,7 +54,7 @@ const LitePicker = ({ onValueChange = () => { }, containerProps, variant = "outl
   const [startDate, setStartDate] = useState(props?.value?.startDate ?? new Date());
   const [endDate, setEndDate] = useState(props?.value?.endDate ?? new Date());
 
-  
+
   useEffect(() => {
     if (!picker.current) {
       const pickerElem = new LitePickerLib({
@@ -82,6 +91,7 @@ const LitePicker = ({ onValueChange = () => { }, containerProps, variant = "outl
         setStartDate(date1)
         setEndDate(date2)
       })
+
       pickerElem.setDateRange(moment(startDate), moment(endDate))
       pickerElem.gotoDate(moment(startDate));
       picker.current = pickerElem
@@ -98,15 +108,29 @@ const LitePicker = ({ onValueChange = () => { }, containerProps, variant = "outl
     [],
   );
 
-  
-  
-  useEffect(() => {
-    const val = {
-      startDate: mergeTime(startTime, startDate?.dateInstance),
-      endDate: mergeTime(endTime, endDate?.dateInstance),
-    }
-    onValueChange({ ...val })
-  }, [endDate, endTime, startDate, startTime]);
+
+
+  const sendParsedDates = useCallback(
+    () => {
+      const val = {
+        startDate: mergeTime(startTime, startDate?.dateInstance),
+        endDate: mergeTime(endTime, endDate?.dateInstance),
+      }
+      onValueChange({ ...val })
+    },
+    [endDate?.dateInstance, endTime, mergeTime, onValueChange, startDate?.dateInstance, startTime],
+  );
+
+  const clearDates = useCallback(
+    () => {
+      setStartTime(null)
+      setStartDate(null)
+      setEndTime(null)
+      setEndDate(null)
+      onValueChange({})
+    },
+    [onValueChange],
+  );
 
   const setRange = useCallback(
     (range) => {
@@ -143,6 +167,7 @@ const LitePicker = ({ onValueChange = () => { }, containerProps, variant = "outl
       <Grid item xs={6}>
         <TextField
           fullWidth
+          size="small"
           inputRef={startElement}
           name="startDate"
           type="date"
@@ -156,6 +181,7 @@ const LitePicker = ({ onValueChange = () => { }, containerProps, variant = "outl
       <Grid item xs={6}>
         <TextField
           fullWidth
+          size="small"
           value={moment(startTime).format("HH:mm")}
           onChange={evt => {
             setStartTime(moment(evt.target.value, ['hh:mm a', 'HH:mm']).toDate())
@@ -172,6 +198,7 @@ const LitePicker = ({ onValueChange = () => { }, containerProps, variant = "outl
       <Grid item xs={6}>
         <TextField
           fullWidth
+          size="small"
           inputRef={endElement}
           name="endDate"
           type="date"
@@ -185,6 +212,7 @@ const LitePicker = ({ onValueChange = () => { }, containerProps, variant = "outl
       <Grid item xs={6}>
         <TextField
           fullWidth
+          size="small"
           value={moment(endTime).format("HH:mm")}
           onChange={evt => {
             setEndTime(moment(evt.target.value, ['hh:mm a', 'HH:mm']).toDate())
@@ -206,7 +234,21 @@ const LitePicker = ({ onValueChange = () => { }, containerProps, variant = "outl
             )}
           </ButtonGroup>
         </Grid>
-        <Grid item xs={10} className={classes.calendarHolder} ref={parentElement}/>
+        <Grid item xs={10} className={classes.calendarHolder} ref={parentElement} />
+        <Grid item xs={12} className={classes.bottomBar}>
+          <Button variant="text" color="inherit"
+            onClick={() => onCancel()
+            }>Close</Button>
+          <div className={classes.spacer} />
+          <Button variant="text" color="primary"
+            onClick={() => sendParsedDates()
+            }>Apply</Button>
+          <Button variant="text" color="secondary"
+            onClick={() => clearDates()
+            }>Clear</Button>
+
+
+        </Grid>
       </Grid>
     </Grid>
   )
