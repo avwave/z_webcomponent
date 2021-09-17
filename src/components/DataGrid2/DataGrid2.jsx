@@ -324,6 +324,7 @@ const DataGrid2 = React.forwardRef(({
   }, [dataGridDispatch, filters]);
 
 
+  const [scrollYoffset, setScrollYoffset] = useState(0);
   return (
     <div className={clsx('datagrid', classes.datagrid)}>
       <Datagrid2Toolbar
@@ -416,6 +417,10 @@ const DataGrid2 = React.forwardRef(({
               onScroll: (event, { baseFunc }) => {
                 baseFunc(event);
                 const element = event.currentTarget;
+                setScrollYoffset(element.scrollLeft)
+                if(element.scrollLeft !== scrollYoffset) {
+                  return
+                }
                 if (
                   element.offsetHeight + element.scrollTop >=
                   element.scrollHeight
