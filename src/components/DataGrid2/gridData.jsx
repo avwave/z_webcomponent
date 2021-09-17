@@ -42,16 +42,16 @@ const columnData = [
       default: "",
       label: "Is type of",
       labelField: 'label',
-      valueField: 'value',
+      valueField: 'v',
       multiple: true,
       options: [
         {
           label: "Tip",
-          value: "tip",
+          v: "tip",
         },
         {
           label: "Top",
-          value: "top",
+          v: "top",
         },
       ],
     },

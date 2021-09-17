@@ -86,9 +86,11 @@ function AuocompleteFilterRenderer({ onChange, onChangeDisplay, value, filter })
   const [internalValues, setInternalValues] = useState(value);
 
   useEffect(() => {
-    const filtered = filter?.options.filter(v => value?.some(vv => vv === v.value));
+    const filtered = filter?.options.filter(v => value?.some(vv => {
+      return vv === v?.[filter?.valueField]
+    }));
     setInternalValues(filtered);
-  }, [value]);
+  }, [filter?.options, filter?.valueField, value]);
 
   return (
     <FormControl fullWidth className={classes.formControl}>
