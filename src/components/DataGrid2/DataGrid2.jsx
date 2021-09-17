@@ -2,9 +2,9 @@ import { Checkbox, IconButton, LinearProgress, makeStyles, Tooltip } from '@mate
 import clsx from 'clsx';
 import { kaReducer, Table } from "ka-table";
 import { hideDetailsRow, showDetailsRow, deselectAllFilteredRows, deselectRow, selectAllFilteredRows, selectRow, updateData } from "ka-table/actionCreators";
-import { DataType, SortingMode } from "ka-table/enums";
+import { ActionType, DataType, SortingMode } from "ka-table/enums";
 import { isEmpty } from 'lodash';
-import React, { isValidElement, useCallback, useContext, useEffect, useState } from 'react';
+import React, { isValidElement, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { actions as dataGridActions, DataGridContext } from '../DataGrid/DataGridContext';
 import { AuocompleteFilterRenderer, OptionFilterRenderer, TextFilterRenderer } from '../DataGrid/FilterRenderer';
 import { PortalCell } from '../DataGrid/PortalCell';
@@ -162,6 +162,14 @@ const DataGrid2 = ({
   const [selectedRows, setSelectedRows] = useState(new Set());
 
   const { itemHeight, addRowHeight } = useDynamicRowsOptions(tableProps);
+
+  const tableRef = useRef()
+
+  useEffect(() => {
+    if (tableRef.current && !! resetScroll) {
+      tableRef.current.scrollTop = 0
+    }
+  }, [resetScroll])
 
   useEffect(() => {
     onSort(sortColumn, sortDirection);
@@ -411,6 +419,7 @@ const DataGrid2 = ({
           },
           tableWrapper: {
             elementAttributes: () => ({
+              ref: tableRef,
               onScroll: (event, { baseFunc }) => {
                 baseFunc(event);
                 const element = event.currentTarget;

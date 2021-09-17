@@ -498,7 +498,7 @@ const InfiniteLoaderStory = ({ ...args }) => {
           pageOffset={0}
           leftAccessory={ () => (
             <ButtonGroup>
-              <Button onClick={()=>setResetScroll(true)}>Left</Button>
+              <Button onClick={()=>setResetScroll(!resetScroll)}>{`resetScroll ${resetScroll?'true':'false'}`}</Button>
             </ButtonGroup>
           )}
           gridProps={{
