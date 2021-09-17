@@ -45,7 +45,7 @@ const styles = (theme) => ({
     fontWeight: "bold",
     justifySelf: 'end',
     minWidth: 100,
-    textAlign:'right'
+    textAlign: 'right'
   },
   toolbar: {
     display: "flex",
@@ -56,15 +56,15 @@ const styles = (theme) => ({
   root: {
     width: "100%",
   },
-  chips:{
+  chips: {
     width: "100%",
     display: "flex",
     flexDirection: "row",
     flexWrap: "wrap",
     alignItems: "center",
   },
-  clearButton:{
-    
+  clearButton: {
+
   }
 });
 
@@ -150,6 +150,8 @@ function DataGrid2Toolbar({
   const [filterColumnSettings, setFilterColumnSettings] = useState(columns);
 
   const [filterValues, setFilterValues] = useState({});
+  const [filterDisplay, setFilterDisplay] = useState({});
+
   const [searchField, setSearchField] = useState("");
 
   useEffect(() => {
@@ -178,9 +180,13 @@ function DataGrid2Toolbar({
     setFilterValues({ ...filterValues, [filterKey]: filterValue });
   }
 
+  function changeFilterDisplay(filterKey, filterValue) {
+    setFilterDisplay({ ...filterValues, [filterKey]: filterValue });
+  }
+
   useEffect(() => {
     onFilterChange(filterValues);
-    setSearchField(filterValues?.search??"")
+    setSearchField(filterValues?.search ?? "")
   }, [filterValues]);
 
   const renderFilters = () => {
@@ -196,6 +202,9 @@ function DataGrid2Toolbar({
             onChange={(value) => {
               changeFilter(col.key, value);
             }}
+            onChangeDisplay={(value) => {
+              changeFilterDisplay(col.key, value);
+            }}
           />
         </FormControl>
       );
@@ -203,8 +212,8 @@ function DataGrid2Toolbar({
   };
 
   const stateFilters = useMemo(() => {
-    return Object.entries(dataGridState.filterColumn).filter(f => f[1] !== undefined)
-  }, [dataGridState.filterColumn]);
+    return Object.entries(filterDisplay).filter(f => f[1] !== undefined)
+  }, [filterDisplay]);
 
   const debounceSearch = debounce((event) => {
     setFilterValues({ ...filterValues, search: event.target.value })
@@ -257,7 +266,7 @@ function DataGrid2Toolbar({
                   transformOrigin={{ vertical: "top", horizontal: "right" }}
                   keepMounted
                   PaperProps={{
-                    style: { minWidth: gridProps?.filterWidth??400 },
+                    style: { minWidth: gridProps?.filterWidth ?? 400 },
                   }}
                 >
                   <Container maxWidth="md">
@@ -278,6 +287,7 @@ function DataGrid2Toolbar({
                             dataGridDispatch({
                               type: actions.CLEAR_FILTER_COLUMN,
                             });
+                            setFilterDisplay({})
                           }}
                         >
                           Reset
@@ -312,11 +322,11 @@ function DataGrid2Toolbar({
                 />
               </Grid>
               <Grid item >
-                <DateTimeRangePicker inline variant="standard" 
-                value={filterValues}
-                onChange={debounce((v) => {
-                  setFilterValues({ ...filterValues, ...v });
-                }, 500)} />
+                <DateTimeRangePicker inline variant="standard"
+                  value={filterValues}
+                  onChange={debounce((v) => {
+                    setFilterValues({ ...filterValues, ...v });
+                  }, 500)} />
               </Grid>
             </>
           )}
@@ -354,7 +364,10 @@ function DataGrid2Toolbar({
                     }
                   )}
                 </div>
-                <Button className={classes.clearButton} variant="contained" color="secondary" onClick={() => { setFilterValues({}) }}>Clear</Button>
+                <Button className={classes.clearButton} variant="contained" color="secondary" onClick={() => {
+                  setFilterValues({})
+                  setFilterDisplay({})
+                }}>Clear</Button>
               </>
             ) : <div />}
             <Typography

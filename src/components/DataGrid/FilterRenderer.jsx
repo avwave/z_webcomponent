@@ -12,7 +12,7 @@ import {
 } from "@material-ui/core";
 import { Backspace, Close } from "@material-ui/icons";
 import { Autocomplete } from "@material-ui/lab";
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -23,13 +23,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function TextFilterRenderer({ onChange, value, filter }) {
+function TextFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
   const classes = useStyles();
   return (
     <FormControl fullWidth className={classes.formControl}>
       <InputLabel>{filter?.label}</InputLabel>
       <Input
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => {
+          onChange(e.target.value)
+          onChangeDisplay(e.target.value)
+        }}
         value={value ?? ""}
         endAdornment={
           value ? (
@@ -37,7 +40,10 @@ function TextFilterRenderer({ onChange, value, filter }) {
               <IconButton
                 aria-label="close"
                 size="small"
-                onClick={() => onChange("")}
+                onClick={() => {
+                  onChange("")
+                  onChangeDisplay("")
+                }}
               >
                 <Close />
               </IconButton>
@@ -49,7 +55,7 @@ function TextFilterRenderer({ onChange, value, filter }) {
   );
 }
 
-function OptionFilterRenderer({ onChange, value, filter }) {
+function OptionFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
   const classes = useStyles();
   return (
     <FormControl fullWidth className={classes.formControl}>
@@ -57,7 +63,11 @@ function OptionFilterRenderer({ onChange, value, filter }) {
       <Select
         fullWidth
         value={value ?? ""}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => {
+          onChange(e.target.value)
+          const item =filter.options.find(v=> v.value === e.target.value)
+          onChangeDisplay(item?.label)
+        }}
       >
         <MenuItem value="">
           <em>None</em>
@@ -71,9 +81,14 @@ function OptionFilterRenderer({ onChange, value, filter }) {
     </FormControl>
   );
 }
-function AuocompleteFilterRenderer({ onChange, value, filter }) {
+function AuocompleteFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
   const classes = useStyles();
   const [internalValues, setInternalValues] = useState(value);
+
+  useEffect(() => {
+    const filtered = filter?.options.filter(v => value?.some(vv => vv === v.value));
+    setInternalValues(filtered);
+  }, [value]);
 
   return (
     <FormControl fullWidth className={classes.formControl}>
@@ -81,7 +96,13 @@ function AuocompleteFilterRenderer({ onChange, value, filter }) {
         value={internalValues ?? (filter?.multiple ? [] : '')}
         onChange={(e, val) => {
           setInternalValues(val);
-          filter?.multiple ? onChange(val.map(v => v?.[filter.valueField])) : onChange(val?.[filter.valueField])
+          if (filter?.multiple) {
+            onChange(val.map(v => v?.[filter.valueField]))
+            onChangeDisplay(val.map(v => v?.[filter.labelField]))
+          } else {
+            onChange(val?.[filter.valueField])
+            onChangeDisplay(val?.[filter.labelField])
+          }
         }}
         multiple={filter?.multiple}
         options={filter?.options}
