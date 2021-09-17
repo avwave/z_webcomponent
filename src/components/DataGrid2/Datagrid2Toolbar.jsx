@@ -256,7 +256,7 @@ function DataGrid2Toolbar({
                   transformOrigin={{ vertical: "top", horizontal: "right" }}
                   keepMounted
                 >
-                  <Container maxWidth="xs">
+                  <Container maxWidth="md">
                     <form
                       noValidate
                       autoComplete="off"
