@@ -81,7 +81,7 @@ function AuocompleteFilterRenderer({ onChange, value, filter }) {
         value={internalValues ?? (filter?.multiple ? [] : '')}
         onChange={(e, val) => {
           setInternalValues(val);
-          filter?.multiple ? onChange(val.map(v => v.value)) : onChange(val?.[filter.valueField])
+          filter?.multiple ? onChange(val.map(v => v?.[filter.valueField])) : onChange(val?.[filter.valueField])
         }}
         multiple={filter?.multiple}
         options={filter?.options}
