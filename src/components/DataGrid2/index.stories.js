@@ -434,12 +434,20 @@ const InfiniteLoaderStory = ({ ...args }) => {
   const [state, dispatch] = React.useContext(DataGridContext);
 
   const aggregateRows = React.useRef([]);
+  const tableRef = React.useRef(null);
 
-  const [resetScroll, setResetScroll] = React.useState(false);
+  const resetScroll = React.useCallback(
+    () => {
+      if (tableRef.current) {
+        tableRef.current.scrollTop = 0;
+      }
+    },
+    [],
+  );
+  
   const simulateLoading = React.useCallback(
     async (params) => {
       console.log("📢[index.stories.js:406]: ", params);
-      setResetScroll(false)
       dispatch({
         type: actions.SET_LOADING,
       });
@@ -493,12 +501,12 @@ const InfiniteLoaderStory = ({ ...args }) => {
       <Paper style={{height: '80vh'}}>
         <DataGrid2 {...args} 
           onLoadMore={(params)=>simulateLoading(params)}
-          resetScroll={resetScroll}
+          ref={tableRef}
           pageSize={20}
           pageOffset={0}
           leftAccessory={ () => (
             <ButtonGroup>
-              <Button onClick={()=>setResetScroll(!resetScroll)}>{`resetScroll ${resetScroll?'true':'false'}`}</Button>
+              <Button onClick={()=>resetScroll()}>resetscroll</Button>
             </ButtonGroup>
           )}
           gridProps={{

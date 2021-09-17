@@ -133,7 +133,7 @@ const useDynamicRowsOptions = ({ rowKeyField }) => {
   };
 };
 
-const DataGrid2 = ({
+const DataGrid2 = React.forwardRef(({
   draggable,
   showSelector,
   filterable,
@@ -149,7 +149,7 @@ const DataGrid2 = ({
   totalCount,
   resetScroll,
   onSort = () => { },
-}) => {
+}, ref) => {
   const classes = useStyles()
 
   const [tableProps, setTableProps] = useState(tablePropsInit);
@@ -163,14 +163,7 @@ const DataGrid2 = ({
 
   const { itemHeight, addRowHeight } = useDynamicRowsOptions(tableProps);
 
-  const tableRef = useRef()
-
-  useEffect(() => {
-    if (tableRef.current && !! resetScroll) {
-      tableRef.current.scrollTop = 0
-    }
-  }, [resetScroll])
-
+ 
   useEffect(() => {
     onSort(sortColumn, sortDirection);
   }, [sortColumn, sortDirection]);
@@ -419,7 +412,7 @@ const DataGrid2 = ({
           },
           tableWrapper: {
             elementAttributes: () => ({
-              ref: tableRef,
+              ref: ref,
               onScroll: (event, { baseFunc }) => {
                 baseFunc(event);
                 const element = event.currentTarget;
@@ -438,6 +431,6 @@ const DataGrid2 = ({
       />
     </div>
   );
-}
+})
 
 export { DataGrid2 };
