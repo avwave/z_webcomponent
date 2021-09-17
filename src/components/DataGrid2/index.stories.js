@@ -69,8 +69,9 @@ export const Default = DefaultStory.bind({});
 Default.args = {
   rows: rows,
   columns: columnData,
-  
-  gridProps: {},
+  gridProps: {
+    filterWidth: 200,
+  },
 };
 
 export const CellFormatter = DefaultStory.bind({});

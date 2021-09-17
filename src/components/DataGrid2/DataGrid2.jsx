@@ -337,6 +337,7 @@ const DataGrid2 = ({
         centerAccessory={centerAccessory}
         totalCount={totalCount}
         loadedCount={dataGridState.rows.length}
+        gridProps={gridProps}
       />
       <div style={{ display: 'none' }}>{sortColumn}{sortDirection}</div>
       {dataGridState.loading ? <LinearProgress /> : <LinearProgress variant="determinate" value={0} />}

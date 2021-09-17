@@ -134,6 +134,7 @@ function DataGrid2Toolbar({
   loadedCount,
   children,
   tableProps,
+  gridProps,
   dispatch
 }) {
   const [columnAnchor, setColumnAnchor] = useState();
@@ -255,6 +256,9 @@ function DataGrid2Toolbar({
                   anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
                   transformOrigin={{ vertical: "top", horizontal: "right" }}
                   keepMounted
+                  PaperProps={{
+                    style: { minWidth: gridProps?.filterWidth??400 },
+                  }}
                 >
                   <Container maxWidth="md">
                     <form
