@@ -407,11 +407,20 @@ const InfiniteLoaderStory = ({ ...args }) => {
   const [state, dispatch] = React.useContext(DataGridContext);
 
   const aggregateRows = React.useRef([]);
+  
+  const tableRef = React.useRef()
 
-  const [resetScroll, setResetScroll] = React.useState(false);
+  const resetScroll = React.useCallback(
+    () => {
+      if (tableRef.current) {
+        tableRef.current.scrollTop = 0;
+      }
+    },
+    [],
+  );
+
   const simulateLoading = React.useCallback(
     async () => {
-      setResetScroll(false)
       dispatch({
         type: actions.SET_LOADING,
       });
@@ -460,10 +469,10 @@ const InfiniteLoaderStory = ({ ...args }) => {
       <Paper style={{ display: "flex", flexDirection: "column", height: "70vh" }}>
         <DataGrid {...args} 
           onLoadMore={()=>simulateLoading()}
-          resetScroll={resetScroll}
+          ref={tableRef}
           leftAccessory={ () => (
             <ButtonGroup>
-              <Button onClick={()=>setResetScroll(true)}>Left</Button>
+              <Button onClick={()=>resetScroll()}>Left</Button>
             </ButtonGroup>
           )}
         />

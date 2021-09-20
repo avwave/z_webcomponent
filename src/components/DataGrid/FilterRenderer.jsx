@@ -1,4 +1,5 @@
 import {
+  Checkbox,
   FormControl,
   IconButton,
   Input,
@@ -7,9 +8,11 @@ import {
   makeStyles,
   MenuItem,
   Select,
+  TextField,
 } from "@material-ui/core";
-import { Close } from "@material-ui/icons";
-import React from "react";
+import { Backspace, Close } from "@material-ui/icons";
+import { Autocomplete } from "@material-ui/lab";
+import React, { Fragment, useEffect, useState } from "react";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -20,13 +23,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function TextFilterRenderer({ onChange, value, filter }) {
+function TextFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
   const classes = useStyles();
   return (
     <FormControl fullWidth className={classes.formControl}>
       <InputLabel>{filter?.label}</InputLabel>
       <Input
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => {
+          onChange(e.target.value)
+          onChangeDisplay(e.target.value)
+        }}
         value={value ?? ""}
         endAdornment={
           value ? (
@@ -34,7 +40,10 @@ function TextFilterRenderer({ onChange, value, filter }) {
               <IconButton
                 aria-label="close"
                 size="small"
-                onClick={() => onChange("")}
+                onClick={() => {
+                  onChange("")
+                  onChangeDisplay("")
+                }}
               >
                 <Close />
               </IconButton>
@@ -46,7 +55,7 @@ function TextFilterRenderer({ onChange, value, filter }) {
   );
 }
 
-function OptionFilterRenderer({ onChange, value, filter }) {
+function OptionFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
   const classes = useStyles();
   return (
     <FormControl fullWidth className={classes.formControl}>
@@ -54,7 +63,11 @@ function OptionFilterRenderer({ onChange, value, filter }) {
       <Select
         fullWidth
         value={value ?? ""}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => {
+          onChange(e.target.value)
+          const item =filter.options.find(v=> v.value === e.target.value)
+          onChangeDisplay(item?.label)
+        }}
       >
         <MenuItem value="">
           <em>None</em>
@@ -66,8 +79,66 @@ function OptionFilterRenderer({ onChange, value, filter }) {
         ))}
       </Select>
     </FormControl>
-    
   );
 }
+function AuocompleteFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
+  const classes = useStyles();
+  const [internalValues, setInternalValues] = useState(value);
 
-export { TextFilterRenderer, OptionFilterRenderer };
+  useEffect(() => {
+    const filtered = filter?.options.filter(v => value?.some(vv => {
+      return vv === v?.[filter?.valueField]
+    }));
+    setInternalValues(filtered);
+  }, [filter?.options, filter?.valueField, value]);
+
+  return (
+    <FormControl fullWidth className={classes.formControl}>
+      <Autocomplete
+        value={internalValues ?? (filter?.multiple ? [] : '')}
+        onChange={(e, val) => {
+          setInternalValues(val);
+          if (filter?.multiple) {
+            onChange(val.map(v => v?.[filter.valueField]))
+            onChangeDisplay(val.map(v => v?.[filter.labelField]))
+          } else {
+            onChange(val?.[filter.valueField])
+            onChangeDisplay(val?.[filter.labelField])
+          }
+        }}
+        multiple={filter?.multiple}
+        options={filter?.options}
+        getOptionLabel={(option) => {
+          return option[filter?.labelField] ?? ""
+        }}
+        getOptionSelected={(option, t) => {
+          return option[filter?.valueField] === t[filter?.valueField]
+        }}
+        renderOption={(option, { selected }) => {
+          if (filter?.multiple) {
+            return (
+              <Fragment>
+                <Checkbox checked={selected} />
+                {option[filter?.labelField]}
+              </Fragment>
+            );
+          }
+          return option[filter?.labelField];
+        }}
+        closeIcon={<Backspace fontSize="small" />}
+        renderInput={(iParams) => (
+          <TextField
+            {...iParams}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            label={filter?.label}
+            placeholder={"type to search"}
+          />
+        )}
+      />
+    </FormControl>
+  )
+}
+
+export { TextFilterRenderer, OptionFilterRenderer, AuocompleteFilterRenderer };

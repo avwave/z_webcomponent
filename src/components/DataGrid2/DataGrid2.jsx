@@ -2,11 +2,11 @@ import { Checkbox, IconButton, LinearProgress, makeStyles, Tooltip } from '@mate
 import clsx from 'clsx';
 import { kaReducer, Table } from "ka-table";
 import { hideDetailsRow, showDetailsRow, deselectAllFilteredRows, deselectRow, selectAllFilteredRows, selectRow, updateData } from "ka-table/actionCreators";
-import { DataType, SortingMode } from "ka-table/enums";
+import { ActionType, DataType, SortingMode } from "ka-table/enums";
 import { isEmpty } from 'lodash';
-import React, { isValidElement, useCallback, useContext, useEffect, useState } from 'react';
+import React, { isValidElement, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { actions as dataGridActions, DataGridContext } from '../DataGrid/DataGridContext';
-import { OptionFilterRenderer, TextFilterRenderer } from '../DataGrid/FilterRenderer';
+import { AuocompleteFilterRenderer, OptionFilterRenderer, TextFilterRenderer } from '../DataGrid/FilterRenderer';
 import { PortalCell } from '../DataGrid/PortalCell';
 import Truncate from 'react-truncate';
 
@@ -25,6 +25,7 @@ const useStyles = makeStyles((theme) => {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: "center",
+      fontWeight: 'bold',
     },
     headerHoverIcon: {
       fontSize: 12
@@ -90,8 +91,14 @@ const HeaderCell = ({ column, ...props }) => {
   const [onHover, setOnHover] = useState(false);
   const classes = useStyles()
   return <div className={classes.headerHover} onMouseEnter={() => setOnHover(true)}
-    onMouseLeave={() => setOnHover(false)}>
-    <span>{column.title}</span> {onHover && <><UnfoldMore className={classes.headerHoverIcon} /><SyncAlt className={classes.headerHoverIcon} /></>}</div>
+    onMouseLeave={() => setOnHover(false)}
+    {...props}>
+    <span>{column.title}</span> 
+    {onHover && 
+      <>
+        {column?.sortable && <Sort className={classes.headerHoverIcon} />}
+        <SyncAlt className={classes.headerHoverIcon} />
+      </>}</div>
 }
 
 const RowExpanderButton = ({dispatch, rowKeyValue, isDetailsRowShown}) => {
@@ -126,7 +133,7 @@ const useDynamicRowsOptions = ({ rowKeyField }) => {
   };
 };
 
-const DataGrid2 = ({
+const DataGrid2 = React.forwardRef(({
   draggable,
   showSelector,
   filterable,
@@ -142,7 +149,7 @@ const DataGrid2 = ({
   totalCount,
   resetScroll,
   onSort = () => { },
-}) => {
+}, ref) => {
   const classes = useStyles()
 
   const [tableProps, setTableProps] = useState(tablePropsInit);
@@ -156,6 +163,7 @@ const DataGrid2 = ({
 
   const { itemHeight, addRowHeight } = useDynamicRowsOptions(tableProps);
 
+ 
   useEffect(() => {
     onSort(sortColumn, sortDirection);
   }, [sortColumn, sortDirection]);
@@ -170,6 +178,10 @@ const DataGrid2 = ({
         case "option":
           return (args) => (
             <OptionFilterRenderer {...args} filter={c?.filter} />
+          );
+        case "autocomplete":
+          return (args) => (
+            <AuocompleteFilterRenderer {...args} filter={c?.filter} />
           );
         default:
           return c?.filterRenderer
@@ -312,6 +324,7 @@ const DataGrid2 = ({
   }, [dataGridDispatch, filters]);
 
 
+  const [scrollYoffset, setScrollYoffset] = useState(0);
   return (
     <div className={clsx('datagrid', classes.datagrid)}>
       <Datagrid2Toolbar
@@ -326,6 +339,7 @@ const DataGrid2 = ({
         centerAccessory={centerAccessory}
         totalCount={totalCount}
         loadedCount={dataGridState.rows.length}
+        gridProps={gridProps}
       />
       <div style={{ display: 'none' }}>{sortColumn}{sortDirection}</div>
       {dataGridState.loading ? <LinearProgress /> : <LinearProgress variant="determinate" value={0} />}
@@ -354,6 +368,9 @@ const DataGrid2 = ({
                   // areAllRowsSelected={kaPropsUtils.areAllVisibleRowsSelected(tableProps)}
                   />
                 );
+              }
+              if (!props.column?.sortable) {
+                return <HeaderCell {...props} />
               }
             },
             elementAttributes: ({ column }) => {
@@ -396,9 +413,14 @@ const DataGrid2 = ({
           },
           tableWrapper: {
             elementAttributes: () => ({
+              ref: ref,
               onScroll: (event, { baseFunc }) => {
                 baseFunc(event);
                 const element = event.currentTarget;
+                setScrollYoffset(element.scrollLeft)
+                if(element.scrollLeft !== scrollYoffset) {
+                  return
+                }
                 if (
                   element.offsetHeight + element.scrollTop >=
                   element.scrollHeight
@@ -414,6 +436,6 @@ const DataGrid2 = ({
       />
     </div>
   );
-}
+})
 
 export { DataGrid2 };
