@@ -70,7 +70,7 @@ const LitePicker = ({ onCancel = () => { }, onValueChange = () => { }, container
         numberOfColumns: 2,
         autoRefresh: true,
         resetButton: true,
-        allowRepick: true,
+        allowRepick: false,
         dropdowns: {
           months: true,
           years: "asc",
@@ -127,7 +127,10 @@ const LitePicker = ({ onCancel = () => { }, onValueChange = () => { }, container
       setStartDate(null)
       setEndTime(null)
       setEndDate(null)
-      onValueChange({})
+      onValueChange({
+        startDate: null,
+        endDate:null
+      })
     },
     [onValueChange],
   );
