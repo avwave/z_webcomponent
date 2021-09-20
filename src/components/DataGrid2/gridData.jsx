@@ -38,17 +38,20 @@ const columnData = [
     name: "Filter: Option",
     sortable: true,
     filter: {
-      type: "option",
+      type: "autocomplete",
       default: "",
       label: "Is type of",
+      labelField: 'label',
+      valueField: 'v',
+      multiple: true,
       options: [
         {
           label: "Tip",
-          value: "tip",
+          v: "tip",
         },
         {
           label: "Top",
-          value: "top",
+          v: "top",
         },
       ],
     },
@@ -154,7 +157,7 @@ const columnData = [
 
 let rows = [];
 faker.seed(123);
-for (let i = 0; i < 20; i++) {
+for (let i = 0; i < 5; i++) {
   rows.push({
     id: `row${i}`,
     title: faker.name.findName(),

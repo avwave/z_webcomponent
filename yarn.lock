@@ -7067,6 +7067,11 @@ css-tree@^1.1.2:
     mdn-data "2.0.14"
     source-map "^0.6.1"
 
+css-vars-hook@^0.2.5:
+  version "0.2.5"
+  resolved "https://registry.yarnpkg.com/css-vars-hook/-/css-vars-hook-0.2.5.tgz#8a44ca5ae2dd109931141a355cd47ade01e307c0"
+  integrity sha512-QiCKORnOLeIuy/Xcrtnfsi9b1mFMS7ka8LTh5ab69l71ni4L9/p644eFQm3/wreKBp0znugtfsXkV49EG1K7sg==
+
 css-vendor@^2.0.8:
   version "2.0.8"
   resolved "https://registry.yarnpkg.com/css-vendor/-/css-vendor-2.0.8.tgz#e47f91d3bd3117d49180a3c935e62e3d9f7f449d"
@@ -11565,6 +11570,11 @@ listr@0.14.3:
     listr-verbose-renderer "^0.5.0"
     p-map "^2.0.0"
     rxjs "^6.3.3"
+
+litepicker@^2.0.11:
+  version "2.0.11"
+  resolved "https://registry.yarnpkg.com/litepicker/-/litepicker-2.0.11.tgz#a947ea35b976a29b1af8911e053754cdc40ea678"
+  integrity sha512-7MECMp2EDGIYDIz9QT24t9hWpgBD9JD57ZdDrbffNMGfbw0JVhBhvlYsyaIUuYhywtLvgmI5lfulM7XF2HLEkg==
 
 load-json-file@^1.0.0:
   version "1.1.0"

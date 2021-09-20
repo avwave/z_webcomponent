@@ -24,7 +24,8 @@ import {
   Switch,
   TextField,
   Toolbar, Typography,
-  CircularProgress
+  CircularProgress,
+  InputLabel
 } from "@material-ui/core";
 import { Add, Backspace, Close, DateRange, Schedule } from "@material-ui/icons";
 import { Autocomplete } from "@material-ui/lab";
@@ -47,6 +48,7 @@ import { FormikPersist } from "./FormikPersist";
 import moment from "moment";
 import { Fragment } from "react";
 import { createContext } from "react";
+import { DateTimeRangePicker } from "../DateTimeRangePicker";
 
 const useStyles = makeStyles((theme) => ({
   controlContainer: {
@@ -67,7 +69,7 @@ const useStyles = makeStyles((theme) => ({
   subformContent: {
     flexGrow: 1,
   },
-  subformHeaderTitle:{
+  subformHeaderTitle: {
     fontWeight: 'bold',
     paddingLeft: theme.spacing(2)
   },
@@ -95,11 +97,11 @@ const FormFieldSet = ({
   columns = 1,
   formReadOnly,
   setValues = {},
-  additionalActions = () => {},
+  additionalActions = () => { },
   children,
   variant = "standard",
-  onTriggerReset = () => {},
-  onTriggerSubmit = () => {},
+  onTriggerReset = () => { },
+  onTriggerSubmit = () => { },
   triggerReset,
   triggerSubmit,
   decouple,
@@ -141,7 +143,7 @@ const FormFieldSet = ({
     (_src, _dest) => {
       const src = moment(_src);
       const dest = moment(_dest);
-      const newTime = dest.set({ 'hour' : src.get('hour'), 'minute' : src.get('minute'), 'second' : src.get('second') });
+      const newTime = dest.set({ 'hour': src.get('hour'), 'minute': src.get('minute'), 'second': src.get('second') });
       return newTime.toDate()
     },
     [],
@@ -153,20 +155,20 @@ const FormFieldSet = ({
           return testName?.OPTIONS?.name === 'required'
         }
       )
-      
+
       const onChangeOverride = fieldParams.onChange
         ? (evt, value) => {
-            fieldParams.onChange(fieldName, evt?.target?.value ?? evt);
-            formik.setFieldValue(fieldName, evt?.target?.value ?? evt);
-          }
+          fieldParams.onChange(fieldName, evt?.target?.value ?? evt);
+          formik.setFieldValue(fieldName, evt?.target?.value ?? evt);
+        }
         : (evt, value) => {
-            formik.setFieldValue(fieldName, evt?.target?.value ?? evt);
-          };
+          formik.setFieldValue(fieldName, evt?.target?.value ?? evt);
+        };
       let formValue = get(formik.values, fieldName)
       let options = fieldParams.options
-          if (fieldParams.relatedSource){
-            options = get(formik.values, `${fieldSource}.${fieldParams.relatedSource}`, fieldParams.options)
-          }
+      if (fieldParams.relatedSource) {
+        options = get(formik.values, `${fieldSource}.${fieldParams.relatedSource}`, fieldParams.options)
+      }
       switch (fieldParams.type) {
         case "component":
           return <fieldParams.component />;
@@ -176,14 +178,14 @@ const FormFieldSet = ({
         case "text":
         case "email":
         case "number":
-          if(fieldParams.type === 'date') formValue = moment(formValue).format("YYYY-MM-DD");
-          if(fieldParams.type === 'time') formValue = moment(formValue).format("HH:mm");
-          if(fieldParams.type === 'datetime-local') formValue = moment(formValue).format('YYYY-MM-DDTHH:mm:ss');
+          if (fieldParams.type === 'date') formValue = moment(formValue).format("YYYY-MM-DD");
+          if (fieldParams.type === 'time') formValue = moment(formValue).format("HH:mm");
+          if (fieldParams.type === 'datetime-local') formValue = moment(formValue).format('YYYY-MM-DDTHH:mm:ss');
           return (
             <TextField
               name={fieldName}
               type={fieldParams.type}
-              label={`${fieldParams.label} ${isRequired?'*':''}`}
+              label={`${fieldParams.label} ${isRequired ? '*' : ''}`}
               value={formValue}
               onChange={(evt, value) => {
                 let val = evt?.target?.value
@@ -207,7 +209,7 @@ const FormFieldSet = ({
                 }
                 onChangeOverride(val, value)
               }}
-              disabled={fieldParams.readOnly||formReadOnly}
+              disabled={fieldParams.readOnly || formReadOnly}
               error={
                 get(formik.touched, fieldName) &&
                 Boolean(get(formik.errors, fieldName))
@@ -222,7 +224,7 @@ const FormFieldSet = ({
                   </InputAdornment>
                 ) : undefined,
                 inputProps: {
-                  ...fieldParams.inputProps??{}
+                  ...fieldParams.inputProps ?? {}
                 }
               }}
               variant={variant}
@@ -234,12 +236,12 @@ const FormFieldSet = ({
             <TextField
               name={fieldName}
               type="tel"
-              label={`${fieldParams.label} ${isRequired?'*':''}`}
+              label={`${fieldParams.label} ${isRequired ? '*' : ''}`}
               value={formValue}
               onChange={(evt, value) => {
                 onChangeOverride(evt)
               }}
-              disabled={fieldParams.readOnly||formReadOnly}
+              disabled={fieldParams.readOnly || formReadOnly}
               error={
                 get(formik.touched, fieldName) &&
                 Boolean(get(formik.errors, fieldName))
@@ -255,133 +257,37 @@ const FormFieldSet = ({
                 ) : undefined,
                 inputComponent: PhoneInput,
                 inputProps: {
-                    country: "PH",
-                    international: true,
-                    withCountryCallingCode: true,
-                    ...fieldParams.inputProps??{}
+                  country: "PH",
+                  international: true,
+                  withCountryCallingCode: true,
+                  ...fieldParams.inputProps ?? {}
                 }
               }}
               variant={variant}
               {...fieldParams?.fieldProps}
             />
           );
-        // case "date":
-        //   return (
-        //     <DatePicker
-        //       disablePast={fieldParams.disablePast}
-        //       disableFuture={fieldParams.disableFuture}
-        //       label={`${fieldParams.label} ${isRequired?'*':''}`}
-        //       name={fieldName}
-        //       InputProps={{
-        //         startAdornment: fieldParams.icon ? (
-        //           <InputAdornment position="start">
-        //             {fieldParams.icon}
-        //           </InputAdornment>
-        //         ) : undefined,
-        //       }}
-        //       renderInput={props => <TextField variant={variant} {...props} />}
-        //       keyboardIcon={<DateRange/>}
-        //       onChange={(evt, val) => {
-        //         // console.log("📢[FormBuilder.js:152]:", evt);
-        //         if (fieldParams.onChange) {
-        //           fieldParams.onChange(
-        //             fieldName,
-        //             fieldParams.useLocalTime ? moment(evt).toDate() : moment.utc(evt).toDate()
-        //           );
-        //         }
-        //         formik.setFieldValue(
-        //           fieldName,
-        //           fieldParams.useLocalTime ? moment(evt).toDate() : moment.utc(evt).toDate()
-        //         );
-        //       }}
-        //       value={get(formik.values, fieldName)}
-        //       disabled={fieldParams.readOnly||formReadOnly}
-        //       autoOk
-        //       format="MM/DD/yyyy"
-        //       variant="inline"
-        //       inputVariant={variant}
-        //       mask="__/__/____"
-        //       {...fieldParams?.fieldProps}
-        //     />
-        //   );
-
-        // case "datetime":
-        //   return (
-        //     <DateTimePicker
-        //       disablePast={fieldParams.disablePast}
-        //       disableFuture={fieldParams.disableFuture}
-        //       label={`${fieldParams.label} ${isRequired?'*':''}`}
-        //       name={fieldName}
-        //       renderInput={props => <TextField variant={variant} {...props} />}
-        //       InputProps={{
-        //         startAdornment: fieldParams.icon ? (
-        //           <InputAdornment position="start">
-        //             {fieldParams.icon}
-        //           </InputAdornment>
-        //         ) : undefined,
-        //       }}
-        //       onChange={(evt, val) => {
-        //         if (fieldParams.onChange) {
-        //           fieldParams.onChange(
-        //             fieldName,
-        //             fieldParams.useLocalTime ? moment(evt).toDate() : moment.utc(evt).toDate()
-        //           );
-        //         }
-        //         formik.setFieldValue(
-        //           fieldName,
-        //           fieldParams.useLocalTime ? moment(evt).toDate() : moment.utc(evt).toDate()
-        //         );
-        //       }}
-        //       value={get(formik.values, fieldName)}
-        //       disabled={fieldParams.readOnly||formReadOnly}
-        //       autoOk
-        //       variant="inline"
-        //       inputVariant={variant}
-        //       format="MM/dd/yyyy hh:mm a"
-        //       mask="__/__/____ __:__ _M"
-        //       {...fieldParams?.fieldProps}
-        //     />
-        //   );
-        // case "time":
-        //   return (
-        //     <TimePicker
-        //       disablePast={fieldParams.disablePast}
-        //       disableFuture={fieldParams.disableFuture}
-        //       label={`${fieldParams.label} ${isRequired?'*':''}`}
-        //       name={fieldName}
-        //       keyboardIcon={<Schedule/>}
-        //       renderInput={props => <TextField variant={variant} {...props} />}
-        //       InputProps={{
-        //         startAdornment: fieldParams.icon ? (
-        //           <InputAdornment position="start">
-        //             {fieldParams.icon}
-        //           </InputAdornment>
-        //         ) : undefined,
-        //       }}
-        //       onChange={(evt, val) => {
-        //         const evtTime = mergeTime(evt, get(formik.values, fieldName))
-        //         if (fieldParams.onChange) {
-        //           fieldParams.onChange(
-        //             fieldName,
-        //             fieldParams.useLocalTime ? moment(evtTime).toDate() : moment.utc(evtTime).toDate()
-        //           );
-        //         }
-        //         formik.setFieldValue(
-        //           fieldName,
-        //           fieldParams.useLocalTime ? moment(evtTime).toDate() : moment.utc(evtTime).toDate()
-        //         );
-        //       }}
-        //       value={get(formik.values, fieldName)}
-        //       disabled={fieldParams.readOnly||formReadOnly}
-        //       autoOk
-        //       variant="inline"
-        //       inputVariant={variant}
-        //       format="hh:mm a"
-        //       mask="__/__/____ __:__ _M"
-        //       {...fieldParams?.fieldProps}
-        //     />
-        //   );
-
+        case "dateRange":
+          return (
+            <>
+              <InputLabel shrink htmlFor="component-simple">Name</InputLabel>
+              <DateTimeRangePicker
+                inline={fieldParams.inline}
+                form
+                name={fieldName}
+                variant={variant}
+                label={`${fieldParams.label} ${isRequired ? '*' : ''}`}
+                value={get(formik.values, fieldName)}
+                onChange={onChangeOverride}
+                error={
+                  get(formik.touched, fieldName) &&
+                  Boolean(get(formik.errors, fieldName))
+                }
+                disabled={fieldParams.readOnly || formReadOnly}
+                {...fieldParams?.fieldProps}
+              />
+            </>
+          )
         case "select":
           return (
             <>
@@ -390,7 +296,7 @@ const FormFieldSet = ({
                 variant={variant}
                 fullWidth
                 select
-                label={`${fieldParams.label} ${isRequired?'*':''}`}
+                label={`${fieldParams.label} ${isRequired ? '*' : ''}`}
                 value={get(formik.values, fieldName)}
                 onChange={onChangeOverride}
                 error={
@@ -407,7 +313,7 @@ const FormFieldSet = ({
                             (item) =>
                               item[fieldParams.settings?.valueField] === s
                           );
-                          return item?item[fieldParams.settings.labelField]:"";
+                          return item ? item[fieldParams.settings.labelField] : "";
                         })
                         .join(", ");
                     }
@@ -415,7 +321,7 @@ const FormFieldSet = ({
                       (item) =>
                         item[fieldParams.settings?.valueField] === selected
                     );
-                    return item?item[fieldParams.settings.labelField]:"";
+                    return item ? item[fieldParams.settings.labelField] : "";
                   },
                 }}
                 InputLabelProps={{ shrink: true }}
@@ -426,7 +332,7 @@ const FormFieldSet = ({
                     </InputAdornment>
                   ) : undefined,
                 }}
-                disabled={fieldParams.readOnly||formReadOnly}
+                disabled={fieldParams.readOnly || formReadOnly}
                 {...fieldParams?.fieldProps}
               >
                 {options.map((item, idx) => {
@@ -468,8 +374,8 @@ const FormFieldSet = ({
                   }
                   formik.setFieldValue(fieldName, val);
                 }}
-                label={`${fieldParams.label} ${isRequired?'*':''}`}
-                disabled={fieldParams.readOnly||formReadOnly}
+                label={`${fieldParams.label} ${isRequired ? '*' : ''}`}
+                disabled={fieldParams.readOnly || formReadOnly}
                 {...fieldParams?.fieldProps}
               />
             </>
@@ -478,7 +384,7 @@ const FormFieldSet = ({
         case "radio":
           return (
             <>
-              <FormLabel component="legend">{`${fieldParams.label} ${isRequired?'*':''}`}</FormLabel>
+              <FormLabel component="legend">{`${fieldParams.label} ${isRequired ? '*' : ''}`}</FormLabel>
               <RadioGroup
                 row={fieldParams.settings.inline}
                 name={fieldName}
@@ -488,7 +394,7 @@ const FormFieldSet = ({
               >
                 {options.map((item, idx) => (
                   <FormControlLabel
-                    disabled={fieldParams.readOnly||formReadOnly}
+                    disabled={fieldParams.readOnly || formReadOnly}
                     key={idx}
                     value={item[fieldParams.settings?.valueField]}
                     labelPlacement={fieldParams.settings.labelPlacement ?? 'end'}
@@ -503,7 +409,7 @@ const FormFieldSet = ({
         case "checkboxes":
           return (
             <>
-              <FormLabel component="legend">{`${fieldParams.label} ${isRequired?'*':''}`}</FormLabel>
+              <FormLabel component="legend">{`${fieldParams.label} ${isRequired ? '*' : ''}`}</FormLabel>
               <FormGroup
                 row={fieldParams.settings.inline}
                 // name={fieldName}
@@ -515,7 +421,7 @@ const FormFieldSet = ({
                   const checked = get(formik.values, fieldName, []).includes(item[fieldParams.settings?.valueField]);
                   return (
                     <FormControlLabel
-                      disabled={fieldParams.readOnly||formReadOnly}
+                      disabled={fieldParams.readOnly || formReadOnly}
                       key={idx}
                       name={fieldName}
                       control={<Checkbox checked={checked} />}
@@ -540,10 +446,10 @@ const FormFieldSet = ({
           return (
             <Autocomplete
               style={{ verticalAlign: "bottom" }}
-              disabled={fieldParams.readOnly||formReadOnly}
+              disabled={fieldParams.readOnly || formReadOnly}
               disableCloseOnSelect
               name={fieldName}
-              label={`${fieldParams.label} ${isRequired?'*':''}`}
+              label={`${fieldParams.label} ${isRequired ? '*' : ''}`}
               value={get(formik.values, fieldName)}
               onChange={(evt, val) => {
                 if (fieldParams.onChange) {
@@ -589,7 +495,7 @@ const FormFieldSet = ({
                   //       },
                   //     }
                   //   : {})}
-                  label={`${fieldParams.label} ${isRequired?'*':''}`}
+                  label={`${fieldParams.label} ${isRequired ? '*' : ''}`}
                   placeholder={fieldParams.placeholder ?? "type to search"}
                   variant={variant}
                   error={
@@ -612,15 +518,15 @@ const FormFieldSet = ({
                       {get(arrayHelpers.form.values, fieldName).map(
                         (subform, idx) => {
                           return (
-                            <Box component={fieldParams.settings?.formInset?Card:'div'} key={`${fieldName}-${idx}`}
-                              className={fieldParams.inline&&classes.subformInline}>
-                                {!fieldParams.inline &&
+                            <Box component={fieldParams.settings?.formInset ? Card : 'div'} key={`${fieldName}-${idx}`}
+                              className={fieldParams.inline && classes.subformInline}>
+                              {!fieldParams.inline &&
                                 <Box className={classes.subformHeader} >
                                   <Typography variant="body2" className={classes.subformHeaderTitle}>
-                                    {`${fieldParams.label} ${isRequired?'*':''}`}
-                                    </Typography>
-                                    {
-                                    formReadOnly?null:
+                                    {`${fieldParams.label} ${isRequired ? '*' : ''}`}
+                                  </Typography>
+                                  {
+                                    formReadOnly ? null :
                                       <IconButton
                                         aria-label=""
                                         onClick={() => {
@@ -629,37 +535,37 @@ const FormFieldSet = ({
                                       >
                                         <Close />
                                       </IconButton>
-                                    }
+                                  }
                                 </Box>
-                                }
+                              }
 
-                                <Box component={fieldParams.inline?'div':CardContent} className={classes.subformContent}>
-                                  {buildComponent(
-                                    fieldParams.formLayout,
-                                    fieldParams.formTemplate,
-                                    fieldParams.formLayout.length,
-                                    `${fieldName}-${idx}`,
-                                    `${fieldName}[${idx}]`
-                                  )}
-                                </Box>
-                                {fieldParams.inline &&
-                                
-                                  formReadOnly?null:
-                                  <IconButton
-                                      className={classes.inlineDelete}
-                                      aria-label=""
-                                      onClick={() => {
-                                        arrayHelpers.remove(idx);
-                                      }}
-                                    >
-                                    <Close />
-                                  </IconButton>
-                                }
+                              <Box component={fieldParams.inline ? 'div' : CardContent} className={classes.subformContent}>
+                                {buildComponent(
+                                  fieldParams.formLayout,
+                                  fieldParams.formTemplate,
+                                  fieldParams.formLayout.length,
+                                  `${fieldName}-${idx}`,
+                                  `${fieldName}[${idx}]`
+                                )}
+                              </Box>
+                              {fieldParams.inline &&
+
+                                formReadOnly ? null :
+                                <IconButton
+                                  className={classes.inlineDelete}
+                                  aria-label=""
+                                  onClick={() => {
+                                    arrayHelpers.remove(idx);
+                                  }}
+                                >
+                                  <Close />
+                                </IconButton>
+                              }
                             </Box>
                           );
                         }
                       )}
-                      { !formReadOnly && 
+                      {!formReadOnly &&
                         <div>
                           <Button
                             variant="contained"
@@ -667,7 +573,7 @@ const FormFieldSet = ({
                             onClick={() => {
                               arrayHelpers.push(fieldParams.formValueTemplate);
                             }}
-                            startIcon={<Add/>}
+                            startIcon={<Add />}
                             color="primary"
                           >
                             Add {`${fieldParams.label}`}
@@ -679,19 +585,19 @@ const FormFieldSet = ({
                 }
                 if (formReadOnly) return <></>
                 return (
-                    <div>
-                      <Button
+                  <div>
+                    <Button
                       variant="contained"
 
                       onClick={() =>
-                          arrayHelpers.push(fieldParams.formValueTemplate)
-                        }
-                      startIcon={<Add/>}
+                        arrayHelpers.push(fieldParams.formValueTemplate)
+                      }
+                      startIcon={<Add />}
                       color="primary"
-                      >
-                        Add {`${fieldParams.label}`}
-                      </Button>
-                    </div>
+                    >
+                      Add {`${fieldParams.label}`}
+                    </Button>
+                  </div>
                 )
               }}
             />
@@ -727,7 +633,7 @@ const FormFieldSet = ({
         }
         if (field) {
           const err = get(formik.touched, layout) && get(formik.errors, layout);
-          const growFactor = ((field.forceColumnWidth??0) === 0) ? {}:{sm: field.forceColumnWidth}
+          const growFactor = ((field.forceColumnWidth ?? 0) === 0) ? {} : { sm: field.forceColumnWidth }
           return (
             <Grid
               className={field.hidden ? classes.hidden : ""}
@@ -788,20 +694,20 @@ const FormFieldSet = ({
       const buttonArray = [
         ...(hasReset
           ? [
-              <Button
-                key="reset"
-                color="secondary"
-                variant={variant}
-                disabled={loading}
-                startIcon={loading && <CircularProgress size={20} />}
-                onClick={async () => {
-                  formik.handleReset();
-                  onTriggerReset();
-                }}
-              >
-                {resetLabel}
-              </Button>,
-            ]
+            <Button
+              key="reset"
+              color="secondary"
+              variant={variant}
+              disabled={loading}
+              startIcon={loading && <CircularProgress size={20} />}
+              onClick={async () => {
+                formik.handleReset();
+                onTriggerReset();
+              }}
+            >
+              {resetLabel}
+            </Button>,
+          ]
           : []),
         <Button
           key="submit"
@@ -913,16 +819,16 @@ const FormContext = createContext({});
 
 const FormBuilder = (props) => {
   const {
-    onSubmit = () => {},
-    onReset = () => {},
+    onSubmit = () => { },
+    onReset = () => { },
     form,
     additionalValidation,
     additionalInitial,
     formProps,
     formId = "fid",
     usePersist = false,
-    onPersistLoad = () => {},
-    onChange = () => {},
+    onPersistLoad = () => { },
+    onChange = () => { },
   } = props;
 
   const validationSchema = useMemo(() => {
@@ -981,7 +887,7 @@ const FormBuilder = (props) => {
               <FormikPersist
                 name={formId}
                 clearOnOnmount={false}
-                clearData={() => {}}
+                clearData={() => { }}
                 reset={reset}
                 resetCallback={() => setReset(false)}
                 onLoaded={(values) => onPersistLoad(values)}

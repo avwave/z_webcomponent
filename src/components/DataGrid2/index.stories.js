@@ -27,6 +27,7 @@ import { SelectColumn } from "react-data-grid";
 import { Menu as ContextMenu, Item as ContextItem } from "react-contexify";
 import { action } from "@storybook/addon-actions";
 import { DataGrid2 } from "./DataGrid2";
+import ReactJson from "react-json-view";
 
 const DataGridStory = {
   component: DataGrid2,
@@ -68,8 +69,9 @@ export const Default = DefaultStory.bind({});
 Default.args = {
   rows: rows,
   columns: columnData,
-  
-  gridProps: {},
+  gridProps: {
+    filterWidth: 200,
+  },
 };
 
 export const CellFormatter = DefaultStory.bind({});
@@ -134,6 +136,8 @@ ColumnDisplaySelection.args = {
 
 const ServerFilterSortStory = ({ ...args }) => {
   const [state, dispatch] = React.useContext(DataGridContext);
+  const [sentFilters, setSentFilters] = useState();
+
   React.useEffect(() => {
       dispatch({
         payload: { columns: args.columns },
@@ -184,15 +188,25 @@ const ServerFilterSortStory = ({ ...args }) => {
     let filteredRows = args.rows;
     searchKeys.forEach((searchKey) => {
       filteredRows = filteredRows.filter((row) => {
+        if(searchKey === 'search') {
+          return true
+        }
+        const searchItem = row[searchKey]
+
         switch (typeof state.filterColumn[searchKey]) {
           case "boolean":
-            return !isEmpty(row[searchKey]) === state.filterColumn[searchKey];
+            return !isEmpty(searchItem) === state.filterColumn[searchKey];
           case "object":
             return state.filterColumn[searchKey] === null;
+          case "string":
+            if (isEmpty(searchItem)) {
+              return true
+            }
+            const ret = searchItem.toLowerCase().includes(state.filterColumn[searchKey].toString().toLowerCase());
+            return ret
           default:
-            return row[searchKey]
-              .toLowerCase()
-              .includes(state.filterColumn[searchKey].toString().toLowerCase());
+            return true
+            
         }
       });
       console.log(
@@ -206,13 +220,19 @@ const ServerFilterSortStory = ({ ...args }) => {
     });
   }, [state.filterColumn]);
 
+  React.useEffect(() => {
+    setSentFilters(state.filterColumn)
+  }, [state.filterColumn])
+
   return <Paper style={{height: '80vh'}}>
+    <ReactJson src={sentFilters} />
     <DataGrid2 {...args} 
       onSort={(col, dir) => {
         console.log("📢[index.stories.js:211]: ", col, dir);
         handleSort(col, dir)
       }}
     />
+    
   </Paper>;
 };
 export const ServerFilterSort = ServerFilterSortStory.bind({});
@@ -414,12 +434,20 @@ const InfiniteLoaderStory = ({ ...args }) => {
   const [state, dispatch] = React.useContext(DataGridContext);
 
   const aggregateRows = React.useRef([]);
+  const tableRef = React.useRef(null);
 
-  const [resetScroll, setResetScroll] = React.useState(false);
+  const resetScroll = React.useCallback(
+    () => {
+      if (tableRef.current) {
+        tableRef.current.scrollTop = 0;
+      }
+    },
+    [],
+  );
+  
   const simulateLoading = React.useCallback(
     async (params) => {
       console.log("📢[index.stories.js:406]: ", params);
-      setResetScroll(false)
       dispatch({
         type: actions.SET_LOADING,
       });
@@ -473,12 +501,12 @@ const InfiniteLoaderStory = ({ ...args }) => {
       <Paper style={{height: '80vh'}}>
         <DataGrid2 {...args} 
           onLoadMore={(params)=>simulateLoading(params)}
-          resetScroll={resetScroll}
+          ref={tableRef}
           pageSize={20}
           pageOffset={0}
           leftAccessory={ () => (
             <ButtonGroup>
-              <Button onClick={()=>setResetScroll(true)}>Left</Button>
+              <Button onClick={()=>resetScroll()}>resetscroll</Button>
             </ButtonGroup>
           )}
           gridProps={{

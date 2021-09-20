@@ -319,9 +319,23 @@ export const Dates = DefaultStory.bind({});
 Dates.args = {
   ...Default.args,
   formLayout: [
-    ["date", "time", "datetime"],
+    ["date", "time"], 
+    ["datetime", "daterange"],
   ],
   form: {
+    daterange: {
+      type: "dateRange",
+      label: "Ranges",
+      initialValues: {startDate:new Date(
+        'November 17, 2020 03:24:00'
+      ), endDate: new Date(
+        'December 17, 2020 07:24:00'
+      )},
+      validator: () => Yup.object().shape({
+        startDate: Yup.date(),
+        endDate: Yup.date(),
+      }), //required
+    },
     date: {
       type: "date",
       label: "Date",
@@ -414,6 +428,27 @@ Checkboxes.args = {
     },
   },
   formId:'chkboxes',
+  
+};
+
+export const DateRange = DefaultStory.bind({});
+DateRange.args = {
+  ...Default.args,
+  formLayout: [
+    "daterange"
+  ],
+  form: {
+    daterange: {
+      type: "dateRange",
+      label: "Ranges",
+      initialValues: {},
+      validator: () => Yup.object().shape({
+        startDate: Yup.date(),
+        endDate: Yup.date(),
+      }), //required
+    },
+  },
+  formId:'daterange',
   
 };
 
