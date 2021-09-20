@@ -68,9 +68,9 @@ const styles = (theme) => ({
   }
 });
 
-const ColumnSettings = tableProps => {
+const UNMColumnSettings = ({ columns, dispatch }) => {
   const columnsSettingsProps = {
-    data: tableProps.columns.map(c => ({ ...c, visible: c.visible !== false })),
+    data: columns.map(c => ({ ...c, visible: c.visible !== false })),
     rowKeyField: 'key',
     columns: [
       {
@@ -89,15 +89,8 @@ const ColumnSettings = tableProps => {
       }
     ],
   };
-  const dispatchSettings = action => {
-    if (action.type === ActionType.UpdateCellValue) {
-      tableProps.dispatch(
-        action.value
-          ? showColumn(action.rowKeyValue)
-          : hideColumn(action.rowKeyValue)
-      );
-    }
-  };
+
+
   return (
     <Table
       {...columnsSettingsProps}
@@ -116,10 +109,12 @@ const ColumnSettings = tableProps => {
           }
         }
       }}
-      dispatch={dispatchSettings}
+      dispatch={dispatch}
     />
   );
 };
+
+const ColumnSettings = React.memo(UNMColumnSettings)
 
 function DataGrid2Toolbar({
   classes,
@@ -176,7 +171,7 @@ function DataGrid2Toolbar({
     setFilterAnchor(null);
   };
 
-  
+
   const changeFilter = useCallback(
     (filterKey, filterValue) => {
       setFilterValues({ ...filterValues, [filterKey]: filterValue });
@@ -190,7 +185,7 @@ function DataGrid2Toolbar({
     },
     [filterValues],
   );
-  
+
   useEffect(() => {
     onFilterChange(filterValues);
     setSearchField(filterValues?.search ?? "")
@@ -216,8 +211,8 @@ function DataGrid2Toolbar({
         </FormControl>
       );
     });
-  },   
-  [changeFilter, changeFilterDisplay, classes.filterContainer, dataGridState.filterColumn, filterColumnSettings]);
+  },
+    [changeFilter, changeFilterDisplay, classes.filterContainer, dataGridState.filterColumn, filterColumnSettings]);
 
 
   const stateFilters = useMemo(() => {
@@ -255,7 +250,15 @@ function DataGrid2Toolbar({
                   transformOrigin={{ vertical: "top", horizontal: "right" }}
                   keepMounted
                 >
-                  <ColumnSettings {...tableProps} dispatch={dispatch} />
+                  <ColumnSettings {...tableProps} dispatch={action => {
+                    if (action.type === ActionType.UpdateCellValue) {
+                      dispatch(
+                        action.value
+                          ? showColumn(action.rowKeyValue)
+                          : hideColumn(action.rowKeyValue)
+                      );
+                    }
+                  }} />
                 </Popover>
               </>
             ) : (
