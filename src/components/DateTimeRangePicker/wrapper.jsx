@@ -127,7 +127,10 @@ const LitePicker = ({ onCancel = () => { }, onValueChange = () => { }, container
       setStartDate(null)
       setEndTime(null)
       setEndDate(null)
-      onValueChange({})
+      onValueChange({
+        startDate: null,
+        endDate:null
+      })
     },
     [onValueChange],
   );
