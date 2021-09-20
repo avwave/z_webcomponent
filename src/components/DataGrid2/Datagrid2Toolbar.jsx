@@ -23,7 +23,7 @@ import { ActionType, DataType } from 'ka-table/enums';
 import 'ka-table/style.scss';
 import { isEmpty } from "lodash";
 import moment from 'moment'
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import CheckboxProvider from '../CheckList/checklistContext';
 import { actions, DataGridContext } from "../DataGrid/DataGridContext";
 import { DateTimeRangePicker } from '../DateTimeRangePicker';
@@ -176,20 +176,27 @@ function DataGrid2Toolbar({
     setFilterAnchor(null);
   };
 
-  function changeFilter(filterKey, filterValue) {
-    setFilterValues({ ...filterValues, [filterKey]: filterValue });
-  }
+  
+  const changeFilter = useCallback(
+    (filterKey, filterValue) => {
+      setFilterValues({ ...filterValues, [filterKey]: filterValue });
+    },
+    [filterValues],
+  );
 
-  function changeFilterDisplay(filterKey, filterValue) {
-    setFilterDisplay({ ...filterValues, [filterKey]: filterValue });
-  }
-
+  const changeFilterDisplay = useCallback(
+    (filterKey, filterValue) => {
+      setFilterDisplay({ ...filterValues, [filterKey]: filterValue });
+    },
+    [filterValues],
+  );
+  
   useEffect(() => {
     onFilterChange(filterValues);
     setSearchField(filterValues?.search ?? "")
   }, [filterValues]);
 
-  const renderFilters = () => {
+  const renderFilters = useMemo(() => {
     return filterColumnSettings.map((col, idx) => {
       return (
         <FormControl
@@ -209,7 +216,9 @@ function DataGrid2Toolbar({
         </FormControl>
       );
     });
-  };
+  },   
+  [changeFilter, changeFilterDisplay, classes.filterContainer, dataGridState.filterColumn, filterColumnSettings]);
+
 
   const stateFilters = useMemo(() => {
     return Object.entries(filterDisplay).filter(f => f[1] !== undefined)
@@ -293,7 +302,7 @@ function DataGrid2Toolbar({
                           Reset
                         </Button>
                       </ButtonGroup>
-                      {renderFilters()}
+                      {renderFilters}
                     </form>
                   </Container>
                 </Popover>
