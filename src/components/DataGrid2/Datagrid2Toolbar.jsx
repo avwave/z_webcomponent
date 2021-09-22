@@ -161,6 +161,7 @@ function DataGrid2Toolbar({
   children,
   tableProps,
   gridProps,
+  onClearFilters=()=>{},
   dispatch
 }) {
   const [columnAnchor, setColumnAnchor] = useState();
@@ -306,6 +307,7 @@ function DataGrid2Toolbar({
                   <Button variant="contained" color="secondary" onClick={() => {
                     setFilterValues({})
                     setFilterDisplay({})
+                    onClearFilters()
                   }}>Clear</Button>
                 )}
 

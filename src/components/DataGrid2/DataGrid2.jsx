@@ -161,6 +161,7 @@ const DataGrid2 = React.forwardRef(({
   totalCount,
   resetScroll,
   onSort = () => { },
+  onClearFilters = () => { },
 }, ref) => {
   const classes = useStyles()
   const theme = useTheme()
@@ -357,6 +358,7 @@ const DataGrid2 = React.forwardRef(({
         totalCount={totalCount}
         loadedCount={dataGridState.rows.length}
         gridProps={gridProps}
+        onClearFilters={()=>onClearFilters()}
       />
       <div style={{ display: 'none' }}>{sortColumn}{sortDirection}</div>
       {dataGridState.loading ? <LinearProgress /> : <LinearProgress variant="determinate" value={0} />}
