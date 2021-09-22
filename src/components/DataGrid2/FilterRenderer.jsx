@@ -12,6 +12,7 @@ import {
 } from "@material-ui/core";
 import { Backspace, Close } from "@material-ui/icons";
 import { Autocomplete } from "@material-ui/lab";
+import clsx from "clsx";
 import React, { Fragment, useEffect, useState } from "react";
 
 const useStyles = makeStyles((theme) => ({
@@ -20,6 +21,30 @@ const useStyles = makeStyles((theme) => ({
   },
   selectEmpty: {
     marginTop: theme.spacing(2),
+  },
+  selected: {
+    color: theme.palette.primary.main,
+    backgroundColor: theme.palette.action.hover,
+  },
+  paper: {
+    boxShadow: 'none',
+    margin: 0,
+    color: '#586069',
+  },
+  option: {
+    minHeight: 'auto',
+    width: '100%',
+    alignItems: 'flex-start',
+    '&[aria-selected="true"]': {
+      backgroundColor: 'transparent',
+    },
+    '&[data-focus="true"]': {
+      backgroundColor: theme.palette.action.hover,
+    },
+  },
+  popperDisablePortal: {
+    position: 'relative',
+    width: '100% !important'
   },
 }));
 
@@ -87,15 +112,27 @@ function AuocompleteFilterRenderer({ onChange, onChangeDisplay, value, filter })
   const [internalValues, setInternalValues] = useState(value);
 
   useEffect(() => {
-    const filtered = filter?.options.filter(v => value?.some(vv => {
-      return vv === v?.[filter?.valueField]
-    }));
+    let filtered
+    if (filter?.multiple) {
+      filtered = filter?.options.filter(v => value?.some(vv => {
+        return vv === v?.[filter?.valueField]
+      }));
+    } else {
+      filtered = filter?.options.find(v => value === v?.[filter?.valueField]);
+    }
     setInternalValues(filtered);
   }, [filter?.options, filter?.valueField, value]);
 
   return (
-    <FormControl fullWidth className={classes.formControl}>
       <Autocomplete
+        open
+        disablePortal
+        fullWidth
+        classes={{
+          paper: classes.paper,
+          option: classes.option,
+          popperDisablePortal: classes.popperDisablePortal,
+        }}
         value={internalValues ?? (filter?.multiple ? [] : '')}
         onChange={(e, val) => {
           setInternalValues(val);
@@ -118,13 +155,15 @@ function AuocompleteFilterRenderer({ onChange, onChangeDisplay, value, filter })
         renderOption={(option, { selected }) => {
           if (filter?.multiple) {
             return (
-              <Fragment>
-                <Checkbox checked={selected} />
-                {option[filter?.labelField]}
-              </Fragment>
+              <div className={clsx(classes.option, selected&&classes.selected)}>
+                <Checkbox color="primary" size="small" checked={selected} />
+                {option[filter?.renderLabel] ?? option[filter?.labelField]}
+              </div>
             );
           }
-          return option[filter?.labelField];
+          return <div className={clsx(classes.option, selected&&classes.selected)}>
+            {option[filter?.renderLabel] ?? option[filter?.labelField]}
+          </div>
         }}
         closeIcon={<Backspace fontSize="small" />}
         renderInput={(iParams) => (
@@ -138,7 +177,7 @@ function AuocompleteFilterRenderer({ onChange, onChangeDisplay, value, filter })
           />
         )}
       />
-    </FormControl>
+    
   )
 }
 

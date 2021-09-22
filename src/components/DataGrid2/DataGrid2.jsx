@@ -1,19 +1,20 @@
-import { Checkbox, IconButton, LinearProgress, makeStyles, Tooltip } from '@material-ui/core';
+import { faArrowsAltV, faSignal, faSortAmountDown, faSortAmountUp } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Checkbox, fade, IconButton, lighten, LinearProgress, makeStyles, Tooltip, useTheme } from '@material-ui/core';
+import { UnfoldLess, UnfoldMore } from '@material-ui/icons';
 import clsx from 'clsx';
 import { kaReducer, Table } from "ka-table";
-import { hideDetailsRow, showDetailsRow, deselectAllFilteredRows, deselectRow, selectAllFilteredRows, selectRow, updateData } from "ka-table/actionCreators";
-import { ActionType, DataType, SortingMode } from "ka-table/enums";
+import { deselectAllFilteredRows, deselectRow, hideDetailsRow, selectAllFilteredRows, selectRow, showDetailsRow, updateData } from "ka-table/actionCreators";
+import { DataType, SortDirection, SortingMode } from "ka-table/enums";
 import { isEmpty } from 'lodash';
-import React, { isValidElement, useCallback, useContext, useEffect, useRef, useState } from 'react';
-import { actions as dataGridActions, DataGridContext } from '../DataGrid/DataGridContext';
-import { AuocompleteFilterRenderer, OptionFilterRenderer, TextFilterRenderer } from '../DataGrid/FilterRenderer';
-import { PortalCell } from '../DataGrid/PortalCell';
+import React, { isValidElement, useCallback, useContext, useEffect, useState } from 'react';
 import Truncate from 'react-truncate';
-
+import { actions as dataGridActions, DataGridContext } from '../DataGrid/DataGridContext';
+import { AuocompleteFilterRenderer, OptionFilterRenderer, TextFilterRenderer } from './FilterRenderer';
+import { PortalCell } from '../DataGrid/PortalCell';
 import Datagrid2Toolbar from './Datagrid2Toolbar';
 import './styles.scss';
-import { ArrowDropDown, ArrowDropUp, KeyboardArrowDown, KeyboardArrowUp, Sort, SyncAlt, UnfoldLess, UnfoldMore } from '@material-ui/icons';
-import calc from 'postcss-calc';
+
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -26,14 +27,19 @@ const useStyles = makeStyles((theme) => {
       justifyContent: 'space-between',
       alignItems: "center",
       fontWeight: 'bold',
+      width: "100%"
     },
     headerHoverIcon: {
       fontSize: 12
+    },
+    colHighlight: {
+      color: theme.palette.primary.main
     }
   }
 })
 
 const LOAD_MORE_DATA = "LOAD_MORE_DATA";
+const ROW_SELECT = 'ROW_SELECT';
 
 const PAGE_SIZE = 20
 
@@ -56,6 +62,7 @@ const SelectionHeader = ({
 }) => {
   return (
     <Checkbox
+      color="primary"
       checked={areAllRowsSelected}
       onChange={(event) => {
         if (event.target.checked) {
@@ -74,6 +81,7 @@ const SelectionCell = ({
 }) => {
   return (
     <Checkbox
+      color="primary"
       checked={isSelectedRow}
       onChange={(event) => {
         if (event.target.checked) {
@@ -90,25 +98,29 @@ const SelectionCell = ({
 const HeaderCell = ({ column, ...props }) => {
   const [onHover, setOnHover] = useState(false);
   const classes = useStyles()
-  return <div className={classes.headerHover} onMouseEnter={() => setOnHover(true)}
-    onMouseLeave={() => setOnHover(false)}
-    {...props}>
-    <span>{column.title}</span> 
-    {onHover && 
-      <>
-        {column?.sortable && <Sort className={classes.headerHoverIcon} />}
-        <SyncAlt className={classes.headerHoverIcon} />
-      </>}</div>
+  return (
+    <div className={clsx(classes.headerHover, column.sortDirection && classes.colHighlight)} onMouseEnter={() => setOnHover(true)}
+      onMouseLeave={() => setOnHover(false)}
+      {...props}>
+      <span>{column.title}</span>
+      {
+        column?.sortable && <FontAwesomeIcon icon={faSignal} size="xs" transform={{rotate: 90, flipY: true}} />
+      }
+      {column.sortDirection && (
+        <FontAwesomeIcon icon={column.sortDirection === SortDirection.Ascend ? faSortAmountUp : faSortAmountDown} />
+      )}
+    </div>
+  )
 }
 
-const RowExpanderButton = ({dispatch, rowKeyValue, isDetailsRowShown}) => {
+const RowExpanderButton = ({ dispatch, rowKeyValue, isDetailsRowShown }) => {
   return (
     <IconButton onClick={() => {
       dispatch(isDetailsRowShown ? hideDetailsRow(rowKeyValue) : showDetailsRow(rowKeyValue));
     }}>
-      {isDetailsRowShown ? <UnfoldLess/> : <UnfoldMore/>}
+      {isDetailsRowShown ? <UnfoldLess /> : <UnfoldMore />}
     </IconButton>
-  ); 
+  );
 }
 const useDynamicRowsOptions = ({ rowKeyField }) => {
   const [renderedRowSizes] = useState({});
@@ -149,8 +161,10 @@ const DataGrid2 = React.forwardRef(({
   totalCount,
   resetScroll,
   onSort = () => { },
+  onClearFilters = () => { },
 }, ref) => {
   const classes = useStyles()
+  const theme = useTheme()
 
   const [tableProps, setTableProps] = useState(tablePropsInit);
   const [pageOffset, setPageOffset] = useState(0);
@@ -161,9 +175,10 @@ const DataGrid2 = React.forwardRef(({
   const [sortDirection, setSortDirection] = useState("");
   const [selectedRows, setSelectedRows] = useState(new Set());
 
+  const [highlightedRow, setHighlightedRow] = useState();
   const { itemHeight, addRowHeight } = useDynamicRowsOptions(tableProps);
 
- 
+
   useEffect(() => {
     onSort(sortColumn, sortDirection);
   }, [sortColumn, sortDirection]);
@@ -223,6 +238,9 @@ const DataGrid2 = React.forwardRef(({
             page_offset: pageOffset,
             page_size: PAGE_SIZE
           })
+          break
+        case ROW_SELECT:
+          setHighlightedRow(action.rowKeyValue);
           break
         case 'SelectRow':
           setSelectedRows(new Set(selectedRows.add(action.rowKeyValue)))
@@ -340,6 +358,7 @@ const DataGrid2 = React.forwardRef(({
         totalCount={totalCount}
         loadedCount={dataGridState.rows.length}
         gridProps={gridProps}
+        onClearFilters={()=>onClearFilters()}
       />
       <div style={{ display: 'none' }}>{sortColumn}{sortDirection}</div>
       {dataGridState.loading ? <LinearProgress /> : <LinearProgress variant="determinate" value={0} />}
@@ -353,7 +372,17 @@ const DataGrid2 = React.forwardRef(({
         childComponents={{
           dataRow: {
             elementAttributes: ({ rowData }) => ({
-              ref: ref => addRowHeight(rowData, ref?.offsetHeight)
+              ref: ref => addRowHeight(rowData, ref?.offsetHeight),
+              onClick: (evt, extendedEvent) => {
+                const {
+                  childProps: {rowKeyValue},
+                  dispatch
+                } = extendedEvent
+                dispatch({type: ROW_SELECT, rowKeyValue})
+              },
+              style:{
+                
+              }
             })
           },
           headCellContent: {
@@ -373,13 +402,19 @@ const DataGrid2 = React.forwardRef(({
                 return <HeaderCell {...props} />
               }
             },
-            elementAttributes: ({ column }) => {
-              return (['id', 'select-row'].includes(column.key) || column?.frozen) && {
+            elementAttributes: ({ column, ...cellProps }) => {
+              return (['id', 'select-row'].includes(column.key) || column?.frozen) ? {
                 style: {
                   ...column.style,
                   position: 'sticky',
                   left: 0,
                   zIndex: 11,
+                  backgroundColor: theme.palette.grey[100],
+                }
+              }:{
+                style: {
+                  ...column.style,
+                  backgroundColor: theme.palette.grey[100],
                 }
               }
             }
@@ -391,12 +426,12 @@ const DataGrid2 = React.forwardRef(({
                   ...column.style,
                   position: 'sticky',
                   left: 0,
-                  backgroundColor: "#fff",
+                  backgroundColor: (highlightedRow === props?.rowData?.id) ? lighten(theme.palette.primary.light, .85): "#fff",
                 }
               } : {
                 style: {
                   ...column.style,
-                  backgroundColor: "#fff",
+                  backgroundColor: (highlightedRow === props?.rowData?.id) ? fade(theme.palette.primary.light, .15): "#fff",
                   overflow: 'hidden'
                 }
               }
@@ -406,7 +441,7 @@ const DataGrid2 = React.forwardRef(({
             content: props => {
               const component = fetchRenderer(props)
               if (props?.column?.expanderControl) {
-                return <RowExpanderButton {...props}/>
+                return <RowExpanderButton {...props} />
               }
               return component
             }
@@ -418,7 +453,7 @@ const DataGrid2 = React.forwardRef(({
                 baseFunc(event);
                 const element = event.currentTarget;
                 setScrollYoffset(element.scrollLeft)
-                if(element.scrollLeft !== scrollYoffset) {
+                if (element.scrollLeft !== scrollYoffset) {
                   return
                 }
                 if (
