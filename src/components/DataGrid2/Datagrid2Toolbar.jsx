@@ -26,7 +26,7 @@ const styles = (theme) => ({
     paddingBottom: theme.spacing(2),
   },
   heightMax: {
-    height: 36
+    height: '2.3rem'
   },
   filterBar: {
     width: "100%",
