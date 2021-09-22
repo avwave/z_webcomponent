@@ -45,7 +45,7 @@ const columnData = [
       default: "",
       label: "Is type of",
       labelField: 'label',
-      // renderLabel: 'renderLabel',
+      renderLabel: 'renderLabel',
       valueField: 'v',
       multiple: true,
       options: [...Array(faker.datatype.number({

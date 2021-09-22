@@ -24,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
   },
   selected: {
     color: theme.palette.primary.main,
+    backgroundColor: theme.palette.action.hover,
   },
   paper: {
     boxShadow: 'none',
@@ -160,7 +161,9 @@ function AuocompleteFilterRenderer({ onChange, onChangeDisplay, value, filter })
               </div>
             );
           }
-          return option[filter?.renderLabel] ?? option[filter?.labelField];
+          return <div className={clsx(classes.option, selected&&classes.selected)}>
+            {option[filter?.renderLabel] ?? option[filter?.labelField]}
+          </div>
         }}
         closeIcon={<Backspace fontSize="small" />}
         renderInput={(iParams) => (
