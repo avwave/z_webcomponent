@@ -403,12 +403,18 @@ const DataGrid2 = React.forwardRef(({
               }
             },
             elementAttributes: ({ column, ...cellProps }) => {
-              return (['id', 'select-row'].includes(column.key) || column?.frozen) && {
+              return (['id', 'select-row'].includes(column.key) || column?.frozen) ? {
                 style: {
                   ...column.style,
                   position: 'sticky',
                   left: 0,
                   zIndex: 11,
+                  backgroundColor: theme.palette.grey[100],
+                }
+              }:{
+                style: {
+                  ...column.style,
+                  backgroundColor: theme.palette.grey[100],
                 }
               }
             }
