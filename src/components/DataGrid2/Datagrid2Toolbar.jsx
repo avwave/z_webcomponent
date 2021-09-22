@@ -1,33 +1,20 @@
 import {
-  Breadcrumbs,
-  Button,
-  ButtonGroup,
-  Chip,
-  Container,
-  debounce,
-  FormControl,
-  FormHelperText,
-  Grid,
-  IconButton,
-  Input,
-  InputAdornment, Popover, TextField, Toolbar,
+  Button, debounce, IconButton, InputAdornment, Popover, TextField, Toolbar,
   Typography,
   withStyles
 } from "@material-ui/core";
-import { Close, FilterList, Search, ViewColumn } from "@material-ui/icons";
+import { Search, ViewColumn } from "@material-ui/icons";
 import clsx from "clsx";
-import { stringify } from "javascript-stringify";
 import { Table } from "ka-table";
 import { hideColumn, showColumn } from "ka-table/actionCreators";
 import CellEditorBoolean from 'ka-table/Components/CellEditorBoolean/CellEditorBoolean';
 import { ActionType, DataType } from 'ka-table/enums';
 import 'ka-table/style.scss';
-import { isEmpty } from "lodash";
-import moment from 'moment'
 import React, { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import CheckboxProvider from '../CheckList/checklistContext';
-import { actions, DataGridContext } from "../DataGrid/DataGridContext";
+import { DataGridContext } from "../DataGrid/DataGridContext";
 import { DateTimeRangePicker } from '../DateTimeRangePicker';
+import { isDeeplyEmpty } from "../utils/isDeepEmpty";
 import { FilterDropdown } from "./FilterDropdown";
 const POPUP_MODE = {
   FILTER: "FILTER",
@@ -39,7 +26,7 @@ const styles = (theme) => ({
     paddingBottom: theme.spacing(2),
   },
   heightMax: {
-    height:36
+    height: 36
   },
   filterBar: {
     width: "100%",
@@ -67,7 +54,7 @@ const styles = (theme) => ({
       minWidth: 215
     },
     [theme.breakpoints.down('sm')]: {
-      
+
     },
   },
   paddedBottom: {
@@ -287,7 +274,7 @@ function DataGrid2Toolbar({
                   }}
                   label="Date range"
                   inline
-                  
+
                   variant="standard"
                   value={filterValues}
                   onChange={debounce((v) => {
@@ -315,7 +302,7 @@ function DataGrid2Toolbar({
                 />
               </div>
               <div className={clsx(classes.filterSection, classes.paddedBottom)}>
-                {!isEmpty(stateFilters) && (
+                {!isDeeplyEmpty(filterValues) && (
                   <Button variant="contained" color="secondary" onClick={() => {
                     setFilterValues({})
                     setFilterDisplay({})
