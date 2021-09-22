@@ -30,6 +30,11 @@
       vertical-align: top;;
     }
   }
+  .ka-row{
+    cursor: pointer;
+  }
+  .ka-icon-sort-arrow-down:before { content: ''; }
+  .ka-icon-sort-arrow-up:before { content: ''; }
 }
 
 .ka {

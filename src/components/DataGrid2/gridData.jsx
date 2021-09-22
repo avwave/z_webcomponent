@@ -4,6 +4,9 @@ import Checkbox from "../../shared/Checkbox";
 import { TriStateSelect } from "../TriStateSelect";
 import { Delete, HotTubSharp, LocalHospital } from "@material-ui/icons";
 import moment from "moment";
+faker.seed(123);
+
+
 const columnData = [
   {
     key: "id",
@@ -42,18 +45,21 @@ const columnData = [
       default: "",
       label: "Is type of",
       labelField: 'label',
+      // renderLabel: 'renderLabel',
       valueField: 'v',
       multiple: true,
-      options: [
-        {
-          label: "Tip",
-          v: "tip",
-        },
-        {
-          label: "Top",
-          v: "top",
-        },
-      ],
+      options: [...Array(faker.datatype.number({
+        min:4,
+        max:20
+      })).fill(0).map(d => {
+        const v = faker.random.word()
+        return {
+          renderLabel: <h2>{v}</h2>,
+          label: v,
+          v: faker.random.word()
+        }
+      })],
+      
     },
   },
   {
@@ -93,7 +99,7 @@ const columnData = [
     hidden: true,
     tooltip: (props) => {
       return props?.row?.col4Type
-    }
+    },
   },
   {
     key: "col4Type",
@@ -118,6 +124,22 @@ const columnData = [
     sortable: false,
     align: "flex-start",
     hidden: false,
+    filter: {
+      type: "option",
+      default: "",
+      label: "Is type of",
+      labelField: 'label',
+      options: [
+        {
+          label: "Tip",
+          value: "tip",
+        },
+        {
+          label: "Top",
+          value: "top",
+        },
+      ],
+    },
   },
   {
     key: "button",
@@ -156,7 +178,6 @@ const columnData = [
 ];
 
 let rows = [];
-faker.seed(123);
 for (let i = 0; i < 5; i++) {
   rows.push({
     id: `row${i}`,

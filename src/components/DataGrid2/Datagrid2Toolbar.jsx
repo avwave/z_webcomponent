@@ -15,6 +15,7 @@ import {
   withStyles
 } from "@material-ui/core";
 import { Close, FilterList, Search, ViewColumn } from "@material-ui/icons";
+import clsx from "clsx";
 import { stringify } from "javascript-stringify";
 import { Table } from "ka-table";
 import { hideColumn, showColumn } from "ka-table/actionCreators";
@@ -27,6 +28,7 @@ import React, { useCallback, useContext, useEffect, useMemo, useState } from "re
 import CheckboxProvider from '../CheckList/checklistContext';
 import { actions, DataGridContext } from "../DataGrid/DataGridContext";
 import { DateTimeRangePicker } from '../DateTimeRangePicker';
+import { FilterDropdown } from "./FilterDropdown";
 const POPUP_MODE = {
   FILTER: "FILTER",
   COLUMN: "COLUMN",
@@ -35,6 +37,41 @@ const POPUP_MODE = {
 const styles = (theme) => ({
   filterContainer: {
     paddingBottom: theme.spacing(2),
+  },
+  heightMax: {
+    height:36
+  },
+  filterBar: {
+    width: "100%",
+    display: "flex",
+    [theme.breakpoints.up('md')]: {
+      flexWrap: "nowrap",
+    },
+    [theme.breakpoints.down('sm')]: {
+      flexWrap: 'wrap'
+    },
+    flexDirection: "row",
+    justifyContent: "flex-end",
+  },
+  filterSection: {
+    display: 'flex',
+    alignSelf: "flex-end",
+    flexDirection: "row",
+    alignItems: "center",
+    '& > *': {
+      marginRight: theme.spacing(1),
+    },
+  },
+  filterSectionSearch: {
+    [theme.breakpoints.up('md')]: {
+      minWidth: 215
+    },
+    [theme.breakpoints.down('sm')]: {
+      
+    },
+  },
+  paddedBottom: {
+    paddingBottom: theme.spacing(1),
   },
   filterPopup: {
     flexDirection: "column",
@@ -59,12 +96,19 @@ const styles = (theme) => ({
   chips: {
     width: "100%",
     display: "flex",
-    flexDirection: "row",
     flexWrap: "wrap",
+    flexDirection: "row",
+    alignContent: "space-around",
+    justifyContent: "space-between",
     alignItems: "center",
   },
   clearButton: {
-
+    flexBasis: 0
+  },
+  dateTimeRangePicker: {
+    marginRight: theme.spacing(1),
+    marginBottom: theme.spacing(1),
+    flex: 'auto'
   }
 });
 
@@ -192,32 +236,24 @@ function DataGrid2Toolbar({
   }, [filterValues]);
 
   const renderFilters = useMemo(() => {
-    return filterColumnSettings.map((col, idx) => {
-      return (
-        <FormControl
-          key={`filter-${col.id}-${idx}`}
-          className={classes.filterContainer}
-        >
-          <FormHelperText>{col.name}</FormHelperText>
-          <col.filterRenderer
-            value={dataGridState.filterColumn[col.key]}
-            onChange={(value) => {
-              changeFilter(col.key, value);
-            }}
-            onChangeDisplay={(value) => {
-              changeFilterDisplay(col.key, value);
-            }}
-          />
-        </FormControl>
-      );
-    });
+    return filterColumnSettings.map((col, idx) => (
+      <FilterDropdown
+        key={`filter-${col.id}-${idx}`}
+        value={dataGridState.filterColumn[col.key]}
+        name={col?.filter?.label ?? col.name}
+        colKey={col.key}
+        filterRenderer={col.filterRenderer}
+        onChangeFilter={value => changeFilter(col.key, value)}
+        onChangeFilterDisplay={value => changeFilterDisplay(col.key, value)}
+      />
+    ));
   },
-    [changeFilter, changeFilterDisplay, classes.filterContainer, dataGridState.filterColumn, filterColumnSettings]);
+    [changeFilter, changeFilterDisplay, dataGridState.filterColumn, filterColumnSettings]);
 
 
   const stateFilters = useMemo(() => {
-    return Object.entries(filterDisplay).filter(f => f[1] !== undefined)
-  }, [filterDisplay]);
+    return Object.entries(filterValues).filter(f => f[1] !== undefined)
+  }, [filterValues]);
 
   const debounceSearch = debounce((event) => {
     setFilterValues({ ...filterValues, search: event.target.value })
@@ -235,96 +271,41 @@ function DataGrid2Toolbar({
             <div style={{ flex: 1 }} />
             {centerAccessory ? centerAccessory() : <></>}
             <div style={{ flex: 1 }} />
-            {showSelector ? (
-              <>
-                <IconButton variant="default" onClick={handleOpenCheckList}>
-                  <ViewColumn />
-                </IconButton>
-
-                <Popover
-                  id={columnPopoverId}
-                  open={isCheckListOpen}
-                  anchorEl={columnAnchor}
-                  onClose={handleChecklistClose}
-                  anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-                  transformOrigin={{ vertical: "top", horizontal: "right" }}
-                  keepMounted
-                >
-                  <ColumnSettings {...tableProps} dispatch={action => {
-                    if (action.type === ActionType.UpdateCellValue) {
-                      dispatch(
-                        action.value
-                          ? showColumn(action.rowKeyValue)
-                          : hideColumn(action.rowKeyValue)
-                      );
-                    }
-                  }} />
-                </Popover>
-              </>
-            ) : (
-              <></>
-            )}
-            {filterable ? (
-              <>
-                <IconButton variant="default" onClick={handleOpenFilterList}>
-                  <FilterList />
-                </IconButton>
-                <Popover
-                  id={filterPopoverId}
-                  open={isFilterListOpen}
-                  anchorEl={filterAnchor}
-                  onClose={handleFilterListClose}
-                  anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-                  transformOrigin={{ vertical: "top", horizontal: "right" }}
-                  keepMounted
-                  PaperProps={{
-                    style: { minWidth: gridProps?.filterWidth ?? 400 },
-                  }}
-                >
-                  <Container maxWidth="md">
-                    <form
-                      noValidate
-                      autoComplete="off"
-                      className={classes.filterPopup}
-                    >
-                      <ButtonGroup
-                        fullWidth
-                        disableElevation
-                        variant="text"
-                        color="primary"
-                      >
-                        <Button disabled>Filters</Button>
-                        <Button
-                          onClick={() => {
-                            dataGridDispatch({
-                              type: actions.CLEAR_FILTER_COLUMN,
-                            });
-                            setFilterDisplay({})
-                          }}
-                        >
-                          Reset
-                        </Button>
-                      </ButtonGroup>
-                      {renderFilters}
-                    </form>
-                  </Container>
-                </Popover>
-              </>
-            ) : (
-              <></>
-            )}
             {children}
             {rightAccessory ? rightAccessory() : <></>}
           </Toolbar>
         )}
       <Toolbar variant="dense" className={classes.toolbar}>
-        <Grid container spacing={2}>
+        <div className={classes.filterBar}>
           {filterable && (
             <>
-              <Grid item xs>
-                <Input
+              <div className={clsx(classes.chips, classes.filterSection)}>
+                {renderFilters}
+                <DateTimeRangePicker
+                  containerProps={{
+                    className: classes.dateTimeRangePicker
+                  }}
+                  label="Date range"
+                  inline
+                  
+                  variant="standard"
+                  value={filterValues}
+                  onChange={debounce((v) => {
+                    setFilterValues({ ...filterValues, ...v });
+                  }, 500)} />
+              </div>
+              <div className={clsx(classes.filterSection, classes.paddedBottom, classes.filterSectionSearch)}>
+                <TextField
                   fullWidth
-                  startAdornment={<InputAdornment position="start"><Search /></InputAdornment>}
+                  size="small"
+                  variant="outlined"
+                  InputProps={{
+                    endAdornment: <InputAdornment position="end"><Search /></InputAdornment>,
+                    className: classes.heightMax
+                  }}
+                  InputLabelProps={{
+                    shrink: true
+                  }}
                   placeholder="Search"
                   value={searchField}
                   onChange={event => {
@@ -332,69 +313,60 @@ function DataGrid2Toolbar({
                     debounceSearch(event)
                   }}
                 />
-              </Grid>
-              <Grid item >
-                <DateTimeRangePicker inline variant="standard"
-                  value={filterValues}
-                  onChange={debounce((v) => {
-                    setFilterValues({ ...filterValues, ...v });
-                  }, 500)} />
-              </Grid>
+              </div>
+              <div className={clsx(classes.filterSection, classes.paddedBottom)}>
+                {!isEmpty(stateFilters) && (
+                  <Button variant="contained" color="secondary" onClick={() => {
+                    setFilterValues({})
+                    setFilterDisplay({})
+                  }}>Clear</Button>
+                )}
+
+                {(totalCount && loadedCount) && (
+                  <Typography
+                    className={classes.filterLabel}
+                    variant="overline"
+                  >
+                    {totalCount && loadedCount &&
+                      `${loadedCount} of ${totalCount}`
+
+                    }
+                  </Typography>
+                )}
+                {showSelector ? (
+                  <>
+                    <IconButton size="small" variant="default" onClick={handleOpenCheckList}>
+                      <ViewColumn />
+                    </IconButton>
+
+                    <Popover
+                      id={columnPopoverId}
+                      open={isCheckListOpen}
+                      anchorEl={columnAnchor}
+                      onClose={handleChecklistClose}
+                      anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+                      transformOrigin={{ vertical: "top", horizontal: "right" }}
+                      keepMounted
+                    >
+                      <ColumnSettings {...tableProps} dispatch={action => {
+                        if (action.type === ActionType.UpdateCellValue) {
+                          dispatch(
+                            action.value
+                              ? showColumn(action.rowKeyValue)
+                              : hideColumn(action.rowKeyValue)
+                          );
+                        }
+                      }} />
+                    </Popover>
+                  </>
+                ) : (
+                  <></>
+                )}
+              </div>
             </>
           )}
-        </Grid>
+        </div>
       </Toolbar>
-      {((totalCount && loadedCount) ||
-        !isEmpty(stateFilters)) && (
-          <Toolbar variant="dense" className={classes.toolbar}>
-            {!isEmpty(stateFilters) ? (
-              <>
-                <div className={classes.chips} >
-                  <Typography variant="overline" className={classes.filterLabel}>
-                    Filtered by:{" "}
-                  </Typography>
-                  {stateFilters.map(
-                    (filter, idx) => {
-                      // if (!['search', 'endDate', 'startDate'].includes(filter[0])) {
-                      const filterColumn = filterColumnSettings.find((i) => {
-                        const ret = i.key === filter[0];
-                        return ret;
-                      });
-                      let label = stringify(filter[1])
-                      if (filter[1] instanceof Date) {
-                        label = moment(filter[1]).format('L LT')
-                      }
-                      return (
-                        <Chip
-                          variant="outlined"
-                          label={label}
-                          key={idx}
-                          icon={<Chip size="small" label={filterColumn?.name ?? filter[0]} />}
-                        />
-                      );
-                      // }
-                    }
-                  )}
-                </div>
-                <Button className={classes.clearButton} variant="contained" color="secondary" onClick={() => {
-                  setFilterValues({})
-                  setFilterDisplay({})
-                }}>Clear</Button>
-              </>
-            ) : <div />}
-            <Typography
-              className={classes.filterLabel}
-              variant="overline"
-            >
-              {totalCount && loadedCount &&
-                `${loadedCount} of ${totalCount}`
-
-              }
-            </Typography>
-
-
-          </Toolbar>
-        )}
     </div>
   );
 }
