@@ -160,7 +160,7 @@ function AuocompleteFilterRenderer({ onChange, onChangeDisplay, value, filter })
               </div>
             );
           }
-          return option[filter?.labelField];
+          return option[filter?.renderLabel] ?? option[filter?.labelField];
         }}
         closeIcon={<Backspace fontSize="small" />}
         renderInput={(iParams) => (
