@@ -161,7 +161,7 @@ function DataGrid2Toolbar({
   children,
   tableProps,
   gridProps,
-  onClearFilters=()=>{},
+  onClearFilters = () => { },
   dispatch
 }) {
   const [columnAnchor, setColumnAnchor] = useState();
@@ -263,9 +263,9 @@ function DataGrid2Toolbar({
             {rightAccessory ? rightAccessory() : <></>}
           </Toolbar>
         )}
-      <Toolbar variant="dense" className={classes.toolbar}>
-        <div className={classes.filterBar}>
-          {filterable && (
+      {filterable && (
+        <Toolbar variant="dense" className={classes.toolbar}>
+          <div className={classes.filterBar}>
             <>
               <div className={clsx(classes.chips, classes.filterSection)}>
                 {renderFilters}
@@ -353,9 +353,9 @@ function DataGrid2Toolbar({
                 )}
               </div>
             </>
-          )}
-        </div>
-      </Toolbar>
+          </div>
+        </Toolbar>
+      )}
     </div>
   );
 }

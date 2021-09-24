@@ -344,7 +344,7 @@ const DataGrid2 = React.forwardRef(({
 
   const [scrollYoffset, setScrollYoffset] = useState(0);
   return (
-    <div className={clsx('datagrid', classes.datagrid)}>
+    <div className={clsx('datagrid', classes.datagrid)} style={{...containerStyle}}>
       <Datagrid2Toolbar
         tableProps={tableProps}
         dispatch={kaDispatch}
@@ -363,6 +363,7 @@ const DataGrid2 = React.forwardRef(({
       <div style={{ display: 'none' }}>{sortColumn}{sortDirection}</div>
       {dataGridState.loading ? <LinearProgress /> : <LinearProgress variant="determinate" value={0} />}
       <Table
+        style={{...style}}
         {...tableProps}
         dispatch={kaDispatch}
         virtualScrolling={{
