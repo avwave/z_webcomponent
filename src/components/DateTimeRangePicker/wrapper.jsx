@@ -1,6 +1,7 @@
 import LitePickerLib from 'litepicker/dist/nocss/litepicker.umd';
 // import NoCssLP from 'litepicker/dist/nocss/litepicker.umd';
 import 'litepicker/dist/plugins/mobilefriendly';
+import 'litepicker/dist/plugins/ranges';
 
 import { Button, ButtonGroup, Grid, makeStyles, TextField, Typography, Card, useTheme } from '@material-ui/core';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -30,6 +31,9 @@ const useStyles = makeStyles((theme) => {
     },
     spacer: {
       flex: '1 1 auto'
+    },
+    rangeButton: {
+      justifyContent: 'flex-start'
     }
   }
 })
@@ -77,7 +81,10 @@ const LitePicker = ({ onCancel = () => { }, onValueChange = () => { }, container
           maxYear: 2099,
           minYear: 1900
         },
-
+        plugins: [
+          'mobilefriendly',
+          // 'ranges'
+        ],
         setup: (picker) => {
           picker.on('before:show', () => {
             picker.gotoDate(moment().subtract(1, 'month').toDate());
@@ -129,7 +136,7 @@ const LitePicker = ({ onCancel = () => { }, onValueChange = () => { }, container
       setEndDate(null)
       onValueChange({
         startDate: null,
-        endDate:null
+        endDate: null
       })
     },
     [onValueChange],
@@ -178,6 +185,12 @@ const LitePicker = ({ onCancel = () => { }, onValueChange = () => { }, container
           InputLabelProps={{
             shrink: true,
           }}
+          onChange={evt => {
+            setStartDate({ ...startDate, dateInstance: evt.target.value })
+            if (picker.current) {
+              picker.current.setDateRange(evt.target.value, endDate)
+            }
+          }}
           variant={variant}
         />
       </Grid>
@@ -209,6 +222,12 @@ const LitePicker = ({ onCancel = () => { }, onValueChange = () => { }, container
           InputLabelProps={{
             shrink: true,
           }}
+          onChange={evt => {
+            setEndDate({ ...endDate, dateInstance: evt.target.value })
+            if (picker.current) {
+              picker.current.setDateRange(startDate, evt.target.value)
+            }
+          }}
           variant={variant}
         />
       </Grid>
@@ -231,9 +250,9 @@ const LitePicker = ({ onCancel = () => { }, onValueChange = () => { }, container
       </Grid>
       <Grid container item xs={12} spacing={2}>
         <Grid item xs={2} className={classes.rangeSelectContainer} >
-          <ButtonGroup variant="text" orientation="vertical">
+          <ButtonGroup disableElevation variant="text" orientation="vertical">
             {Object.entries(RANGE_CONST).map(([key, value]) =>
-              <Button key={key} onClick={() => setRange(value)}>{value}</Button>
+              <Button className={classes.rangeButton} key={key} size="small" onClick={() => setRange(value)}>{value}</Button>
             )}
           </ButtonGroup>
         </Grid>

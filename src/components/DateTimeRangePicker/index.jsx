@@ -9,8 +9,7 @@ import { DateRange } from '@material-ui/icons';
 const useStyles = makeStyles((theme) => {
   return {
     dateContentButton: {
-      width: '100%',
-      flex: '1 1 auto',
+      flex: 'auto',
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'space-between',
@@ -47,39 +46,50 @@ const DateTimeRange = (props) => {
   )
 }
 
-const DateTimeRangePicker = ({ form, inline, onChange = () => { }, ...props }) => {
+const DateTimeRangePicker = ({ size="medium", label, form, inline, onChange = () => { }, containerProps, ...props }) => {
   const classes = useStyles()
   const [anchorEl, setAnchorEl] = useState(null);
   const [dateRange, setDateRange] = useState(props?.value);
 
+  const isEmptyDateRange = Boolean(!dateRange?.startDate && !dateRange?.endDate)
   const open = Boolean(anchorEl);
 
-  useEffect(() => { 
+  useEffect(() => {
     setDateRange(props?.value)
   }, [props?.value]);
 
   return (
     <>
-    {form ? (
-      <Box className={clsx(classes.dateContentButton, form && classes.form)} onClick={(e) => setAnchorEl(e.currentTarget)}>
-      <div className={clsx(classes.dates, inline && classes.inline)}>
-        <Typography variant="body2"><Typography className={classes.titlePadding} variant="button">Start:</Typography>{dateRange?.startDate ? moment(dateRange?.startDate).format('L LT') : '-'}</Typography>
-        {inline && <Typography variant="body2" className={classes.divider}> - </Typography>}
-        <Typography variant="body2"><Typography className={classes.titlePadding} variant="button">End:</Typography>{dateRange?.endDate ? moment(dateRange?.endDate).format('L LT') : '-'}</Typography>
-      </div>
-      <DateRange />
-    </Box>
-    ):(
-      <Button variant="contained" color="primary" className={clsx(classes.dateContentButton, form && classes.form)} onClick={(e) => setAnchorEl(e.currentTarget)}>
-        <div className={clsx(classes.dates, inline && classes.inline)}>
-          <Typography variant="body2"><Typography className={classes.titlePadding} variant="button">Start:</Typography>{dateRange?.startDate ? moment(dateRange?.startDate).format('L LT') : '-'}</Typography>
-          {inline && <Typography variant="body2" className={classes.divider}> - </Typography>}
-          <Typography variant="body2"><Typography className={classes.titlePadding} variant="button">End:</Typography>{dateRange?.endDate ? moment(dateRange?.endDate).format('L LT') : '-'}</Typography>
-        </div>
-        <DateRange />
-      </Button>
-    )}
-      
+      {form ? (
+        <Box className={clsx(classes.dateContentButton, form && classes.form)} onClick={(e) => setAnchorEl(e.currentTarget)}
+        {...containerProps}>
+          <div className={clsx(classes.dates, inline && classes.inline)}>
+            <Typography variant="body2"><Typography className={classes.titlePadding} variant="button">Start:</Typography>{dateRange?.startDate ? moment(dateRange?.startDate).format('L LT') : '-'}</Typography>
+            {inline && <Typography variant="body2" className={classes.divider}> - </Typography>}
+            <Typography variant="body2"><Typography className={classes.titlePadding} variant="button">End:</Typography>{dateRange?.endDate ? moment(dateRange?.endDate).format('L LT') : '-'}</Typography>
+          </div>
+          <DateRange />
+        </Box>
+      ) : (
+        <Button
+          size={size}
+          variant={isEmptyDateRange ? "outlined" : "contained"} 
+          color={isEmptyDateRange ? "inherit" : "primary"}
+          className={clsx(classes.dateContentButton, form && classes.form)}
+          onClick={(e) => setAnchorEl(e.currentTarget)}
+          {...containerProps}
+        >
+          {label ? label : (
+            <div className={clsx(classes.dates, inline && classes.inline)}>
+              <Typography variant="body2"><Typography className={classes.titlePadding} variant="button">Start:</Typography>{dateRange?.startDate ? moment(dateRange?.startDate).format('L LT') : '-'}</Typography>
+              {inline && <Typography variant="body2" className={classes.divider}> - </Typography>}
+              <Typography variant="body2"><Typography className={classes.titlePadding} variant="button">End:</Typography>{dateRange?.endDate ? moment(dateRange?.endDate).format('L LT') : '-'}</Typography>
+            </div>
+          )}
+          <DateRange fontSize="small"/>
+        </Button>
+      )}
+
       <Popover
         open={open}
         anchorEl={anchorEl}
@@ -97,12 +107,12 @@ const DateTimeRangePicker = ({ form, inline, onChange = () => { }, ...props }) =
         }}
       >
         <Box p={2}>
-          <LitePicker {...props} 
-          onCancel={() => setAnchorEl(null)}
-          onValueChange={(val) => {
-            setDateRange(val)
-            onChange(val)
-          }} />
+          <LitePicker {...props}
+            onCancel={() => setAnchorEl(null)}
+            onValueChange={(val) => {
+              setDateRange(val)
+              onChange(val)
+            }} />
         </Box>
       </Popover>
     </>
