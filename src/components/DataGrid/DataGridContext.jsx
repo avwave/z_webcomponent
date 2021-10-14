@@ -1,4 +1,5 @@
 import React, { createContext, useReducer } from "react";
+import { fromEntries } from "../utils/fromEntries.polyfill";
 
 export const initState = {
   rows: [],
@@ -28,7 +29,7 @@ function setDefaultFilterValues(columns, filterColumns) {
     const colKey = columns.find( ({key}) => key===keyItem)
     return [keyItem, colKey?.filter?.default]
   })
-  const newKeys = Object.fromEntries(keys)
+  const newKeys = fromEntries(keys)
   return newKeys
 }
 
