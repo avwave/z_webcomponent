@@ -16,6 +16,8 @@ import Datagrid2Toolbar from './Datagrid2Toolbar';
 import './styles.scss';
 
 
+const TABLE_LOAD_OFFSET = 200;
+
 const useStyles = makeStyles((theme) => {
   return {
     datagrid: {
@@ -459,7 +461,7 @@ const DataGrid2 = React.forwardRef(({
                 }
                 if (
                   element.offsetHeight + element.scrollTop >=
-                  element.scrollHeight
+                  element.scrollHeight - TABLE_LOAD_OFFSET
                 ) {
                   kaDispatch({ type: LOAD_MORE_DATA });
                 }

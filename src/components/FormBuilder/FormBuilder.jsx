@@ -49,6 +49,7 @@ import moment from "moment";
 import { Fragment } from "react";
 import { createContext } from "react";
 import { DateTimeRangePicker } from "../DateTimeRangePicker";
+import { fromEntries } from "../utils/fromEntries.polyfill";
 
 const useStyles = makeStyles((theme) => ({
   controlContainer: {
@@ -838,7 +839,7 @@ const FormBuilder = (props) => {
         return [k, v.validator()];
       });
 
-    const validatorMap = Object.fromEntries(validatorSpread);
+    const validatorMap = fromEntries(validatorSpread);
     const validator = Yup.object().shape({
       ...validatorMap,
       ...additionalValidation,
@@ -847,7 +848,7 @@ const FormBuilder = (props) => {
   }, [additionalValidation, form]);
 
   const initialValues = useMemo(() => {
-    const mapped = Object.fromEntries(
+    const mapped = fromEntries(
       Object.entries({ ...form }).map(([k, v]) => {
         return [k, v.initialValues];
       })

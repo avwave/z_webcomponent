@@ -249,7 +249,7 @@ function DataGrid2Toolbar({
 
   return (
     <div className={classes.root}>
-      {(showSelector ||
+      {(
         leftAccessory ||
         centerAccessory ||
         rightAccessory ||
