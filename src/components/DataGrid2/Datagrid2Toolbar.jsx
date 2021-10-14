@@ -252,8 +252,8 @@ function DataGrid2Toolbar({
       {(
         leftAccessory ||
         centerAccessory ||
-        rightAccessory ||
-        filterable) && (
+        rightAccessory
+      ) && (
           <Toolbar variant="dense" className={classes.toolbar} disableGutters>
             {leftAccessory ? leftAccessory() : <></>}
             <div style={{ flex: 1 }} />
