@@ -1,4 +1,4 @@
-import { faArrowsAltV, faSignal, faSortAmountDown, faSortAmountUp } from '@fortawesome/free-solid-svg-icons';
+import { faSignal, faSortAmountDown, faSortAmountUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Checkbox, fade, IconButton, lighten, LinearProgress, makeStyles, Tooltip, useTheme } from '@material-ui/core';
 import { UnfoldLess, UnfoldMore } from '@material-ui/icons';
@@ -10,9 +10,9 @@ import { isEmpty } from 'lodash';
 import React, { isValidElement, useCallback, useContext, useEffect, useState } from 'react';
 import Truncate from 'react-truncate';
 import { actions as dataGridActions, DataGridContext } from '../DataGrid/DataGridContext';
-import { AuocompleteFilterRenderer, OptionFilterRenderer, TextFilterRenderer } from './FilterRenderer';
 import { PortalCell } from '../DataGrid/PortalCell';
 import Datagrid2Toolbar from './Datagrid2Toolbar';
+import { AuocompleteFilterRenderer, OptionFilterRenderer, TextFilterRenderer } from './FilterRenderer';
 import './styles.scss';
 
 
@@ -106,7 +106,7 @@ const HeaderCell = ({ column, ...props }) => {
       {...props}>
       <span>{column.title}</span>
       {
-        column?.sortable && <FontAwesomeIcon icon={faSignal} size="xs" transform={{rotate: 90, flipY: true}} />
+        column?.sortable && <FontAwesomeIcon icon={faSignal} size="xs" transform={{ rotate: 90, flipY: true }} />
       }
       {column.sortDirection && (
         <FontAwesomeIcon icon={column.sortDirection === SortDirection.Ascend ? faSortAmountUp : faSortAmountDown} />
@@ -162,6 +162,8 @@ const DataGrid2 = React.forwardRef(({
   onLoadMore = () => { },
   totalCount,
   resetScroll,
+  hasSearchFilter = true,
+  hasDateRangeFilter = true,
   onSort = () => { },
   onClearFilters = () => { },
 }, ref) => {
@@ -346,8 +348,10 @@ const DataGrid2 = React.forwardRef(({
 
   const [scrollYoffset, setScrollYoffset] = useState(0);
   return (
-    <div className={clsx('datagrid', classes.datagrid)} style={{...containerStyle}}>
+    <div className={clsx('datagrid', classes.datagrid)} style={{ ...containerStyle }}>
       <Datagrid2Toolbar
+        hasDateRangeFilter={hasDateRangeFilter}
+        hasSearchFilter={hasSearchFilter}
         tableProps={tableProps}
         dispatch={kaDispatch}
         columns={tableProps.columns}
@@ -360,12 +364,12 @@ const DataGrid2 = React.forwardRef(({
         totalCount={totalCount}
         loadedCount={dataGridState.rows.length}
         gridProps={gridProps}
-        onClearFilters={()=>onClearFilters()}
+        onClearFilters={() => onClearFilters()}
       />
       <div style={{ display: 'none' }}>{sortColumn}{sortDirection}</div>
       {dataGridState.loading ? <LinearProgress /> : <LinearProgress variant="determinate" value={0} />}
       <Table
-        style={{...style}}
+        style={{ ...style }}
         {...tableProps}
         dispatch={kaDispatch}
         virtualScrolling={{
@@ -378,13 +382,13 @@ const DataGrid2 = React.forwardRef(({
               ref: ref => addRowHeight(rowData, ref?.offsetHeight),
               onClick: (evt, extendedEvent) => {
                 const {
-                  childProps: {rowKeyValue},
+                  childProps: { rowKeyValue },
                   dispatch
                 } = extendedEvent
-                dispatch({type: ROW_SELECT, rowKeyValue})
+                dispatch({ type: ROW_SELECT, rowKeyValue })
               },
-              style:{
-                
+              style: {
+
               }
             })
           },
@@ -414,7 +418,7 @@ const DataGrid2 = React.forwardRef(({
                   zIndex: 11,
                   backgroundColor: theme.palette.grey[100],
                 }
-              }:{
+              } : {
                 style: {
                   ...column.style,
                   backgroundColor: theme.palette.grey[100],
@@ -429,12 +433,12 @@ const DataGrid2 = React.forwardRef(({
                   ...column.style,
                   position: 'sticky',
                   left: 0,
-                  backgroundColor: (highlightedRow === props?.rowData?.id) ? lighten(theme.palette.primary.light, .85): "#fff",
+                  backgroundColor: (highlightedRow === props?.rowData?.id) ? lighten(theme.palette.primary.light, .85) : "#fff",
                 }
               } : {
                 style: {
                   ...column.style,
-                  backgroundColor: (highlightedRow === props?.rowData?.id) ? fade(theme.palette.primary.light, .15): "#fff",
+                  backgroundColor: (highlightedRow === props?.rowData?.id) ? fade(theme.palette.primary.light, .15) : "#fff",
                   overflow: 'hidden'
                 }
               }
