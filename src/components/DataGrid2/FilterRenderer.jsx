@@ -115,12 +115,11 @@ function DateRangeFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
   return (
     <FormControl fullWidth className={classes.formControl}>
       <InputLabel>{filter?.label}</InputLabel>
-
       <LitePicker label="Date range"
         inline
         variant="standard"
         value={value}
-        onCancel={() => setAnchorEl(null)}
+        onCancel={() => onChange(null)}
         onValueChange={(val) => {
           onChange(val)
         }} />
