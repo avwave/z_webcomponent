@@ -12,7 +12,7 @@ import Truncate from 'react-truncate';
 import { actions as dataGridActions, DataGridContext } from '../DataGrid/DataGridContext';
 import { PortalCell } from '../DataGrid/PortalCell';
 import Datagrid2Toolbar from './Datagrid2Toolbar';
-import { AuocompleteFilterRenderer, OptionFilterRenderer, TextFilterRenderer } from './FilterRenderer';
+import { AuocompleteFilterRenderer, DateRangeFilterRenderer, OptionFilterRenderer, TextFilterRenderer } from './FilterRenderer';
 import './styles.scss';
 
 
@@ -201,6 +201,10 @@ const DataGrid2 = React.forwardRef(({
         case "autocomplete":
           return (args) => (
             <AuocompleteFilterRenderer {...args} filter={c?.filter} />
+          );
+        case "dateRange":
+          return (args) => (
+            <DateRangeFilterRenderer {...args} filter={c?.filter} />
           );
         default:
           return c?.filterRenderer

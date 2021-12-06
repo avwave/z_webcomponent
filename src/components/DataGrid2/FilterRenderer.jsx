@@ -14,6 +14,8 @@ import { Backspace, Close } from "@material-ui/icons";
 import { Autocomplete } from "@material-ui/lab";
 import clsx from "clsx";
 import React, { Fragment, useEffect, useState } from "react";
+import { DateTimeRangePicker } from "../DateTimeRangePicker";
+import { LitePicker } from "../DateTimeRangePicker/wrapper";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -91,7 +93,7 @@ function OptionFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
         value={value ?? ""}
         onChange={(e) => {
           onChange(e.target.value)
-          const item =filter.options.find(v=> v.value === e.target.value)
+          const item = filter.options.find(v => v.value === e.target.value)
           onChangeDisplay(item?.label)
         }}
       >
@@ -107,6 +109,25 @@ function OptionFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
     </FormControl>
   );
 }
+
+function DateRangeFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
+  const classes = useStyles();
+  return (
+    <FormControl fullWidth className={classes.formControl}>
+      <InputLabel>{filter?.label}</InputLabel>
+
+      <LitePicker label="Date range"
+        inline
+        variant="standard"
+        value={value}
+        onCancel={() => setAnchorEl(null)}
+        onValueChange={(val) => {
+          onChange(val)
+        }} />
+    </FormControl>
+  );
+}
+
 function AuocompleteFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
   const classes = useStyles();
   const [internalValues, setInternalValues] = useState(value);
@@ -121,64 +142,64 @@ function AuocompleteFilterRenderer({ onChange, onChangeDisplay, value, filter })
       filtered = filter?.options.find(v => value === v?.[filter?.valueField]);
     }
     setInternalValues(filtered);
-  }, [filter?.options, filter?.valueField, value]);
+  }, [filter?.multiple, filter?.options, filter?.valueField, value]);
 
   return (
-      <Autocomplete
-        open
-        disablePortal
-        fullWidth
-        classes={{
-          paper: classes.paper,
-          option: classes.option,
-          popperDisablePortal: classes.popperDisablePortal,
-        }}
-        value={internalValues ?? (filter?.multiple ? [] : '')}
-        onChange={(e, val) => {
-          setInternalValues(val);
-          if (filter?.multiple) {
-            onChange(val.map(v => v?.[filter.valueField]))
-            onChangeDisplay(val.map(v => v?.[filter.labelField]))
-          } else {
-            onChange(val?.[filter.valueField])
-            onChangeDisplay(val?.[filter.labelField])
-          }
-        }}
-        multiple={filter?.multiple}
-        options={filter?.options}
-        getOptionLabel={(option) => {
-          return option[filter?.labelField] ?? ""
-        }}
-        getOptionSelected={(option, t) => {
-          return option[filter?.valueField] === t[filter?.valueField]
-        }}
-        renderOption={(option, { selected }) => {
-          if (filter?.multiple) {
-            return (
-              <div className={clsx(classes.option, selected&&classes.selected)}>
-                <Checkbox color="primary" size="small" checked={selected} />
-                {option[filter?.renderLabel] ?? option[filter?.labelField]}
-              </div>
-            );
-          }
-          return <div className={clsx(classes.option, selected&&classes.selected)}>
-            {option[filter?.renderLabel] ?? option[filter?.labelField]}
-          </div>
-        }}
-        closeIcon={<Backspace fontSize="small" />}
-        renderInput={(iParams) => (
-          <TextField
-            {...iParams}
-            InputLabelProps={{
-              shrink: true,
-            }}
-            label={filter?.label}
-            placeholder={"type to search"}
-          />
-        )}
-      />
-    
+    <Autocomplete
+      open
+      disablePortal
+      fullWidth
+      classes={{
+        paper: classes.paper,
+        option: classes.option,
+        popperDisablePortal: classes.popperDisablePortal,
+      }}
+      value={internalValues ?? (filter?.multiple ? [] : '')}
+      onChange={(e, val) => {
+        setInternalValues(val);
+        if (filter?.multiple) {
+          onChange(val.map(v => v?.[filter.valueField]))
+          onChangeDisplay(val.map(v => v?.[filter.labelField]))
+        } else {
+          onChange(val?.[filter.valueField])
+          onChangeDisplay(val?.[filter.labelField])
+        }
+      }}
+      multiple={filter?.multiple}
+      options={filter?.options}
+      getOptionLabel={(option) => {
+        return option[filter?.labelField] ?? ""
+      }}
+      getOptionSelected={(option, t) => {
+        return option[filter?.valueField] === t[filter?.valueField]
+      }}
+      renderOption={(option, { selected }) => {
+        if (filter?.multiple) {
+          return (
+            <div className={clsx(classes.option, selected && classes.selected)}>
+              <Checkbox color="primary" size="small" checked={selected} />
+              {option[filter?.renderLabel] ?? option[filter?.labelField]}
+            </div>
+          );
+        }
+        return <div className={clsx(classes.option, selected && classes.selected)}>
+          {option[filter?.renderLabel] ?? option[filter?.labelField]}
+        </div>
+      }}
+      closeIcon={<Backspace fontSize="small" />}
+      renderInput={(iParams) => (
+        <TextField
+          {...iParams}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          label={filter?.label}
+          placeholder={"type to search"}
+        />
+      )}
+    />
+
   )
 }
 
-export { TextFilterRenderer, OptionFilterRenderer, AuocompleteFilterRenderer };
+export { TextFilterRenderer, OptionFilterRenderer, AuocompleteFilterRenderer, DateRangeFilterRenderer};
