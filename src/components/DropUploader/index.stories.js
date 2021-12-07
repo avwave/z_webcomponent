@@ -1,32 +1,35 @@
 import { Typography } from "@material-ui/core";
 import React from "react";
-import { ProgressContainer } from ".";
+import { DropUploader } from ".";
 
-const ProgressContainerStory = {
-  component: ProgressContainer,
-  title: "ProgressContainer",
+const DropUploaderStory = {
+  component: DropUploader,
+  title: "DropUploader",
   argTypes: {
     variant: {
       control: {
         type: "select",
-        options: ["primary", "secondary", "error", "warning", "info", "success"],
+        options: [
+          "primary",
+          "secondary",
+          "error",
+          "warning",
+          "info",
+          "success",
+        ],
       },
     },
   },
 };
 
-export default ProgressContainerStory;
+export default DropUploaderStory;
 
-const DefaultStory = ({...args}) => (
-  <ProgressContainer {...args}>
-    <Typography>{args.progress} %</Typography>
-  </ProgressContainer>
-);
+const DefaultStory = ({ ...args }) => <DropUploader {...args} />;
 
 export const Default = DefaultStory.bind({});
 Default.args = {
   progress: 75,
-}
+};
 
 export const Variant = DefaultStory.bind({});
 Variant.args = {
