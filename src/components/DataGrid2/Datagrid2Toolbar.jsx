@@ -162,7 +162,9 @@ function DataGrid2Toolbar({
   tableProps,
   gridProps,
   onClearFilters = () => { },
-  dispatch
+  dispatch,
+  hasSearchFilter = true,
+  hasDateRangeFilter = true
 }) {
   const [columnAnchor, setColumnAnchor] = useState();
   const [filterAnchor, setFilterAnchor] = useState();
@@ -269,39 +271,44 @@ function DataGrid2Toolbar({
             <>
               <div className={clsx(classes.chips, classes.filterSection)}>
                 {renderFilters}
-                <DateTimeRangePicker
-                  containerProps={{
-                    className: classes.dateTimeRangePicker
-                  }}
-                  label="Date range"
-                  inline
+                {hasDateRangeFilter && (
 
-                  variant="standard"
-                  value={filterValues}
-                  onChange={debounce((v) => {
-                    setFilterValues({ ...filterValues, ...v });
-                  }, 500)} />
+                  <DateTimeRangePicker
+                    containerProps={{
+                      className: classes.dateTimeRangePicker
+                    }}
+                    label="Date range"
+                    inline
+
+                    variant="standard"
+                    value={filterValues}
+                    onChange={debounce((v) => {
+                      setFilterValues({ ...filterValues, ...v });
+                    }, 500)} />
+                )}
               </div>
-              <div className={clsx(classes.filterSection, classes.paddedBottom, classes.filterSectionSearch)}>
-                <TextField
-                  fullWidth
-                  size="small"
-                  variant="outlined"
-                  InputProps={{
-                    endAdornment: <InputAdornment position="end"><Search /></InputAdornment>,
-                    className: classes.heightMax
-                  }}
-                  InputLabelProps={{
-                    shrink: true
-                  }}
-                  placeholder="Search"
-                  value={searchField}
-                  onChange={event => {
-                    setSearchField(event.target.value)
-                    debounceSearch(event)
-                  }}
-                />
-              </div>
+              {hasSearchFilter && (
+                <div className={clsx(classes.filterSection, classes.paddedBottom, classes.filterSectionSearch)}>
+                  <TextField
+                    fullWidth
+                    size="small"
+                    variant="outlined"
+                    InputProps={{
+                      endAdornment: <InputAdornment position="end"><Search /></InputAdornment>,
+                      className: classes.heightMax
+                    }}
+                    InputLabelProps={{
+                      shrink: true
+                    }}
+                    placeholder="Search"
+                    value={searchField}
+                    onChange={event => {
+                      setSearchField(event.target.value)
+                      debounceSearch(event)
+                    }}
+                  />
+                </div>
+              )}
               <div className={clsx(classes.filterSection, classes.paddedBottom)}>
                 {!isDeeplyEmpty(filterValues) && (
                   <Button variant="contained" color="secondary" onClick={() => {
