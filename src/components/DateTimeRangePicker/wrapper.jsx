@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => {
     },
     rangeSelectContainer: {
       display: 'flex',
-      flexDirection: 'row',
+      flexDirection: 'column',
       alignItems: 'center',
     },
     bottomBar: {
@@ -249,14 +249,14 @@ const LitePicker = ({ onCancel = () => { }, onValueChange = () => { }, container
         />
       </Grid>
       <Grid container item xs={12} spacing={2}>
-        <Grid item xs={2} className={classes.rangeSelectContainer} >
-          <ButtonGroup disableElevation variant="text" orientation="vertical">
+        <Grid item xs={12} className={classes.calendarHolder} ref={parentElement} />
+        <Grid item xs={12} className={classes.rangeSelectContainer} >
+          <ButtonGroup disableElevation variant="text" size="small" >
             {Object.entries(RANGE_CONST).map(([key, value]) =>
               <Button className={classes.rangeButton} key={key} size="small" onClick={() => setRange(value)}>{value}</Button>
             )}
           </ButtonGroup>
         </Grid>
-        <Grid item xs={10} className={classes.calendarHolder} ref={parentElement} />
         <Grid item xs={12} className={classes.bottomBar}>
           <Button variant="text" color="inherit"
             onClick={() => onCancel()

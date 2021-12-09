@@ -67,6 +67,8 @@ const DefaultStory = ({ ...args }) => {
 
 export const Default = DefaultStory.bind({});
 Default.args = {
+  hasDateRangeFilter: true,
+  hasSearchFilter: true,
   rows: rows,
   columns: columnData,
   gridProps: {

@@ -65,10 +65,10 @@ const columnData = [
   {
     key: "col9Type",
     colId: "col9",
-    name: "Custom Filter",
+    name: "Daterange Filter",
     sortable: false,
     filter: {
-      type: "custom",
+      type: "dateRange",
       default: null,
     },
     filterRenderer: ({ onChange, value }) => {
