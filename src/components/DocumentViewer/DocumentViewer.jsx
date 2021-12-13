@@ -29,7 +29,9 @@ const DocumentViewer = ({
     if (data) {
       file = { ...file, data }
     } else if (url) {
-      const contentType = mime.lookup(url);
+      const hrefparse = document.createElement('a')
+      hrefparse.href = url
+      const contentType = mime.lookup(hrefparse.pathname);
       file = { ...file, mimeType: contentType, url }
     }
     return file
