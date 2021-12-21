@@ -164,7 +164,7 @@ Default.args = {
       type: "time",
       label: "Start-Time",
       initialValues: new Date("2021-06-10T12:00:00"),
-      validator: () => Yup.date(),
+      validator: () => Yup.date().required(),
       onChange: (field, data) => {},
       
     },
@@ -184,7 +184,7 @@ Default.args = {
         labelField: "label",
         valueField: "value",
       },
-      validator: () => Yup.number(), //required
+      validator: () => Yup.number().required(), //required
     },
     multipleSelection: {
       type: "select",
@@ -532,7 +532,7 @@ export const Nested = NestedStory.bind({});
 Nested.args = {
   ...Default.args,
   formId:'nested',
-  formReadOnly: true,
+  formReadOnly: false,
   formLayout: [["form1", "form2"], "subform"],
   form: {
     form1: {
@@ -540,7 +540,7 @@ Nested.args = {
       label: "form 1",
       initialValues: "",
       forceColumnWidth: 6,
-      validator: () => Yup.string().nullable(),
+      validator: () => Yup.string().required(),
     },
     form2: {
       type: "text",
@@ -558,10 +558,10 @@ Nested.args = {
       }],
       //note: only root level form nodes can have validation
       validator: () =>
-        Yup.array().nullable().of(
+        Yup.array().of(
           Yup.object().shape({
-            subform1: Yup.string().nullable(),
-            subform2: Yup.string().nullable(),
+            subform1: Yup.string().nullable().required(),
+            subform2: Yup.string().nullable().required(),
             subsubform: Yup.array().of(
               Yup.object().shape({
                 subsubform1: Yup.array(),

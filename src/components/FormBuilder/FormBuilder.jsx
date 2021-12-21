@@ -167,6 +167,9 @@ const FormFieldSet = ({
         };
       let formValue = get(formik.values, fieldName)
       let options = fieldParams.options
+      const isTouched = get(formik.touched, fieldName)
+      const isError = get(formik.errors, fieldName)
+      
       if (fieldParams.relatedSource) {
         options = get(formik.values, `${fieldSource}.${fieldParams.relatedSource}`, fieldParams.options)
       }
