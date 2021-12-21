@@ -1,16 +1,15 @@
 import { Avatar, Chip, makeStyles } from '@material-ui/core';
-import { PropertyKeys } from 'ag-grid-community';
-import React, { useEffect, useMemo, useState } from 'react';
+import React from 'react';
 
 const useStyles = makeStyles((theme) => {
   return {
-    root:{
+    root: {
       flexFlow: 'row-reverse',
       paddingRight: theme.spacing(1),
 
     },
     avatar: {
-      width:'auto !important',
+      width: 'auto !important',
       minWidth: '1em !important',
       borderRadius: '1em/50%',
       paddingLeft: '0.5rem',
@@ -30,15 +29,15 @@ const PillSelect = ({ label, onClick = () => { }, badgeContent, ...rest }) => {
         avatar: classes.avatar,
         label: classes.label,
       }}
-      
+
       label={label}
       onClick={() => onClick()}
       avatar={<Avatar>{badgeContent}</Avatar>}
       variant="outlined"
-      
+
       {...rest}
     />
   )
 }
 
-export { PillSelect }
+export { PillSelect };

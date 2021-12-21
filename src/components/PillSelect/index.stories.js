@@ -1,4 +1,3 @@
-import { Typography } from "@material-ui/core";
 import React from "react";
 import { PillSelect } from "./PillSelect";
 
@@ -29,9 +28,3 @@ Default.args = {
   variant: "default"
 
 }
-
-export const Variant = DefaultStory.bind({});
-Variant.args = {
-  label: "Variant Label",
-  badgeContent: "999999"
-};
