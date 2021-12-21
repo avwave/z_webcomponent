@@ -167,8 +167,10 @@ const FormFieldSet = ({
         };
       let formValue = get(formik.values, fieldName)
       let options = fieldParams.options
-      const isTouched = get(formik.touched, fieldName)
-      const isError = get(formik.errors, fieldName)
+      const isTouched = Boolean(get(formik.touched, fieldName) || get(formik.touched, fieldSource))
+      const isError = Boolean(get(formik.errors, fieldName))
+      const hasError = Boolean(isTouched && isError)
+
       
       if (fieldParams.relatedSource) {
         options = get(formik.values, `${fieldSource}.${fieldParams.relatedSource}`, fieldParams.options)
@@ -214,10 +216,7 @@ const FormFieldSet = ({
                 onChangeOverride(val, value)
               }}
               disabled={fieldParams.readOnly || formReadOnly}
-              error={
-                get(formik.touched, fieldName) &&
-                Boolean(get(formik.errors, fieldName))
-              }
+              error={hasError}
               InputLabelProps={{
                 shrink: true,
               }}
@@ -246,10 +245,7 @@ const FormFieldSet = ({
                 onChangeOverride(evt)
               }}
               disabled={fieldParams.readOnly || formReadOnly}
-              error={
-                get(formik.touched, fieldName) &&
-                Boolean(get(formik.errors, fieldName))
-              }
+              error={hasError}
               InputLabelProps={{
                 shrink: true,
               }}
@@ -283,10 +279,7 @@ const FormFieldSet = ({
                 label={`${fieldParams.label} ${isRequired ? '*' : ''}`}
                 value={get(formik.values, fieldName)}
                 onChange={onChangeOverride}
-                error={
-                  get(formik.touched, fieldName) &&
-                  Boolean(get(formik.errors, fieldName))
-                }
+                error={hasError}
                 disabled={fieldParams.readOnly || formReadOnly}
                 {...fieldParams?.fieldProps}
               />
@@ -303,10 +296,7 @@ const FormFieldSet = ({
                 label={`${fieldParams.label} ${isRequired ? '*' : ''}`}
                 value={get(formik.values, fieldName)}
                 onChange={onChangeOverride}
-                error={
-                  get(formik.touched, fieldName) &&
-                  Boolean(get(formik.errors, fieldName))
-                }
+                error={hasError}
                 SelectProps={{
                   multiple: fieldParams.settings?.multiple,
                   renderValue: (selected, b) => {
@@ -502,10 +492,7 @@ const FormFieldSet = ({
                   label={`${fieldParams.label} ${isRequired ? '*' : ''}`}
                   placeholder={fieldParams.placeholder ?? "type to search"}
                   variant={variant}
-                  error={
-                    get(formik.touched, fieldName) &&
-                    Boolean(get(formik.errors, fieldName))
-                  }
+                  error={hasError}
                 />
               )}
               {...fieldParams?.fieldProps}
@@ -651,10 +638,7 @@ const FormFieldSet = ({
                 fullWidth
                 component="fieldset"
                 variant={variant}
-                error={
-                  get(formik.touched, layout) &&
-                  Boolean(get(formik.errors, layout))
-                }
+                error={Boolean(err)}
               >
                 {renderField(layout, field, fieldName)}
                 <FormHelperText>
