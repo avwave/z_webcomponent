@@ -482,7 +482,7 @@ const NestedStory = ({ ...args }) => {
               })
             }
           >
-            Nested
+            add
           </Button>
         </ButtonGroup>
       )}
@@ -553,8 +553,13 @@ Nested.args = {
       label: "subform",
       inline:true,
       initialValues: [{
-          subform1:2,
-          subform2:2,
+          subform1:"sf1",
+          subform2:"sf2",
+          subsubform:[{
+            subsubform1:"ssf1",
+          },{
+            subsubform1:"ssf1-2",
+          }]
       }],
       //note: only root level form nodes can have validation
       validator: () =>
