@@ -18,7 +18,7 @@ initStoryshots({
   test: snapshotWithOptions((story) => ({
     createNodeMock: (element) => {
         if (element.type === 'div') {
-          return {scrollHeight: 0};
+          // return {scrollHeight: 0};
           // return document.createElement('div');
         }
         if (element.type === 'input') {

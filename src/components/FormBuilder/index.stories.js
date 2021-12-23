@@ -1,27 +1,23 @@
+import { Avatar, Button, ButtonGroup, IconButton } from "@material-ui/core";
+import { Close, MobileFriendly, PhoneAndroid } from "@material-ui/icons";
+import { useFormikContext } from "formik";
 import React, { useState } from "react";
 import * as Yup from "yup";
-
-import { action, actions } from "@storybook/addon-actions";
 import { FormBuilder } from ".";
-import { min } from "moment";
-import {
-  Avatar,
-  Button,
-  ButtonGroup,
-  Card,
-  IconButton,
-  ListItemText,
-} from "@material-ui/core";
-import { AccountTree, Close, MobileFriendly, PhoneAndroid } from "@material-ui/icons";
-import { useFormikContext } from "formik";
 
 const FormConsumer = (props) => {
   const formikObject = useFormikContext();
-  const {values, initialValues, setValues, setFieldValue, ...formik} = formikObject
+  const {
+    values,
+    initialValues,
+    setValues,
+    setFieldValue,
+    ...formik
+  } = formikObject;
 
   React.useEffect(() => {
-      const dirty = formik.dirty
-      console.log("📢[index.stories.js:356]: ", values, formik?.errors);
+    const dirty = formik.dirty;
+    console.log("📢[index.stories.js:356]: ", values, formik?.errors);
   }, [formik.dirty, values, formik]);
   return null;
 };
@@ -54,12 +50,16 @@ const FormBuilderStory = {
 
 export default FormBuilderStory;
 
-const DefaultStory = ({ ...args }) => <FormBuilder {...args} ><FormConsumer/></FormBuilder>;
+const DefaultStory = ({ ...args }) => (
+  <FormBuilder {...args}>
+    <FormConsumer />
+  </FormBuilder>
+);
 
 export const Default = DefaultStory.bind({});
 Default.args = {
   loading: false,
-  formId:'default',
+  formId: "default",
   reverse: true,
   formLabel: "primary",
   formReadOnly: false,
@@ -164,9 +164,8 @@ Default.args = {
       type: "time",
       label: "Start-Time",
       initialValues: new Date("2021-06-10T12:00:00"),
-      validator: () => Yup.date(),
+      validator: () => Yup.date().required(),
       onChange: (field, data) => {},
-      
     },
     selection: {
       type: "select",
@@ -184,7 +183,7 @@ Default.args = {
         labelField: "label",
         valueField: "value",
       },
-      validator: () => Yup.number(), //required
+      validator: () => Yup.number().required(), //required
     },
     multipleSelection: {
       type: "select",
@@ -278,8 +277,6 @@ Default.args = {
   },
 };
 
-
-
 const ModifyStory = ({ ...args }) => {
   const [formState, setFormState] = useState({});
 
@@ -312,29 +309,29 @@ const ModifyStory = ({ ...args }) => {
 export const Modify = ModifyStory.bind({});
 Modify.args = {
   ...Default.args,
-  formId:'modify',
+  formId: "modify",
 };
 
 export const Dates = DefaultStory.bind({});
 Dates.args = {
   ...Default.args,
   formLayout: [
-    ["date", "time"], 
+    ["date", "time"],
     ["datetime", "daterange"],
   ],
   form: {
     daterange: {
       type: "dateRange",
       label: "Ranges",
-      initialValues: {startDate:new Date(
-        'November 17, 2020 03:24:00'
-      ), endDate: new Date(
-        'December 17, 2020 07:24:00'
-      )},
-      validator: () => Yup.object().shape({
-        startDate: Yup.date(),
-        endDate: Yup.date(),
-      }), //required
+      initialValues: {
+        startDate: new Date("November 17, 2020 03:24:00"),
+        endDate: new Date("December 17, 2020 07:24:00"),
+      },
+      validator: () =>
+        Yup.object().shape({
+          startDate: Yup.date(),
+          endDate: Yup.date(),
+        }), //required
     },
     date: {
       type: "date",
@@ -363,52 +360,65 @@ Dates.args = {
       onChange: (field, data) => {},
     },
   },
-  formId:'dates',
+  formId: "dates",
 };
 
 export const Phone = DefaultStory.bind({});
 Phone.args = {
   ...Default.args,
-  formLayout: [
-    ["phone", "fillPhone"],
-  ],
+  formLayout: [["phone", "fillPhone"]],
   form: {
     phone: {
       type: "phone",
       label: "Phone",
       initialValues: "",
-      validator: () => Yup.string().required().nullable().max(15).matches(/^\+(63\d{10}|(?!63)\d{1,3}\d{10})$/, 'invalid phone number format').label(' '),
+      validator: () =>
+        Yup.string()
+          .required()
+          .nullable()
+          .max(15)
+          .matches(
+            /^\+(63\d{10}|(?!63)\d{1,3}\d{10})$/,
+            "invalid phone number format"
+          )
+          .label(" "),
       onChange: (field, data) => {
         console.log("📢[index.stories.js:101]:", field, data, data);
       },
-      icon: <MobileFriendly/>
+      icon: <MobileFriendly />,
     },
     fillPhone: {
       type: "phone",
       label: "Phone",
       initialValues: "+639166831131",
-      validator: () => Yup.string().required().nullable().max(15).matches(/^\+(63\d{10}|(?!63)\d{1,3}\d{10})$/, 'invalid phone number format').label(' '),
+      validator: () =>
+        Yup.string()
+          .required()
+          .nullable()
+          .max(15)
+          .matches(
+            /^\+(63\d{10}|(?!63)\d{1,3}\d{10})$/,
+            "invalid phone number format"
+          )
+          .label(" "),
       onChange: (field, data) => {
         console.log("📢[index.stories.js:101]:", field, data, data);
       },
-      icon: <PhoneAndroid/>
+      icon: <PhoneAndroid />,
     },
-    
   },
-  formId:'phone',
+  formId: "phone",
 };
 
 export const Checkboxes = DefaultStory.bind({});
 Checkboxes.args = {
   ...Default.args,
-  formLayout: [
-    "checkboxes"
-  ],
+  formLayout: ["checkboxes"],
   form: {
     checkboxes: {
       type: "checkboxes",
       label: "CheckBoxes",
-      initialValues: ['2', '5'],
+      initialValues: ["2", "5"],
       options: [
         { id: "1", label: "one" },
         { id: "2", label: "two" },
@@ -421,45 +431,40 @@ Checkboxes.args = {
         labelField: "label",
         valueField: "id",
         inline: true,
-        labelPlacement: 'end'
+        labelPlacement: "end",
       },
 
       validator: () => Yup.array(), //required
     },
   },
-  formId:'chkboxes',
-  
+  formId: "chkboxes",
 };
 
 export const DateRange = DefaultStory.bind({});
 DateRange.args = {
   ...Default.args,
-  formLayout: [
-    "daterange"
-  ],
+  formLayout: ["daterange"],
   form: {
     daterange: {
       type: "dateRange",
       label: "Ranges",
       initialValues: {},
-      validator: () => Yup.object().shape({
-        startDate: Yup.date(),
-        endDate: Yup.date(),
-      }), //required
+      validator: () =>
+        Yup.object().shape({
+          startDate: Yup.date(),
+          endDate: Yup.date(),
+        }), //required
     },
   },
-  formId:'daterange',
-  
+  formId: "daterange",
 };
 
 export const Persist = DefaultStory.bind({});
 Persist.args = {
   ...Default.args,
-  formId:'persist',
-  usePersist: true
+  formId: "persist",
+  usePersist: true,
 };
-
-
 
 const NestedStory = ({ ...args }) => {
   const [formState, setFormState] = useState({});
@@ -482,12 +487,12 @@ const NestedStory = ({ ...args }) => {
               })
             }
           >
-            Nested
+            add
           </Button>
         </ButtonGroup>
       )}
     >
-      <FormConsumer/>
+      <FormConsumer />
     </FormBuilder>
   );
 };
@@ -517,13 +522,13 @@ export const Decouple = DecoupleStory.bind({});
 Decouple.args = {
   ...Default.args,
   decouple: true,
-  formId:'decouple',
+  formId: "decouple",
 };
 
 export const Reversed = DecoupleStory.bind({});
 Reversed.args = {
   ...Default.args,
-  formId:'reversed',
+  formId: "reversed",
   reverse: true,
   additionalActions: () => {},
 };
@@ -531,8 +536,8 @@ Reversed.args = {
 export const Nested = NestedStory.bind({});
 Nested.args = {
   ...Default.args,
-  formId:'nested',
-  formReadOnly: true,
+  formId: "nested",
+  formReadOnly: false,
   formLayout: [["form1", "form2"], "subform"],
   form: {
     form1: {
@@ -540,7 +545,7 @@ Nested.args = {
       label: "form 1",
       initialValues: "",
       forceColumnWidth: 6,
-      validator: () => Yup.string().nullable(),
+      validator: () => Yup.string().required(),
     },
     form2: {
       type: "text",
@@ -551,17 +556,27 @@ Nested.args = {
     subform: {
       type: "fieldarray",
       label: "subform",
-      inline:true,
-      initialValues: [{
-          subform1:2,
-          subform2:2,
-      }],
+      inline: true,
+      initialValues: [
+        {
+          subform1: "sf1",
+          subform2: "sf2",
+          subsubform: [
+            {
+              subsubform1: "ssf1",
+            },
+            {
+              subsubform1: "ssf1-2",
+            },
+          ],
+        },
+      ],
       //note: only root level form nodes can have validation
       validator: () =>
-        Yup.array().nullable().of(
+        Yup.array().of(
           Yup.object().shape({
-            subform1: Yup.string().nullable(),
-            subform2: Yup.string().nullable(),
+            subform1: Yup.string().nullable().required(),
+            subform2: Yup.string().nullable().required(),
             subsubform: Yup.array().of(
               Yup.object().shape({
                 subsubform1: Yup.array(),
