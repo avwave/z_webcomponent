@@ -281,8 +281,13 @@ const DataGrid2 = React.forwardRef(({
 
 
   useEffect(() => {
-    kaDispatch(updateData([...dataGridState.rows]))
-  }, [dataGridState.rows, kaDispatch]);
+    if (!isEmpty(dataGridState.rows)) {
+      kaDispatch(updateData(dataGridState.rows))
+    }else {
+      kaDispatch(updateData([]))
+    }
+   
+  }, [dataGridState.rows]);
 
   // useEffect(() => {
   //   dataGridState.loading ? kaDispatch(showLoading()) : kaDispatch(hideLoading())
