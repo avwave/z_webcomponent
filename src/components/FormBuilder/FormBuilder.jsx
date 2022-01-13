@@ -32,7 +32,7 @@ import { Autocomplete } from "@material-ui/lab";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input/input";
 import { LocalizationProvider } from "@material-ui/pickers/LocalizationProvider";
-import DateFnsAdapter from '@material-ui/pickers/adapter/date-fns';
+import MomentUtils from '@material-ui/pickers/adapter/moment';
 import { FieldArray, Formik, getIn } from "formik";
 import { get, isEmpty } from "lodash";
 import PropTypes from "prop-types";
@@ -795,11 +795,9 @@ const FormFieldSet = ({
   ]);
 
   return (
-    // <MuiPickersUtilsProvider utils={DateFnsUtils}>
-    <LocalizationProvider dateAdapter={DateFnsAdapter}>
+    
       <form onSubmit={formik.handleSubmit}>{buildFormFactor}</form>
-    </LocalizationProvider>
-    // </MuiPickersUtilsProvider>
+    
   );
 };
 
