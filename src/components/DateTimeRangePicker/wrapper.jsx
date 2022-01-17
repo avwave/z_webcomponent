@@ -1,6 +1,6 @@
 import { Button, ButtonGroup, Grid, makeStyles, TextField } from '@material-ui/core';
 import { DatePicker, LocalizationProvider } from '@material-ui/pickers';
-import MomentUtils from '@material-ui/pickers/adapter/date-fns';
+import MomentUtils from '@material-ui/pickers/adapter/moment';
 import LitePickerLib from 'litepicker/dist/nocss/litepicker.umd';
 // import NoCssLP from 'litepicker/dist/nocss/litepicker.umd';
 import 'litepicker/dist/plugins/mobilefriendly';
