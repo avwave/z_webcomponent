@@ -58,6 +58,7 @@ const DefaultStory = ({ ...args }) => (
 
 export const Default = DefaultStory.bind({});
 Default.args = {
+  formInline: true,
   loading: false,
   formId: "default",
   reverse: true,
