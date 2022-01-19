@@ -32,7 +32,7 @@ import { Autocomplete } from "@material-ui/lab";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input/input";
 import { LocalizationProvider } from "@material-ui/pickers/LocalizationProvider";
-import DateFnsAdapter from '@material-ui/pickers/adapter/date-fns';
+import MomentUtils from '@material-ui/pickers/adapter/moment';
 import { FieldArray, Formik, getIn } from "formik";
 import { get, isEmpty } from "lodash";
 import PropTypes from "prop-types";
@@ -84,6 +84,18 @@ const useStyles = makeStyles((theme) => ({
   },
   inlineDelete: {
     alignSelf: "start"
+  },
+  formInline: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignContent: 'center',
+
+  },
+  inlineLabel: {
+    minWidth: '150px',
+    alignSelf: 'center',
+    fontWeight: 'bolder',
+    paddingBottom: theme.spacing(2),
   }
 }));
 
@@ -110,6 +122,7 @@ const FormFieldSet = ({
   hasReset = true,
   loading = false,
   onChange,
+  formInline = false,
 }) => {
   const classes = useStyles();
   const formcontext = useContext(FormContext);
@@ -171,7 +184,7 @@ const FormFieldSet = ({
       const isError = Boolean(get(formik.errors, fieldName))
       const hasError = Boolean(isTouched && isError)
 
-      
+
       if (fieldParams.relatedSource) {
         options = get(formik.values, `${fieldSource}.${fieldParams.relatedSource}`, fieldParams.options)
       }
@@ -191,7 +204,7 @@ const FormFieldSet = ({
             <TextField
               name={fieldName}
               type={fieldParams.type}
-              label={`${fieldParams.label} ${isRequired ? '*' : ''}`}
+              label={formInline ? "" : `${fieldParams.label} ${isRequired ? '*' : ''}`}
               value={formValue}
               onChange={(evt, value) => {
                 let val = evt?.target?.value
@@ -239,7 +252,7 @@ const FormFieldSet = ({
             <TextField
               name={fieldName}
               type="tel"
-              label={`${fieldParams.label} ${isRequired ? '*' : ''}`}
+              label={formInline ? "" : `${fieldParams.label} ${isRequired ? '*' : ''}`}
               value={formValue}
               onChange={(evt, value) => {
                 onChangeOverride(evt)
@@ -270,13 +283,12 @@ const FormFieldSet = ({
         case "dateRange":
           return (
             <>
-              <InputLabel shrink htmlFor="component-simple">Name</InputLabel>
               <DateTimeRangePicker
                 inline={fieldParams.inline}
                 form
                 name={fieldName}
                 variant={variant}
-                label={`${fieldParams.label} ${isRequired ? '*' : ''}`}
+                label={formInline ? "" : `${fieldParams.label} ${isRequired ? '*' : ''}`}
                 value={get(formik.values, fieldName)}
                 onChange={onChangeOverride}
                 error={hasError}
@@ -293,7 +305,7 @@ const FormFieldSet = ({
                 variant={variant}
                 fullWidth
                 select
-                label={`${fieldParams.label} ${isRequired ? '*' : ''}`}
+                label={formInline ? "" : `${fieldParams.label} ${isRequired ? '*' : ''}`}
                 value={get(formik.values, fieldName)}
                 onChange={onChangeOverride}
                 error={hasError}
@@ -368,7 +380,7 @@ const FormFieldSet = ({
                   }
                   formik.setFieldValue(fieldName, val);
                 }}
-                label={`${fieldParams.label} ${isRequired ? '*' : ''}`}
+                label={formInline ? "" : `${fieldParams.label} ${isRequired ? '*' : ''}`}
                 disabled={fieldParams.readOnly || formReadOnly}
                 {...fieldParams?.fieldProps}
               />
@@ -378,7 +390,7 @@ const FormFieldSet = ({
         case "radio":
           return (
             <>
-              <FormLabel component="legend">{`${fieldParams.label} ${isRequired ? '*' : ''}`}</FormLabel>
+              <FormLabel component="legend">{formInline ? "" : `${fieldParams.label} ${isRequired ? '*' : ''}`}</FormLabel>
               <RadioGroup
                 row={fieldParams.settings.inline}
                 name={fieldName}
@@ -403,7 +415,7 @@ const FormFieldSet = ({
         case "checkboxes":
           return (
             <>
-              <FormLabel component="legend">{`${fieldParams.label} ${isRequired ? '*' : ''}`}</FormLabel>
+              <FormLabel component="legend">{formInline ? "" : `${fieldParams.label} ${isRequired ? '*' : ''}`}</FormLabel>
               <FormGroup
                 row={fieldParams.settings.inline}
                 // name={fieldName}
@@ -443,7 +455,7 @@ const FormFieldSet = ({
               disabled={fieldParams.readOnly || formReadOnly}
               disableCloseOnSelect
               name={fieldName}
-              label={`${fieldParams.label} ${isRequired ? '*' : ''}`}
+              label={formInline ? "" : `${fieldParams.label} ${isRequired ? '*' : ''}`}
               value={get(formik.values, fieldName)}
               onChange={(evt, val) => {
                 if (fieldParams.onChange) {
@@ -489,7 +501,7 @@ const FormFieldSet = ({
                   //       },
                   //     }
                   //   : {})}
-                  label={`${fieldParams.label} ${isRequired ? '*' : ''}`}
+                  label={formInline ? "" : `${fieldParams.label} ${isRequired ? '*' : ''}`}
                   placeholder={fieldParams.placeholder ?? "type to search"}
                   variant={variant}
                   error={hasError}
@@ -514,7 +526,7 @@ const FormFieldSet = ({
                               {!fieldParams.inline &&
                                 <Box className={classes.subformHeader} >
                                   <Typography variant="body2" className={classes.subformHeaderTitle}>
-                                    {`${fieldParams.label} ${isRequired ? '*' : ''}`}
+                                    {formInline ? "" : `${fieldParams.label} ${isRequired ? '*' : ''}`}
                                   </Typography>
                                   {
                                     formReadOnly ? null :
@@ -603,6 +615,11 @@ const FormFieldSet = ({
 
   const buildComponent = useCallback(
     (layout, formParams, colCount, index, fieldName) => {
+      let isRequired = !!getIn(validationSchema?.fields, layout)?.tests?.find(
+        testName => {
+          return testName?.OPTIONS?.name === 'required'
+        }
+      )
       if (Array.isArray(layout)) {
         return (
           <Grid key={`container-${index}`} container spacing={2}>
@@ -622,6 +639,7 @@ const FormFieldSet = ({
         if (fieldName) {
           layout = `${fieldName}.${layout}`;
         }
+        const isFormInline = formInline && field.type !== 'component'
         if (field) {
           const err = get(formik.touched, layout) && get(formik.errors, layout);
           const growFactor = ((field.forceColumnWidth ?? 0) === 0) ? {} : { sm: field.forceColumnWidth }
@@ -633,31 +651,27 @@ const FormFieldSet = ({
               xs
               {...growFactor}
             >
-              <FormControl
-                className={classes.controlContainer}
-                fullWidth
-                component="fieldset"
-                variant={variant}
-                error={Boolean(err)}
-              >
-                {renderField(layout, field, fieldName)}
-                <FormHelperText>
-                  {!Array.isArray(err) ? err : ""}
-                </FormHelperText>
-              </FormControl>
+              <div className={isFormInline ? classes.formInline : ""}>
+                {isFormInline && <Typography color="textSecondary" variant="caption" className={classes.inlineLabel}>{field?.label}{isRequired ? '*' : ''}</Typography>}
+                <FormControl
+                  className={classes.controlContainer}
+                  fullWidth
+                  component="fieldset"
+                  variant={variant}
+                  error={Boolean(err)}
+                >
+                  {renderField(layout, field, fieldName)}
+                  <FormHelperText>
+                    {!Array.isArray(err) ? err : ""}
+                  </FormHelperText>
+                </FormControl>
+              </div>
             </Grid>
           );
         }
       }
     },
-    [
-      classes.hidden,
-      classes.controlContainer,
-      formik.errors,
-      formik.touched,
-      renderField,
-      variant,
-    ]
+    [validationSchema?.fields, formik.touched, formik.errors, classes.hidden, classes.formInline, classes.inlineLabel, classes.controlContainer, formInline, variant, renderField]
   );
 
   const buildFields = useCallback(() => {
@@ -795,11 +809,9 @@ const FormFieldSet = ({
   ]);
 
   return (
-    // <MuiPickersUtilsProvider utils={DateFnsUtils}>
-    <LocalizationProvider dateAdapter={DateFnsAdapter}>
+    
       <form onSubmit={formik.handleSubmit}>{buildFormFactor}</form>
-    </LocalizationProvider>
-    // </MuiPickersUtilsProvider>
+    
   );
 };
 
@@ -817,6 +829,7 @@ const FormBuilder = (props) => {
     usePersist = false,
     onPersistLoad = () => { },
     onChange = () => { },
+    formInline = false,
   } = props;
 
   const validationSchema = useMemo(() => {
@@ -868,6 +881,7 @@ const FormBuilder = (props) => {
           >
             <FormFieldSet
               {...props}
+              formInline={formInline}
               onChange={(values) => onChange(values)}
               isSubForm={false}
             />

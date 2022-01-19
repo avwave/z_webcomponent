@@ -1,14 +1,14 @@
+import { Button, ButtonGroup, Grid, makeStyles, TextField } from '@material-ui/core';
+import { DatePicker, LocalizationProvider } from '@material-ui/pickers';
+import MomentUtils from '@material-ui/pickers/adapter/moment';
 import LitePickerLib from 'litepicker/dist/nocss/litepicker.umd';
 // import NoCssLP from 'litepicker/dist/nocss/litepicker.umd';
 import 'litepicker/dist/plugins/mobilefriendly';
 import 'litepicker/dist/plugins/ranges';
-
-import { Button, ButtonGroup, Grid, makeStyles, TextField, Typography, Card, useTheme } from '@material-ui/core';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-
-import './style.scss'
 import moment from 'moment';
-import { useTheme as useVarHook } from 'css-vars-hook';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import './style.scss';
+
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -55,9 +55,11 @@ const LitePicker = ({ onCancel = () => { }, onValueChange = () => { }, container
 
   const [startTime, setStartTime] = useState(props?.value?.startDate);
   const [endTime, setEndTime] = useState(props?.value?.endDate);
-  const [startDate, setStartDate] = useState(props?.value?.startDate ?? new Date());
-  const [endDate, setEndDate] = useState(props?.value?.endDate ?? new Date());
+  const [startDate, setStartDate] = useState(props?.value?.startDate || new Date());
+  const [endDate, setEndDate] = useState(props?.value?.endDate || new Date());
 
+  const [dateRange, setDateRange] = useState([null, null]);
+  const [date1, setDate1] = useState(new Date());
 
   useEffect(() => {
     if (!picker.current) {
@@ -95,8 +97,8 @@ const LitePicker = ({ onCancel = () => { }, onValueChange = () => { }, container
         ...props
       })
       pickerElem.on('selected', (date1, date2) => {
-        setStartDate(date1)
-        setEndDate(date2)
+        setStartDate(date1.dateInstance)
+        setEndDate(date2.dateInstance)
       })
 
       pickerElem.setDateRange(moment(startDate), moment(endDate))
@@ -120,12 +122,12 @@ const LitePicker = ({ onCancel = () => { }, onValueChange = () => { }, container
   const sendParsedDates = useCallback(
     () => {
       const val = {
-        startDate: mergeTime(startTime, startDate?.dateInstance),
-        endDate: mergeTime(endTime, endDate?.dateInstance),
+        startDate: mergeTime(startTime, startDate),
+        endDate: mergeTime(endTime, endDate),
       }
       onValueChange({ ...val })
     },
-    [endDate?.dateInstance, endTime, mergeTime, onValueChange, startDate?.dateInstance, startTime],
+    [endDate, endTime, mergeTime, onValueChange, startDate, startTime],
   );
 
   const clearDates = useCallback(
@@ -175,23 +177,33 @@ const LitePicker = ({ onCancel = () => { }, onValueChange = () => { }, container
   return (
     <Grid container spacing={2} className={classes.pickerContainer} {...containerProps} >
       <Grid item xs={6}>
-        <TextField
-          fullWidth
-          size="small"
-          inputRef={startElement}
-          name="startDate"
-          type="date"
+        <DatePicker
+          ref={startElement}
           label="Start Date"
-          InputLabelProps={{
-            shrink: true,
-          }}
+          renderInput={
+            (props) => <TextField
+              {...props}
+              fullWidth
+              size="small"
+              name="startDate"
+              helperText=" "
+              variant={variant}
+              InputLabelProps={{
+                shrink: true,
+              }}
+
+            />
+          }
           onChange={evt => {
-            setStartDate({ ...startDate, dateInstance: evt.target.value })
+            setStartDate(evt)
             if (picker.current) {
-              picker.current.setDateRange(evt.target.value, endDate)
+              picker.current.setDateRange(evt, endDate)
             }
           }}
-          variant={variant}
+          value={startDate}
+          onError={(reason, value) => {
+            console.log('wrapper.jsx (204) # reason, value', reason, value);
+          }}
         />
       </Grid>
       <Grid item xs={6}>
@@ -212,24 +224,32 @@ const LitePicker = ({ onCancel = () => { }, onValueChange = () => { }, container
         />
       </Grid>
       <Grid item xs={6}>
-        <TextField
-          fullWidth
-          size="small"
-          inputRef={endElement}
-          name="endDate"
-          type="date"
+        <DatePicker
           label="End Date"
-          InputLabelProps={{
-            shrink: true,
-          }}
+          ref={endElement}
+          renderInput={
+            (props) => <TextField
+              {...props}
+              fullWidth
+              size="small"
+              name="endDate"
+              helperText=" "
+              variant={variant}
+              InputLabelProps={{
+                shrink: true,
+              }}
+
+            />
+          }
           onChange={evt => {
-            setEndDate({ ...endDate, dateInstance: evt.target.value })
+            setEndDate(evt)
             if (picker.current) {
-              picker.current.setDateRange(startDate, evt.target.value)
+              picker.current.setDateRange(startDate, evt)
             }
           }}
-          variant={variant}
+          value={endDate}
         />
+
       </Grid>
       <Grid item xs={6}>
         <TextField
@@ -276,4 +296,15 @@ const LitePicker = ({ onCancel = () => { }, onValueChange = () => { }, container
   )
 }
 
-export { LitePicker }
+const WrapPicker = props => {
+  //NOTE: Use this pattern to set the filters beforehand to prevent unecessary rerendering
+  // const [state, dispatch] = useReducer(dataGridReducer, { ...initState, filterColumn: { partner: '', statuses: '' } });
+  return (
+    <LocalizationProvider dateAdapter={MomentUtils}>
+      <LitePicker {...props} />
+    </LocalizationProvider>
+  );
+};
+
+export { WrapPicker as LitePicker };
+

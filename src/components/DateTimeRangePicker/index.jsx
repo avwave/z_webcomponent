@@ -3,8 +3,10 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { LitePicker } from './wrapper';
 import clsx from 'clsx';
 import moment from 'moment'
+import MomentUtils from '@material-ui/pickers/adapter/moment';
 
 import { DateRange } from '@material-ui/icons';
+import { LocalizationProvider } from '@material-ui/pickers';
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -91,6 +93,7 @@ const DateTimeRangePicker = ({ size="medium", label, form, inline, onChange = ()
       )}
 
       <Popover
+      disableEnforceFocus
         open={open}
         anchorEl={anchorEl}
         onClose={() => setAnchorEl(null)}
