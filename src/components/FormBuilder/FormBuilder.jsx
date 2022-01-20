@@ -96,6 +96,12 @@ const useStyles = makeStyles((theme) => ({
     alignSelf: 'center',
     fontWeight: 'bolder',
     paddingBottom: theme.spacing(2),
+  },
+  tfTextOnlyOutline: {
+    borderStyle:'hidden'
+  },
+  tfTextOnlyFilled: {
+    backgroundColor: 'unset',
   }
 }));
 
@@ -247,6 +253,23 @@ const FormFieldSet = ({
               {...fieldParams?.fieldProps}
             />
           );
+        case "textonly":
+          return (
+            <TextField
+              variant={variant}
+              defaultValue={fieldParams?.text}
+              label={formInline ? "" : `${fieldParams.label}`}
+              readOnly
+              InputProps={{
+                classes:{
+                  root: variant==='filled'&&classes.tfTextOnlyFilled,
+                  notchedOutline: classes.tfTextOnlyOutline
+                },
+                multiline: true,
+                readOnly: true,
+                disableUnderline: true,
+              }} />
+          )
         case "phone":
           return (
             <TextField
@@ -610,7 +633,7 @@ const FormFieldSet = ({
           return <></>;
       }
     },
-    [formik, variant]
+    [classes.inlineDelete, classes.subformContent, classes.subformHeader, classes.subformHeaderTitle, classes.subformInline, formInline, formReadOnly, formik, mergeTime, validationSchema?.fields, variant]
   );
 
   const buildComponent = useCallback(
@@ -639,7 +662,7 @@ const FormFieldSet = ({
         if (fieldName) {
           layout = `${fieldName}.${layout}`;
         }
-        const isFormInline = formInline && field.type !== 'component'
+        const isFormInline = formInline && field?.type !== 'component'
         if (field) {
           const err = get(formik.touched, layout) && get(formik.errors, layout);
           const growFactor = ((field.forceColumnWidth ?? 0) === 0) ? {} : { sm: field.forceColumnWidth }
@@ -809,9 +832,9 @@ const FormFieldSet = ({
   ]);
 
   return (
-    
-      <form onSubmit={formik.handleSubmit}>{buildFormFactor}</form>
-    
+
+    <form onSubmit={formik.handleSubmit}>{buildFormFactor}</form>
+
   );
 };
 
