@@ -79,7 +79,8 @@ Default.args = {
     </ButtonGroup>
   ),
   formLayout: [
-    ["plainComponent", "readOnly", "email"],
+    ["plainComponent", "textOnly"],
+    ["readOnly", "email"],
     ["firstName", "middleName", "lastName"],
     ["startDate", "startTime"],
     "aNumber",
@@ -92,6 +93,11 @@ Default.args = {
     plainComponent: {
       type: "component",
       component: () => <Avatar>H</Avatar>,
+    },
+    textOnly: {
+      type: "textonly",
+      label: "Text Only",
+      text: "Text Only Value",
     },
     readOnly: {
       type: "text",
