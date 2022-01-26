@@ -1,12 +1,37 @@
 import faker from "faker";
-import { FormControlLabel, IconButton, MenuItem, Select } from "@material-ui/core";
+import { FormControlLabel, IconButton, Chip, Select } from "@material-ui/core";
 import Checkbox from "../../shared/Checkbox";
 import { TriStateSelect } from "../TriStateSelect";
 import { Delete, HotTubSharp, LocalHospital } from "@material-ui/icons";
 import moment from "moment";
 faker.seed(123);
 
-
+const chipFilters = [
+  {
+    count: 0,
+    type: "default",
+    label: "Chip Default",
+    value: "CHIP_D"
+  },
+  {
+    count: 99,
+    type: "warning",
+    label: "Chip Warning",
+    value: "CHIP_W"
+  },
+  {
+    count: 999,
+    type: "error",
+    label: "Chip Error",
+    value: "CHIP_E"
+  },
+  {
+    count: 9999,
+    type: "success",
+    label: "Chip Success",
+    value: "CHIP_S"
+  },
+]
 const columnData = [
   {
     key: "id",
@@ -59,7 +84,6 @@ const columnData = [
           v: faker.random.word()
         }
       })],
-      
     },
   },
   {
@@ -173,7 +197,21 @@ const columnData = [
     colId: "col8",
     name: "React Component",
     sortable: false,
-    width: 250
+    width: 250,
+    filter: {
+      type: "chiptabs",
+      default: "",
+      label: "Chips of",
+      labelField: 'label',
+      options: chipFilters.map(d => {
+        return {
+          count: d?.count,
+          type: d?.type,
+          label: d?.label,
+          v: d?.value
+        }
+      }),
+    },
   },
 ];
 

@@ -12,7 +12,7 @@ import Truncate from 'react-truncate';
 import { actions as dataGridActions, DataGridContext } from '../DataGrid/DataGridContext';
 import { PortalCell } from '../DataGrid/PortalCell';
 import Datagrid2Toolbar from './Datagrid2Toolbar';
-import { AuocompleteFilterRenderer, DateRangeFilterRenderer, OptionFilterRenderer, TextFilterRenderer } from './FilterRenderer';
+import { AuocompleteFilterRenderer, ChipTabsFilterRenderer, DateRangeFilterRenderer, OptionFilterRenderer, TextFilterRenderer } from './FilterRenderer';
 import './styles.scss';
 
 
@@ -206,6 +206,10 @@ const DataGrid2 = React.forwardRef(({
           return (args) => (
             <DateRangeFilterRenderer {...args} filter={c?.filter} />
           );
+        case "chiptabs":
+          return (args) => (
+            <ChipTabsFilterRenderer {...args} filter={c?.filter} />
+          )
         default:
           return c?.filterRenderer
       }
