@@ -74,6 +74,7 @@ Default.args = {
   gridProps: {
     filterWidth: 200,
   },
+  filterable: true
 };
 
 export const CellFormatter = DefaultStory.bind({});
@@ -204,8 +205,8 @@ const ServerFilterSortStory = ({ ...args }) => {
             if (isEmpty(searchItem)) {
               return true
             }
-            const ret = searchItem.toLowerCase().includes(state.filterColumn[searchKey].toString().toLowerCase());
-            return ret
+            // const ret = searchItem.toLowerCase().includes(state.filterColumn[searchKey].toString().toLowerCase());
+            return true
           default:
             return true
             

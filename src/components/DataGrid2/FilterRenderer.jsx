@@ -1,5 +1,8 @@
 import {
+  Avatar,
+  Box,
   Checkbox,
+  Chip,
   FormControl,
   IconButton,
   Input,
@@ -8,9 +11,13 @@ import {
   makeStyles,
   MenuItem,
   Select,
+  Tab,
+  Tabs,
   TextField,
+  Typography,
 } from "@material-ui/core";
-import { Backspace, Close } from "@material-ui/icons";
+import { amber, red, teal, yellow } from "@material-ui/core/colors";
+import { Backspace, Close, Error } from "@material-ui/icons";
 import { Autocomplete } from "@material-ui/lab";
 import clsx from "clsx";
 import React, { Fragment, useEffect, useState } from "react";
@@ -48,6 +55,36 @@ const useStyles = makeStyles((theme) => ({
     position: 'relative',
     width: '100% !important'
   },
+  chipListRoot: {
+    display: 'flex',
+    justifyContent: 'center',
+    flexWrap: 'wrap',
+    listStyle: 'none',
+    padding: theme.spacing(0.5),
+    margin: 0,
+  },
+  chip: {
+    
+  },
+  chipRoot: {
+    flexFlow: 'row-reverse',
+    paddingRight: theme.spacing(1),
+    boxShadow: "rgba(0, 0, 0, 0.15) 2.4px 2.4px 3.2px",
+    backgroundColor: '#fff',
+    border: 0,
+    fontWeight: 'bolder',
+    textTransform: 'uppercase'
+  },
+  chipAvatar: {
+    width: 'auto !important',
+    minWidth: '1em !important',
+    borderRadius: '1em/50%',
+    paddingLeft: '0.5rem',
+    paddingRight: '0.5rem',
+  },
+  label: {
+
+  }
 }));
 
 function TextFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
@@ -127,6 +164,55 @@ function DateRangeFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
   );
 }
 
+function ChipTabsFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
+  const classes = useStyles();
+  return (
+    <Tabs indicatorColor="primary"
+      variant="scrollable"
+      value={value}
+      onChange={(e, val) => {
+        onChange(val)
+      }}
+      scrollButtons="auto">
+      {filter?.options.map((option, idx) => {
+        let icon
+        switch (option?.type) {
+          case "warning":
+            icon = <Typography variant="button"><Error style={{ color: amber[500] }} /> {option?.label}</Typography>
+            break;
+          case "error":
+            icon = <Typography variant="button"><Error style={{ color: red[500] }} /> {option?.label}</Typography>
+            break;
+          case "success":
+            icon = <Typography variant="button"><Error style={{ color: teal[500] }} /> {option?.label}</Typography>
+            break;
+          default:
+            icon = <Typography variant="button">{option?.label}</Typography>
+            break;
+        }
+        return (
+          <Tab key={idx} value={option?.v} label={
+            <Chip
+              size="small"
+              variant="outlined"
+              color={value === option?.v ? "primary" : "default"}
+              label={icon}
+              className={classes.chip}
+              // onClick={() => onChange(option?.v)}
+              avatar={<Avatar>{option?.count}</Avatar>}
+              classes={{
+                root: classes.chipRoot,
+                avatar: classes.chipAvatar,
+                label: classes.label,
+              }}
+            />
+          } />
+        )
+      })}
+    </Tabs>
+  )
+}
+
 function AuocompleteFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
   const classes = useStyles();
   const [internalValues, setInternalValues] = useState(value);
@@ -201,4 +287,4 @@ function AuocompleteFilterRenderer({ onChange, onChangeDisplay, value, filter })
   )
 }
 
-export { TextFilterRenderer, OptionFilterRenderer, AuocompleteFilterRenderer, DateRangeFilterRenderer};
+export { ChipTabsFilterRenderer, TextFilterRenderer, OptionFilterRenderer, AuocompleteFilterRenderer, DateRangeFilterRenderer };
