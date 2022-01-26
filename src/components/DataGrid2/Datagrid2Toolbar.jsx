@@ -264,6 +264,11 @@ function DataGrid2Toolbar({
     setFilterValues({ ...filterValues, search: event.target.value })
   }, 500)
 
+  const hasChipFilter = useMemo(() => {
+    const result = filterColumnSettings.some(f=>f?.filter?.type === 'chiptabs')
+    return result
+  }, [filterColumnSettings]);
+
   return (
     <div className={classes.root}>
       {(
@@ -378,7 +383,7 @@ function DataGrid2Toolbar({
           </div>
         </Toolbar>
       )}
-      {filterable && (
+      {hasChipFilter && (
         <Toolbar variant="dense" className={classes.toolbar}>{renderChipFilters}</Toolbar>
       )}
     </div>
