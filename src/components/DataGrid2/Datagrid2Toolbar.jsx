@@ -1,5 +1,5 @@
 import {
-  Button, debounce, IconButton, InputAdornment, Popover, TextField, Toolbar,
+  Button, Chip, debounce, IconButton, InputAdornment, Popover, TextField, Toolbar,
   Typography,
   withStyles
 } from "@material-ui/core";
@@ -226,7 +226,9 @@ function DataGrid2Toolbar({
   }, [filterValues]);
 
   const renderFilters = useMemo(() => {
-    return filterColumnSettings.map((col, idx) => (
+    return filterColumnSettings
+    .filter(f=>f?.filter?.type !== 'chiptabs')
+    .map((col, idx) => (
       <FilterDropdown
         key={`filter-${col.id}-${idx}`}
         value={dataGridState.filterColumn[col.key]}
@@ -237,8 +239,21 @@ function DataGrid2Toolbar({
         onChangeFilterDisplay={value => changeFilterDisplay(col.key, value)}
       />
     ));
-  },
-    [changeFilter, changeFilterDisplay, dataGridState.filterColumn, filterColumnSettings]);
+  },[changeFilter, changeFilterDisplay, dataGridState.filterColumn, filterColumnSettings]);
+
+  const renderChipFilters = useMemo(() => {
+    return filterColumnSettings.filter(f=> {
+      return f?.filter?.type==='chiptabs'
+    }).map((col, idx) => {
+      const FilterRenderer = col.filterRenderer;
+      return <FilterRenderer
+        value={dataGridState.filterColumn[col.key]}
+        onChange={(v) => {
+          changeFilter(col.key, v);
+        }}
+      />
+    })    
+  }, [changeFilter, dataGridState.filterColumn, filterColumnSettings]);
 
 
   const stateFilters = useMemo(() => {
@@ -248,6 +263,11 @@ function DataGrid2Toolbar({
   const debounceSearch = debounce((event) => {
     setFilterValues({ ...filterValues, search: event.target.value })
   }, 500)
+
+  const hasChipFilter = useMemo(() => {
+    const result = filterColumnSettings.some(f=>f?.filter?.type === 'chiptabs')
+    return result
+  }, [filterColumnSettings]);
 
   return (
     <div className={classes.root}>
@@ -362,6 +382,9 @@ function DataGrid2Toolbar({
             </>
           </div>
         </Toolbar>
+      )}
+      {hasChipFilter && (
+        <Toolbar variant="dense" className={classes.toolbar}>{renderChipFilters}</Toolbar>
       )}
     </div>
   );
