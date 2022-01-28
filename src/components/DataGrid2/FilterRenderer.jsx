@@ -64,8 +64,8 @@ const useStyles = makeStyles((theme) => ({
     margin: 0,
   },
   chipTabRoot: {
-    padding: 0,
-    
+    paddingLeft: theme.spacing(0.5),
+    paddingRight: theme.spacing(0.5),
   },
   chipTabIndicator: {
     display: 'flex',
