@@ -63,13 +63,26 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(0.5),
     margin: 0,
   },
+  chipTabRoot: {
+    padding: 0,
+    
+  },
+  chipTabIndicator: {
+    display: 'flex',
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
+  },
+  chipTabSelected:{
+    border: `1px solid ${theme.palette.action.focus}`,
+    borderBottom: 0,
+    borderRadius: theme.shape.borderRadius,
+  },
   chip: {
     
   },
   chipRoot: {
     flexFlow: 'row-reverse',
     paddingRight: theme.spacing(1),
-    boxShadow: "rgba(0, 0, 0, 0.15) 2.4px 2.4px 3.2px",
     backgroundColor: '#fff',
     border: 0,
     fontWeight: 'bolder',
@@ -173,6 +186,7 @@ function ChipTabsFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
       onChange={(e, val) => {
         onChange(val)
       }}
+      classes={{indicator: classes.chipTabIndicator}}
       scrollButtons="auto">
       {filter?.options.map((option, idx) => {
         let icon
@@ -191,7 +205,12 @@ function ChipTabsFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
             break;
         }
         return (
-          <Tab key={idx} value={option?.v} label={
+          <Tab key={idx} value={option?.v} 
+          disableFocusRipple
+          disableRipple
+          wrapped
+          classes={{root: classes.chipTabRoot, selected: classes.chipTabSelected}}
+          label={
             <Chip
               size="small"
               variant="outlined"
@@ -206,8 +225,8 @@ function ChipTabsFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
                 label: classes.label,
               }}
             />
-          } />
-        )
+          }
+        />)
       })}
     </Tabs>
   )
