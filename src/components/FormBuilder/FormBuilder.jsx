@@ -129,6 +129,7 @@ const FormFieldSet = ({
   loading = false,
   onChange,
   formInline = false,
+  disableSubmit = false,
 }) => {
   const classes = useStyles();
   const formcontext = useContext(FormContext);
@@ -737,7 +738,7 @@ const FormFieldSet = ({
         <Button
           key="submit"
           color="primary"
-          disabled={loading}
+          disabled={loading || disableSubmit}
           startIcon={loading && <CircularProgress size={20} />}
           variant={variant}
           onClick={async () => {
@@ -828,7 +829,8 @@ const FormFieldSet = ({
     classes.actionBar,
     formReadOnly,
     loading,
-    hasReset
+    hasReset,
+    disableSubmit
   ]);
 
   return (
