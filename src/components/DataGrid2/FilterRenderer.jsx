@@ -72,13 +72,16 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     backgroundColor: 'transparent',
   },
-  chipTabSelected:{
+  chipTabSelected: {
     border: `1px solid ${theme.palette.action.focus}`,
     borderBottom: 0,
     borderRadius: theme.shape.borderRadius,
   },
   chip: {
-    
+
+  },
+  chipLabel: {
+    display: 'flex'
   },
   chipRoot: {
     flexFlow: 'row-reverse',
@@ -186,47 +189,47 @@ function ChipTabsFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
       onChange={(e, val) => {
         onChange(val)
       }}
-      classes={{indicator: classes.chipTabIndicator}}
+      classes={{ indicator: classes.chipTabIndicator }}
       scrollButtons="auto">
       {filter?.options.map((option, idx) => {
         let icon
         switch (option?.type) {
           case "warning":
-            icon = <Typography variant="button"><Error style={{ color: amber[500] }} /> {option?.label}</Typography>
+            icon = <Typography className={classes.chipLabel} variant="button"><Error style={{ color: amber[500] }} /> {option?.label}</Typography>
             break;
           case "error":
-            icon = <Typography variant="button"><Error style={{ color: red[500] }} /> {option?.label}</Typography>
+            icon = <Typography className={classes.chipLabel} variant="button"><Error style={{ color: red[500] }} /> {option?.label}</Typography>
             break;
           case "success":
-            icon = <Typography variant="button"><Error style={{ color: teal[500] }} /> {option?.label}</Typography>
+            icon = <Typography className={classes.chipLabel} variant="button"><Error style={{ color: teal[500] }} /> {option?.label}</Typography>
             break;
           default:
-            icon = <Typography variant="button">{option?.label}</Typography>
+            icon = <Typography className={classes.chipLabel} variant="button">{option?.label}</Typography>
             break;
         }
         return (
-          <Tab key={idx} value={option?.v} 
-          disableFocusRipple
-          disableRipple
-          wrapped
-          classes={{root: classes.chipTabRoot, selected: classes.chipTabSelected}}
-          label={
-            <Chip
-              size="small"
-              variant="outlined"
-              color={value === option?.v ? "primary" : "default"}
-              label={icon}
-              className={classes.chip}
-              // onClick={() => onChange(option?.v)}
-              avatar={<Avatar>{option?.count}</Avatar>}
-              classes={{
-                root: classes.chipRoot,
-                avatar: classes.chipAvatar,
-                label: classes.label,
-              }}
-            />
-          }
-        />)
+          <Tab key={idx} value={option?.v}
+            disableFocusRipple
+            disableRipple
+            wrapped
+            classes={{ root: classes.chipTabRoot, selected: classes.chipTabSelected }}
+            label={
+              <Chip
+                size="small"
+                variant="outlined"
+                color={value === option?.v ? "primary" : "default"}
+                label={icon}
+                className={classes.chip}
+                // onClick={() => onChange(option?.v)}
+                avatar={<Avatar>{option?.count}</Avatar>}
+                classes={{
+                  root: classes.chipRoot,
+                  avatar: classes.chipAvatar,
+                  label: classes.label,
+                }}
+              />
+            }
+          />)
       })}
     </Tabs>
   )
