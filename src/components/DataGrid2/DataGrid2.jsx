@@ -173,7 +173,7 @@ const DataGrid2 = React.forwardRef(({
 
   const [tableProps, setTableProps] = useState(tablePropsInit);
   const [pageOffset, setPageOffset] = useState(0);
-  const [filters, setFilters] = useState(defaultFilters);
+  const [filters, setFilters] = useState({...defaultFilters});
   const [dataGridState, dataGridDispatch] = useContext(DataGridContext);
 
   const [sortColumn, setSortColumn] = useState("");
@@ -358,10 +358,6 @@ const DataGrid2 = React.forwardRef(({
       },
     });
   }, [dataGridDispatch, filters]);
-
-  useEffect(() => {
-    setFilters(defaultFilters)
-  }, [defaultFilters]);
 
   const [scrollYoffset, setScrollYoffset] = useState(0);
   return (
