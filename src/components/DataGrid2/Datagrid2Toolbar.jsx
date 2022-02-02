@@ -153,6 +153,7 @@ function DataGrid2Toolbar({
   showSelector,
   filterable,
   onFilterChange,
+  defaultFilters = {},
   rightAccessory,
   leftAccessory,
   centerAccessory,
@@ -178,7 +179,7 @@ function DataGrid2Toolbar({
 
   const [filterColumnSettings, setFilterColumnSettings] = useState(columns);
 
-  const [filterValues, setFilterValues] = useState({});
+  const [filterValues, setFilterValues] = useState(defaultFilters);
   const [filterDisplay, setFilterDisplay] = useState({});
 
   const [searchField, setSearchField] = useState("");
