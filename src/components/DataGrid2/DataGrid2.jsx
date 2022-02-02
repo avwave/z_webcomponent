@@ -376,6 +376,7 @@ const DataGrid2 = React.forwardRef(({
         centerAccessory={centerAccessory}
         totalCount={totalCount}
         loadedCount={dataGridState.rows.length}
+        defaultFilters={defaultFilters}
         gridProps={gridProps}
         onClearFilters={() => onClearFilters()}
       />
