@@ -166,13 +166,14 @@ const DataGrid2 = React.forwardRef(({
   hasDateRangeFilter = true,
   onSort = () => { },
   onClearFilters = () => { },
+  defaultFilters = {}
 }, ref) => {
   const classes = useStyles()
   const theme = useTheme()
 
   const [tableProps, setTableProps] = useState(tablePropsInit);
   const [pageOffset, setPageOffset] = useState(0);
-  const [filters, setFilters] = useState({});
+  const [filters, setFilters] = useState(defaultFilters);
   const [dataGridState, dataGridDispatch] = useContext(DataGridContext);
 
   const [sortColumn, setSortColumn] = useState("");
