@@ -359,6 +359,9 @@ const DataGrid2 = React.forwardRef(({
     });
   }, [dataGridDispatch, filters]);
 
+  useEffect(() => {
+    setFilters(defaultFilters)
+  }, [defaultFilters]);
 
   const [scrollYoffset, setScrollYoffset] = useState(0);
   return (
