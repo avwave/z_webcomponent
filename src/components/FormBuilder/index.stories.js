@@ -347,7 +347,7 @@ Dates.args = {
       disablePast: false,
       initialValues: "",
       useLocalTime: true,
-      validator: () => Yup.date().max(new Date()),
+      validator: () => Yup.date().required().nullable(),
       onChange: (field, data) => {
         console.log("📢[index.stories.js:101]:", field, data, data);
       },
@@ -363,7 +363,7 @@ Dates.args = {
       type: "datetime-local",
       label: "DateTime",
       initialValues: new Date("2021-06-10T12:00:00"),
-      validator: () => Yup.date(),
+      validator: () => Yup.date().required().nullable().max(new Date()),
       onChange: (field, data) => {},
     },
   },
