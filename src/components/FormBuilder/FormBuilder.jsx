@@ -201,6 +201,9 @@ const FormFieldSet = ({
         case "date":
           return (
             <DatePicker
+              allowSameDateSelection
+              clearable
+              
               disablePast={fieldParams.disablePast}
               disableFuture={fieldParams.disableFuture}
               label={formInline ? "" : `${fieldParams.label} ${isRequired ? '*' : ''}`}
@@ -220,7 +223,7 @@ const FormFieldSet = ({
                   shrink: true,
                 }}
                 />}
-              keyboardIcon={<DateRange />}
+              openPickerIcon={<DateRange />}
               onChange={(evt, val) => {
                 // console.log("📢[FormBuilder.js:152]:", evt);
                 if (fieldParams.onChange) {
@@ -247,6 +250,8 @@ const FormFieldSet = ({
         case "datetime-local":
           return (
             <DateTimePicker
+              allowSameDateSelection
+              clearable
               disablePast={fieldParams.disablePast}
               disableFuture={fieldParams.disableFuture}
               label={formInline ? "" : `${fieldParams.label} ${isRequired ? '*' : ''}`}
