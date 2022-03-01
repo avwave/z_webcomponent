@@ -36,16 +36,7 @@ const EdgeContainerStory = {
         defaultValue: 5,
       },
     },
-    edgeColor: {
-      control: {
-        type: "color",
-      },
-    },
-    backgroundColor: {
-      control: {
-        type: "color",
-      },
-    },
+    
   },
 };
 
