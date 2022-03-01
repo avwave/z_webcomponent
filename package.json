@@ -1,11 +1,12 @@
 {
   "name": "@zennya/web-component-library",
-  "version": "0.7.34",
+  "version": "0.7.35",
   "private": false,
   "dependencies": {
     "@date-io/date-fns": "^2.10.11",
     "@date-io/moment": "1.x",
     "@dropzone-ui/react": "^3.3.0",
+    "@fingerprintjs/fingerprintjs": "^3.3.3",
     "@fontsource/roboto": "^4.5.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.36",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
