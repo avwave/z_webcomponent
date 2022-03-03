@@ -27,14 +27,17 @@ const useFingerprint = async () => {
   return fpData?.visitorId
 }
 
-const deleteFingerprint = async () => {
-  await set('fingerprint', null)
+
+const useFingerprintGuid = async () => {
+  return await get('fingerprint')
+}
+
+const resetFingerprint = async () => {
+  await set('fingerprint', uuidv4())
 }
 
 const Fingerprint = ({ guid=false, onFingerprint = () => { } }) => {
   const classes = useStyles()
-
-  const [fp, setFp] = useState();
 
   useEffect(() => {
     if (!fpPromise) throw new Error('FingerprintJS not loaded, add registerFingerprint() closest to root as possible (possibly index.js)')
@@ -42,7 +45,7 @@ const Fingerprint = ({ guid=false, onFingerprint = () => { } }) => {
       const fp = await fpPromise
       const fpData = await fp.get()
       const guidFp = await get('fingerprint')
-      setFp(fpData);
+      
       onFingerprint(guid ? guidFp : fpData?.visitorId)
     }
 
@@ -54,4 +57,4 @@ const Fingerprint = ({ guid=false, onFingerprint = () => { } }) => {
   )
 }
 
-export { deleteFingerprint, registerFingerprint, useFingerprint, Fingerprint }
+export { useFingerprintGuid, resetFingerprint, registerFingerprint, useFingerprint, Fingerprint }
