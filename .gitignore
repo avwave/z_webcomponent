@@ -52,3 +52,4 @@ storybook-static
 yarn.lock
 /.vscode/settings.json
 build
+.history
