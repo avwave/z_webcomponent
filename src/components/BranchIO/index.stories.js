@@ -1,5 +1,5 @@
 import { Button } from "@material-ui/core";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import ReactJson from "react-json-view";
 import { useBranch } from "./BranchProvider";
 
@@ -83,3 +83,29 @@ export const SetIdentity = () => {
     </>
   );
 };
+
+export const DefaultDeeplink = () => {
+  const {deepLink, generateDeeplink} = useBranch({
+    apiKey: BRANCH_API_KEY,
+  })
+
+  const [dl, setDeepLink] = useState();
+  
+  useEffect(() => {
+    generateDeeplink();
+  }, []);
+
+  return <ReactJson src={{deepLink}} />;
+}
+
+export const CustomDeeplinkPayload = () => {
+  const {deepLink, generateDeeplink} = useBranch({
+    apiKey: BRANCH_API_KEY,
+  })
+
+  useEffect(() => {
+    generateDeeplink({campaign:'custom campaign', tags:['customtag1', 'customtag2']});
+  }, []);
+
+  return <ReactJson src={{deepLink}} />;
+}

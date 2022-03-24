@@ -114,6 +114,26 @@ const BranchProvider = ({ apiKey, children, ...props }) => {
     [],
   );
 
+  const [deepLink, setDeepLink] = useState(undefined);
+  const generateDeeplink = useCallback(
+    (payload={}) => {
+      const {campaign='default campaign', channel='web', feature='', stage='', tags=[], data={}} = payload
+      branchSdk.link({
+        campaign,
+        channel,
+        feature,
+        stage,
+        tags,
+        data
+      }, (err, link) => {
+        if (!err) {
+          setDeepLink(link);
+        }
+      })
+    },
+    [],
+  );
+
   useEffect(() => {
     branchSdk.init(apiKey, branchOptions, branchInitCallback);
     console.log('BranchProvider.jsx (22)', 'init branch')
@@ -132,7 +152,9 @@ const BranchProvider = ({ apiKey, children, ...props }) => {
     branchStatus,
     setBranchIdentity,
     getBranchIdentity,
-    hasIdentity
+    hasIdentity,
+    generateDeeplink,
+    deepLink
   }
 }
 
