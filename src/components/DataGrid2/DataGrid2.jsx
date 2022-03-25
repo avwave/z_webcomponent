@@ -482,8 +482,12 @@ const DataGrid2 = React.forwardRef(({
                   element.offsetHeight + element.scrollTop >=
                   element.scrollHeight - TABLE_LOAD_OFFSET
                 ) {
-                  if (deferLoading && !dataGridState.loading) {
+                  if (!deferLoading) {
                     kaDispatch({ type: LOAD_MORE_DATA });
+                  } else {
+                    if(!dataGridState.loading) {
+                      kaDispatch({ type: LOAD_MORE_DATA });
+                    }
                   }
                 }
               },
