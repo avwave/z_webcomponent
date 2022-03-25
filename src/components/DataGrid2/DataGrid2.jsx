@@ -54,7 +54,7 @@ const tablePropsInit = {
   columnReordering: true,
   columnResizing: true,
   singleAction: {
-    type: LOAD_MORE_DATA
+    // type: LOAD_MORE_DATA
   },
   sortingMode: SortingMode.SingleTripleState
 }
