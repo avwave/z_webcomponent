@@ -54,7 +54,7 @@ const tablePropsInit = {
   columnReordering: true,
   columnResizing: true,
   singleAction: {
-    type: LOAD_MORE_DATA
+    // type: LOAD_MORE_DATA
   },
   sortingMode: SortingMode.SingleTripleState
 }
@@ -166,7 +166,8 @@ const DataGrid2 = React.forwardRef(({
   hasDateRangeFilter = true,
   onSort = () => { },
   onClearFilters = () => { },
-  defaultFilters = {}
+  defaultFilters = {},
+  deferLoading=false
 }, ref) => {
   const classes = useStyles()
   const theme = useTheme()
@@ -481,7 +482,13 @@ const DataGrid2 = React.forwardRef(({
                   element.offsetHeight + element.scrollTop >=
                   element.scrollHeight - TABLE_LOAD_OFFSET
                 ) {
-                  kaDispatch({ type: LOAD_MORE_DATA });
+                  if (!deferLoading) {
+                    kaDispatch({ type: LOAD_MORE_DATA });
+                  } else {
+                    if(!dataGridState.loading) {
+                      kaDispatch({ type: LOAD_MORE_DATA });
+                    }
+                  }
                 }
               },
             })
