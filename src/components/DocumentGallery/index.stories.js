@@ -68,33 +68,38 @@ Remote.args = {
       dataCallback: async()=> {
         return await fetchData("scientific")
       },
-      name: "scientific",
+      name: "dl-scientific",
+      displayName: "scientific",
     },
     {
       mimeType: "application/pdf",
       data: pdfBase64Data,
-      name: "pdfBase64Data",
+      name: "dl-pdfBase64Data",
+      displayName: "pdfBase64Data",
     },
     {
       mimeType: "application/pdf",
       dataCallback: async ()=> {
         return await fetchData("hello")
       },
-      name: "hello",
+      name: "dl-hello",
+
     },
     {
       mimeType: "application/pdf",
       dataCallback: async ()=> {
         return await fetchData("form")
       },
-      name: "form",
+      name: "dl-form",
+      displayName: "form",
     },
     {
       mimeType: "application/pdf",
       dataCallback: async ()=> {
         return await fetchData("annotations")
       },
-      name: "annotations",
+      name: "dl-annotations",
+      displayName: "annotations",
     },
   ],
 };
