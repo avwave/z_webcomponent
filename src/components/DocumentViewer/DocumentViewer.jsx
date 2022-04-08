@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core';
 import React, { useMemo } from 'react';
-import FilePreviewer, { FilePreviewerThumbnail } from 'react-file-previewer';
-import "react-file-previewer/src/styles.css";
+import FilePreviewer, { FilePreviewerThumbnail } from 'react-file-previewer-v2';
+import "react-file-previewer-v2/src/styles.css";
 import mime from 'mime-types';
 
 const useStyles = makeStyles((theme) => {
