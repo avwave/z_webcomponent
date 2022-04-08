@@ -20,22 +20,22 @@ const useStyles = makeStyles((theme) => {
       right: 0,
       top: '50%'
     },
-    galleryInfo:{
-      
+    galleryInfo: {
+
     }
   }
 })
-const DocumentGallery = ({ docs = [] }) => {
+const DocumentGallery = ({ docs = [], initialIndex=0 }) => {
   const classes = useStyles()
-  const [currentFileIndex, setCurrentFileIndex] = useState(null);
+  const [currentFileIndex, setCurrentFileIndex] = useState(initialIndex);
 
   const [fileData, setFileData] = useState();
 
   useEffect(() => {
     if (docs.length > 0) {
-      setCurrentFileIndex(0);
+      setCurrentFileIndex(initialIndex);
     }
-  }, []);
+  }, [docs.length, initialIndex]);
 
   useEffect(() => {
     const process = async () => {
@@ -54,11 +54,11 @@ const DocumentGallery = ({ docs = [] }) => {
   }
 
   return (
-    <div className={classes.navigationContainer}>
+    <div className={clsx(classes.navigationContainer, 'pvx-container')}>
       <div className={clsx(classes.galleryInfo, 'preview-bar')}>
         <IconButton color="inherit" onClick={() => { setCurrentFileIndex(currentFileIndex === 0 ? 0 : currentFileIndex - 1) }} ><ArrowBackIos /></IconButton>
-        <Typography style={{flex:1}}variant="caption">{docs[currentFileIndex]?.displayName??docs[currentFileIndex]?.name}</Typography>
-        <Typography variant="caption">{currentFileIndex + 1} of {docs.length + 1}</Typography>
+        <Typography style={{ flex: 1 }} variant="caption">{docs[currentFileIndex]?.displayName ?? docs[currentFileIndex]?.name}</Typography>
+        <Typography variant="caption">{currentFileIndex + 1} of {docs.length}</Typography>
         <IconButton color="inherit" onClick={() => { setCurrentFileIndex(currentFileIndex === (docs.length - 1) ? docs.length - 1 : currentFileIndex + 1) }} ><ArrowForwardIos /></IconButton>
       </div>
       <DocumentViewer downloadName={docs[currentFileIndex]?.name} data={fileData} mimeType={docs[currentFileIndex]?.mimeType} url={docs[currentFileIndex]?.url} />

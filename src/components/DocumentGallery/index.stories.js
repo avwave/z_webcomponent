@@ -103,3 +103,9 @@ Remote.args = {
     },
   ],
 };
+
+export const RemoteInitialIndex = RemoteStory.bind({});
+RemoteInitialIndex.args = {
+  ...Remote.args,
+  initialIndex: 2,
+}
