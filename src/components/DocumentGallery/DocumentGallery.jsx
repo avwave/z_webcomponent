@@ -57,7 +57,7 @@ const DocumentGallery = ({ docs = [] }) => {
     <div className={classes.navigationContainer}>
       <div className={clsx(classes.galleryInfo, 'preview-bar')}>
         <IconButton color="inherit" onClick={() => { setCurrentFileIndex(currentFileIndex === 0 ? 0 : currentFileIndex - 1) }} ><ArrowBackIos /></IconButton>
-        <Typography style={{flex:1}}variant="caption">{docs[currentFileIndex]?.name}</Typography>
+        <Typography style={{flex:1}}variant="caption">{docs[currentFileIndex]?.displayName??docs[currentFileIndex]?.name}</Typography>
         <Typography variant="caption">{currentFileIndex + 1} of {docs.length + 1}</Typography>
         <IconButton color="inherit" onClick={() => { setCurrentFileIndex(currentFileIndex === (docs.length - 1) ? docs.length - 1 : currentFileIndex + 1) }} ><ArrowForwardIos /></IconButton>
       </div>
