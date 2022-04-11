@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => {
 const DocumentGallery = ({ docs = [], initialIndex=0 }) => {
   const classes = useStyles()
   const [currentFileIndex, setCurrentFileIndex] = useState(initialIndex);
-
+  const [loading, setLoading] = useState(true);
   const [fileData, setFileData] = useState();
 
   useEffect(() => {
@@ -39,12 +39,14 @@ const DocumentGallery = ({ docs = [], initialIndex=0 }) => {
 
   useEffect(() => {
     const process = async () => {
+      setLoading(true);
       let data = docs[currentFileIndex]?.data
       if (docs[currentFileIndex]?.dataCallback) {
         const callbackfn = docs[currentFileIndex].dataCallback
         data = await callbackfn()
       }
       setFileData(data)
+      setLoading(false);
     }
     process()
   }, [currentFileIndex, docs]);
@@ -61,7 +63,7 @@ const DocumentGallery = ({ docs = [], initialIndex=0 }) => {
         <Typography variant="caption">{currentFileIndex + 1} of {docs.length}</Typography>
         <IconButton color="inherit" onClick={() => { setCurrentFileIndex(currentFileIndex === (docs.length - 1) ? docs.length - 1 : currentFileIndex + 1) }} ><ArrowForwardIos /></IconButton>
       </div>
-      <DocumentViewer downloadName={docs[currentFileIndex]?.name} data={fileData} mimeType={docs[currentFileIndex]?.mimeType} url={docs[currentFileIndex]?.url} />
+      <DocumentViewer loading={loading} downloadName={docs[currentFileIndex]?.name} data={fileData} mimeType={docs[currentFileIndex]?.mimeType} url={docs[currentFileIndex]?.url} />
       <IconButton onClick={() => { setCurrentFileIndex(currentFileIndex === 0 ? 0 : currentFileIndex - 1) }} className={classes.previous}><ArrowBackIos /></IconButton>
       <IconButton onClick={() => { setCurrentFileIndex(currentFileIndex === (docs.length - 1) ? docs.length - 1 : currentFileIndex + 1) }} className={classes.next}><ArrowForwardIos /></IconButton>
     </div>

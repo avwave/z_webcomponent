@@ -1,4 +1,4 @@
-import { makeStyles } from '@material-ui/core';
+import { makeStyles, CircularProgress } from '@material-ui/core';
 import React, { useMemo } from 'react';
 import FilePreviewer, { FilePreviewerThumbnail } from 'react-file-previewer';
 import "react-file-previewer/src/styles.css";
@@ -8,7 +8,15 @@ import mime from 'mime-types';
 const useStyles = makeStyles((theme) => {
   return {
     documentContainer: {
-      
+      minHeight: "calc(100vh - 88px) !important",
+      width: '100%',
+      backgroundColor:'#68738a',
+      display: 'flex',
+      alignItems: "center",
+    justifyContent: "space-around",
+    },
+    center:{
+
     }
   }
 })
@@ -18,6 +26,7 @@ const DocumentViewer = ({
   mimeType = "image/*",
   downloadName = "download",
   asThumbnail = false,
+  loading = false
 }) => {
   const classes = useStyles()
 
@@ -48,9 +57,14 @@ const DocumentViewer = ({
   }
   return (
     <div className={classes.documentContainer}>
-      <FilePreviewer
-        file={file}
-      />
+      {loading ? (
+        <CircularProgress className={classes.center}/>
+      ) : (
+        <FilePreviewer
+          file={file}
+        />
+      )
+      }
     </div>
 
   )
