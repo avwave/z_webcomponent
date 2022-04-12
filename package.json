@@ -50,6 +50,7 @@
     "react-dom": "^17.0.1",
     "react-fast-compare": "^3.2.0",
     "react-file-previewer": "^0.6.3",
+    "react-file-previewer-v2": "^0.6.3",
     "react-helmet": "^6.1.0",
     "react-json-view": "^1.21.3",
     "react-loader-advanced": "^1.7.1",
@@ -70,6 +71,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 6006 -s public",
+    "start-dev": "start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public",
     "chromatic": "npx chromatic --project-token 5715d8611200",
     "publish:npm": "rm -rf dist && mkdir dist &&  babel src/components -d dist --copy-files"
