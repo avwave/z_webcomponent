@@ -8,6 +8,7 @@ import { deselectAllFilteredRows, deselectRow, hideDetailsRow, selectAllFiltered
 import { DataType, SortDirection, SortingMode } from "ka-table/enums";
 import { isEmpty } from 'lodash';
 import React, { isValidElement, useCallback, useContext, useEffect, useState } from 'react';
+import { useContextMenu } from 'react-contexify';
 import Truncate from 'react-truncate';
 import { actions as dataGridActions, DataGridContext } from '../DataGrid/DataGridContext';
 import { PortalCell } from '../DataGrid/PortalCell';
@@ -184,6 +185,15 @@ const DataGrid2 = React.forwardRef(({
   const [highlightedRow, setHighlightedRow] = useState();
   const { itemHeight, addRowHeight } = useDynamicRowsOptions(tableProps);
 
+  const { show: showContextMenu } = useContextMenu({
+    id: contextMenu?.menuId ?? "CONTEXT_MENU_ID",
+  });
+
+  function displayMenu(e, row) {
+    showContextMenu(e, { props: { row } });
+  }
+
+
 
   useEffect(() => {
     onSort(sortColumn, sortDirection);
@@ -321,7 +331,9 @@ const DataGrid2 = React.forwardRef(({
         targetColumn?.cellRenderer(cellProps)
       ) : (
         isReactElem ? <span style={targetColumn.cellStyles}>{element}</span> :
-          <Truncate lines={targetColumn?.truncateLines ?? 2} ellipsis={<span>(...)</span>}
+          <Truncate 
+            width={targetColumn?.width}
+            lines={targetColumn?.truncateLines ?? 2} ellipsis={<span>(...)</span>}
             style={targetColumn.cellStyles}
           >
             {tooltip}
@@ -395,6 +407,11 @@ const DataGrid2 = React.forwardRef(({
           dataRow: {
             elementAttributes: ({ rowData }) => ({
               ref: ref => addRowHeight(rowData, ref?.offsetHeight),
+              onContextMenu: (e, extendedEvent) => {
+                if (contextMenu) {
+                  displayMenu(e, rowData)
+                }
+              },
               onClick: (evt, extendedEvent) => {
                 const {
                   childProps: { rowKeyValue },
@@ -497,6 +514,7 @@ const DataGrid2 = React.forwardRef(({
         }}
         {...gridProps}
       />
+      {contextMenu?.contextItems() ?? <></>}
     </div>
   );
 })
