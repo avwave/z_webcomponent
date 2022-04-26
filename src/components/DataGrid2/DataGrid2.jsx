@@ -512,6 +512,7 @@ const DataGrid2 = React.forwardRef(({
         }}
         {...gridProps}
       />
+      {contextMenu?.contextItems() ?? <></>}
     </div>
   );
 })
