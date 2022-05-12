@@ -1,4 +1,3 @@
-import DateFnsUtils from "@date-io/moment";
 import {
   Box,
   Button,
@@ -7,8 +6,7 @@ import {
   CardActions,
   CardContent,
   CardHeader,
-  Checkbox,
-  Container,
+  Checkbox, CircularProgress, Container,
   FormControl,
   FormControlLabel, FormGroup, FormHelperText,
   FormLabel,
@@ -18,38 +16,34 @@ import {
   LinearProgress,
   ListItemText,
   makeStyles,
-  MenuItem,
-  Radio,
+  MenuItem, Radio,
   RadioGroup,
   Switch,
   TextField,
-  Toolbar, Typography,
-  CircularProgress,
-  InputLabel
+  Toolbar, Typography
 } from "@material-ui/core";
 import { Add, Backspace, Close, DateRange, Schedule } from "@material-ui/icons";
 import { Autocomplete } from "@material-ui/lab";
-import "react-phone-number-input/style.css";
-import PhoneInput from "react-phone-number-input/input";
+import { DatePicker, DateTimePicker, LocalizationProvider, TimePicker } from "@material-ui/pickers";
+import MomentUtils from '@material-ui/pickers/adapter/moment';
 import { FieldArray, Formik, getIn } from "formik";
 import { get, isEmpty } from "lodash";
+import moment from "moment";
 import PropTypes from "prop-types";
-import React, {
-  useCallback,
+import {
+  createContext, Fragment, useCallback,
   useContext,
   useEffect,
   useMemo,
   useState
 } from "react";
+import PhoneInput from "react-phone-number-input/input";
+import "react-phone-number-input/style.css";
 import * as Yup from "yup";
-import { FormikPersist } from "./FormikPersist";
-import moment from "moment";
-import { Fragment } from "react";
-import { createContext } from "react";
 import { DateTimeRangePicker } from "../DateTimeRangePicker";
 import { fromEntries } from "../utils/fromEntries.polyfill";
-import { DatePicker, LocalizationProvider, DateTimePicker, TimePicker } from "@material-ui/pickers";
-import MomentUtils from '@material-ui/pickers/adapter/moment';
+import { FormikPersist } from "./FormikPersist";
+import { WizardFieldArray } from "./WizardFieldArray";
 
 const useStyles = makeStyles((theme) => ({
   controlContainer: {
@@ -203,7 +197,7 @@ const FormFieldSet = ({
             <DatePicker
               allowSameDateSelection
               clearable
-              
+
               disablePast={fieldParams.disablePast}
               disableFuture={fieldParams.disableFuture}
               label={formInline ? "" : `${fieldParams.label} ${isRequired ? '*' : ''}`}
@@ -216,13 +210,13 @@ const FormFieldSet = ({
                 ) : undefined,
               }}
               renderInput={props => <TextField
-                {...props} 
+                {...props}
                 helperText=" "
                 variant={variant}
                 InputLabelProps={{
                   shrink: true,
                 }}
-                />}
+              />}
               openPickerIcon={<DateRange />}
               onChange={(evt, val) => {
                 // console.log("📢[FormBuilder.js:152]:", evt);
@@ -257,13 +251,13 @@ const FormFieldSet = ({
               label={formInline ? "" : `${fieldParams.label} ${isRequired ? '*' : ''}`}
               name={fieldName}
               renderInput={props => <TextField
-                {...props} 
+                {...props}
                 helperText=" "
                 variant={variant}
                 InputLabelProps={{
                   shrink: true,
                 }}
-                />}
+              />}
               InputProps={{
                 startAdornment: fieldParams.icon ? (
                   <InputAdornment position="start">
@@ -301,13 +295,13 @@ const FormFieldSet = ({
               name={fieldName}
               keyboardIcon={<Schedule />}
               renderInput={props => <TextField
-                {...props} 
+                {...props}
                 helperText=" "
                 variant={variant}
                 InputLabelProps={{
                   shrink: true,
                 }}
-                />}
+              />}
               InputProps={{
                 startAdornment: fieldParams.icon ? (
                   <InputAdornment position="start">
@@ -701,7 +695,6 @@ const FormFieldSet = ({
                                   }
                                 </Box>
                               }
-
                               <Box component={fieldParams.inline ? 'div' : CardContent} className={classes.subformContent}>
                                 {buildComponent(
                                   fieldParams.formLayout,
@@ -713,7 +706,7 @@ const FormFieldSet = ({
                               </Box>
                               {fieldParams.inline &&
 
-                                formReadOnly ? null :
+                                (formReadOnly || fieldParams?.readOnly) ? null :
                                 <IconButton
                                   className={classes.inlineDelete}
                                   aria-label=""
@@ -728,11 +721,10 @@ const FormFieldSet = ({
                           );
                         }
                       )}
-                      {!formReadOnly &&
+                      {(!formReadOnly && !fieldParams?.readOnly) &&
                         <div>
                           <Button
                             variant="contained"
-
                             onClick={() => {
                               arrayHelpers.push(fieldParams.formValueTemplate);
                             }}
@@ -746,7 +738,7 @@ const FormFieldSet = ({
                     </>
                   );
                 }
-                if (formReadOnly) return <></>
+                if (formReadOnly && fieldParams?.readOnly) return <></>
                 return (
                   <div>
                     <Button
@@ -765,7 +757,18 @@ const FormFieldSet = ({
               }}
             />
           );
-
+        case "wizardFieldArray":
+          return (
+            <WizardFieldArray
+              fieldName={fieldName}
+              fieldParams={fieldParams}
+              classes={classes}
+              formInline={formInline}
+              isRequired={isRequired}
+              formReadOnly={formReadOnly}
+              buildComponent={buildComponent}
+            />
+          );
         default:
           return <></>;
       }
@@ -1086,3 +1089,8 @@ FormBuilder.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   usePersist: PropTypes.bool,
 };
+
+function renderWizardFieldArray() {
+  return
+}
+
