@@ -564,6 +564,7 @@ Nested.args = {
       type: "fieldarray",
       label: "subform",
       inline: true,
+      bordered:true,
       initialValues: [
         {
           subform1: "sf1",

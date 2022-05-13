@@ -96,6 +96,10 @@ const useStyles = makeStyles((theme) => ({
   },
   tfTextOnlyFilled: {
     backgroundColor: 'unset',
+  },
+  fieldArray: {
+    padding: theme.spacing(2),
+    border: `1px solid ${theme.palette.grey[200]}`,
   }
 }));
 
@@ -666,6 +670,7 @@ const FormFieldSet = ({
           );
         case "fieldarray":
           return (
+            <div className={fieldParams?.bordered?classes.fieldArray:''}>
             <FieldArray
               name={fieldName}
               render={(arrayHelpers) => {
@@ -756,6 +761,7 @@ const FormFieldSet = ({
                 )
               }}
             />
+            </div>
           );
         case "wizardFieldArray":
           return (
