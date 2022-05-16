@@ -791,7 +791,7 @@ const FormFieldSet = ({
       )
       if (Array.isArray(layout)) {
         return (
-          <Grid key={`container-${index}`} container spacing={2}>
+          <Grid key={`container-${index}`} item container spacing={2}>
             {layout.map((subLayout, idx) =>
               buildComponent(
                 subLayout,
