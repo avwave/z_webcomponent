@@ -564,6 +564,7 @@ Nested.args = {
       type: "fieldarray",
       label: "subform",
       inline: true,
+      bordered:true,
       initialValues: [
         {
           subform1: "sf1",
@@ -631,3 +632,116 @@ Nested.args = {
     },
   },
 };
+
+
+const WizardStory = ({...args}) => {
+  
+}
+
+export const Wizard = DefaultStory.bind({})
+Wizard.args = {
+  ...Default.args,
+  formId: "nested",
+  formLayout: ["subform"],
+  form: {
+    subform: {
+      readOnly: true,
+      type: "wizardFieldArray",
+      label: "subform",
+      inline: true,
+      initialValues: [
+        {
+          subform1: "",
+          subform2: "",
+          subform3: "",
+          subform4: "",
+        },
+      ],
+      //note: only root level form nodes can have validation
+      validator: () =>
+        Yup.array().of(
+          Yup.object().shape({
+            subform1: Yup.string().nullable().required(),
+            subform2: Yup.string().nullable().required(),
+            subform3: Yup.string().nullable().required(),
+            subform4: Yup.string().nullable().required(),
+          })
+        ),
+      formLayout: ["subform1", "subform2", "subform3", "subform4"],
+      formValueTemplate: {
+        subform1: ``,
+        subform2: ``,
+        subform3: ``,
+        subform4: ``,
+      },
+      formTemplate: {
+        subform1: {
+          type: "radio",
+          label: "Question 1",
+          initialValues: "",
+          options: [
+            { id: "1", label: "one" },
+            { id: "2", label: "two" },
+            { id: "3", label: "three" },
+            { id: "4", label: "four" },
+          ],
+          settings: {
+            labelField: "label",
+            valueField: "id",
+            inline: false,
+          },
+        },
+        subform2: {
+          type: "radio",
+          label: "Question 2",
+          initialValues: "",
+          options: [
+            { id: "1", label: "one" },
+            { id: "2", label: "two" },
+            { id: "3", label: "three" },
+            { id: "4", label: "four" },
+          ],
+          settings: {
+            labelField: "label",
+            valueField: "id",
+            inline: false,
+          },
+        },
+        subform3: {
+          type: "radio",
+          label: "Question 3",
+          initialValues: "",
+          options: [
+            { id: "1", label: "one" },
+            { id: "2", label: "two" },
+            { id: "3", label: "three" },
+            { id: "4", label: "four" },
+          ],
+          settings: {
+            labelField: "label",
+            valueField: "id",
+            inline: false,
+          },
+        },
+        subform4: {
+          type: "radio",
+          label: "Question 4",
+          initialValues: "",
+          options: [
+            { id: "1", label: "one" },
+            { id: "2", label: "two" },
+            { id: "3", label: "three" },
+            { id: "4", label: "four" },
+          ],
+          settings: {
+            labelField: "label",
+            valueField: "id",
+            inline: false,
+          },
+        },
+      },
+      form: [],
+    },
+  },
+
+}
