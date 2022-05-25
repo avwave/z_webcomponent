@@ -64,7 +64,7 @@ const WizardFieldArray = ({
           }
           return (
             <>
-              <ReactJson src={{
+              {/* <ReactJson src={{
                 fieldParams,
                 fieldName,
                 stepCount,
@@ -72,7 +72,7 @@ const WizardFieldArray = ({
                 arh: arrayHelpers.form
               }}
                 collapsed={1}
-              />
+              /> */}
               {get(arrayHelpers.form.values, fieldName).map(
                 (subform, idx) => {
                   return (
