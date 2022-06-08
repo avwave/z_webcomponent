@@ -20,7 +20,7 @@ import {
   RadioGroup,
   Switch,
   TextField,
-  Toolbar, Typography
+  Toolbar, Typography, withStyles
 } from "@material-ui/core";
 import { Add, Backspace, Close, DateRange, Schedule } from "@material-ui/icons";
 import { Autocomplete } from "@material-ui/lab";
@@ -1126,7 +1126,11 @@ const WrapBuilder = props => {
     </LocalizationProvider>
   );
 };
-export { WrapBuilder as FormBuilder };
+
+const StyleWrap = withStyles(useStyles)(WrapBuilder)
+export { StyleWrap as FormBuilder };
+
+
 
 FormBuilder.propTypes = {
   formId: PropTypes.string.isRequired,
