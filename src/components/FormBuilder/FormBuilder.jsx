@@ -850,10 +850,10 @@ const FormFieldSet = ({
           const errText = Array.isArray(err) ? Array.from(new Set(err)).join(', ') : err;
           const isErrArrString = err?.reduce((acc, curr) => {
             return acc || (typeof curr === 'string' || curr instanceof String)
-          });
+          }, false);
 
           const isErrString = isErrArrString || (typeof err === 'string' || err instanceof String)
-          
+
           const growFactor = ((field.forceColumnWidth ?? 0) === 0) ? {} : { sm: field.forceColumnWidth }
           return (
             <Grid
