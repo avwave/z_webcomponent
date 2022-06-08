@@ -37,6 +37,8 @@ import {
   useMemo,
   useState
 } from "react";
+import DurationInputMask from "react-duration-input-mask/publish/index";
+
 import PhoneInput from "react-phone-number-input/input";
 import "react-phone-number-input/style.css";
 import * as Yup from "yup";
@@ -388,6 +390,40 @@ const FormFieldSet = ({
               {...fieldParams?.fieldProps}
             />
           );
+        case "duration":
+          return (
+            <DurationInputMask 
+              component={TextField}
+              name={fieldName}
+              type={fieldParams.type}
+              label={formInline ? "" : `${fieldParams.label} ${isRequired ? '*' : ''}`}
+              value={formValue}
+              handleChange={(value) => {
+                onChangeOverride(value)
+              }}
+              handleBlur={(value) => {
+                onChangeOverride(value)
+              }}
+              disabled={fieldParams.readOnly || formReadOnly}
+              error={hasError}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              InputProps={{
+                startAdornment: fieldParams.icon ? (
+                  <InputAdornment position="start">
+                    {fieldParams.icon}
+                  </InputAdornment>
+                ) : undefined,
+                inputProps: {
+                  ...fieldParams.inputProps ?? {}
+                }
+              }}
+              maskDelay={1000} 
+              variant={variant}
+              {...fieldParams?.fieldProps}
+            />
+          )
         case "textonly":
           return (
             <TextField
