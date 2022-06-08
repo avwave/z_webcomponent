@@ -49,6 +49,7 @@
     "react-dnd": "^11.1.3",
     "react-dnd-html5-backend": "^11.1.3",
     "react-dom": "^17.0.1",
+    "react-duration-input-mask": "^0.6.1",
     "react-fast-compare": "^3.2.0",
     "react-file-previewer": "^0.6.3",
     "react-file-previewer-v2": "^0.6.3",
