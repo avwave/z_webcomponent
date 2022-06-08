@@ -848,9 +848,12 @@ const FormFieldSet = ({
         if (field) {
           const err = get(formik.touched, layout) && get(formik.errors, layout);
           const errText = Array.isArray(err) ? Array.from(new Set(err)).join(', ') : err;
-          const isErrString = (typeof err === 'string' || err instanceof String) || err?.reduce((acc, curr) => {
+          const isErrArrString = err?.reduce((acc, curr) => {
             return acc || (typeof curr === 'string' || curr instanceof String)
           });
+
+          const isErrString = isErrArrString || (typeof err === 'string' || err instanceof String)
+          
           const growFactor = ((field.forceColumnWidth ?? 0) === 0) ? {} : { sm: field.forceColumnWidth }
           return (
             <Grid
