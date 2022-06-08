@@ -848,9 +848,9 @@ const FormFieldSet = ({
         if (field) {
           const err = get(formik.touched, layout) && get(formik.errors, layout);
           const errText = Array.isArray(err) ? Array.from(new Set(err)).join(', ') : err;
-          const isErrArrString = err?.reduce((acc, curr) => {
+          const isErrArrString = Array.isArray(err) ? err?.reduce((acc, curr) => {
             return acc || (typeof curr === 'string' || curr instanceof String)
-          }, false);
+          }, false): false;
 
           const isErrString = isErrArrString || (typeof err === 'string' || err instanceof String)
 
