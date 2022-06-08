@@ -474,9 +474,9 @@ Duration.args = {
     duration: {
       type: "duration",
       label: "Duration",
-      initialValues: 60400,
+      initialValues: '',
       validator: () =>
-        Yup.number().required().nullable()
+        Yup.number().required().label()
     },
   },
   formId: "duration",
