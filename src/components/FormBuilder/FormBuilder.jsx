@@ -869,7 +869,7 @@ const FormFieldSet = ({
                 >
                   {renderField(layout, field, fieldName)}
                   <FormHelperText>
-                    {isErrString ? err: errText}
+                    {isErrString ? err: ""}
                   </FormHelperText>
                 </FormControl>
               </div>
