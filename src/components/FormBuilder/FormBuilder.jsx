@@ -848,6 +848,13 @@ const FormFieldSet = ({
         const isFormInline = formInline && field?.type !== 'component'
         if (field) {
           const err = get(formik.touched, layout) && get(formik.errors, layout);
+          const errText = Array.isArray(err) ? Array.from(new Set(err)).join(', ') : err;
+          const isErrArrString = Array.isArray(err) ? err?.reduce((acc, curr) => {
+            return acc || (typeof curr === 'string' || curr instanceof String)
+          }, false): false;
+
+          const isErrString = isErrArrString || (typeof err === 'string' || err instanceof String)
+
           const growFactor = ((field.forceColumnWidth ?? 0) === 0) ? {} : { sm: field.forceColumnWidth }
           return (
             <Grid
@@ -868,7 +875,7 @@ const FormFieldSet = ({
                 >
                   {renderField(layout, field, fieldName)}
                   <FormHelperText>
-                    {!Array.isArray(err) ? err : ""}
+                    {isErrString ? errText: ""}
                   </FormHelperText>
                 </FormControl>
               </div>
