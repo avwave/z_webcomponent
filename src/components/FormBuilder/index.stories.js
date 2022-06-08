@@ -172,7 +172,7 @@ Default.args = {
       label: "Start-Time",
       initialValues: new Date("2021-06-10T12:00:00"),
       validator: () => Yup.date().required(),
-      onChange: (field, data) => {},
+      onChange: (field, data) => { },
     },
     selection: {
       type: "select",
@@ -357,14 +357,14 @@ Dates.args = {
       label: "Time",
       initialValues: new Date("2021-06-10T12:00:00"),
       validator: () => Yup.date(),
-      onChange: (field, data) => {},
+      onChange: (field, data) => { },
     },
     datetime: {
       type: "datetime-local",
       label: "DateTime",
       initialValues: new Date("2021-06-10T12:00:00"),
       validator: () => Yup.date().required().nullable().max(new Date()),
-      onChange: (field, data) => {},
+      onChange: (field, data) => { },
     },
   },
   formId: "dates",
@@ -466,6 +466,22 @@ DateRange.args = {
   formId: "daterange",
 };
 
+export const Duration = DefaultStory.bind({});
+Duration.args = {
+  ...Default.args,
+  formLayout: ["duration"],
+  form: {
+    duration: {
+      type: "duration",
+      label: "Duration",
+      initialValues: 60400,
+      validator: () =>
+        Yup.number().required().nullable()
+    },
+  },
+  formId: "duration",
+};
+
 export const Persist = DefaultStory.bind({});
 Persist.args = {
   ...Default.args,
@@ -537,7 +553,7 @@ Reversed.args = {
   ...Default.args,
   formId: "reversed",
   reverse: true,
-  additionalActions: () => {},
+  additionalActions: () => { },
 };
 
 export const Nested = NestedStory.bind({});
@@ -564,7 +580,7 @@ Nested.args = {
       type: "fieldarray",
       label: "subform",
       inline: true,
-      bordered:true,
+      bordered: true,
       initialValues: [
         {
           subform1: "sf1",
@@ -634,113 +650,111 @@ Nested.args = {
 };
 
 
-const WizardStory = ({...args}) => {
-  
+const WizardStory = ({ ...args }) => {
+
 }
 
 export const Wizard = DefaultStory.bind({})
 Wizard.args = {
   ...Default.args,
   formId: "nested",
-  formLayout: ["subform"],
+  formLayout: ["questions"],
   form: {
-    subform: {
-      readOnly: true,
-      type: "wizardFieldArray",
-      label: "subform",
-      inline: true,
-      initialValues: [
-        {
-          subform1: "",
-          subform2: "",
-          subform3: "",
-          subform4: "",
-        },
+    questions: {
+      "type": "wizardFieldArray",
+      "label": "Question",
+      "inline": true,
+      "formLayout": [
+        "6",
+        "7",
+        "8"
       ],
-      //note: only root level form nodes can have validation
-      validator: () =>
-        Yup.array().of(
-          Yup.object().shape({
-            subform1: Yup.string().nullable().required(),
-            subform2: Yup.string().nullable().required(),
-            subform3: Yup.string().nullable().required(),
-            subform4: Yup.string().nullable().required(),
-          })
-        ),
-      formLayout: ["subform1", "subform2", "subform3", "subform4"],
-      formValueTemplate: {
-        subform1: ``,
-        subform2: ``,
-        subform3: ``,
-        subform4: ``,
+      "formValueTemplate": {
+        "6": "",
+        "7": "",
+        "8": ""
       },
-      formTemplate: {
-        subform1: {
+      "formTemplate": {
+        "6": {
           type: "radio",
-          label: "Question 1",
+          label: "Radio",
+
           initialValues: "",
           options: [
             { id: "1", label: "one" },
             { id: "2", label: "two" },
             { id: "3", label: "three" },
             { id: "4", label: "four" },
+            { id: "5", label: "five" },
+            { id: "6", label: "six" },
           ],
           settings: {
             labelField: "label",
             valueField: "id",
-            inline: false,
+            inline: true,
           },
         },
-        subform2: {
-          type: "radio",
-          label: "Question 2",
-          initialValues: "",
-          options: [
-            { id: "1", label: "one" },
-            { id: "2", label: "two" },
-            { id: "3", label: "three" },
-            { id: "4", label: "four" },
+        "7": {
+          "type": "radio",
+          "initialValues": "",
+          "label": "Odio sit accusantium et aut ea. Dolores officia ducimus. Dolor dolore reprehenderit vitae et. Ut atque voluptatem labore quos. Reprehenderit officia esse modi laboriosam ad ad qui. Dolor at eveniet odit.",
+          "options": [
+            {
+              "label": "ut sunt dolor",
+              "id": 38
+            },
+            {
+              "label": "nobis quia officia",
+              "id": 36
+            },
+            {
+              "label": "omnis quasi minus",
+              "id": 35
+            },
+            {
+              "label": "eum sapiente voluptatibus",
+              "id": 37
+            }
           ],
-          settings: {
-            labelField: "label",
-            valueField: "id",
-            inline: false,
-          },
+          "settings": {
+            "labelField": "label",
+            "valueField": "id",
+            "inline": false
+          }
         },
-        subform3: {
-          type: "radio",
-          label: "Question 3",
-          initialValues: "",
-          options: [
-            { id: "1", label: "one" },
-            { id: "2", label: "two" },
-            { id: "3", label: "three" },
-            { id: "4", label: "four" },
+        "8": {
+          "type": "radio",
+          "initialValues": "",
+          "label": "Dolorem aut eos minus perspiciatis quaerat. Alias eligendi maxime voluptatum dolorem enim harum enim deserunt ex. Sit et modi laboriosam sunt eius. Beatae rerum in nihil voluptatibus est natus quo quis incidunt.",
+          "options": [
+            {
+              "label": "Kansas",
+              "id": 32
+            },
+            {
+              "label": "animi nihil reprehenderit",
+              "id": 33
+            },
+            {
+              "label": "sunt voluptatem vel",
+              "id": 34
+            }
           ],
-          settings: {
-            labelField: "label",
-            valueField: "id",
-            inline: false,
-          },
-        },
-        subform4: {
-          type: "radio",
-          label: "Question 4",
-          initialValues: "",
-          options: [
-            { id: "1", label: "one" },
-            { id: "2", label: "two" },
-            { id: "3", label: "three" },
-            { id: "4", label: "four" },
-          ],
-          settings: {
-            labelField: "label",
-            valueField: "id",
-            inline: false,
-          },
-        },
+          "settings": {
+            "labelField": "label",
+            "valueField": "id",
+            "inline": false
+          }
+        }
       },
-      form: [],
+      "initialValues": [
+        {
+          "6": "",
+          "7": "",
+          "8": ""
+        }
+      ],
+      "form": []
     },
   },
 
