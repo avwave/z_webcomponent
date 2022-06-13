@@ -603,7 +603,7 @@ Nested.args = {
             subform2: Yup.string().nullable().required(),
             subsubform: Yup.array().of(
               Yup.object().shape({
-                subsubform1: Yup.string().nullable().required(),
+                subsubform1: Yup.array(),
               })
             ),
           })
