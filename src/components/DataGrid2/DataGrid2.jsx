@@ -161,6 +161,7 @@ const DataGrid2 = React.forwardRef(({
   rightAccessory,
   centerAccessory,
   onLoadMore = () => { },
+  loadMoreOffset = TABLE_LOAD_OFFSET,
   totalCount,
   resetScroll,
   hasSearchFilter = true,
@@ -497,7 +498,7 @@ const DataGrid2 = React.forwardRef(({
                 }
                 if (
                   element.offsetHeight + element.scrollTop >=
-                  element.scrollHeight - TABLE_LOAD_OFFSET
+                  element.scrollHeight - loadMoreOffset
                 ) {
                   if (!deferLoading) {
                     kaDispatch({ type: LOAD_MORE_DATA });
