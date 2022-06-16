@@ -29,12 +29,14 @@ const FormBuilderStory = {
     variant: {
       control: {
         type: "select",
+        toolTip: "select",
         options: ["filled", "standard", "outlined"],
       },
     },
     formFactor: {
       control: {
         type: "select",
+        toolTip: "select",
         options: ["default", "card", "toolbar"],
       },
     },
@@ -43,6 +45,7 @@ const FormBuilderStory = {
     docs: {
       source: {
         type: "dynamic",
+        toolTip: "dynamic",
       },
     },
   },
@@ -92,15 +95,18 @@ Default.args = {
   form: {
     plainComponent: {
       type: "component",
+      toolTip: "component",
       component: () => <Avatar>H</Avatar>,
     },
     textOnly: {
       type: "textonly",
+      toolTip: "textonly",
       label: "Text Only",
       text: "Text Only Value",
     },
     readOnly: {
       type: "text",
+      toolTip: "text",
       label: "Read Only",
       initialValues: "not editable",
       validator: () => Yup.string(),
@@ -109,6 +115,7 @@ Default.args = {
     },
     firstName: {
       type: "text",
+      toolTip: "text",
       label: "First Name",
       initialValues: "",
 
@@ -119,6 +126,7 @@ Default.args = {
     },
     middleName: {
       type: "text",
+      toolTip: "text",
       label: "Middle Name",
       initialValues: "",
 
@@ -126,12 +134,14 @@ Default.args = {
     },
     lastName: {
       type: "text",
+      toolTip: "text",
       label: "Last Name",
       initialValues: "",
       validator: () => Yup.string(),
     },
     multiLine: {
       type: "text",
+      toolTip: "text",
       label: "Multi line",
 
       initialValues: "",
@@ -143,12 +153,14 @@ Default.args = {
     },
     email: {
       type: "email",
+      toolTip: "email",
       label: "Email",
       initialValues: "",
       validator: () => Yup.string().email(),
     },
     aNumber: {
       type: "number",
+      toolTip: "number",
       label: "A-Number",
 
       initialValues: 0,
@@ -156,6 +168,7 @@ Default.args = {
     },
     startDate: {
       type: "date",
+      
       label: "Start-Date",
 
       disableFuture: true,
@@ -169,6 +182,7 @@ Default.args = {
     },
     startTime: {
       type: "time",
+      toolTip: "time",
       label: "Start-Time",
       initialValues: new Date("2021-06-10T12:00:00"),
       validator: () => Yup.date().required(),
@@ -176,6 +190,7 @@ Default.args = {
     },
     selection: {
       type: "select",
+      toolTip: "select",
       label: "Selection",
 
       initialValues: "",
@@ -194,6 +209,7 @@ Default.args = {
     },
     multipleSelection: {
       type: "select",
+      toolTip: "select",
       label: "Multiple Selection",
 
       initialValues: [],
@@ -215,6 +231,7 @@ Default.args = {
     },
     autocomplete: {
       type: "autocomplete",
+      toolTip: "autocomplete",
       label: "Autocomplete",
 
       initialValues: [],
@@ -236,6 +253,7 @@ Default.args = {
     },
     radio: {
       type: "radio",
+      toolTip: "radio",
       label: "Radio",
 
       initialValues: "",
@@ -257,6 +275,7 @@ Default.args = {
     },
     checkbox: {
       type: "checkbox",
+      toolTip: "checkbox",
       label: "CheckBox",
 
       initialValues: false,
@@ -268,6 +287,7 @@ Default.args = {
     },
     switch: {
       type: "switch",
+      toolTip: "switch",
       label: "Switch",
 
       initialValues: false,
@@ -329,6 +349,7 @@ Dates.args = {
   form: {
     daterange: {
       type: "dateRange",
+      toolTip: "dateRange",
       label: "Ranges",
       initialValues: {
         startDate: new Date("November 17, 2020 03:24:00"),
@@ -342,6 +363,7 @@ Dates.args = {
     },
     date: {
       type: "date",
+      toolTip: "date",
       label: "Date",
       disableFuture: true,
       disablePast: false,
@@ -354,6 +376,7 @@ Dates.args = {
     },
     time: {
       type: "time",
+      toolTip: "time",
       label: "Time",
       initialValues: new Date("2021-06-10T12:00:00"),
       validator: () => Yup.date(),
@@ -361,6 +384,7 @@ Dates.args = {
     },
     datetime: {
       type: "datetime-local",
+      toolTip: "datetime-local",
       label: "DateTime",
       initialValues: new Date("2021-06-10T12:00:00"),
       validator: () => Yup.date().required().nullable().max(new Date()),
@@ -377,6 +401,7 @@ Phone.args = {
   form: {
     phone: {
       type: "phone",
+      toolTip: "phone",
       label: "Phone",
       initialValues: "",
       validator: () =>
@@ -396,6 +421,7 @@ Phone.args = {
     },
     fillPhone: {
       type: "phone",
+      toolTip: "phone",
       label: "Phone",
       initialValues: "+639166831131",
       validator: () =>
@@ -424,6 +450,7 @@ Checkboxes.args = {
   form: {
     checkboxes: {
       type: "checkboxes",
+      toolTip: "checkboxes",
       label: "CheckBoxes",
       initialValues: ["2", "5"],
       options: [
@@ -454,6 +481,7 @@ DateRange.args = {
   form: {
     daterange: {
       type: "dateRange",
+      toolTip: "dateRange",
       label: "Ranges",
       initialValues: {},
       validator: () =>
@@ -473,6 +501,7 @@ Duration.args = {
   form: {
     duration: {
       type: "duration",
+      toolTip: "duration",
       label: "Duration",
       initialValues: 60400,
       validator: () =>
@@ -565,6 +594,7 @@ Nested.args = {
   form: {
     form1: {
       type: "text",
+      toolTip: "text",
       label: "form 1",
       initialValues: "",
       forceColumnWidth: 6,
@@ -572,12 +602,14 @@ Nested.args = {
     },
     form2: {
       type: "text",
+      toolTip: "text",
       label: "form 2",
       initialValues: "",
       validator: () => Yup.string().nullable(),
     },
     subform: {
       type: "fieldarray",
+      toolTip: "fieldarray",
       label: "subform",
       inline: true,
       bordered: true,
@@ -617,17 +649,20 @@ Nested.args = {
       formTemplate: {
         subform1: {
           type: "text",
+          toolTip: "text",
           label: "subform 1",
           initialValues: "",
         },
         subform2: {
           type: "text",
+          toolTip: "text",
           label: "subform 2",
           forceColumnWidth: 1,
           initialValues: "",
         },
         subsubform: {
           type: "fieldarray",
+          toolTip: "fieldarray",
           label: "subsubform",
           inline: true,
           formLayout: ["subsubform1"],
@@ -637,6 +672,7 @@ Nested.args = {
           formTemplate: {
             subsubform1: {
               type: "text",
+              toolTip: "text",
               label: "subsubform 1",
               initialValues: "",
             },
@@ -677,6 +713,7 @@ Wizard.args = {
       "formTemplate": {
         "6": {
           type: "radio",
+          toolTip: "radio",
           label: "Radio",
 
           initialValues: "",
