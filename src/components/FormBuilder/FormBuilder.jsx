@@ -20,7 +20,7 @@ import {
   RadioGroup,
   Switch,
   TextField,
-  Toolbar, Typography
+  Toolbar, Tooltip, Typography
 } from "@material-ui/core";
 import { Add, Backspace, Close, DateRange, Schedule } from "@material-ui/icons";
 import { Autocomplete } from "@material-ui/lab";
@@ -215,14 +215,28 @@ const FormFieldSet = ({
                   </InputAdornment>
                 ) : undefined,
               }}
-              renderInput={props => <TextField
-                {...props}
-                helperText=" "
-                variant={variant}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />}
+              renderInput={props => (
+                fieldParams.toolTip ? <Tooltip
+                  title={fieldParams.toolTip}
+                  placement="top-start">
+                  <TextField
+                    {...props}
+                    helperText=" "
+                    variant={variant}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                  />
+                </Tooltip> :
+                  <TextField
+                    {...props}
+                    helperText=" "
+                    variant={variant}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                  />
+              )}
               openPickerIcon={<DateRange />}
               onChange={(evt, val) => {
                 // console.log("📢[FormBuilder.js:152]:", evt);
@@ -256,14 +270,28 @@ const FormFieldSet = ({
               disableFuture={fieldParams.disableFuture}
               label={formInline ? "" : `${fieldParams.label} ${isRequired ? '*' : ''}`}
               name={fieldName}
-              renderInput={props => <TextField
-                {...props}
-                helperText=" "
-                variant={variant}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />}
+              renderInput={props => (
+                fieldParams.toolTip ? <Tooltip
+                  title={fieldParams.toolTip}
+                  placement="top-start">
+                  <TextField
+                    {...props}
+                    helperText=" "
+                    variant={variant}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                  />
+                </Tooltip> :
+                  <TextField
+                    {...props}
+                    helperText=" "
+                    variant={variant}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                  />
+              )}
               InputProps={{
                 startAdornment: fieldParams.icon ? (
                   <InputAdornment position="start">
@@ -300,14 +328,28 @@ const FormFieldSet = ({
               label={formInline ? "" : `${fieldParams.label} ${isRequired ? '*' : ''}`}
               name={fieldName}
               keyboardIcon={<Schedule />}
-              renderInput={props => <TextField
-                {...props}
-                helperText=" "
-                variant={variant}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />}
+              renderInput={props => (
+                fieldParams.toolTip ? <Tooltip
+                  title={fieldParams.toolTip}
+                  placement="top-start">
+                  <TextField
+                    {...props}
+                    helperText=" "
+                    variant={variant}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                  />
+                </Tooltip> :
+                  <TextField
+                    {...props}
+                    helperText=" "
+                    variant={variant}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                  />
+              )}
               InputProps={{
                 startAdornment: fieldParams.icon ? (
                   <InputAdornment position="start">
@@ -392,7 +434,7 @@ const FormFieldSet = ({
           );
         case "duration":
           return (
-            <DurationInputMask 
+            <DurationInputMask
               component={TextField}
               name={fieldName}
               type={fieldParams.type}
@@ -419,7 +461,7 @@ const FormFieldSet = ({
                   ...fieldParams.inputProps ?? {}
                 }
               }}
-              maskDelay={1000} 
+              maskDelay={1000}
               variant={variant}
               {...fieldParams?.fieldProps}
             />
@@ -476,114 +518,108 @@ const FormFieldSet = ({
           );
         case "dateRange":
           return (
-            <>
-              <DateTimeRangePicker
-                inline={fieldParams.inline}
-                form
-                name={fieldName}
-                variant={variant}
-                label={formInline ? "" : `${fieldParams.label} ${isRequired ? '*' : ''}`}
-                value={get(formik.values, fieldName)}
-                onChange={onChangeOverride}
-                error={hasError}
-                disabled={fieldParams.readOnly || formReadOnly}
-                {...fieldParams?.fieldProps}
-              />
-            </>
+            <DateTimeRangePicker
+              inline={fieldParams.inline}
+              form
+              name={fieldName}
+              variant={variant}
+              label={formInline ? "" : `${fieldParams.label} ${isRequired ? '*' : ''}`}
+              value={get(formik.values, fieldName)}
+              onChange={onChangeOverride}
+              error={hasError}
+              disabled={fieldParams.readOnly || formReadOnly}
+              {...fieldParams?.fieldProps}
+            />
           )
         case "select":
           return (
-            <>
-              <TextField
-                name={fieldName}
-                variant={variant}
-                fullWidth
-                select
-                label={formInline ? "" : `${fieldParams.label} ${isRequired ? '*' : ''}`}
-                value={get(formik.values, fieldName)}
-                onChange={onChangeOverride}
-                error={hasError}
-                SelectProps={{
-                  multiple: fieldParams.settings?.multiple,
-                  renderValue: (selected, b) => {
-                    if (fieldParams.settings?.multiple) {
-                      return selected
-                        .map((s) => {
-                          const item = options.find(
-                            (item) =>
-                              item[fieldParams.settings?.valueField] === s
-                          );
-                          return item ? item[fieldParams.settings.labelField] : "";
-                        })
-                        .join(", ");
-                    }
-                    const item = options.find(
-                      (item) =>
-                        item[fieldParams.settings?.valueField] === selected
-                    );
-                    return item ? item[fieldParams.settings.labelField] : "";
-                  },
-                }}
-                InputLabelProps={{ shrink: true }}
-                InputProps={{
-                  startAdornment: fieldParams.icon ? (
-                    <InputAdornment position="start">
-                      {fieldParams.icon}
-                    </InputAdornment>
-                  ) : undefined,
-                }}
-                disabled={fieldParams.readOnly || formReadOnly}
-                {...fieldParams?.fieldProps}
-              >
-                {options.map((item, idx) => {
-                  return (
-                    <MenuItem
-                      key={idx}
-                      value={item[fieldParams.settings?.valueField]}
-                    >
-                      {fieldParams.settings?.multiple && (
-                        <Checkbox
-                          checked={get(formik.values, fieldName, []).includes(
-                            item[fieldParams.settings?.valueField]
-                          )}
-                        />
-                      )}
-                      <ListItemText
-                        primary={item[fieldParams.settings.labelField]}
-                      />
-                    </MenuItem>
+            <TextField
+              name={fieldName}
+              variant={variant}
+              fullWidth
+              select
+              label={formInline ? "" : `${fieldParams.label} ${isRequired ? '*' : ''}`}
+              value={get(formik.values, fieldName)}
+              onChange={onChangeOverride}
+              error={hasError}
+              SelectProps={{
+                multiple: fieldParams.settings?.multiple,
+                renderValue: (selected, b) => {
+                  if (fieldParams.settings?.multiple) {
+                    return selected
+                      .map((s) => {
+                        const item = options.find(
+                          (item) =>
+                            item[fieldParams.settings?.valueField] === s
+                        );
+                        return item ? item[fieldParams.settings.labelField] : "";
+                      })
+                      .join(", ");
+                  }
+                  const item = options.find(
+                    (item) =>
+                      item[fieldParams.settings?.valueField] === selected
                   );
-                })}
-              </TextField>
-            </>
+                  return item ? item[fieldParams.settings.labelField] : "";
+                },
+              }}
+              InputLabelProps={{ shrink: true }}
+              InputProps={{
+                startAdornment: fieldParams.icon ? (
+                  <InputAdornment position="start">
+                    {fieldParams.icon}
+                  </InputAdornment>
+                ) : undefined,
+              }}
+              disabled={fieldParams.readOnly || formReadOnly}
+              {...fieldParams?.fieldProps}
+            >
+              {options.map((item, idx) => {
+                return (
+                  <MenuItem
+                    key={idx}
+                    value={item[fieldParams.settings?.valueField]}
+                  >
+                    {fieldParams.settings?.multiple && (
+                      <Checkbox
+                        checked={get(formik.values, fieldName, []).includes(
+                          item[fieldParams.settings?.valueField]
+                        )}
+                      />
+                    )}
+                    <ListItemText
+                      primary={item[fieldParams.settings.labelField]}
+                    />
+                  </MenuItem>
+                );
+              })}
+            </TextField>
           );
         case "switch":
         case "checkbox":
           return (
-            <>
-              <FormControlLabel
-                name={fieldName}
-                checked={get(formik.values, fieldName)}
-                control={
-                  fieldParams.type === "switch" ? <Switch /> : <Checkbox />
+            <FormControlLabel
+              name={fieldName}
+              checked={get(formik.values, fieldName)}
+              control={
+                fieldParams.type === "switch" ? <Switch /> : <Checkbox />
+              }
+              labelPlacement={fieldParams.settings.labelPlacement ?? 'end'}
+              onChange={(evt, val) => {
+                if (fieldParams.onChange) {
+                  fieldParams.onChange(fieldName, val);
                 }
-                labelPlacement={fieldParams.settings.labelPlacement ?? 'end'}
-                onChange={(evt, val) => {
-                  if (fieldParams.onChange) {
-                    fieldParams.onChange(fieldName, val);
-                  }
-                  formik.setFieldValue(fieldName, val);
-                }}
-                label={formInline ? "" : `${fieldParams.label} ${isRequired ? '*' : ''}`}
-                disabled={fieldParams.readOnly || formReadOnly}
-                {...fieldParams?.fieldProps}
-              />
-            </>
+                formik.setFieldValue(fieldName, val);
+              }}
+              label={formInline ? "" : `${fieldParams.label} ${isRequired ? '*' : ''}`}
+              disabled={fieldParams.readOnly || formReadOnly}
+              {...fieldParams?.fieldProps}
+            />
           );
 
         case "radio":
           return (
-            <>
+            <FormControl>
               <FormLabel component="legend">{formInline ? "" : `${fieldParams.label} ${isRequired ? '*' : ''}`}</FormLabel>
               <RadioGroup
                 row={fieldParams.settings.inline}
@@ -604,11 +640,11 @@ const FormFieldSet = ({
                   />
                 ))}
               </RadioGroup>
-            </>
+            </FormControl>
           );
         case "checkboxes":
           return (
-            <>
+            <FormControl>
               <FormLabel component="legend">{formInline ? "" : `${fieldParams.label} ${isRequired ? '*' : ''}`}</FormLabel>
               <FormGroup
                 row={fieldParams.settings.inline}
@@ -639,7 +675,7 @@ const FormFieldSet = ({
                   );
                 })}
               </FormGroup>
-            </>
+            </FormControl>
           );
 
         case "autocomplete":
@@ -706,97 +742,97 @@ const FormFieldSet = ({
           );
         case "fieldarray":
           return (
-            <div className={fieldParams?.bordered?classes.fieldArray:''}>
-            <FieldArray
-              name={fieldName}
-              render={(arrayHelpers) => {
-                if (Array.isArray(get(arrayHelpers.form.values, fieldName))) {
-                  return (
-                    <>
-                      {get(arrayHelpers.form.values, fieldName).map(
-                        (subform, idx) => {
-                          return (
-                            <Box component={fieldParams.settings?.formInset ? Card : 'div'} key={`${fieldName}-${idx}`}
-                              className={fieldParams.inline && classes.subformInline}>
-                              {!fieldParams.inline &&
-                                <Box className={classes.subformHeader} >
-                                  <Typography variant="body2" className={classes.subformHeaderTitle}>
-                                    {formInline ? "" : `${fieldParams.label} ${isRequired ? '*' : ''}`}
-                                  </Typography>
-                                  {
-                                    formReadOnly ? null :
-                                      <IconButton
-                                        aria-label=""
-                                        onClick={() => {
-                                          arrayHelpers.remove(idx);
-                                        }}
-                                      >
-                                        <Close />
-                                      </IconButton>
-                                  }
+            <div className={fieldParams?.bordered ? classes.fieldArray : ''}>
+              <FieldArray
+                name={fieldName}
+                render={(arrayHelpers) => {
+                  if (Array.isArray(get(arrayHelpers.form.values, fieldName))) {
+                    return (
+                      <>
+                        {get(arrayHelpers.form.values, fieldName).map(
+                          (subform, idx) => {
+                            return (
+                              <Box component={fieldParams.settings?.formInset ? Card : 'div'} key={`${fieldName}-${idx}`}
+                                className={fieldParams.inline && classes.subformInline}>
+                                {!fieldParams.inline &&
+                                  <Box className={classes.subformHeader} >
+                                    <Typography variant="body2" className={classes.subformHeaderTitle}>
+                                      {formInline ? "" : `${fieldParams.label} ${isRequired ? '*' : ''}`}
+                                    </Typography>
+                                    {
+                                      formReadOnly ? null :
+                                        <IconButton
+                                          aria-label=""
+                                          onClick={() => {
+                                            arrayHelpers.remove(idx);
+                                          }}
+                                        >
+                                          <Close />
+                                        </IconButton>
+                                    }
+                                  </Box>
+                                }
+                                <Box component={fieldParams.inline ? 'div' : CardContent} className={classes.subformContent}>
+                                  {buildComponent(
+                                    fieldParams.formLayout,
+                                    fieldParams.formTemplate,
+                                    fieldParams.formLayout.length,
+                                    `${fieldName}-${idx}`,
+                                    `${fieldName}[${idx}]`
+                                  )}
                                 </Box>
-                              }
-                              <Box component={fieldParams.inline ? 'div' : CardContent} className={classes.subformContent}>
-                                {buildComponent(
-                                  fieldParams.formLayout,
-                                  fieldParams.formTemplate,
-                                  fieldParams.formLayout.length,
-                                  `${fieldName}-${idx}`,
-                                  `${fieldName}[${idx}]`
-                                )}
+                                {fieldParams.inline &&
+
+                                  (formReadOnly || fieldParams?.readOnly) ? null :
+                                  <IconButton
+                                    className={classes.inlineDelete}
+                                    aria-label=""
+                                    onClick={() => {
+                                      arrayHelpers.remove(idx);
+                                    }}
+                                  >
+                                    <Close />
+                                  </IconButton>
+                                }
                               </Box>
-                              {fieldParams.inline &&
-
-                                (formReadOnly || fieldParams?.readOnly) ? null :
-                                <IconButton
-                                  className={classes.inlineDelete}
-                                  aria-label=""
-                                  onClick={() => {
-                                    arrayHelpers.remove(idx);
-                                  }}
-                                >
-                                  <Close />
-                                </IconButton>
-                              }
-                            </Box>
-                          );
+                            );
+                          }
+                        )}
+                        {(!formReadOnly && !fieldParams?.readOnly) &&
+                          <div>
+                            <Button
+                              variant="contained"
+                              onClick={() => {
+                                arrayHelpers.push(fieldParams.formValueTemplate);
+                              }}
+                              startIcon={<Add />}
+                              color="primary"
+                            >
+                              Add {`${fieldParams.label}`}
+                            </Button>
+                          </div>
                         }
-                      )}
-                      {(!formReadOnly && !fieldParams?.readOnly) &&
-                        <div>
-                          <Button
-                            variant="contained"
-                            onClick={() => {
-                              arrayHelpers.push(fieldParams.formValueTemplate);
-                            }}
-                            startIcon={<Add />}
-                            color="primary"
-                          >
-                            Add {`${fieldParams.label}`}
-                          </Button>
-                        </div>
-                      }
-                    </>
-                  );
-                }
-                if (formReadOnly && fieldParams?.readOnly) return <></>
-                return (
-                  <div>
-                    <Button
-                      variant="contained"
+                      </>
+                    );
+                  }
+                  if (formReadOnly && fieldParams?.readOnly) return <></>
+                  return (
+                    <div>
+                      <Button
+                        variant="contained"
 
-                      onClick={() =>
-                        arrayHelpers.push(fieldParams.formValueTemplate)
-                      }
-                      startIcon={<Add />}
-                      color="primary"
-                    >
-                      Add {`${fieldParams.label}`}
-                    </Button>
-                  </div>
-                )
-              }}
-            />
+                        onClick={() =>
+                          arrayHelpers.push(fieldParams.formValueTemplate)
+                        }
+                        startIcon={<Add />}
+                        color="primary"
+                      >
+                        Add {`${fieldParams.label}`}
+                      </Button>
+                    </div>
+                  )
+                }}
+              />
             </div>
           );
         case "wizardFieldArray":
@@ -850,7 +886,7 @@ const FormFieldSet = ({
           const errText = Array.isArray(err) ? Array.from(new Set(err)).join(', ') : err;
           const isErrArrString = Array.isArray(err) ? err?.reduce((acc, curr) => {
             return acc || (typeof curr === 'string' || curr instanceof String)
-          }, false): false;
+          }, false) : false;
 
           const isErrString = isErrArrString || (typeof err === 'string' || err instanceof String)
 
@@ -872,9 +908,13 @@ const FormFieldSet = ({
                   variant={variant}
                   error={Boolean(err)}
                 >
-                  {renderField(layout, field, fieldName)}
+                  {field.toolTip ? <Tooltip
+                    title={field.toolTip}
+                    placement="top-start">
+                    {renderField(layout, field, fieldName)}
+                  </Tooltip> : renderField(layout, field, fieldName)}
                   <FormHelperText>
-                    {isErrString ? errText: ""}
+                    {isErrString ? errText : ""}
                   </FormHelperText>
                 </FormControl>
               </div>
