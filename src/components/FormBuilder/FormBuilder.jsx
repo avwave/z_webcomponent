@@ -838,6 +838,7 @@ const FormFieldSet = ({
         case "wizardFieldArray":
           return (
             <WizardFieldArray
+              stepVariant={fieldParams?.stepVariant}
               fieldName={fieldName}
               fieldParams={fieldParams}
               classes={classes}
@@ -845,6 +846,8 @@ const FormFieldSet = ({
               isRequired={isRequired}
               formReadOnly={formReadOnly}
               buildComponent={buildComponent}
+              stepperProps={fieldParams?.stepperProps}
+              wizardProps={fieldParams?.wizardProps}
             />
           );
         default:

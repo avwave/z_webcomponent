@@ -168,7 +168,7 @@ Default.args = {
     },
     startDate: {
       type: "date",
-      
+
       label: "Start-Date",
 
       disableFuture: true,
@@ -699,7 +699,14 @@ Wizard.args = {
     questions: {
       "type": "wizardFieldArray",
       "label": "Question",
+      "stepVariant": "text",
       "inline": true,
+      "stepperProps": {
+          color: 'default',
+          progressColor: 'secondary',
+          prefix: 'Question',
+          isDense: true,
+      },
       "formLayout": [
         "6",
         "7",
