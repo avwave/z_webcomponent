@@ -1,6 +1,6 @@
 {
   "name": "@zennya/web-component-library",
-  "version": "0.7.44",
+  "version": "0.7.45",
   "private": false,
   "dependencies": {
     "@date-io/date-fns": "^2.10.11",
@@ -69,7 +69,6 @@
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@fortawesome/react-fontawesome": "^0.1.15"
   },
-
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

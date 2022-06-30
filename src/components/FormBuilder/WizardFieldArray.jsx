@@ -5,6 +5,7 @@ import { get } from "lodash";
 import { useCallback, useMemo, useState } from 'react';
 import ReactJson from 'react-json-view';
 import {isEmpty} from 'lodash'
+import { Stepper } from '../Stepper';
 const useStyles = makeStyles((theme) => {
   return {}
 })
@@ -14,7 +15,10 @@ const WizardFieldArray = ({
   formInline,
   isRequired,
   formReadOnly,
-  buildComponent = () => { }
+  stepVariant="dots",
+  buildComponent = () => { },
+  stepperProps,
+  wizardProps
 }) => {
   const classes = useStyles()
   const theme = useTheme()
@@ -99,8 +103,9 @@ const WizardFieldArray = ({
                   );
                 }
               )}
-              <MobileStepper
-                variant="dots"
+              <Stepper
+                stepperProps={stepperProps}
+                variant={stepVariant}
                 steps={stepCount}
                 position="static"
                 activeStep={currentStep}
