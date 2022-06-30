@@ -20,11 +20,18 @@ const Stepper = ({
   stepperProps
 }) => {
   const classes = useStyles()
-  
+
   const normalValue = useMemo(
     () => {
       const value = activeStep + 1
       const normalise = value * 100 / (steps);
+      return normalise
+    }, [activeStep, steps]
+  );
+  const offsetValue = useMemo(
+    () => {
+      const value = activeStep
+      const normalise = value * 100 / (steps -1);
       return normalise
     }, [activeStep, steps]
   );
@@ -37,12 +44,27 @@ const Stepper = ({
     >
       <Toolbar variant={stepperProps?.isDense ? "dense" : "regular"}>
         {backButton}
-        <div className={classes.grow} />
-        <Typography variant="caption" color="inherit">{stepperProps?.prefix} {activeStep + 1} of {steps}</Typography>
-        <div className={classes.grow} />
+
+        {stepperProps?.variant === 'progress' ?
+          (
+            <LinearProgress className={classes.grow} color={stepperProps?.progressColor} variant='determinate' value={offsetValue} />
+          )
+          :
+          (
+            <>
+              <div className={classes.grow} />
+              <Typography variant="caption" color="inherit">{stepperProps?.prefix} {activeStep + 1} of {steps}</Typography>
+              <div className={classes.grow} />
+            </>
+          )
+        }
+
+
         {nextButton}
       </Toolbar>
-        <LinearProgress color={stepperProps?.progressColor} variant='determinate' value={normalValue}/>
+      {stepperProps?.variant === 'progress' ? <></> :
+        <LinearProgress color={stepperProps?.progressColor} variant='determinate' value={normalValue} />
+      }
     </AppBar >
   )
 }

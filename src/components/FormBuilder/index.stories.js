@@ -706,6 +706,7 @@ Wizard.args = {
           progressColor: 'secondary',
           prefix: 'Question',
           isDense: true,
+          variant: "progress"
       },
       "formLayout": [
         "6",
