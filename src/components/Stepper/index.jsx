@@ -1,4 +1,5 @@
 import { AppBar, LinearProgress, makeStyles, Toolbar, Typography } from '@material-ui/core';
+import clsx from 'clsx';
 import React, { useEffect, useMemo, useState } from 'react';
 
 const useStyles = makeStyles((theme) => {
@@ -10,6 +11,10 @@ const useStyles = makeStyles((theme) => {
     grow: {
       flexGrow: 1,
     },
+    progress: {
+      marginLeft: theme.spacing(3),
+      marginRight: theme.spacing(3),
+    }
   }
 })
 const Stepper = ({
@@ -31,7 +36,7 @@ const Stepper = ({
   const offsetValue = useMemo(
     () => {
       const value = activeStep
-      const normalise = value * 100 / (steps -1);
+      const normalise = value * 100 / (steps - 1);
       return normalise
     }, [activeStep, steps]
   );
@@ -42,12 +47,16 @@ const Stepper = ({
       className={classes.appBar}
       elevation={0}
     >
-      <Toolbar variant={stepperProps?.isDense ? "dense" : "regular"}>
+      <Toolbar
+        variant={stepperProps?.isDense ? "dense" : "regular"}
+        disableGutters
+      >
+
         {backButton}
 
         {stepperProps?.variant === 'progress' ?
           (
-            <LinearProgress className={classes.grow} color={stepperProps?.progressColor} variant='determinate' value={offsetValue} />
+            <LinearProgress className={clsx(classes.grow, classes.progress)} color={stepperProps?.progressColor} variant='determinate' value={offsetValue} />
           )
           :
           (
