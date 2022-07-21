@@ -1,6 +1,6 @@
 import { faSignal, faSortAmountDown, faSortAmountUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Checkbox, fade, IconButton, lighten, LinearProgress, makeStyles, Tooltip, useTheme } from '@material-ui/core';
+import { alpha, Checkbox, fade, IconButton, lighten, LinearProgress, makeStyles, Tooltip, useTheme } from '@material-ui/core';
 import { UnfoldLess, UnfoldMore } from '@material-ui/icons';
 import clsx from 'clsx';
 import { kaReducer, Table } from "ka-table";
@@ -169,14 +169,15 @@ const DataGrid2 = React.forwardRef(({
   onSort = () => { },
   onClearFilters = () => { },
   defaultFilters = {},
-  deferLoading=false
+  extendedRowAttributes = () => { },
+  deferLoading = false
 }, ref) => {
   const classes = useStyles()
   const theme = useTheme()
 
   const [tableProps, setTableProps] = useState(tablePropsInit);
   const [pageOffset, setPageOffset] = useState(0);
-  const [filters, setFilters] = useState({...defaultFilters});
+  const [filters, setFilters] = useState({ ...defaultFilters });
   const [dataGridState, dataGridDispatch] = useContext(DataGridContext);
 
   const [sortColumn, setSortColumn] = useState("");
@@ -300,10 +301,10 @@ const DataGrid2 = React.forwardRef(({
   useEffect(() => {
     if (!isEmpty(dataGridState.rows)) {
       kaDispatch(updateData(dataGridState.rows))
-    }else {
+    } else {
       kaDispatch(updateData([]))
     }
-   
+
   }, [dataGridState.rows]);
 
   // useEffect(() => {
@@ -332,7 +333,7 @@ const DataGrid2 = React.forwardRef(({
         targetColumn?.cellRenderer(cellProps)
       ) : (
         isReactElem ? <span style={targetColumn.cellStyles}>{element}</span> :
-          <Truncate 
+          <Truncate
             width={targetColumn?.width}
             lines={targetColumn?.truncateLines ?? 2} ellipsis={<span>(...)</span>}
             style={targetColumn.cellStyles}
@@ -406,24 +407,25 @@ const DataGrid2 = React.forwardRef(({
         }}
         childComponents={{
           dataRow: {
-            elementAttributes: ({ rowData }) => ({
-              ref: ref => addRowHeight(rowData, ref?.offsetHeight),
-              onContextMenu: (e, extendedEvent) => {
-                if (contextMenu) {
-                  displayMenu(e, rowData)
-                }
-              },
-              onClick: (evt, extendedEvent) => {
-                const {
-                  childProps: { rowKeyValue },
-                  dispatch
-                } = extendedEvent
-                dispatch({ type: ROW_SELECT, rowKeyValue })
-              },
-              style: {
-
+            elementAttributes: ({ rowData }) => {
+              const attribs = extendedRowAttributes(rowData)
+              return {
+                ref: ref => addRowHeight(rowData, ref?.offsetHeight),
+                onContextMenu: (e, extendedEvent) => {
+                  if (contextMenu) {
+                    displayMenu(e, rowData)
+                  }
+                },
+                onClick: (evt, extendedEvent) => {
+                  const {
+                    childProps: { rowKeyValue },
+                    dispatch
+                  } = extendedEvent
+                  dispatch({ type: ROW_SELECT, rowKeyValue })
+                },
+                ...attribs
               }
-            })
+            }
           },
           headCellContent: {
             content: props => <HeaderCell {...props} />
@@ -466,12 +468,12 @@ const DataGrid2 = React.forwardRef(({
                   ...column.style,
                   position: 'sticky',
                   left: 0,
-                  backgroundColor: (highlightedRow === props?.rowData?.id) ? lighten(theme.palette.primary.light, .85) : "#fff",
+                  backgroundColor: (highlightedRow === props?.rowData?.id) ? alpha(theme.palette.primary.light, .15) : null,
                 }
               } : {
                 style: {
                   ...column.style,
-                  backgroundColor: (highlightedRow === props?.rowData?.id) ? fade(theme.palette.primary.light, .15) : "#fff",
+                  backgroundColor: (highlightedRow === props?.rowData?.id) ? alpha(theme.palette.primary.light, .25) : null,
                   overflow: 'hidden'
                 }
               }
@@ -503,7 +505,7 @@ const DataGrid2 = React.forwardRef(({
                   if (!deferLoading) {
                     kaDispatch({ type: LOAD_MORE_DATA });
                   } else {
-                    if(!dataGridState.loading) {
+                    if (!dataGridState.loading) {
                       kaDispatch({ type: LOAD_MORE_DATA });
                     }
                   }
