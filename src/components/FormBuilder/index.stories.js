@@ -466,6 +466,11 @@ Checkboxes.args = {
         valueField: "id",
         inline: true,
         labelPlacement: "end",
+        isSwitch: true,
+        selectionGridProps: {
+          xs: 12,
+          sm: 6,
+        },
       },
 
       validator: () => Yup.array(), //required
@@ -702,11 +707,11 @@ Wizard.args = {
       "stepVariant": "text",
       "inline": true,
       "stepperProps": {
-          color: 'default',
-          progressColor: 'secondary',
-          prefix: 'Question',
-          isDense: true,
-          // variant: "progress"
+        color: 'default',
+        progressColor: 'secondary',
+        prefix: 'Question',
+        isDense: true,
+        // variant: "progress"
       },
       "formLayout": [
         "6",

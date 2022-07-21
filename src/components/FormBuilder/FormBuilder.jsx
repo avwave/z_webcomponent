@@ -643,37 +643,45 @@ const FormFieldSet = ({
             </FormControl>
           );
         case "checkboxes":
+          const gridSettings = fieldParams.settings?.inline ? {xs:12}: {...fieldParams?.settings?.selectionGridProps};
           return (
             <FormControl>
               <FormLabel component="legend">{formInline ? "" : `${fieldParams.label} ${isRequired ? '*' : ''}`}</FormLabel>
               <FormGroup
-                row={fieldParams.settings.inline}
+                row={fieldParams?.settings?.inline}
                 // name={fieldName}
                 // value={get(formik.values, fieldName)}
                 // onChange={onChangeOverride}
                 {...fieldParams?.fieldProps}
               >
-                {options.map((item, idx) => {
-                  const checked = get(formik.values, fieldName, []).includes(item[fieldParams.settings?.valueField]);
-                  return (
-                    <FormControlLabel
-                      disabled={fieldParams.readOnly || formReadOnly}
-                      key={idx}
-                      name={fieldName}
-                      control={<Checkbox checked={checked} />}
-                      label={item[fieldParams.settings.labelField]}
-                      labelPlacement={fieldParams.settings.labelPlacement ?? 'end'}
-                      onChange={(evt, value) => {
-                        const valueSet = new Set(get(formik.values, fieldName));
-                        value
-                          ? valueSet.add(item.id)
-                          : valueSet.delete(item.id);
-                        formik.setFieldValue(fieldName, Array.from(valueSet));
-                      }}
-                      {...fieldParams?.fieldProps}
-                    />
-                  );
-                })}
+                <Grid container>
+                  {options.map((item, idx) => {
+                    const checked = get(formik.values, fieldName, []).includes(item[fieldParams.settings?.valueField]);
+                    return (
+                      <Grid 
+                        item
+                        {...gridSettings}
+                        >
+                        <FormControlLabel
+                          disabled={fieldParams.readOnly || formReadOnly}
+                          key={idx}
+                          name={fieldName}
+                          control={fieldParams?.settings?.isSwitch ? <Switch checked={checked} /> : <Checkbox checked={checked} />}
+                          label={item[fieldParams.settings.labelField]}
+                          labelPlacement={fieldParams.settings.labelPlacement ?? 'end'}
+                          onChange={(evt, value) => {
+                            const valueSet = new Set(get(formik.values, fieldName));
+                            value
+                              ? valueSet.add(item.id)
+                              : valueSet.delete(item.id);
+                            formik.setFieldValue(fieldName, Array.from(valueSet));
+                          }}
+                          {...fieldParams?.fieldProps}
+                        />
+                      </Grid>
+                    );
+                  })}
+                </Grid>
               </FormGroup>
             </FormControl>
           );
