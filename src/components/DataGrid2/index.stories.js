@@ -280,7 +280,7 @@ export const Selectable = SelectableStory.bind({});
 Selectable.args = {
   ...Default.args,
   rows: rows,
-  columns: [SelectColumn, ...columnData],
+  columns: [...columnData],
 };
 
 function displayId({ props: { row } }) {
