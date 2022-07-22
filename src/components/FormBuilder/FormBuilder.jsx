@@ -26,6 +26,7 @@ import { Add, Backspace, Close, DateRange, Schedule } from "@material-ui/icons";
 import { Autocomplete } from "@material-ui/lab";
 import { DatePicker, DateTimePicker, LocalizationProvider, TimePicker } from "@material-ui/pickers";
 import MomentUtils from '@material-ui/pickers/adapter/moment';
+import clsx from "clsx";
 import { FieldArray, Formik, getIn } from "formik";
 import { get, isEmpty } from "lodash";
 import moment from "moment";
@@ -55,6 +56,15 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
+  },
+  compactRight: {
+    justifyContent: "flex-end",
+  },
+  compactCenter: {
+    justifyContent: "center",
+  },
+  compactLeft: {
+    justifyContent: "flex-start",
   },
   hidden: {
     display: "none",
@@ -125,6 +135,7 @@ const FormFieldSet = ({
   triggerSubmit,
   decouple,
   reverse = false,
+  alignActions = "none",
   hasReset = true,
   loading = false,
   onChange,
@@ -643,7 +654,7 @@ const FormFieldSet = ({
             </FormControl>
           );
         case "checkboxes":
-          const gridSettings = fieldParams.settings?.inline ? {xs:12}: {...fieldParams?.settings?.selectionGridProps};
+          const gridSettings = fieldParams.settings?.inline ? { xs: 12 } : { ...fieldParams?.settings?.selectionGridProps };
           return (
             <FormControl>
               <FormLabel component="legend">{formInline ? "" : `${fieldParams.label} ${isRequired ? '*' : ''}`}</FormLabel>
@@ -658,10 +669,10 @@ const FormFieldSet = ({
                   {options.map((item, idx) => {
                     const checked = get(formik.values, fieldName, []).includes(item[fieldParams.settings?.valueField]);
                     return (
-                      <Grid 
+                      <Grid
                         item
                         {...gridSettings}
-                        >
+                      >
                         <FormControlLabel
                           disabled={fieldParams.readOnly || formReadOnly}
                           key={idx}
@@ -944,6 +955,20 @@ const FormFieldSet = ({
   }, [buildComponent, columns, form, formLayout]);
 
   const buildFormFactor = useMemo(() => {
+    let alignment = null
+    switch (alignActions) {
+      case 'left':
+        alignment = classes.compactLeft
+        break;
+      case 'right':
+        alignment = classes.compactRight
+        break
+      case 'center':
+        alignment = classes.compactCenter
+        break;
+      default:
+        break;
+    }
     const ActionButtons = () => {
       let variant = "";
       switch (formFactor) {
@@ -1006,7 +1031,7 @@ const FormFieldSet = ({
               {children}
               {formik.isSubmitting && <LinearProgress />}
             </CardContent>
-            <CardActions>
+            <CardActions className={clsx(classes.actionBar, alignment)}>
               <ActionButtons />
             </CardActions>
           </Card>
@@ -1033,7 +1058,7 @@ const FormFieldSet = ({
             {buildFields()}
             {children}
             {formik.isSubmitting && <LinearProgress />}
-            <div className={classes.actionBar}>
+            <div className={clsx(classes.actionBar, alignment)}>
               {reverse ? (
                 <>
                   <ActionButtons />
@@ -1065,7 +1090,11 @@ const FormFieldSet = ({
     buildFields,
     children,
     reverse,
+    alignActions,
     classes.actionBar,
+    classes.compactCenter,
+    classes.compactLeft,
+    classes.compactRight,
     formReadOnly,
     loading,
     hasReset,
