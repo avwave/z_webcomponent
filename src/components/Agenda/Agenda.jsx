@@ -56,7 +56,7 @@ export function isBetween(value, start, end) {
   return valTime.isBetween(preTime, postTime, "minutes", "[]");
 }
 
-function Agenda(props) {
+function Agenda(_props) {
   const {
     metaRenderer: metaR,
     alertMessage: alertM,
@@ -67,8 +67,10 @@ function Agenda(props) {
     defaultEvents,
     eventComponent,
     pickerToolbar,
-    calendarWeek = false
-  } = props;
+    calendarWeek = false,
+    components: extraComponents,
+    ...props
+  } = _props;
 
   const classes = useStyles()
   const metaRenderer = metaR ? metaR : () => { };
@@ -205,7 +207,7 @@ function Agenda(props) {
               dateHeader: AgendaDateHeader,
             },
             timeSlotWrapper: TimeslotWrapper,
-            ...props.components
+            ...extraComponents
           }}
           eventPropGetter={eventPropGetter}
           onSelectSlot={onSelectSlot}
