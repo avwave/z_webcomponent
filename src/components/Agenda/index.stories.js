@@ -157,7 +157,13 @@ CustomCellRendering.args = {
   ...BlockView.args,
   eventComponent: ((event) => {
     return <pre>{JSON.stringify(event, null, 2)}</pre>
-  })
+  }),
+  components:{
+    month: {
+      event: (evt) => <pre>{JSON.stringify(evt, null, 2)}</pre>
+    }
+  },
+  pickerToolbar: true,
 }
 
 const ResourceStory = ({ ...args }) => {
