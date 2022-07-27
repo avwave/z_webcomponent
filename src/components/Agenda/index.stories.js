@@ -9,7 +9,7 @@ import {
   baseEvents,
   daySummary,
   heightBugEvents,
-  progressEvents, 
+  progressEvents,
   resourceEvents,
   resourceList
 } from "./events";
@@ -73,11 +73,34 @@ Default.args = {
   lockSlotStartTime: "00:00",
   lockSlotEndTime: "23:59",
   popup: true,
-  views: [views.MONTH,views.WEEK, views.WORK_WEEK, views.AGENDA],
+  pickerToolbar: false,
+  views: [views.MONTH, views.WEEK, views.WORK_WEEK, views.AGENDA],
   defaultView: views.WEEK,
   style: { flex: "1 1 auto" },
   events: [...baseEvents],
+  onSelectEvent: (evt, element) => {
+    console.log('index.stories.js (79) # evt, element', evt, element);
+  },
+  onRangeChange: (navtype, date,v) => {
+    console.log('index.stories.js (82) # navtype, date', navtype, date, v);
+  }
 };
+
+
+export const StandardCalendarWeek = DefaultStory.bind({});
+StandardCalendarWeek.args = {
+  ...Default.args,
+  calendarWeek: true
+};
+
+
+export const PickerToolbar = DefaultStory.bind({});
+PickerToolbar.args = {
+  ...Default.args,
+  pickerToolbar: true,
+  calendarWeek: true
+};
+
 
 export const CustomDayHeader = DefaultStory.bind({});
 CustomDayHeader.args = {
@@ -101,7 +124,7 @@ ProgressEvent.args = {
 export const AgendaMetaRendering = DefaultStory.bind({});
 AgendaMetaRendering.args = {
   ...Default.args,
-  views:[views.AGENDA],
+  views: [views.AGENDA],
   defaultView: "agenda",
   events: [...progressEvents],
   metaRenderer: (event) => {
@@ -126,11 +149,11 @@ BlockView.args = {
   selectable: true,
   onSelectEvent: (event) => alert(event.title),
   onSelectSlot: (slot) => alert(`${slot.start} to ${slot.end}`),
-  
+
 };
 
 export const CustomCellRendering = DefaultStory.bind({});
-CustomCellRendering.args= {
+CustomCellRendering.args = {
   ...BlockView.args,
   eventComponent: ((event) => {
     return <pre>{JSON.stringify(event, null, 2)}</pre>
