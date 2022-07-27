@@ -1,14 +1,11 @@
+import moment from "moment";
 import React, { Children, cloneElement, useContext, useState } from "react";
 import {
   Calendar,
-  dateFnsLocalizer,
-  momentLocalizer,
+  dateFnsLocalizer
 } from "react-big-calendar";
-import moment from "moment";
 import { AgendaContext } from "./AgendaContext";
 
-import "./AgendaStyles.scss";
-import GridBox from "../DataGrid/GridBox";
 import {
   Box,
   Button,
@@ -16,22 +13,19 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
-  LinearProgress,
-  Link,
+  DialogContentText, Link,
   makeStyles,
-  Paper,
-  Toolbar,
-  Typography,
+  Paper, Typography
 } from "@material-ui/core";
-import AgendaToolbar from "./AgendaToolbar";
-import { ProgressContainer } from "../ProgressContainer";
+import GridBox from "../DataGrid/GridBox";
 import { EdgeContainer } from "../EdgeContainer";
+import "./AgendaStyles.scss";
+import { AgendaToolbar } from "./AgendaToolbar";
 
 import format from "date-fns/format";
-import startOfWeek from "date-fns/startOfWeek";
 import getDay from "date-fns/getDay";
 import enLocale from "date-fns/locale/en-US";
+import startOfWeek from "date-fns/startOfWeek";
 import sub from "date-fns/sub";
 
 import BlockUi from "react-loader-advanced";
@@ -49,16 +43,6 @@ const useStyles = makeStyles(theme => ({
 }));
 
 // const localizer = momentLocalizer(moment);
-const sOfWeek = () =>
-  startOfWeek(new Date(), {
-    weekStartsOn: getDay(sub(new Date(), { days: 1 })),
-  });
-const localizer = dateFnsLocalizer({
-  format,
-  startOfWeek: sOfWeek,
-  getDay,
-  locales: dateFnsLocales,
-});
 
 export function isBetween(value, start, end) {
   const getTime = (dateTime) => {
@@ -82,10 +66,12 @@ function Agenda(props) {
     containerStyle,
     defaultEvents,
     eventComponent,
+    pickerToolbar,
+    calendarWeek = false
   } = props;
 
   const classes = useStyles()
-  const metaRenderer = metaR ? metaR : () => {};
+  const metaRenderer = metaR ? metaR : () => { };
 
   const [state, dispatch] = useContext(AgendaContext);
   const [openAlert, setOpenAlert] = useState(false);
@@ -134,7 +120,7 @@ function Agenda(props) {
   };
 
   const TimeslotWrapper = (slotProp) => {
-    const {resource, value, children } = slotProp;
+    const { resource, value, children } = slotProp;
     if (resource) {
       return children;
     }
@@ -175,11 +161,22 @@ function Agenda(props) {
     setOpenAlert(false);
   };
 
+  const sOfWeek = () =>
+    startOfWeek(new Date(), {
+      weekStartsOn: calendarWeek ? 0 : getDay(sub(new Date(), { days: 1 })),
+    });
+  const localizer = dateFnsLocalizer({
+    format,
+    startOfWeek: sOfWeek,
+    getDay,
+    locales: dateFnsLocales,
+  });
+
   return (
-    <BlockUi 
-    message={<CircularProgress/>}
-    backgroundStyle={{backgroundColor: '#ffffffcc'}}
-    show={!!state?.loading} style={{ height: 700, ...containerStyle }}
+    <BlockUi
+      message={<CircularProgress />}
+      backgroundStyle={{ backgroundColor: '#ffffffcc' }}
+      show={!!state?.loading} style={{ height: 700, ...containerStyle }}
     >
       <Paper elevation={0} square>
         <Dialog open={openAlert} onClose={handleCloseAlert}>
@@ -203,7 +200,7 @@ function Agenda(props) {
             agenda: {
               event: AgendaEventComponent,
             },
-            toolbar: (toolbarProps) => <AgendaToolbar {...toolbarProps} {...props} />,
+            toolbar: (toolbarProps) => <AgendaToolbar picker={!!pickerToolbar} {...toolbarProps} {...props} />,
             month: {
               dateHeader: AgendaDateHeader,
             },
