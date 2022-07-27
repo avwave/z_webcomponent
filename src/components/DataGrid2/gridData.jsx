@@ -218,7 +218,7 @@ const columnData = [
 let rows = [];
 for (let i = 0; i < 5; i++) {
   rows.push({
-    id: `row${i}`,
+    id: i,
     title: faker.name.findName(),
     col3Type: faker.random.number().toString(),
     col4Type: faker.date.recent().toISOString(),

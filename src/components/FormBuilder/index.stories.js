@@ -40,6 +40,13 @@ const FormBuilderStory = {
         options: ["default", "card", "toolbar"],
       },
     },
+    alignActions: {
+      control: {
+        type: "select",
+        toolTip: "select",
+        options: ["left", "center", "right", "default"],
+      },
+    },
   },
   parameters: {
     docs: {
@@ -65,6 +72,7 @@ Default.args = {
   loading: false,
   formId: "default",
   reverse: true,
+  alignActions: "none",
   formLabel: "primary",
   formReadOnly: false,
   formSubtitle: "secondary",
@@ -255,7 +263,6 @@ Default.args = {
       type: "radio",
       toolTip: "radio",
       label: "Radio",
-
       initialValues: "",
       options: [
         { id: "1", label: "one" },
@@ -466,6 +473,11 @@ Checkboxes.args = {
         valueField: "id",
         inline: true,
         labelPlacement: "end",
+        isSwitch: true,
+        selectionGridProps: {
+          xs: 12,
+          sm: 6,
+        },
       },
 
       validator: () => Yup.array(), //required
@@ -702,11 +714,11 @@ Wizard.args = {
       "stepVariant": "text",
       "inline": true,
       "stepperProps": {
-          color: 'default',
-          progressColor: 'secondary',
-          prefix: 'Question',
-          isDense: true,
-          // variant: "progress"
+        color: 'default',
+        progressColor: 'secondary',
+        prefix: 'Question',
+        isDense: true,
+        // variant: "progress"
       },
       "formLayout": [
         "6",

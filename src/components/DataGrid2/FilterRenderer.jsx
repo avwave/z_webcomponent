@@ -10,6 +10,7 @@ import {
   InputLabel,
   makeStyles,
   MenuItem,
+  MenuList,
   Select,
   Tab,
   Tabs,
@@ -136,7 +137,7 @@ function TextFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
   );
 }
 
-function OptionFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
+function LegacyOptionFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
   const classes = useStyles();
   return (
     <FormControl fullWidth className={classes.formControl}>
@@ -159,6 +160,36 @@ function OptionFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
           </MenuItem>
         ))}
       </Select>
+    </FormControl>
+  );
+}
+function OptionFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
+  const classes = useStyles();
+  const onLocalChange = (value) => {
+    onChange(value)
+    const item = filter.options.find(v => v.value === value)
+    onChangeDisplay(item?.label)
+  }
+  return (
+    <FormControl fullWidth className={classes.formControl}>
+      <MenuList
+        fullWidth
+      >
+        <MenuItem value=""
+          onClick={() => onLocalChange(null)}
+        >
+          <em>None</em>
+        </MenuItem>
+        {filter.options.map((option, idx) => (
+          <MenuItem
+            key={idx}
+            value={option.value}
+            selected={value === option.value}
+            onClick={() => onLocalChange(option.value)}>
+            {option.label}
+          </MenuItem>
+        ))}
+      </MenuList>
     </FormControl>
   );
 }

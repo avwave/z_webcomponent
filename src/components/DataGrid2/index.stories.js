@@ -280,7 +280,7 @@ export const Selectable = SelectableStory.bind({});
 Selectable.args = {
   ...Default.args,
   rows: rows,
-  columns: [SelectColumn, ...columnData],
+  columns: [...columnData],
 };
 
 function displayId({ props: { row } }) {
@@ -537,4 +537,17 @@ InfiniteLoader.args = {
   totalCount: 300,
   centerAccessory: () => <Typography variant="h6">Heading</Typography>,
   columns: [SelectColumn, ...columnData],
+};
+
+export const ExtendedRowAttributes = DefaultStory.bind({});
+ExtendedRowAttributes.args = {
+  ...Default.args,
+  extendedRowAttributes: (row) => {
+    return {
+      style: {
+        backgroundColor: (row?.id % 2 === 0) ? 'rgba(0, 255, 0, 0.1)' : 'rgba(255, 0, 0, 0.1)'
+      },
+      title: `${row?.title}: ${row?.col3Type}`
+    }
+  }
 };
