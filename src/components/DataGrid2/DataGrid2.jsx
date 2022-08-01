@@ -16,6 +16,7 @@ import Datagrid2Toolbar from './Datagrid2Toolbar';
 import { AuocompleteFilterRenderer, ChipTabsFilterRenderer, DateRangeFilterRenderer, OptionFilterRenderer, TextFilterRenderer } from './FilterRenderer';
 import './styles.scss';
 
+const CONTEXT_MENU_ACTIVATE = 'zwcl-DATAGRID-CONTEXT-ROW'
 
 const TABLE_LOAD_OFFSET = 200;
 
@@ -164,6 +165,7 @@ const DataGrid2 = React.forwardRef(({
   loadMoreOffset = TABLE_LOAD_OFFSET,
   totalCount,
   resetScroll,
+  onContextMenu = () => { },
   hasSearchFilter = true,
   hasDateRangeFilter = true,
   onSort = () => { },
@@ -267,6 +269,9 @@ const DataGrid2 = React.forwardRef(({
           break
         case ROW_SELECT:
           setHighlightedRow(action.rowKeyValue);
+          break
+        case CONTEXT_MENU_ACTIVATE:
+          onContextMenu({ data: action?.row })
           break
         case 'SelectRow':
           setSelectedRows(new Set(selectedRows.add(action.rowKeyValue)))
@@ -414,6 +419,7 @@ const DataGrid2 = React.forwardRef(({
                 onContextMenu: (e, extendedEvent) => {
                   if (contextMenu) {
                     displayMenu(e, rowData)
+                    extendedEvent.dispatch({ type: CONTEXT_MENU_ACTIVATE, row: rowData, ...{ extendedEvent } })
                   }
                 },
                 onClick: (evt, extendedEvent) => {
@@ -468,7 +474,7 @@ const DataGrid2 = React.forwardRef(({
                   ...column.style,
                   position: 'sticky',
                   left: 0,
-                  backgroundColor: (highlightedRow === props?.rowData?.id) ? alpha(theme.palette.primary.light, .15) : null,
+                  backgroundColor: (highlightedRow === props?.rowData?.id) ? lighten(theme.palette.primary.light, .15) : theme.palette.background.paper,
                 }
               } : {
                 style: {

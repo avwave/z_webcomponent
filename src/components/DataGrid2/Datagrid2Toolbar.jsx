@@ -22,6 +22,20 @@ const POPUP_MODE = {
 };
 
 const styles = (theme) => ({
+  toolbarLeft: {
+    flexGrow:1,
+    flexBasis:0,
+    display: "flex",
+    justifyContent: "flex-start",
+    alignItems: "center",
+  },
+  toolbarRight:{
+    flexGrow:1,
+    flexBasis:0,
+    display: "flex",
+    justifyContent: "flex-end",
+    alignItems: "center",
+  },
   filterContainer: {
     paddingBottom: theme.spacing(2),
   },
@@ -228,23 +242,23 @@ function DataGrid2Toolbar({
 
   const renderFilters = useMemo(() => {
     return filterColumnSettings
-    .filter(f=>f?.filter?.type !== 'chiptabs')
-    .map((col, idx) => (
-      <FilterDropdown
-        key={`filter-${col.id}-${idx}`}
-        value={dataGridState.filterColumn[col.key]}
-        name={col?.filter?.label ?? col.name}
-        colKey={col.key}
-        filterRenderer={col.filterRenderer}
-        onChangeFilter={value => changeFilter(col.key, value)}
-        onChangeFilterDisplay={value => changeFilterDisplay(col.key, value)}
-      />
-    ));
-  },[changeFilter, changeFilterDisplay, dataGridState.filterColumn, filterColumnSettings]);
+      .filter(f => f?.filter?.type !== 'chiptabs')
+      .map((col, idx) => (
+        <FilterDropdown
+          key={`filter-${col.id}-${idx}`}
+          value={dataGridState.filterColumn[col.key]}
+          name={col?.filter?.label ?? col.name}
+          colKey={col.key}
+          filterRenderer={col.filterRenderer}
+          onChangeFilter={value => changeFilter(col.key, value)}
+          onChangeFilterDisplay={value => changeFilterDisplay(col.key, value)}
+        />
+      ));
+  }, [changeFilter, changeFilterDisplay, dataGridState.filterColumn, filterColumnSettings]);
 
   const renderChipFilters = useMemo(() => {
-    return filterColumnSettings.filter(f=> {
-      return f?.filter?.type==='chiptabs'
+    return filterColumnSettings.filter(f => {
+      return f?.filter?.type === 'chiptabs'
     }).map((col, idx) => {
       const FilterRenderer = col.filterRenderer;
       return <FilterRenderer
@@ -253,7 +267,7 @@ function DataGrid2Toolbar({
           changeFilter(col.key, v);
         }}
       />
-    })    
+    })
   }, [changeFilter, dataGridState.filterColumn, filterColumnSettings]);
 
 
@@ -266,7 +280,7 @@ function DataGrid2Toolbar({
   }, 500)
 
   const hasChipFilter = useMemo(() => {
-    const result = filterColumnSettings.some(f=>f?.filter?.type === 'chiptabs')
+    const result = filterColumnSettings.some(f => f?.filter?.type === 'chiptabs')
     return result
   }, [filterColumnSettings]);
 
@@ -278,12 +292,14 @@ function DataGrid2Toolbar({
         rightAccessory
       ) && (
           <Toolbar variant="dense" className={classes.toolbar} disableGutters>
-            {leftAccessory ? leftAccessory() : <></>}
-            <div style={{ flex: 1 }} />
+            <div className={classes.toolbarLeft}>
+              {leftAccessory ? leftAccessory() : <></>}
+            </div>
             {centerAccessory ? centerAccessory() : <></>}
-            <div style={{ flex: 1 }} />
-            {children}
-            {rightAccessory ? rightAccessory() : <></>}
+            <div className={classes.toolbarRight}>
+              {children}
+              {rightAccessory ? rightAccessory() : <></>}
+            </div>
           </Toolbar>
         )}
       {filterable && (
