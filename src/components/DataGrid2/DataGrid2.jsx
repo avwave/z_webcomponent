@@ -474,7 +474,7 @@ const DataGrid2 = React.forwardRef(({
                   ...column.style,
                   position: 'sticky',
                   left: 0,
-                  backgroundColor: (highlightedRow === props?.rowData?.id) ? lighten(theme.palette.primary.light, .15) : theme.palette.background.paper,
+                  backgroundColor: (highlightedRow === props?.rowData?.id) ? lighten(theme.palette.primary.light, .75) : theme.palette.background.paper,
                 }
               } : {
                 style: {
