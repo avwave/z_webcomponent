@@ -1,8 +1,9 @@
 import { Button, ButtonGroup, Grid, Toolbar, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { LocalizationProvider, MobileDatePicker } from "@material-ui/pickers";
+import { DatePicker, LocalizationProvider, MobileDatePicker } from "@material-ui/pickers";
 import MomentUtils from '@material-ui/pickers/adapter/moment';
 import clsx from "clsx";
+import moment from "moment";
 import React, { useMemo } from "react";
 import { Navigate } from "react-big-calendar";
 import { views as calendarViews } from "react-big-calendar/lib/utils/constants";
@@ -88,6 +89,33 @@ const AgendaToolbar = ({
               onChange={range => {
                 onNavigate(Navigate.DATE, range?.date?.toDate())
               }} />
+          </div>
+        )
+      }
+      else if (view === calendarViews.DAY) {
+        return (
+          <div className={classes.title}>
+            <MobileDatePicker
+              disableCloseOnSelect={false}
+              disableMaskedInput
+              showDaysOutsideCurrentMonth
+              showToolbar={false}
+              value={date}
+              onChange={range => {
+                onNavigate(Navigate.DATE, range?.toDate())
+              }}
+              renderInput={({ inputRef, inputProps, InputProps, ...props }) => {
+                const date = moment(inputProps?.value)
+                let dateweek = `${date.format('dddd ll')}`
+                return (
+                  <div className={classes.inputRoot}>
+                    <input {...inputProps} readOnly hidden />
+                    <Button {...inputProps} ref={inputRef} >{dateweek}</Button>
+                    {InputProps?.endAdornment}
+                  </div>
+                )
+              }}
+            />
           </div>
         )
       }
