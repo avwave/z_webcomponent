@@ -23,15 +23,15 @@ const POPUP_MODE = {
 
 const styles = (theme) => ({
   toolbarLeft: {
-    flexGrow:1,
-    flexBasis:0,
+    flexGrow: 1,
+    flexBasis: 0,
     display: "flex",
     justifyContent: "flex-start",
     alignItems: "center",
   },
-  toolbarRight:{
-    flexGrow:1,
-    flexBasis:0,
+  toolbarRight: {
+    flexGrow: 1,
+    flexBasis: 0,
     display: "flex",
     justifyContent: "flex-end",
     alignItems: "center",
@@ -179,6 +179,7 @@ function DataGrid2Toolbar({
   onClearFilters = () => { },
   dispatch,
   hasSearchFilter = true,
+  searchPlaceholder = 'Search',
   hasDateRangeFilter = true
 }) {
   const [columnAnchor, setColumnAnchor] = useState();
@@ -337,7 +338,7 @@ function DataGrid2Toolbar({
                     InputLabelProps={{
                       shrink: true
                     }}
-                    placeholder="Search"
+                    placeholder={searchPlaceholder}
                     value={searchField}
                     onChange={event => {
                       setSearchField(event.target.value)
