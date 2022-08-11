@@ -1,7 +1,8 @@
-import { Button, ButtonGroup, Toolbar, Typography } from "@material-ui/core";
+import { Button, ButtonGroup, Grid, Toolbar, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { LocalizationProvider, MobileDatePicker } from "@material-ui/pickers";
 import MomentUtils from '@material-ui/pickers/adapter/moment';
+import clsx from "clsx";
 import React, { useMemo } from "react";
 import { Navigate } from "react-big-calendar";
 import { views as calendarViews } from "react-big-calendar/lib/utils/constants";
@@ -9,8 +10,23 @@ import { WeekPicker } from "../WeekPicker";
 
 
 const useStyles = makeStyles((theme) => ({
-  leftGroup: {},
-  rightGroup: {},
+  leftGroup: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "flex-start",
+    alignContent: "center",
+    flexDirection: "row",
+  },
+  rightGroup: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "flex-start",
+    [theme.breakpoints.up("md")]: {
+      justifyContent: "flex-end",
+    },
+    alignContent: "center",
+    flexDirection: "row",
+  },
   title: {
     flexGrow: 1,
     display: "flex",
@@ -19,6 +35,26 @@ const useStyles = makeStyles((theme) => ({
     cursor: "pointer"
   },
   root: {
+  },
+  padded: {
+    marginRight: theme.spacing(2)
+  },
+  container: {
+    display: "flex",
+    flex: 1,
+    alignItems: "center",
+  },
+  item2: {
+    order: 3,
+    [theme.breakpoints.up("sm")]: {
+      order: 2
+    }
+  },
+  item3: {
+    order: 2,
+    [theme.breakpoints.up("sm")]: {
+      order: 3
+    }
   }
 }));
 
@@ -32,6 +68,7 @@ const AgendaToolbar = ({
   onView,
   resources,
   picker = false,
+  filterComponent,
   ...props
 }) => {
   const classes = useStyles();
@@ -72,42 +109,55 @@ const AgendaToolbar = ({
       }
     }, [classes.title, label, onNavigate, picker]
   );
+  const defColWidth = filterComponent ? 3 : 4
   return (
     <Toolbar className={classes.root}>
-      {!resources ?
-        <ButtonGroup variant="text" size="small" className={classes.leftGroup}>
-          <Button
-            type="button"
-            onClick={() => onNavigate(Navigate.TODAY, date)}
-          >
-            {localizer.messages.today}
-          </Button>
-          <Button
-            type="button"
-            onClick={() => onNavigate(Navigate.PREVIOUS, date)}
-          >
-            {localizer.messages.previous}
-          </Button>
-          <Button type="button" onClick={() => onNavigate(Navigate.NEXT, date)}>
-            {localizer.messages.next}
-          </Button>
-        </ButtonGroup>
-        : <Typography variant="overline" className={classes.leftGroup}>{" "}</Typography>}
+      <Grid container spacing={16} justify="flex-start" className={classes.container}>
+        <Grid item xs={12} sm={6} md={defColWidth}>
+          {!resources ?
+            <ButtonGroup variant="text" size="small" className={classes.leftGroup}>
+              <Button
+                type="button"
+                onClick={() => onNavigate(Navigate.TODAY, date)}
+              >
+                {localizer.messages.today}
+              </Button>
+              <Button
+                type="button"
+                onClick={() => onNavigate(Navigate.PREVIOUS, date)}
+              >
+                {localizer.messages.previous}
+              </Button>
+              <Button type="button" onClick={() => onNavigate(Navigate.NEXT, date)}>
+                {localizer.messages.next}
+              </Button>
+            </ButtonGroup>
+            : <Typography variant="overline" className={classes.leftGroup}>{" "}</Typography>}
+        </Grid>
+        <Grid item xs={12} sm={6} md={defColWidth} className={classes.item2}>
+          {renderTitle}
+        </Grid>
+        <Grid item xs={12} sm={6} md={defColWidth} className={classes.item3}>
+          <div className={classes.rightGroup}>
+            <ButtonGroup variant="text" size="small" className={clsx(filterComponent ? classes.padded : null, classes.rightGroup)}>
+              {views?.map((viewItem, idx) => (
+                <Button
+                  type="button"
+                  key={`view-${idx}`}
+                  color={view === viewItem ? "primary" : "inherit"}
+                  onClick={() => onView(viewItem)}
+                >
+                  {localizer.messages[viewItem]}
+                </Button>
+              ))}
+            </ButtonGroup>
 
-      {renderTitle}
-
-      <ButtonGroup variant="text" size="small" className={classes.rightGroup}>
-        {views?.map((viewItem, idx) => (
-          <Button
-            type="button"
-            key={`view-${idx}`}
-            color={view === viewItem ? "primary" : "inherit"}
-            onClick={() => onView(viewItem)}
-          >
-            {localizer.messages[viewItem]}
-          </Button>
-        ))}
-      </ButtonGroup>
+          </div>
+        </Grid>
+        <Grid item xs={12} sm={6} md={defColWidth} className={classes.item3}>
+          {filterComponent}
+        </Grid>
+      </Grid>
     </Toolbar>
 
   );
