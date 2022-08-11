@@ -1,5 +1,6 @@
 import {
   Button, Chip, debounce, IconButton, InputAdornment, Popover, TextField, Toolbar,
+  Tooltip,
   Typography,
   withStyles
 } from "@material-ui/core";
@@ -326,26 +327,28 @@ function DataGrid2Toolbar({
                 )}
               </div>
               {hasSearchFilter && (
-                <div className={clsx(classes.filterSection, classes.paddedBottom, classes.filterSectionSearch)}>
-                  <TextField
-                    fullWidth
-                    size="small"
-                    variant="outlined"
-                    InputProps={{
-                      endAdornment: <InputAdornment position="end"><Search /></InputAdornment>,
-                      className: classes.heightMax
-                    }}
-                    InputLabelProps={{
-                      shrink: true
-                    }}
-                    placeholder={searchPlaceholder}
-                    value={searchField}
-                    onChange={event => {
-                      setSearchField(event.target.value)
-                      debounceSearch(event)
-                    }}
-                  />
-                </div>
+                <Tooltip title={searchPlaceholder}>
+                  <div className={clsx(classes.filterSection, classes.paddedBottom, classes.filterSectionSearch)}>
+                    <TextField
+                      fullWidth
+                      size="small"
+                      variant="outlined"
+                      InputProps={{
+                        endAdornment: <InputAdornment position="end"><Search /></InputAdornment>,
+                        className: classes.heightMax
+                      }}
+                      InputLabelProps={{
+                        shrink: true
+                      }}
+                      placeholder={searchPlaceholder}
+                      value={searchField}
+                      onChange={event => {
+                        setSearchField(event.target.value)
+                        debounceSearch(event)
+                      }}
+                    />
+                  </div>
+                </Tooltip>
               )}
               <div className={clsx(classes.filterSection, classes.paddedBottom)}>
                 {!isDeeplyEmpty(filterValues) && (
