@@ -167,6 +167,7 @@ const DataGrid2 = React.forwardRef(({
   resetScroll,
   onContextMenu = () => { },
   hasSearchFilter = true,
+  searchPlaceholder,
   hasDateRangeFilter = true,
   onSort = () => { },
   onClearFilters = () => { },
@@ -384,6 +385,7 @@ const DataGrid2 = React.forwardRef(({
     <div className={clsx('datagrid', classes.datagrid)} style={{ ...containerStyle }}>
       <Datagrid2Toolbar
         hasDateRangeFilter={hasDateRangeFilter}
+        searchPlaceholder={searchPlaceholder}
         hasSearchFilter={hasSearchFilter}
         tableProps={tableProps}
         dispatch={kaDispatch}
