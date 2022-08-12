@@ -152,7 +152,7 @@ function LegacyOptionFilterRenderer({ onChange, onChangeDisplay, value, filter }
         }}
       >
         <MenuItem value="">
-          <em>None</em>
+          <em>Any</em>
         </MenuItem>
         {filter.options.map((option, idx) => (
           <MenuItem key={idx} value={option.value}>
@@ -178,7 +178,7 @@ function OptionFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
         <MenuItem value=""
           onClick={() => onLocalChange(null)}
         >
-          <em>None</em>
+          <em>Any</em>
         </MenuItem>
         {filter.options.map((option, idx) => (
           <MenuItem

@@ -1,4 +1,4 @@
-import { Chip } from "@material-ui/core";
+import { Chip, TextField } from "@material-ui/core";
 import React from "react";
 import { withReactContext } from "storybook-react-context";
 import { Agenda } from ".";
@@ -74,7 +74,7 @@ Default.args = {
   lockSlotEndTime: "23:59",
   popup: true,
   pickerToolbar: false,
-  views: [views.MONTH, views.WEEK, views.WORK_WEEK, views.AGENDA],
+  views: [views.MONTH, views.WEEK, views.WORK_WEEK, views.DAY, views.AGENDA],
   defaultView: views.WEEK,
   style: { flex: "1 1 auto" },
   events: [...baseEvents],
@@ -98,6 +98,14 @@ export const PickerToolbar = DefaultStory.bind({});
 PickerToolbar.args = {
   ...Default.args,
   pickerToolbar: true,
+  calendarWeek: true
+};
+
+export const ToolbarFilterComponent = DefaultStory.bind({});
+ToolbarFilterComponent.args = {
+  ...Default.args,
+  pickerToolbar: true,
+  filterComponent: <TextField fullWidth onChange={(evt)=>alert(evt)}/>,
   calendarWeek: true
 };
 

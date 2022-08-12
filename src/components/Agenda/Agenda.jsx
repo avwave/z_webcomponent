@@ -67,6 +67,7 @@ function Agenda(_props) {
     defaultEvents,
     eventComponent,
     pickerToolbar,
+    filterComponent,
     calendarWeek = false,
     components: extraComponents,
     ...props
@@ -202,7 +203,10 @@ function Agenda(_props) {
             agenda: {
               event: AgendaEventComponent,
             },
-            toolbar: (toolbarProps) => <AgendaToolbar picker={!!pickerToolbar} {...toolbarProps} {...props} />,
+            toolbar: (toolbarProps) => <AgendaToolbar 
+              filterComponent={filterComponent}
+              picker={!!pickerToolbar} {...toolbarProps} {...props} 
+            />,
             month: {
               dateHeader: AgendaDateHeader,
             },

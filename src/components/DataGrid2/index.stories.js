@@ -76,6 +76,18 @@ Default.args = {
   },
   filterable: true
 };
+export const ToolbarSearchPlaceholder = DefaultStory.bind({});
+ToolbarSearchPlaceholder.args = {
+  hasDateRangeFilter: true,
+  hasSearchFilter: true,
+  searchPlaceholder: 'Type here to search',
+  rows: rows,
+  columns: columnData,
+  gridProps: {
+    filterWidth: 200,
+  },
+  filterable: true
+};
 
 export const CellFormatter = DefaultStory.bind({});
 const CellFormatting = ({ value }) => {

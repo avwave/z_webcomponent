@@ -1,5 +1,6 @@
 import {
   Button, Chip, debounce, IconButton, InputAdornment, Popover, TextField, Toolbar,
+  Tooltip,
   Typography,
   withStyles
 } from "@material-ui/core";
@@ -23,15 +24,15 @@ const POPUP_MODE = {
 
 const styles = (theme) => ({
   toolbarLeft: {
-    flexGrow:1,
-    flexBasis:0,
+    flexGrow: 1,
+    flexBasis: 0,
     display: "flex",
     justifyContent: "flex-start",
     alignItems: "center",
   },
-  toolbarRight:{
-    flexGrow:1,
-    flexBasis:0,
+  toolbarRight: {
+    flexGrow: 1,
+    flexBasis: 0,
     display: "flex",
     justifyContent: "flex-end",
     alignItems: "center",
@@ -179,6 +180,7 @@ function DataGrid2Toolbar({
   onClearFilters = () => { },
   dispatch,
   hasSearchFilter = true,
+  searchPlaceholder = 'Search',
   hasDateRangeFilter = true
 }) {
   const [columnAnchor, setColumnAnchor] = useState();
@@ -325,26 +327,28 @@ function DataGrid2Toolbar({
                 )}
               </div>
               {hasSearchFilter && (
-                <div className={clsx(classes.filterSection, classes.paddedBottom, classes.filterSectionSearch)}>
-                  <TextField
-                    fullWidth
-                    size="small"
-                    variant="outlined"
-                    InputProps={{
-                      endAdornment: <InputAdornment position="end"><Search /></InputAdornment>,
-                      className: classes.heightMax
-                    }}
-                    InputLabelProps={{
-                      shrink: true
-                    }}
-                    placeholder="Search"
-                    value={searchField}
-                    onChange={event => {
-                      setSearchField(event.target.value)
-                      debounceSearch(event)
-                    }}
-                  />
-                </div>
+                <Tooltip title={searchPlaceholder}>
+                  <div className={clsx(classes.filterSection, classes.paddedBottom, classes.filterSectionSearch)}>
+                    <TextField
+                      fullWidth
+                      size="small"
+                      variant="outlined"
+                      InputProps={{
+                        endAdornment: <InputAdornment position="end"><Search /></InputAdornment>,
+                        className: classes.heightMax
+                      }}
+                      InputLabelProps={{
+                        shrink: true
+                      }}
+                      placeholder={searchPlaceholder}
+                      value={searchField}
+                      onChange={event => {
+                        setSearchField(event.target.value)
+                        debounceSearch(event)
+                      }}
+                    />
+                  </div>
+                </Tooltip>
               )}
               <div className={clsx(classes.filterSection, classes.paddedBottom)}>
                 {!isDeeplyEmpty(filterValues) && (
