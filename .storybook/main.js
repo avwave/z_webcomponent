@@ -12,13 +12,5 @@ module.exports = {
     "storybook-addon-material-ui",
     "storybook-addon-pseudo-states",
     "@storybook/addon-storysource",
-    {
-      name: '@storybook/addon-storysource',
-      options: {
-        loaderOptions: {
-          injectStoryParameters: false,
-        },
-      },
-    },
   ]
 }
