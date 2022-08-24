@@ -38,7 +38,8 @@ const DocumentViewer = ({
     }
 
     if (data) {
-      const mimeType = base64Utils.getMimeType(data)
+      const magicNumberSlice = data.slice(0, 16)
+      const mimeType = base64Utils.getMimeType(magicNumberSlice)
       file = { ...file, mimeType, data }
     } else if (url) {
       const hrefparse = document.createElement('a')
