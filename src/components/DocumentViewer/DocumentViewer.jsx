@@ -4,6 +4,7 @@ import FilePreviewer, { FilePreviewerThumbnail } from 'react-file-previewer';
 import "react-file-previewer/src/styles.css";
 import "./styles.scss";
 import mime from 'mime-types';
+import * as base64Utils from 'base64-utils'
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -37,7 +38,9 @@ const DocumentViewer = ({
     }
 
     if (data) {
-      file = { ...file, data }
+      const magicNumberSlice = data.slice(0, 16)
+      const mimeType = base64Utils.getMimeType(magicNumberSlice)
+      file = { ...file, mimeType, data }
     } else if (url) {
       const hrefparse = document.createElement('a')
       hrefparse.href = url
