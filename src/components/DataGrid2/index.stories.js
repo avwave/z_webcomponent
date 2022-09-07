@@ -35,6 +35,13 @@ const DataGridStory = {
   parameters: {
     chromatic: { disable: true },
     storyshots: { disable: true },
+    docs: {
+      // page: Usage
+      source: {
+        type: 'code'
+      }
+
+    }
   },
   decorators: [
     withReactContext(),
@@ -62,7 +69,7 @@ const DefaultStory = ({ ...args }) => {
     });
   }, [args.columns, args.rows, dispatch]);
 
-  return <Paper style={{height: '80vh'}}><DataGrid2 {...args} /></Paper>;
+  return <Paper style={{ height: '80vh' }}><DataGrid2 {...args} /></Paper>;
 };
 
 export const Default = DefaultStory.bind({});
@@ -76,6 +83,37 @@ Default.args = {
   },
   filterable: true
 };
+
+export const Basic = DefaultStory.bind({});
+Basic.args = {
+  rows: [
+    {
+      id: 1,
+      name: 'Alice',
+      age: 20
+    },
+    {
+      id: 2,
+      name: 'Bob',
+      age: 21
+    },
+    {
+      id: 3,
+      name: 'Charlie',
+      age: 22
+    }
+  ],
+  columns: [
+    {
+      key: "name",
+      name: "Name",
+    },
+    {
+      key: "age",
+      name: "Age",
+    },
+  ]
+}
 export const ToolbarSearchPlaceholder = DefaultStory.bind({});
 ToolbarSearchPlaceholder.args = {
   hasDateRangeFilter: true,
@@ -119,7 +157,7 @@ Reorderable.args = {
 export const Blank = DefaultStory.bind({});
 Blank.args = {
   ...Default.args,
-  rows:[],
+  rows: [],
   draggable: true,
   columns: columnData,
 };
@@ -149,51 +187,24 @@ ColumnDisplaySelection.args = {
   filterable: false,
 };
 
-const ServerFilterSortStory = ({ ...args }) => {
+const ServerFilterStory = ({ ...args }) => {
   const [state, dispatch] = React.useContext(DataGridContext);
   const [sentFilters, setSentFilters] = useState();
 
   React.useEffect(() => {
-      dispatch({
-        payload: { columns: args.columns },
-        type: actions.LOAD_COLUMNS,
-      });
+    dispatch({
+      payload: { columns: args.columns },
+      type: actions.LOAD_COLUMNS,
+    });
 
   }, [args.columns]);
 
   React.useEffect(() => {
     dispatch({
-      payload: { rows: args.rows},
+      payload: { rows: args.rows },
       type: actions.LOAD_ROWS,
     });
   }, [args.rows]);
-
-  const handleSort = React.useCallback(
-    (sortColumn, sortDirection) => {
-      // if (sortColumn === null || sortDirection === null) {
-      //   return;
-      // }
-      // if (sortDirection === "NONE") {
-      //   return state.rows;
-      // }
-  
-      let sortedRows = state.rows;
-      sortedRows = sortedRows.sort((a, b) =>
-        a[sortColumn]
-          .toString()
-          .localeCompare(b[sortColumn].toString())
-      );
-  
-      sortedRows =
-        sortDirection === "DESC" ? sortedRows.reverse() : sortedRows;
-  
-      dispatch({
-        payload: { rows: [...sortedRows] },
-        type: actions.LOAD_ROWS,
-      });
-    },
-    [dispatch, state.rows],
-  );
 
   React.useEffect(() => {
     const searchKeys = isEmpty(state.filterColumn)
@@ -203,7 +214,7 @@ const ServerFilterSortStory = ({ ...args }) => {
     let filteredRows = args.rows;
     searchKeys.forEach((searchKey) => {
       filteredRows = filteredRows.filter((row) => {
-        if(searchKey === 'search') {
+        if (searchKey === 'search') {
           return true
         }
         const searchItem = row[searchKey]
@@ -221,7 +232,7 @@ const ServerFilterSortStory = ({ ...args }) => {
             return true
           default:
             return true
-            
+
         }
       });
       console.log(
@@ -239,19 +250,65 @@ const ServerFilterSortStory = ({ ...args }) => {
     setSentFilters(state.filterColumn)
   }, [state.filterColumn])
 
-  return <Paper style={{height: '80vh'}}>
+  return <>
     <ReactJson src={sentFilters} />
-    <DataGrid2 {...args} 
+    <DataGrid2 {...args}/>
+  </>;
+};
+export const ServerFilter = ServerFilterStory.bind({});
+ServerFilter.args = {
+  ...Default.args,
+  showSelector: true,
+  filterable: true,
+};
+const ServerSortStory = ({ ...args }) => {
+  const [state, dispatch] = React.useContext(DataGridContext);
+  
+  React.useEffect(() => {
+    dispatch({
+      payload: { columns: args.columns },
+      type: actions.LOAD_COLUMNS,
+    });
+
+  }, [args.columns]);
+
+  React.useEffect(() => {
+    dispatch({
+      payload: { rows: args.rows },
+      type: actions.LOAD_ROWS,
+    });
+  }, [args.rows]);
+
+  const handleSort = React.useCallback(
+    (sortColumn, sortDirection) => {
+      // sortColumn and sortDirection can be sent to the server.  sortDirection is either 'ASC' or 'DESC'
+      let sortedRows = state.rows;
+      sortedRows = sortedRows.sort((a, b) =>
+        a[sortColumn]
+          .toString()
+          .localeCompare(b[sortColumn].toString())
+      );
+
+      sortedRows =
+        sortDirection === "DESC" ? sortedRows.reverse() : sortedRows;
+
+      dispatch({
+        payload: { rows: [...sortedRows] },
+        type: actions.LOAD_ROWS,
+      });
+    },
+    [dispatch, state.rows],
+  );
+
+  return <DataGrid2 {...args}
       onSort={(col, dir) => {
-        console.log("📢[index.stories.js:211]: ", col, dir);
         handleSort(col, dir)
       }}
     />
-    
-  </Paper>;
+
 };
-export const ServerFilterSort = ServerFilterSortStory.bind({});
-ServerFilterSort.args = {
+export const ServerSort = ServerSortStory.bind({});
+ServerSort.args = {
   ...Default.args,
   showSelector: true,
   filterable: true,
@@ -269,21 +326,21 @@ const SelectableStory = ({ ...args }) => {
   }, [args.columns, args.rows, dispatch]);
 
   return (
-    <Paper style={{height: '80vh'}}>
-    <DataGrid2
-      {...args}
-      gridProps={{
-        selectedRows: selectedRowIds,
-        onSelectedRowsChange: (rows) => {
-          console.log("📢[index.stories.js:231]: ", rows);
-          setSelectedRowIds(rows);
-        },
-        rowKeyGetter: (row) => {
-          return row.id;
-        },
-      }}
-    />
-    <pre>{JSON.stringify(selectedRowIds, null, 2)}</pre>
+    <Paper style={{ height: '80vh' }}>
+      <DataGrid2
+        {...args}
+        gridProps={{
+          selectedRows: selectedRowIds,
+          onSelectedRowsChange: (rows) => {
+            console.log("📢[index.stories.js:231]: ", rows);
+            setSelectedRowIds(rows);
+          },
+          rowKeyGetter: (row) => {
+            return row.id;
+          },
+        }}
+      />
+      <pre>{JSON.stringify(selectedRowIds, null, 2)}</pre>
     </Paper>
   );
 };
@@ -371,9 +428,9 @@ const RedrawBugStory = ({ ...args }) => {
   return (
     <Grid container>
       <Grid item xs={12}>
-      <Paper style={{height: '80vh'}}>
-        <DataGrid2 {...args} />
-      </Paper>
+        <Paper style={{ height: '80vh' }}>
+          <DataGrid2 {...args} />
+        </Paper>
       </Grid>
     </Grid>
   );
@@ -422,10 +479,10 @@ const LoaderStory = ({ ...args }) => {
   return (
     <Grid container>
       <Grid item xs={12}>
-      <Paper style={{height: '80vh'}}>
-        <DataGrid2 {...args} />
-        <Button onClick={()=>simulateLoading()}>Simulate Loading</Button>
-      </Paper>
+        <Paper style={{ height: '80vh' }}>
+          <DataGrid2 {...args} />
+          <Button onClick={() => simulateLoading()}>Simulate Loading</Button>
+        </Paper>
       </Grid>
     </Grid>
   );
@@ -448,55 +505,44 @@ Loader.args = {
 const InfiniteLoaderStory = ({ ...args }) => {
   const [state, dispatch] = React.useContext(DataGridContext);
 
-  const aggregateRows = React.useRef([]);
-  const tableRef = React.useRef(null);
-
-  const resetScroll = React.useCallback(
-    () => {
-      if (tableRef.current) {
-        tableRef.current.scrollTop = 0;
-      }
-    },
-    [],
-  );
+  const [allRows, setAllRows] = useState([]);
   
+
   const simulateLoading = React.useCallback(
-    async (params) => {
-      console.log("📢[index.stories.js:406]: ", params);
+    async () => {
       dispatch({
         type: actions.SET_LOADING,
       });
-      const mrows = aggregateRows.current.map((r,i) => {
+      const currentRows = allRows?.map((r, i) => {
         return {
           ...r,
           id: i
         }
       })
 
-      const arows = args.rows.map((r,i) => {
+      const moreRows = args.rows.map((r, i) => {
         return {
           ...r,
-          id: i+mrows.length
+          id: i + currentRows.length
         }
       })
 
-      const rs = [...mrows, ...arows]
-      console.log("📢[index.stories.js:404rsrsrs]: ", mrows, arows, rs);
-
-      aggregateRows.current = rs
+      const rows = [...currentRows, ...moreRows]
+      
+      setAllRows(rows)
 
       dispatch({
-        payload: { rows: rs },
+        payload: { rows },
         type: actions.LOAD_ROWS,
       });
       dispatch({
         type: actions.SET_DONE_LOADING,
       });
     },
-    [aggregateRows, args.rows, dispatch],
+    [allRows, args.rows, dispatch],
   );
 
-  
+
   React.useEffect(() => {
     dispatch({
       payload: { columns: args.columns, rows: args.rows },
@@ -504,38 +550,16 @@ const InfiniteLoaderStory = ({ ...args }) => {
     });
   }, [args.columns, args.rows, dispatch]);
 
-  React.useEffect(() => {
-    simulateLoading()
-  }, []);
-
-  const [selectedRowIds, setSelectedRowIds] = useState(() => new Set());
+  
 
   return (
     <Grid container>
       <Grid item xs={12}>
-      <Paper style={{height: '80vh'}}>
-        <DataGrid2 {...args} 
-          onLoadMore={(params)=>simulateLoading(params)}
-          ref={tableRef}
-          pageSize={20}
-          pageOffset={0}
-          leftAccessory={ () => (
-            <ButtonGroup>
-              <Button onClick={()=>resetScroll()}>resetscroll</Button>
-            </ButtonGroup>
-          )}
-          gridProps={{
-            selectedRows: selectedRowIds,
-            onSelectedRowsChange: (rows) => {
-              console.log("📢[index.stories.js:231]: ", rows);
-              setSelectedRowIds(rows);
-            },
-            rowKeyGetter: (row) => {
-              return row.id;
-            },
-          }}
-        />
-      </Paper>
+        <Paper style={{ height: '300px' }}>
+          <DataGrid2 {...args}
+            onLoadMore={() => simulateLoading()}
+          />
+        </Paper>
       </Grid>
     </Grid>
   );
@@ -544,9 +568,10 @@ const InfiniteLoaderStory = ({ ...args }) => {
 export const InfiniteLoader = InfiniteLoaderStory.bind({});
 InfiniteLoader.args = {
   ...Default.args,
-  filterable: true,
+  hasDateRangeFilter: false,
+  hasSearchFilter: false,
+  filterable: false,
   showSelector: true,
-  totalCount: 300,
   centerAccessory: () => <Typography variant="h6">Heading</Typography>,
   columns: [SelectColumn, ...columnData],
 };

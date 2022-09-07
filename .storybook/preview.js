@@ -3,6 +3,12 @@ import "../src/index.css";
 import { withReactContext } from "storybook-react-context";
 import { muiTheme } from 'storybook-addon-material-ui'
 
+import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
+import scss from 'react-syntax-highlighter/dist/esm/languages/prism/scss';
+import diff from 'react-syntax-highlighter/dist/esm/languages/prism/diff';
+
+SyntaxHighlighter.registerLanguage('scss', scss);
+SyntaxHighlighter.registerLanguage('diff', diff);
 const zennyaTheme = {
   themeName: 'Zennya Theme',
   palette: {
@@ -27,4 +33,10 @@ const zennyaTheme = {
 export const decorators = [withReactContext, muiTheme([zennyaTheme])];
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
+  controls: {
+    matchers: {
+      color: /(background|color)$/i,
+      date: /Date$/,
+    },
+  }
 };
