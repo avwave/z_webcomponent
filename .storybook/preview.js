@@ -3,12 +3,6 @@ import "../src/index.css";
 import { withReactContext } from "storybook-react-context";
 import { muiTheme } from 'storybook-addon-material-ui'
 
-import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
-import scss from 'react-syntax-highlighter/dist/esm/languages/prism/scss';
-import diff from 'react-syntax-highlighter/dist/esm/languages/prism/diff';
-
-SyntaxHighlighter.registerLanguage('scss', scss);
-SyntaxHighlighter.registerLanguage('diff', diff);
 const zennyaTheme = {
   themeName: 'Zennya Theme',
   palette: {
