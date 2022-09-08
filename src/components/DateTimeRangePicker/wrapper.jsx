@@ -7,6 +7,7 @@ import 'litepicker/dist/plugins/mobilefriendly';
 import 'litepicker/dist/plugins/ranges';
 import moment from 'moment';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { Timepicker } from '../Timepicker';
 import './style.scss';
 
 
@@ -207,20 +208,21 @@ const LitePicker = ({ onCancel = () => { }, onValueChange = () => { }, container
         />
       </Grid>
       <Grid item xs={6}>
-        <TextField
-          fullWidth
-          size="small"
-          value={moment(startTime).format("HH:mm")}
+        <Timepicker
           onChange={evt => {
-            setStartTime(moment(evt.target.value, ['hh:mm a', 'HH:mm']).toDate())
+            setStartTime(evt)
           }}
-          name="startTime"
-          type="time"
           label="Start Time"
-          InputLabelProps={{
-            shrink: true,
+          value={moment(startTime)}
+          inputProps={{
+            fullWidth: true,
+            InputLabelProps: {
+              shrink: true,
+            },
+            variant: variant,
+            size: "small",
+            helperText: ''
           }}
-          variant={variant}
         />
       </Grid>
       <Grid item xs={6}>
@@ -252,20 +254,21 @@ const LitePicker = ({ onCancel = () => { }, onValueChange = () => { }, container
 
       </Grid>
       <Grid item xs={6}>
-        <TextField
-          fullWidth
-          size="small"
-          value={moment(endTime).format("HH:mm")}
+        <Timepicker
           onChange={evt => {
-            setEndTime(moment(evt.target.value, ['hh:mm a', 'HH:mm']).toDate())
+            setEndTime(evt)
           }}
-          name="endTime"
-          type="time"
           label="End Time"
-          InputLabelProps={{
-            shrink: true,
+          value={moment(endTime)}
+          inputProps={{
+            fullWidth: true,
+            InputLabelProps: {
+              shrink: true,
+            },
+            variant: variant,
+            size: "small",
+            helperText: ''
           }}
-          variant={variant}
         />
       </Grid>
       <Grid container item xs={12} spacing={2}>
@@ -283,8 +286,11 @@ const LitePicker = ({ onCancel = () => { }, onValueChange = () => { }, container
             }>Close</Button>
           <div className={classes.spacer} />
           <Button variant="text" color="primary"
-            onClick={() => sendParsedDates()
-            }>Apply</Button>
+            onClick={() => {
+              sendParsedDates()
+              onCancel()
+
+            }}>Apply</Button>
           <Button variant="text" color="secondary"
             onClick={() => clearDates()
             }>Clear</Button>
