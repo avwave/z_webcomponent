@@ -35,22 +35,17 @@ const chipFilters = [
 const columnData = [
   {
     key: "id",
-    colId: "col1",
     name: "Frozen Column1",
-    type: "text",
     sortable: false,
     noTooltip: true,
     frozen: true,
   },
   {
     key: "title",
-    colId: "col2",
     name: "Filter: Text",
-    type: "text",
     sortable: false,
     width: 300,
     filter: {
-      type: "text",
       label: "Contains",
       default: "",
     },
@@ -62,13 +57,12 @@ const columnData = [
   },
   {
     key: "col6Type",
-    colId: "col6",
     name: "Filter: Option",
     sortable: true,
     filter: {
       type: "autocomplete",
       default: "",
-      label: "Is type of",
+      label: "Is type of (autocomplete)",
       labelField: 'label',
       renderLabel: 'renderLabel',
       valueField: 'v',
@@ -88,7 +82,6 @@ const columnData = [
   },
   {
     key: "col9Type",
-    colId: "col9",
     name: "Daterange Filter",
     sortable: false,
     filter: {
@@ -113,7 +106,6 @@ const columnData = [
   },
   {
     key: "col3Type",
-    colId: "col3",
     name: "Long column name should really be wrappable up until small screens.  ideally should not be this long",
     cellStyles: {
       color: "green",
@@ -127,7 +119,6 @@ const columnData = [
   },
   {
     key: "col4Type",
-    colId: "col4",
     name: "Custom Header",
     sortable: false,
     minWidth: 200,
@@ -143,7 +134,6 @@ const columnData = [
   },
   {
     key: "col5Type",
-    colId: "col5",
     name: "Truncate",
     sortable: false,
     align: "flex-start",
@@ -167,7 +157,6 @@ const columnData = [
   },
   {
     key: "button",
-    colId: "button",
     name: "Button",
     sortable: false,
     // getCellValue: (row) => JSON.stringify(row.col7Type),
@@ -184,7 +173,6 @@ const columnData = [
   },
   {
     key: "col7Typer",
-    colId: "col7r",
     name: "Formatted JSON",
     sortable: false,
     // getCellValue: (row) => JSON.stringify(row.col7Type),
@@ -194,7 +182,6 @@ const columnData = [
   },
   {
     key: "col8Type",
-    colId: "col8",
     name: "React Component",
     sortable: false,
     width: 250,
