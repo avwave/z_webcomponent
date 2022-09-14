@@ -218,6 +218,7 @@ function Agenda(_props) {
           min={moment(lockSlotStartTime, "HH:mm").toDate()}
           max={moment(lockSlotEndTime, "HH:mm").toDate()}
           showMultiDayTimes
+          length={7} //week by default
           {...props}
         />
       </Paper>

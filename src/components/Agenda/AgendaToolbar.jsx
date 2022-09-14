@@ -81,60 +81,71 @@ const AgendaToolbar = ({
           {label}
         </Typography>)
       }
-      if (view === calendarViews.WEEK || view === calendarViews.WORK_WEEK) {
-        return (
-          <div className={classes.title}>
-            <WeekPicker
-              value={date}
-              onChange={range => {
-                onNavigate(Navigate.DATE, range?.date?.toDate())
-              }} />
-          </div>
-        )
+      switch (view) {
+        case calendarViews.WEEK:
+        case calendarViews.WORK_WEEK:
+          return (
+            <div className={classes.title}>
+              <WeekPicker
+                value={date}
+                onChange={range => {
+                  onNavigate(Navigate.DATE, range?.date?.toDate())
+                }} />
+            </div>
+          )
+        case calendarViews.AGENDA:
+          return (
+            <div className={classes.title}>
+              <WeekPicker
+                value={date}
+                onChange={range => {
+                  onNavigate(Navigate.DATE, range?.start_date?.toDate())
+                }} />
+            </div>
+          )
+        case calendarViews.DAY:
+          return (
+            <div className={classes.title}>
+              <MobileDatePicker
+                disableCloseOnSelect={false}
+                disableMaskedInput
+                showDaysOutsideCurrentMonth
+                showToolbar={false}
+                value={date}
+                onChange={range => {
+                  onNavigate(Navigate.DATE, range?.toDate())
+                }}
+                renderInput={({ inputRef, inputProps, InputProps, ...props }) => {
+                  const date = moment(inputProps?.value)
+                  let dateweek = `${date.format('dddd ll')}`
+                  return (
+                    <div className={classes.inputRoot}>
+                      <input {...inputProps} readOnly hidden />
+                      <Button {...inputProps} ref={inputRef} >{dateweek}</Button>
+                      {InputProps?.endAdornment}
+                    </div>
+                  )
+                }}
+              />
+            </div>
+          )
+        case calendarViews.MONTH:
+          return (
+            <div className={classes.title}>
+              <WeekPicker
+                asMonthPicker
+                value={date}
+                onChange={range => {
+                  onNavigate(Navigate.DATE, range?.date?.toDate())
+                }} />
+            </div>
+          )
+        default:
+          return (<Typography variant="h6" className={classes.title}>
+            {label}
+          </Typography>)
       }
-      else if (view === calendarViews.DAY) {
-        return (
-          <div className={classes.title}>
-            <MobileDatePicker
-              disableCloseOnSelect={false}
-              disableMaskedInput
-              showDaysOutsideCurrentMonth
-              showToolbar={false}
-              value={date}
-              onChange={range => {
-                onNavigate(Navigate.DATE, range?.toDate())
-              }}
-              renderInput={({ inputRef, inputProps, InputProps, ...props }) => {
-                const date = moment(inputProps?.value)
-                let dateweek = `${date.format('dddd ll')}`
-                return (
-                  <div className={classes.inputRoot}>
-                    <input {...inputProps} readOnly hidden />
-                    <Button {...inputProps} ref={inputRef} >{dateweek}</Button>
-                    {InputProps?.endAdornment}
-                  </div>
-                )
-              }}
-            />
-          </div>
-        )
-      }
-      else if (view === calendarViews.MONTH) {
-        return (
-          <div className={classes.title}>
-            <WeekPicker
-              asMonthPicker
-              value={date}
-              onChange={range => {
-                onNavigate(Navigate.DATE, range?.date?.toDate())
-              }} />
-          </div>
-        )
-      } else {
-        return (<Typography variant="h6" className={classes.title}>
-          {label}
-        </Typography>)
-      }
+
     }, [classes.title, label, onNavigate, picker]
   );
   const defColWidth = filterComponent ? 3 : 4
