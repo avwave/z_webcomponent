@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { withReactContext } from "storybook-react-context";
 import { Agenda } from ".";
 
@@ -16,6 +16,8 @@ import moment from "moment";
 import { parseBookingStatus } from "./bookingStates";
 import { Chip, Link, Typography } from "@material-ui/core";
 import { personNameFormal } from "../utils/format";
+import { AggregateWeekView } from "./AggregateWeekView";
+import { AggregateCell, AggregateEventCell, DayViewCell, DayViewHeader, DayViewToolTip, WeekViewCell } from "./DayViewCell";
 
 const AgendaStory = {
   component: Agenda,
@@ -46,6 +48,8 @@ export default AgendaStory;
 
 const DefaultStory = ({ ...args }) => {
   const [state, dispatch] = React.useContext(AgendaContext);
+  const [currentView, setCurrentView] = useState(views.WEEK);
+
   React.useEffect(() => {
     const events = largeData.map(event => {
       const parse = parseBookingStatus(event)
@@ -67,49 +71,54 @@ const DefaultStory = ({ ...args }) => {
     });
   }, [args.events, args.summaries, dispatch]);
 
-  const DayViewCell = ({ event, ...rest }) => {
-    const { booking } = event
-    const start = moment(booking?.date_scheduled)
-
-    const parse = parseBookingStatus(booking)
-    return (
-      <Chip
-        size="small"
-        style={{
-          background: parse?.variant === 'outlined' ? 'inherit' : parse?.bgColor,
-          color: parse?.variant === 'outlined' ? parse?.textColor : 'inherit',
-        }}
-        variant={parse?.variant}
-        label={parse?.value}
-      />
-    )
-  }
-
-
   return <Agenda
     containerStyle={{
       height: 750,
     }}
-    timeslots={1}
-    step={60}
-    lockSlotStartTime="00:00"
+    lockSlotStartTime="07:00"
     lockSlotEndTime="23:59"
     popup
     pickerToolbar
-    views={[views.MONTH, views.WEEK, views.WORK_WEEK, views.DAY, views.AGENDA]}
-    defaultView={views.AGENDA}
+    calendarWeek
+    tooltipAccessor={null}
+    step={15}
+    timeslots={4}
+    components={{
+      week: {
+        event: (evt) => <AggregateEventCell event={evt} />
+      },
+      day: {
+        event: (evt) => <WeekViewCell event={evt} />,
+      },
+      eventWrapper: ({ event, children, type, selected, ...REST }) => {
+        if(currentView === views.WEEK) {
+          return <AggregateCell event={event}>{children}</AggregateCell>
+        }
+        return <DayViewToolTip view={currentView} selected={selected} event={event}>{children}</DayViewToolTip>
+      }
+    }}
+    views={{
+      month: true,
+      week: AggregateWeekView,
+      day: true,
+    }}
+    defaultView={views.WEEK}
     style={{ flex: "1 1 auto" }}
 
+    onViewChange={(view) => {
+      setCurrentView(view)
+    }}
     metaRenderer={(event) => {
       return (
-        <div style={{color:'#000'}}>
+        <div style={{ color: '#000' }}>
           <Link>{event?.booking?.id}</Link>
           <Typography>{event?.booking?.type?.label}</Typography>
           <Typography><Link>{personNameFormal(event?.booking?.white_label_customer)}</Link></Typography>
-          <DayViewCell event={event} />
+      
         </div>
       )
     }}
+    dayLayoutAlgorithm="no-overlap"
   />;
 };
 

@@ -149,6 +149,28 @@ const AgendaToolbar = ({
     }, [classes.title, label, onNavigate, picker]
   );
   const defColWidth = filterComponent ? 3 : 4
+
+  const renderViewButtons = useMemo(
+    () => {
+      let viewArray = []
+      if(Array.isArray(views)) {
+        viewArray = views
+      } else {
+        viewArray = Object.keys(views)
+      }
+      return viewArray?.map((viewItem, idx) => (
+        <Button
+          type="button"
+          key={`view-${idx}`}
+          color={view === viewItem ? "primary" : "inherit"}
+          onClick={() => onView(viewItem)}
+        >
+          {localizer.messages[viewItem]}
+        </Button>
+      ))
+      
+    }, [localizer.messages, onView, view, views]
+  );
   return (
     <Toolbar className={classes.root}>
       <Grid container spacing={16} justify="flex-start" className={classes.container}>
@@ -179,16 +201,7 @@ const AgendaToolbar = ({
         <Grid item xs={12} sm={6} md={defColWidth} className={classes.item3}>
           <div className={classes.rightGroup}>
             <ButtonGroup variant="text" size="small" className={clsx(filterComponent ? classes.padded : null, classes.rightGroup)}>
-              {views?.map((viewItem, idx) => (
-                <Button
-                  type="button"
-                  key={`view-${idx}`}
-                  color={view === viewItem ? "primary" : "inherit"}
-                  onClick={() => onView(viewItem)}
-                >
-                  {localizer.messages[viewItem]}
-                </Button>
-              ))}
+              {renderViewButtons}
             </ButtonGroup>
 
           </div>
