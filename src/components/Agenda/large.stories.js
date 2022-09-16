@@ -18,6 +18,7 @@ import { Chip, Link, Typography } from "@material-ui/core";
 import { personNameFormal } from "../utils/format";
 import { AggregateWeekView } from "./AggregateWeekView";
 import { AggregateCell, AggregateEventCell, DayViewCell, DayViewHeader, DayViewToolTip, WeekViewCell } from "./DayViewCell";
+import { wideLoadAlgorithm } from "./WideLoadAlgorithm";
 
 const AgendaStory = {
   component: Agenda,
@@ -118,7 +119,7 @@ const DefaultStory = ({ ...args }) => {
         </div>
       )
     }}
-    dayLayoutAlgorithm="no-overlap"
+    dayLayoutAlgorithm={wideLoadAlgorithm}
   />;
 };
 
