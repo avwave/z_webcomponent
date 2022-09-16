@@ -81,63 +81,96 @@ const AgendaToolbar = ({
           {label}
         </Typography>)
       }
-      if (view === calendarViews.WEEK || view === calendarViews.WORK_WEEK) {
-        return (
-          <div className={classes.title}>
-            <WeekPicker
-              value={date}
-              onChange={range => {
-                onNavigate(Navigate.DATE, range?.date?.toDate())
-              }} />
-          </div>
-        )
+      switch (view) {
+        case calendarViews.WEEK:
+        case calendarViews.WORK_WEEK:
+          return (
+            <div className={classes.title}>
+              <WeekPicker
+                value={date}
+                onChange={range => {
+                  onNavigate(Navigate.DATE, range?.date?.toDate())
+                }} />
+            </div>
+          )
+        case calendarViews.AGENDA:
+          return (
+            <div className={classes.title}>
+              <WeekPicker
+                value={date}
+                onChange={range => {
+                  onNavigate(Navigate.DATE, range?.start_date?.toDate())
+                }} />
+            </div>
+          )
+        case calendarViews.DAY:
+          return (
+            <div className={classes.title}>
+              <MobileDatePicker
+                disableCloseOnSelect={false}
+                disableMaskedInput
+                showDaysOutsideCurrentMonth
+                showToolbar={false}
+                value={date}
+                onChange={range => {
+                  onNavigate(Navigate.DATE, range?.toDate())
+                }}
+                renderInput={({ inputRef, inputProps, InputProps, ...props }) => {
+                  const date = moment(inputProps?.value)
+                  let dateweek = `${date.format('dddd ll')}`
+                  return (
+                    <div className={classes.inputRoot}>
+                      <input {...inputProps} readOnly hidden />
+                      <Button {...inputProps} ref={inputRef} >{dateweek}</Button>
+                      {InputProps?.endAdornment}
+                    </div>
+                  )
+                }}
+              />
+            </div>
+          )
+        case calendarViews.MONTH:
+          return (
+            <div className={classes.title}>
+              <WeekPicker
+                asMonthPicker
+                value={date}
+                onChange={range => {
+                  onNavigate(Navigate.DATE, range?.date?.toDate())
+                }} />
+            </div>
+          )
+        default:
+          return (<Typography variant="h6" className={classes.title}>
+            {label}
+          </Typography>)
       }
-      else if (view === calendarViews.DAY) {
-        return (
-          <div className={classes.title}>
-            <MobileDatePicker
-              disableCloseOnSelect={false}
-              disableMaskedInput
-              showDaysOutsideCurrentMonth
-              showToolbar={false}
-              value={date}
-              onChange={range => {
-                onNavigate(Navigate.DATE, range?.toDate())
-              }}
-              renderInput={({ inputRef, inputProps, InputProps, ...props }) => {
-                const date = moment(inputProps?.value)
-                let dateweek = `${date.format('dddd ll')}`
-                return (
-                  <div className={classes.inputRoot}>
-                    <input {...inputProps} readOnly hidden />
-                    <Button {...inputProps} ref={inputRef} >{dateweek}</Button>
-                    {InputProps?.endAdornment}
-                  </div>
-                )
-              }}
-            />
-          </div>
-        )
-      }
-      else if (view === calendarViews.MONTH) {
-        return (
-          <div className={classes.title}>
-            <WeekPicker
-              asMonthPicker
-              value={date}
-              onChange={range => {
-                onNavigate(Navigate.DATE, range?.date?.toDate())
-              }} />
-          </div>
-        )
-      } else {
-        return (<Typography variant="h6" className={classes.title}>
-          {label}
-        </Typography>)
-      }
+
     }, [classes.title, label, onNavigate, picker]
   );
   const defColWidth = filterComponent ? 3 : 4
+
+  const renderViewButtons = useMemo(
+    () => {
+      let viewArray = []
+      if(Array.isArray(views)) {
+        viewArray = views
+      } else {
+        viewArray = Object.keys(views)
+      }
+      return viewArray?.map((viewItem, idx) => (
+        <Button
+          type="button"
+          key={`view-${idx}`}
+          color={view === viewItem ? "primary" : "inherit"}
+          onClick={() => onView(viewItem)}
+        >
+          {localizer.messages[viewItem]}
+        </Button>
+      ))
+      
+    }, [localizer.messages, onView, view, views]
+  );
   return (
     <Toolbar className={classes.root}>
       <Grid container spacing={16} justify="flex-start" className={classes.container}>
@@ -168,16 +201,7 @@ const AgendaToolbar = ({
         <Grid item xs={12} sm={6} md={defColWidth} className={classes.item3}>
           <div className={classes.rightGroup}>
             <ButtonGroup variant="text" size="small" className={clsx(filterComponent ? classes.padded : null, classes.rightGroup)}>
-              {views?.map((viewItem, idx) => (
-                <Button
-                  type="button"
-                  key={`view-${idx}`}
-                  color={view === viewItem ? "primary" : "inherit"}
-                  onClick={() => onView(viewItem)}
-                >
-                  {localizer.messages[viewItem]}
-                </Button>
-              ))}
+              {renderViewButtons}
             </ButtonGroup>
 
           </div>

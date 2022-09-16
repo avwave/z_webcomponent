@@ -2,7 +2,8 @@ import moment from "moment";
 import React, { Children, cloneElement, useContext, useState } from "react";
 import {
   Calendar,
-  dateFnsLocalizer
+  dateFnsLocalizer,
+  momentLocalizer
 } from "react-big-calendar";
 import { AgendaContext } from "./AgendaContext";
 
@@ -70,6 +71,7 @@ function Agenda(_props) {
     filterComponent,
     calendarWeek = false,
     components: extraComponents,
+    onViewChange=()=>{},
     ...props
   } = _props;
 
@@ -168,12 +170,20 @@ function Agenda(_props) {
     startOfWeek(new Date(), {
       weekStartsOn: calendarWeek ? 0 : getDay(sub(new Date(), { days: 1 })),
     });
-  const localizer = dateFnsLocalizer({
-    format,
-    startOfWeek: sOfWeek,
-    getDay,
-    locales: dateFnsLocales,
-  });
+
+  // const localizer = dateFnsLocalizer({
+  //   format,
+  //   startOfWeek: sOfWeek,
+  //   getDay,
+  //   locales: dateFnsLocales,
+  // });
+
+  moment.locale('en-US', {
+    week: {
+      dow: calendarWeek ? 0 : getDay(sub(new Date(), { days: 1 })),
+    }
+  })
+  const localizer = momentLocalizer(moment)
 
   return (
     <BlockUi
@@ -203,9 +213,9 @@ function Agenda(_props) {
             agenda: {
               event: AgendaEventComponent,
             },
-            toolbar: (toolbarProps) => <AgendaToolbar 
+            toolbar: (toolbarProps) => <AgendaToolbar
               filterComponent={filterComponent}
-              picker={!!pickerToolbar} {...toolbarProps} {...props} 
+              picker={!!pickerToolbar} {...toolbarProps} {...props}
             />,
             month: {
               dateHeader: AgendaDateHeader,
@@ -218,6 +228,10 @@ function Agenda(_props) {
           min={moment(lockSlotStartTime, "HH:mm").toDate()}
           max={moment(lockSlotEndTime, "HH:mm").toDate()}
           showMultiDayTimes
+          length={7} //week by default
+          onView={(view)=>{
+            onViewChange(view)
+          }}
           {...props}
         />
       </Paper>
