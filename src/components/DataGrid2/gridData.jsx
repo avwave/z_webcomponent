@@ -43,7 +43,7 @@ const columnData = [
   {
     key: "title",
     name: "Filter: Text",
-    sortable: false,
+    sortable: true,
     width: 300,
     filter: {
       label: "Contains",
