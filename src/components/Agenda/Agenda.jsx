@@ -30,6 +30,7 @@ import startOfWeek from "date-fns/startOfWeek";
 import sub from "date-fns/sub";
 
 import BlockUi from "react-loader-advanced";
+import { useUrlState } from "../useURLState";
 
 const dateFnsLocales = {
   "en-US": enLocale,
@@ -72,11 +73,24 @@ function Agenda(_props) {
     calendarWeek = false,
     components: extraComponents,
     onViewChange=()=>{},
+    id="calendar",
+    useUrlAsState=false,
     ...props
   } = _props;
 
   const classes = useStyles()
   const metaRenderer = metaR ? metaR : () => { };
+
+  const [currentDate, setCurrentDate] = useUrlState({
+    queryKey:`${id}-date`,
+    disable: !useUrlAsState,
+  });
+
+  const [paramView, setParamView] = useUrlState({
+    queryKey:`${id}-view`,
+    disable: !useUrlAsState,
+    defaultValue: props?.defaultView
+  })
 
   const [state, dispatch] = useContext(AgendaContext);
   const [openAlert, setOpenAlert] = useState(false);
@@ -231,6 +245,12 @@ function Agenda(_props) {
           length={7} //week by default
           onView={(view)=>{
             onViewChange(view)
+            setParamView(view)
+          }}
+          view={paramView}
+          date={currentDate}
+          onNavigate={(date, view)=>{
+            setCurrentDate(date)
           }}
           {...props}
         />
