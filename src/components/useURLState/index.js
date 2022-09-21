@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useRef, useState } from "react";
-import qs from "query-string";
+import * as qs from "query-string";
 import moment from "moment";
 
 export function useUrlState({ queryKey, defaultValue, disable = false }) {
