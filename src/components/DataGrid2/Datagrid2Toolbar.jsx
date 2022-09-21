@@ -183,7 +183,8 @@ function DataGrid2Toolbar({
   hasSearchFilter = true,
   searchPlaceholder = 'Search',
   hasDateRangeFilter = true,
-  useUrlAsState = false
+  useUrlAsState = false,
+  gridId
 }) {
   const [columnAnchor, setColumnAnchor] = useState();
   const [filterAnchor, setFilterAnchor] = useState();
@@ -197,7 +198,7 @@ function DataGrid2Toolbar({
 
   const [filterColumnSettings, setFilterColumnSettings] = useState(columns);
 
-  const [filterValues, setFilterValues] = useUrlState({queryKey:'filters', disable:!useUrlAsState});
+  const [filterValues, setFilterValues] = useUrlState({queryKey:`${gridId}-filters`, disable:!useUrlAsState});
   const [filterDisplay, setFilterDisplay] = useState({});
 
   const [searchField, setSearchField] = useState("");

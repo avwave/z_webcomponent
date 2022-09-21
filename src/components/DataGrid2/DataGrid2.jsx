@@ -175,7 +175,8 @@ const DataGrid2 = React.forwardRef(({
   defaultFilters = {},
   extendedRowAttributes = () => { },
   deferLoading = false,
-  useUrlAsState = false
+  useUrlAsState = false,
+  id = "grid"
 }, ref) => {
   const classes = useStyles()
   const theme = useTheme()
@@ -184,7 +185,7 @@ const DataGrid2 = React.forwardRef(({
   const [pageOffset, setPageOffset] = useState(0);
 
   const [filters, setFilters, filtersRef] = useUrlState({
-    queryKey: "filters",
+    queryKey: `${id}-filters`,
     defaultValue: defaultFilters,
     disable: !useUrlAsState
   })
@@ -192,11 +193,11 @@ const DataGrid2 = React.forwardRef(({
   const [dataGridState, dataGridDispatch] = useContext(DataGridContext);
 
   const [sortColumn, setSortColumn] = useUrlState({
-    queryKey: "sortOn",
+    queryKey: `${id}-sortOn`,
     disable: !useUrlAsState
   });
   const [sortDirection, setSortDirection] = useUrlState({
-    queryKey: "sortBy",
+    queryKey: `${id}-sortBy`,
     disable: !useUrlAsState
   })
   const [selectedRows, setSelectedRows] = useState(new Set());
@@ -422,6 +423,7 @@ const DataGrid2 = React.forwardRef(({
         defaultFilters={defaultFilters}
         gridProps={gridProps}
         onClearFilters={() => onClearFilters()}
+        gridId={id}
       />
       <div style={{ display: 'none' }}>{sortColumn}{sortDirection}</div>
       {dataGridState.loading ? <LinearProgress /> : <LinearProgress variant="determinate" value={0} />}
