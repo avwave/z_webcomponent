@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useRef, useState } from "react";
-import {parse, stringify} from "query-string";
+
 import moment from "moment";
 
 export function useUrlState({ queryKey, defaultValue, disable = false }) {
@@ -19,8 +19,8 @@ export function useUrlState({ queryKey, defaultValue, disable = false }) {
   }, [disable]);
 
   const getQueryStringValue = useMemo(() => {
-    const values = qs.parse(window.location.search);
-    const pValue = values[queryKey] || state || null
+    const qs = new URLSearchParams(window.location.search);
+    const pValue = qs.get(queryKey) || state || null
     let convertedValue = pValue;
     if (pValue) {
       try {
@@ -43,12 +43,17 @@ export function useUrlState({ queryKey, defaultValue, disable = false }) {
       const returnValue = typeof val === "function" ? val(ref.current) : val;
       const parsedValue = typeof returnValue === "object" ? JSON.stringify(returnValue) : returnValue;
 
-      const values = parse(window.location.search);
+      const qs = new URLSearchParams(window.location.search);
+      let values = {};
+      for(var value of qs.keys()) {
+          values[value] = qs.get(value);
+      }
       const mergedValues = {
         ...values,
         [queryKey]: parsedValue
       }
-      const newQsValue = stringify(mergedValues);
+      const newQs = new URLSearchParams(mergedValues);
+      const newQsValue = newQs.toString()
       setQueryString(`?${newQsValue}`);
       setState(returnValue);
     },
