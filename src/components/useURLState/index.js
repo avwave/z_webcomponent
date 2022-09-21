@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo, useRef, useState } from "react";
 import qs from "query-string";
+import moment from "moment";
 
 export function useUrlState({ queryKey, defaultValue, disable = false }) {
   const [state, setState] = useState(defaultValue);
@@ -20,12 +21,19 @@ export function useUrlState({ queryKey, defaultValue, disable = false }) {
   const getQueryStringValue = useMemo(() => {
     const values = qs.parse(window.location.search);
     const pValue = values[queryKey] || state || null
+    let convertedValue = pValue;
     if (pValue) {
       try {
-        ref.current = JSON.parse(pValue);
+        convertedValue = JSON.parse(pValue);
+        try {
+          const isDate = moment(new Date(convertedValue)).isValid();
+          convertedValue = isDate ? moment(convertedValue).toDate() : convertedValue;
+        }catch (dateparseError) {
+        }
       } catch (error) {
-        ref.current = pValue;
+        convertedValue = pValue;
       }
+      ref.current = convertedValue;
     }
     return ref.current;
   }, [queryKey, state]);
