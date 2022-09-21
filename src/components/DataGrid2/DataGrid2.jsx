@@ -12,6 +12,7 @@ import { useContextMenu } from 'react-contexify';
 import Truncate from 'react-truncate';
 import { actions as dataGridActions, DataGridContext } from '../DataGrid/DataGridContext';
 import { PortalCell } from '../DataGrid/PortalCell';
+import { useUrlState } from '../useURLState';
 import Datagrid2Toolbar from './Datagrid2Toolbar';
 import { AuocompleteFilterRenderer, ChipTabsFilterRenderer, DateRangeFilterRenderer, OptionFilterRenderer, TextFilterRenderer } from './FilterRenderer';
 import './styles.scss';
@@ -173,18 +174,31 @@ const DataGrid2 = React.forwardRef(({
   onClearFilters = () => { },
   defaultFilters = {},
   extendedRowAttributes = () => { },
-  deferLoading = false
+  deferLoading = false,
+  useUrlAsState = false
 }, ref) => {
   const classes = useStyles()
   const theme = useTheme()
 
   const [tableProps, setTableProps] = useState(tablePropsInit);
   const [pageOffset, setPageOffset] = useState(0);
-  const [filters, setFilters] = useState({ ...defaultFilters });
+
+  const [filters, setFilters, filtersRef] = useUrlState({
+    queryKey: "filters",
+    defaultValue: defaultFilters,
+    disable: !useUrlAsState
+  })
+
   const [dataGridState, dataGridDispatch] = useContext(DataGridContext);
 
-  const [sortColumn, setSortColumn] = useState("");
-  const [sortDirection, setSortDirection] = useState("");
+  const [sortColumn, setSortColumn] = useUrlState({
+    queryKey: "sortOn",
+    disable: !useUrlAsState
+  });
+  const [sortDirection, setSortDirection] = useUrlState({
+    queryKey: "sortBy",
+    disable: !useUrlAsState
+  })
   const [selectedRows, setSelectedRows] = useState(new Set());
 
   const [highlightedRow, setHighlightedRow] = useState();
@@ -242,6 +256,7 @@ const DataGrid2 = React.forwardRef(({
         isResizable: col.resizable,
         style: { width: 200, minWidth: 200 },
         ...col.key === 'select-row' ? { width: 50 } : {},
+        ...col.key === sortColumn ? { sortDirection: sortDirection === 'ASC' ? 'ascend' : 'descend' } : {}
       }
       return column
     })
@@ -253,7 +268,10 @@ const DataGrid2 = React.forwardRef(({
       sort: ({ column }) => {
         const sort = column.sortDirection === 'ascend' ? 'ASC' : column.sortDirection === 'descend' ? 'DESC' : 'NONE'
         setSortColumn(column.key);
-        setSortDirection(sort);
+        if (sort !== 'NONE') {
+          setSortDirection(sort);
+        }
+
         return (a, b) => 0
       }
     })
@@ -378,12 +396,13 @@ const DataGrid2 = React.forwardRef(({
         filterColumn: filters,
       },
     });
-  }, [dataGridDispatch, filters]);
+  }, [filters]);
 
   const [scrollYoffset, setScrollYoffset] = useState(0);
   return (
     <div className={clsx('datagrid', classes.datagrid)} style={{ ...containerStyle }}>
       <Datagrid2Toolbar
+        useUrlAsState={useUrlAsState}
         hasDateRangeFilter={hasDateRangeFilter}
         searchPlaceholder={searchPlaceholder}
         hasSearchFilter={hasSearchFilter}
@@ -392,7 +411,9 @@ const DataGrid2 = React.forwardRef(({
         columns={tableProps.columns}
         showSelector={showSelector}
         filterable={filterable}
-        onFilterChange={setFilters}
+        onFilterChange={(f)=>{
+          setFilters(f)
+        }}
         rightAccessory={rightAccessory}
         leftAccessory={leftAccessory}
         centerAccessory={centerAccessory}

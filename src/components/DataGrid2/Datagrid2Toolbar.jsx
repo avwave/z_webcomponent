@@ -15,6 +15,7 @@ import React, { useCallback, useContext, useEffect, useMemo, useState } from "re
 import CheckboxProvider from '../CheckList/checklistContext';
 import { DataGridContext } from "../DataGrid/DataGridContext";
 import { DateTimeRangePicker } from '../DateTimeRangePicker';
+import { useUrlState } from "../useURLState";
 import { isDeeplyEmpty } from "../utils/isDeepEmpty";
 import { FilterDropdown } from "./FilterDropdown";
 const POPUP_MODE = {
@@ -181,7 +182,8 @@ function DataGrid2Toolbar({
   dispatch,
   hasSearchFilter = true,
   searchPlaceholder = 'Search',
-  hasDateRangeFilter = true
+  hasDateRangeFilter = true,
+  useUrlAsState = false
 }) {
   const [columnAnchor, setColumnAnchor] = useState();
   const [filterAnchor, setFilterAnchor] = useState();
@@ -195,7 +197,7 @@ function DataGrid2Toolbar({
 
   const [filterColumnSettings, setFilterColumnSettings] = useState(columns);
 
-  const [filterValues, setFilterValues] = useState(defaultFilters);
+  const [filterValues, setFilterValues] = useUrlState({queryKey:'filters', disable:!useUrlAsState});
   const [filterDisplay, setFilterDisplay] = useState({});
 
   const [searchField, setSearchField] = useState("");
@@ -225,7 +227,10 @@ function DataGrid2Toolbar({
 
   const changeFilter = useCallback(
     (filterKey, filterValue) => {
-      setFilterValues({ ...filterValues, [filterKey]: filterValue });
+      const filterV = { ...filterValues, [filterKey]: filterValue }
+      setFilterValues(filterV);
+      setSearchField(filterV?.search ?? "")
+      onFilterChange(filterV)
     },
     [filterValues],
   );
@@ -237,11 +242,7 @@ function DataGrid2Toolbar({
     [filterValues],
   );
 
-  useEffect(() => {
-    onFilterChange(filterValues);
-    setSearchField(filterValues?.search ?? "")
-  }, [filterValues]);
-
+  
   const renderFilters = useMemo(() => {
     return filterColumnSettings
       .filter(f => f?.filter?.type !== 'chiptabs')
@@ -273,12 +274,11 @@ function DataGrid2Toolbar({
   }, [changeFilter, dataGridState.filterColumn, filterColumnSettings]);
 
 
-  const stateFilters = useMemo(() => {
-    return Object.entries(filterValues).filter(f => f[1] !== undefined)
-  }, [filterValues]);
-
   const debounceSearch = debounce((event) => {
-    setFilterValues({ ...filterValues, search: event.target.value })
+    const filterV = { ...filterValues, search: event.target.value }
+    setFilterValues(filterV);
+    setSearchField(filterV?.search ?? "")
+    onFilterChange(filterV)
   }, 500)
 
   const hasChipFilter = useMemo(() => {
@@ -322,7 +322,10 @@ function DataGrid2Toolbar({
                     variant="standard"
                     value={filterValues}
                     onChange={debounce((v) => {
-                      setFilterValues({ ...filterValues, ...v });
+                      const filterV = { ...filterValues, ...v }
+                      setFilterValues(filterV);
+                      setSearchField(filterV?.search ?? "")
+                      onFilterChange(filterV)
                     }, 500)} />
                 )}
               </div>
@@ -341,7 +344,7 @@ function DataGrid2Toolbar({
                         shrink: true
                       }}
                       placeholder={searchPlaceholder}
-                      value={searchField}
+                      value={searchField||filterValues?.search}
                       onChange={event => {
                         setSearchField(event.target.value)
                         debounceSearch(event)
@@ -353,7 +356,10 @@ function DataGrid2Toolbar({
               <div className={clsx(classes.filterSection, classes.paddedBottom)}>
                 {!isDeeplyEmpty(filterValues) && (
                   <Button variant="contained" color="secondary" onClick={() => {
-                    setFilterValues({})
+                    const filterV = {}
+                    setFilterValues(filterV);
+                    setSearchField("")
+                    onFilterChange(filterV)
                     setFilterDisplay({})
                     onClearFilters()
                   }}>Clear</Button>
