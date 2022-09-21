@@ -81,7 +81,8 @@ Default.args = {
   gridProps: {
     filterWidth: 200,
   },
-  filterable: true
+  filterable: true,
+  useUrlAsState: true
 };
 
 export const Basic = DefaultStory.bind({});

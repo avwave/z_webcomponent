@@ -23,6 +23,7 @@ import AgendaProvider, {
 
 import moment from "moment";
 import { views } from "react-big-calendar/lib/utils/constants";
+import {useUrlState} from '../useURLState/index';
 
 const AgendaStory = {
   component: Agenda,
@@ -83,7 +84,8 @@ Default.args = {
   },
   onRangeChange: (navtype, date,v) => {
     console.log('index.stories.js (82) # navtype, date', navtype, date, v);
-  }
+  },
+  useUrlAsState: true,
 };
 
 
