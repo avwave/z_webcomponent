@@ -1,5 +1,4 @@
-import React, { useCallback, useEffect, useRef } from "react";
-import { useState } from './useStateRef';
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
 const isFunction = (functionToCheck) => !!(
   typeof functionToCheck === 'function'
