@@ -1,7 +1,7 @@
 import { useInterval } from './components/hooks/useInterval'
 import { useStateRef } from './components/hooks/useStateRef';
 import { useUrlState } from './components/hooks/useUrlState';
-import { DataGrid2 } from './components/DataGrid2/index';
+import {DataGrid2} from './components/DataGrid2/DataGrid2';
 import DataGridProvider, { DataGridContext, actions as gridActions } from './components/DataGrid/DataGridContext';
 
 export { useInterval, useStateRef, useUrlState }
