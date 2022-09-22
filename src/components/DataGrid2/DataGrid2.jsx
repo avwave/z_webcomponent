@@ -12,7 +12,8 @@ import { useContextMenu } from 'react-contexify';
 import Truncate from 'react-truncate';
 import { actions as dataGridActions, DataGridContext } from '../DataGrid/DataGridContext';
 import { PortalCell } from '../DataGrid/PortalCell';
-import { useUrlState } from '../useURLState';
+import { useUrlState } from '../hooks/useUrlState';
+
 import Datagrid2Toolbar from './Datagrid2Toolbar';
 import { AuocompleteFilterRenderer, ChipTabsFilterRenderer, DateRangeFilterRenderer, OptionFilterRenderer, TextFilterRenderer } from './FilterRenderer';
 import './styles.scss';

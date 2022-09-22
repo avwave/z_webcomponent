@@ -15,7 +15,8 @@ import React, { useCallback, useContext, useEffect, useMemo, useState } from "re
 import CheckboxProvider from '../CheckList/checklistContext';
 import { DataGridContext } from "../DataGrid/DataGridContext";
 import { DateTimeRangePicker } from '../DateTimeRangePicker';
-import { useUrlState } from "../useURLState";
+import { useUrlState } from "../hooks/useUrlState";
+
 import { isDeeplyEmpty } from "../utils/isDeepEmpty";
 import { FilterDropdown } from "./FilterDropdown";
 const POPUP_MODE = {

@@ -30,7 +30,7 @@ import startOfWeek from "date-fns/startOfWeek";
 import sub from "date-fns/sub";
 
 import BlockUi from "react-loader-advanced";
-import { useUrlState } from "../useURLState";
+import { useUrlState } from "../hooks/useUrlState";
 
 const dateFnsLocales = {
   "en-US": enLocale,

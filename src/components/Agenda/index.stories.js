@@ -23,7 +23,6 @@ import AgendaProvider, {
 
 import moment from "moment";
 import { views } from "react-big-calendar/lib/utils/constants";
-import {useUrlState} from '../useURLState/index';
 
 const AgendaStory = {
   component: Agenda,
@@ -82,7 +81,7 @@ Default.args = {
   onSelectEvent: (evt, element) => {
     console.log('index.stories.js (79) # evt, element', evt, element);
   },
-  onRangeChange: (navtype, date,v) => {
+  onRangeChange: (navtype, date, v) => {
     console.log('index.stories.js (82) # navtype, date', navtype, date, v);
   },
   useUrlAsState: true,
@@ -107,7 +106,7 @@ export const ToolbarFilterComponent = DefaultStory.bind({});
 ToolbarFilterComponent.args = {
   ...Default.args,
   pickerToolbar: true,
-  filterComponent: <TextField fullWidth onChange={(evt)=>alert(evt)}/>,
+  filterComponent: <TextField fullWidth onChange={(evt) => alert(evt)} />,
   calendarWeek: true
 };
 
@@ -168,7 +167,7 @@ CustomCellRendering.args = {
   eventComponent: ((event) => {
     return <pre>{JSON.stringify(event, null, 2)}</pre>
   }),
-  components:{
+  components: {
     month: {
       event: (evt) => <pre>{JSON.stringify(evt, null, 2)}</pre>
     }
