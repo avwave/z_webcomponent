@@ -1,5 +1,4 @@
-import React, { useCallback, useEffect, useRef } from "react";
-import { useState } from './stateref';
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
 const isFunction = (functionToCheck) => !!(
   typeof functionToCheck === 'function'
@@ -9,11 +8,13 @@ const isFunction = (functionToCheck) => !!(
 )
 
 
-const useInterval = (fn, delay) => {
+export const useInterval = ({ fn, delay, autoStart=true }) => {
   const timeout = useRef(null);
   const callback = useRef()
 
   const [isCleared, setIsCleared] = useState(false);
+  const [start, setStart] = useState(autoStart);
+  const [pause, setPause] = useState(!autoStart);
 
   const clear = useCallback(
     () => {
@@ -31,16 +32,27 @@ const useInterval = (fn, delay) => {
     }
   }, [fn]);
 
+
   useEffect(() => {
-    if (typeof delay === 'number') {
-      timeout.current = setInterval(() => {
-        callback?.current()
-      }, delay)
+    if (typeof delay === 'number' && !pause) {
+      
+        timeout.current = setInterval(() => {
+          callback?.current()
+        }, delay)
+      
+    } else {
+      clear()
     }
     return clear;
-  }, [delay]);
+  }, [delay, pause]);
 
-  return [isCleared, clear]
+  const resume = useCallback(
+    () => {
+      
+      setPause(!pause)
+    },
+    [pause],
+  );
+
+  return [isCleared, clear, resume]
 }
-
-export { useInterval }

@@ -1,0 +1,85 @@
+<!-- Usage.mdx -->
+
+import { Source, Story, Meta } from "@storybook/addon-docs";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { withReactContext } from "storybook-react-context";
+
+<Meta title="Hooks/Usage" />
+
+# Hooks
+
+Custom Hooks
+
+- [useInterval](#useinterval)
+- [useStateRef](#usestateref)
+- [useUrlState](#useurlstate)
+
+### useInterval
+
+React hook used to start/stop/resume a function to be called at a specified interval.
+
+| Parameters | Type     | Default | Description                                           |
+| ---------- | -------- | ------- | ----------------------------------------------------- |
+| fn         | function | ()=>{}  | function callback to be run after every interval tick |
+| delay      | number   | 0       | delay in milliseconds per tick                        |
+| autoStart  | boolean  | true    | whether to start the interval immediately             |
+
+<Canvas>
+  <Story id="hooks-useinterval--mdx-example" />
+  <Source id="hooks-useinterval--mdx-example" type="code" />
+</Canvas>
+
+| Return Props  | type     | Description                                                                                      |
+| ------------- | -------- | ------------------------------------------------------------------------------------------------ |
+| isCleared     | boolean  | status of interval if running or not                                                             |
+| stopInterval  | function | function to stop the interval                                                                    |
+| pauseInterval | function | function to temporarily pause/resume the interval depending on the current state of the interval |
+
+### useStateRef
+
+React hook that is a dropin replacement to `useState` that returns the ongoing state value without waiting for a rerender to update the value unlike `useState`.
+Uses `useRef` internally to store the state value
+
+| Parameters   | Type | Default | Description                |
+| ------------ | ---- | ------- | -------------------------- |
+| initialValue | any  | null    | initial value of the state |
+
+<Canvas>
+  {/* <Story id="hooks-usestateref--default" /> */}
+  <Source id="hooks-usestateref--default" type="code" />
+</Canvas>
+
+| Return Props | type        | Description                                                                                                 |
+| ------------ | ----------- | ----------------------------------------------------------------------------------------------------------- |
+| state        | `<any>`     | useState 'state' value                                                                                      |
+| setState     | function    | equivalent setState of useState                                                                             |
+| stateRef     | ref element | ref containing always current value of state. Since its a `ref`, content is accessed via `stateRef.current` |
+
+### useUrlState
+
+React hook that is a dropin replacement to `useState` that returns the ongoing state value without waiting for a rerender to update the value unlike `useState`.
+`useUrlState` also updates the url query params with the state value and vice versa.
+Uses `useRef` internally to store the state value
+
+DOCUMENTATION NOTE: Storybook is rendered in an internal iFrame and hence the url query params are not updated in the url bar. However, the url query params are updated in the url bar the canvas is opened in a new tab
+
+NOTE: JSON/JSON-like objects/nonprimitive values are stringified AND urlencoded before being set as query params
+
+
+| Parameters   | Type | Default | Description                |
+| ------------ | ---- | ------- | -------------------------- |
+| queryKey | string  |     | url query param mapped to this value ie: `&queryKeyValue=` |
+| disable | boolean | false | if true, treat `useUrlState` as a normal `useState`, ie: no urlparams are synced to and from state |
+| defaultValue | any  | null    | initial value of the state |
+
+
+<Canvas>
+  <Story id="hooks-useurlstate--default" />
+  <Source id="hooks-useurlstate--default" type="code" />
+</Canvas>
+
+| Return Props | type        | Description                                                                                                 |
+| ------------ | ----------- | ----------------------------------------------------------------------------------------------------------- |
+| state        | `<any>`     | useState 'state' value                                                                                      |
+| setState     | function    | equivalent setState of useState                                                                             |
+| stateRef     | ref element | ref containing always current value of state. Since its a `ref`, content is accessed via `stateRef.current` |
