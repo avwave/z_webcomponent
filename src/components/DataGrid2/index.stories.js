@@ -40,7 +40,6 @@ const DataGridStory = {
       source: {
         type: 'code'
       }
-
     }
   },
   decorators: [

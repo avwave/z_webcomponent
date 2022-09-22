@@ -20,6 +20,18 @@ Infinite scroll/pagination, sortable, filterable Data grid component
 - [Usage](#usage)
 - [Datasources](#setup-datasources)
 
+- [pagination](#pagination)
+- [sorting](#sorting)
+- [Filtering](#filtering)
+- [Cell Rendering](#cell-rendering)
+- [Basic Cell Renderer](#basic-cell-renderer)
+- [Custom Cell Renderer](#custom-cell-renderer)
+- [Disable Cell Tooltip](#disable-cell-tooltip)
+- [Custom Tooltip](#custom-tooltip)
+- [Toolbar Accessories](#toolbar-accessories)
+- [URLParams as State](#urlparams-as-state)
+
+
 ### Setup
 
 - Add DndProvider to root index.js of project
@@ -284,7 +296,7 @@ Component example:
   <Source id="datagrid-datagrid2--server-filter" type="code" />
 </Canvas>
 
-#### Cell Rendering
+#### Cell Rendering 
 
 ### Basic Cell Renderer
 
@@ -339,6 +351,14 @@ const columnSource = [
   },
 ];
 ```
+
+### URLParams as State
+
+| Props  | Defaults   |  Options  | Description |
+| - | - | - | - |
+| id  | "grid"     | string     | id for the datagrid, used for url params |
+| useUrlAsState | false | boolean | if true, will use url params as the filter state, any changes to the grid state will propagate to the url params and vice versa |
+
 
 ### Toolbar Accessories
 
