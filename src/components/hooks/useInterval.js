@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef } from "react";
-import { useState } from './stateref';
+import { useState } from './useStateRef';
 
 const isFunction = (functionToCheck) => !!(
   typeof functionToCheck === 'function'
@@ -9,7 +9,7 @@ const isFunction = (functionToCheck) => !!(
 )
 
 
-const useInterval = (fn, delay) => {
+export function useInterval(fn, delay) {
   const timeout = useRef(null);
   const callback = useRef()
 
@@ -42,5 +42,3 @@ const useInterval = (fn, delay) => {
 
   return [isCleared, clear]
 }
-
-export { useInterval }
