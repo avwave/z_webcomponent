@@ -25,10 +25,13 @@ export function useUrlState({ queryKey, defaultValue, disable = false }) {
     if (pValue) {
       try {
         convertedValue = JSON.parse(pValue);
-        try {
-          const isDate = moment(new Date(convertedValue)).isValid();
-          convertedValue = isDate ? moment(convertedValue).toDate() : convertedValue;
-        }catch (dateparseError) {
+        const calltype = Object.prototype.toString.call(convertedValue)
+        if (calltype === '[object String]') {
+          try {
+            const isDate = moment(new Date(convertedValue)).isValid();
+            convertedValue = isDate ? moment(convertedValue).toDate() : convertedValue;
+          } catch (dateparseError) {
+          }
         }
       } catch (error) {
         convertedValue = pValue;
@@ -45,8 +48,8 @@ export function useUrlState({ queryKey, defaultValue, disable = false }) {
 
       const qs = new URLSearchParams(window.location.search);
       let values = {};
-      for(var value of qs.keys()) {
-          values[value] = qs.get(value);
+      for (var value of qs.keys()) {
+        values[value] = qs.get(value);
       }
       const mergedValues = {
         ...values,
