@@ -5,7 +5,6 @@ import { DataGrid2 } from './components/DataGrid2/DataGrid2';
 import DataGridProvider, { DataGridContext, actions as gridActions } from './components/DataGrid/DataGridContext';
 import Agenda from './components/Agenda/Agenda';
 import { AgendaContext, AgendaProvider, actions as agendaActions } from './components/Agenda/AgendaContext';
-import { TimePicker } from '@material-ui/pickers';
 
 export { useInterval, useStateRef, useUrlState }
 
@@ -22,7 +21,7 @@ export { DropUploader } from './components/DropUploader'
 export { EdgeContainer } from './components/EdgeContainer'
 export * as Fingerprint from './components/Fingerprint/Fingerprint'
 export { FormBuilder } from './components/FormBuilder'
-export { TimePicker } from './components/Timepicker'
+export { Timepicker } from './components/Timepicker'
 export { WeekPicker } from './components/WeekPicker'
 export { Checklist } from './components/CheckList'
 
