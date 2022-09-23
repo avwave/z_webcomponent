@@ -3,6 +3,14 @@ import "../src/index.css";
 import { withReactContext } from "storybook-react-context";
 import { muiTheme } from 'storybook-addon-material-ui'
 
+import { addDecorator } from '@storybook/react';
+import { withKnobs } from '@storybook/addon-knobs';
+import { withConsole } from '@storybook/addon-console';
+import '@storybook/addon-console';
+
+addDecorator(withKnobs);
+addDecorator((storyFn, context) => withConsole()(storyFn)(context));
+
 const zennyaTheme = {
   themeName: 'Zennya Theme',
   palette: {
@@ -24,7 +32,10 @@ const zennyaTheme = {
   },
 };
 
-export const decorators = [withReactContext, muiTheme([zennyaTheme])];
+export const decorators = [
+  withReactContext,
+  muiTheme([zennyaTheme]),
+];
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
   controls: {

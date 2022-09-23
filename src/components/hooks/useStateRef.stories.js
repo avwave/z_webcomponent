@@ -13,18 +13,22 @@ export const Default = ({ ...args }) => {
   var [state, setState, stateRef] = useStateRef(0)
   function increment() {
     setState(state + 1)
-    alert(`ref Value: ${stateRef.current}`) // will show 1
+    console.log(`ref Value: ${stateRef.current}`)
   }
   useEffect(() => {
-    alert(`useEffect: state value: ${stateRef.current}`) // Always show the last value
+    console.log(`useEffect: state value: ${stateRef.current}`)
     return () => {
-      alert(`exit useEffect: state value: ${stateRef.current}`) // Always show the last value
+
     }
   }, [])
   return (
     <div>
+      <p>
+        <em>Check console.log for order of values</em>
+      </p>
+
       State Value: {state}
-      <Button onClick={increment}>
+      <Button variant="contained" onClick={increment}>
         Increment
       </Button>
     </div>)
