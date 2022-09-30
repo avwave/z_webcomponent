@@ -199,10 +199,14 @@ function DataGrid2Toolbar({
 
   const [filterColumnSettings, setFilterColumnSettings] = useState(columns);
 
-  const [filterValues, setFilterValues] = useUrlState({queryKey:`${gridId}-filters`, disable:!useUrlAsState});
+  const [filterValues, setFilterValues] = useUrlState({ queryKey: `${gridId}-filters`, disable: !useUrlAsState });
   const [filterDisplay, setFilterDisplay] = useState({});
 
   const [searchField, setSearchField] = useState("");
+
+  useEffect(() => {
+    setSearchField(filterValues?.search);
+  }, [filterValues?.search]);
 
   useEffect(() => {
     setFilterColumnSettings(
@@ -228,12 +232,12 @@ function DataGrid2Toolbar({
 
 
   const changeFilter = useCallback(
-    (filterKey, filterValue) => {
+    debounce((filterKey, filterValue) => {
       const filterV = { ...filterValues, [filterKey]: filterValue }
       setFilterValues(filterV);
-      setSearchField(filterV?.search ?? "")
+      // setSearchField(filterV?.search ?? "")
       onFilterChange(filterV)
-    },
+    }, 500),
     [filterValues],
   );
 
@@ -244,7 +248,7 @@ function DataGrid2Toolbar({
     [filterValues],
   );
 
-  
+
   const renderFilters = useMemo(() => {
     return filterColumnSettings
       .filter(f => f?.filter?.type !== 'chiptabs')
@@ -276,12 +280,12 @@ function DataGrid2Toolbar({
   }, [changeFilter, dataGridState.filterColumn, filterColumnSettings]);
 
 
-  const debounceSearch = debounce((event) => {
-    const filterV = { ...filterValues, search: event.target.value }
+  const debounceSearch = useCallback(debounce((value) => {
+    const filterV = { ...filterValues, search: value }
     setFilterValues(filterV);
-    setSearchField(filterV?.search ?? "")
+
     onFilterChange(filterV)
-  }, 500)
+  }, 500), [])
 
   const hasChipFilter = useMemo(() => {
     const result = filterColumnSettings.some(f => f?.filter?.type === 'chiptabs')
@@ -326,7 +330,6 @@ function DataGrid2Toolbar({
                     onChange={debounce((v) => {
                       const filterV = { ...filterValues, ...v }
                       setFilterValues(filterV);
-                      setSearchField(filterV?.search ?? "")
                       onFilterChange(filterV)
                     }, 500)} />
                 )}
@@ -346,10 +349,10 @@ function DataGrid2Toolbar({
                         shrink: true
                       }}
                       placeholder={searchPlaceholder}
-                      value={searchField||filterValues?.search}
+                      value={searchField}
                       onChange={event => {
                         setSearchField(event.target.value)
-                        debounceSearch(event)
+                        debounceSearch(event.target.value)
                       }}
                     />
                   </div>
