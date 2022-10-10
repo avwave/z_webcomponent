@@ -83,7 +83,7 @@ const SelectionHeader = ({
 };
 
 const SelectionCell = ({
-  rowKeyValue, dispatch, isSelectedRow, selectedRows
+  rowKeyValue, dispatch, isSelectedRow, selectedRows, ...props
 }) => {
   return (
     <Checkbox
@@ -340,12 +340,13 @@ const DataGrid2 = React.forwardRef(({
   const fetchRenderer = useCallback(
     (cellProps) => {
       cellProps = { ...cellProps, row: cellProps.rowData }
+      const targetColumn = tableProps.columns.find(col => col.key === cellProps.column.key)
       if (cellProps.column.key === "select-row") {
-        return <SelectionCell {...cellProps} />
+        const selectable = targetColumn?.selectable(cellProps)
+        return selectable?<SelectionCell {...cellProps} />:<></>
       }
 
-      const targetColumn = tableProps.columns.find(col => col.key === cellProps.column.key)
-
+      
       const element = cellProps.row[cellProps.column.key];
       const isReactElem = isValidElement(element);
       const cellData = cellProps.row[cellProps.column.key]
