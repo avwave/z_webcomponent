@@ -342,8 +342,12 @@ const DataGrid2 = React.forwardRef(({
       cellProps = { ...cellProps, row: cellProps.rowData }
       const targetColumn = tableProps.columns.find(col => col.key === cellProps.column.key)
       if (cellProps.column.key === "select-row") {
-        const selectable = targetColumn?.selectable(cellProps)
-        return selectable?<SelectionCell {...cellProps} />:<></>
+        if (targetColumn?.selectable) {
+          const selectable = targetColumn?.selectable(cellProps)
+          return selectable?<SelectionCell {...cellProps} />:<></>
+        } else {
+          return <SelectionCell {...cellProps}/>
+        }
       }
 
       
