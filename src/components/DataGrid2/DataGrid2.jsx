@@ -146,8 +146,9 @@ const useDynamicRowsOptions = ({ rowKeyField, ...rest }) => {
       : estimatedItemSize;
   return {
     addRowHeight,
-    itemHeight: rowData =>
-      renderedRowSizes[rowData[rowKeyField]] || estimatedItemSize
+    itemHeight: rowData => {
+      return renderedRowSizes[rowData[rowKeyField]] || estimatedItemSize
+    }
   };
 };
 
@@ -441,6 +442,7 @@ const DataGrid2 = React.forwardRef(({
         dispatch={kaDispatch}
         virtualScrolling={{
           ...tableProps.virtualScrolling,
+          itemHeight
         }}
         childComponents={{
           dataRow: {
