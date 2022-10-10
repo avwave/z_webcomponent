@@ -529,7 +529,7 @@ const DataGrid2 = React.forwardRef(({
             elementAttributes: () => ({
               ref: ref,
               onScroll: (event, { baseFunc }) => {
-                baseFunc(event);
+                // baseFunc(event);
                 const element = event.currentTarget;
                 setScrollYoffset(element.scrollLeft)
                 if (element.scrollLeft !== scrollYoffset) {
