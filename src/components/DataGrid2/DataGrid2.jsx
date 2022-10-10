@@ -4,7 +4,7 @@ import { alpha, Checkbox, fade, IconButton, lighten, LinearProgress, makeStyles,
 import { UnfoldLess, UnfoldMore } from '@material-ui/icons';
 import clsx from 'clsx';
 import { kaReducer, Table } from "ka-table";
-import { showLoading, hideLoading, deselectAllFilteredRows, deselectRow, hideDetailsRow, selectAllFilteredRows, selectRow, showDetailsRow, updateData } from "ka-table/actionCreators";
+import { deselectAllFilteredRows, deselectRow, hideDetailsRow, selectAllFilteredRows, selectRow, showDetailsRow, updateData } from "ka-table/actionCreators";
 import { DataType, SortDirection, SortingMode } from "ka-table/enums";
 import { isEmpty } from 'lodash';
 import React, { isValidElement, useCallback, useContext, useEffect, useState } from 'react';
@@ -53,7 +53,7 @@ const tablePropsInit = {
   columns: [],
   rowKeyField: 'id',
   virtualScrolling: {
-    enabled: false
+    enabled: true
   },
   columnReordering: true,
   columnResizing: true,
@@ -283,12 +283,10 @@ const DataGrid2 = React.forwardRef(({
     async action => {
       switch (action.type) {
         case LOAD_MORE_DATA:
-          kaDispatch(showLoading())
           await onLoadMore({
             page_offset: pageOffset,
             page_size: PAGE_SIZE
           })
-          kaDispatch(hideLoading())
           break
         case ROW_SELECT:
           setHighlightedRow(action.rowKeyValue);
@@ -531,7 +529,7 @@ const DataGrid2 = React.forwardRef(({
             elementAttributes: () => ({
               ref: ref,
               onScroll: (event, { baseFunc }) => {
-                baseFunc(event);
+                // baseFunc(event);
                 const element = event.currentTarget;
                 setScrollYoffset(element.scrollLeft)
                 if (element.scrollLeft !== scrollYoffset) {
