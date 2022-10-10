@@ -128,7 +128,7 @@ const RowExpanderButton = ({ dispatch, rowKeyValue, isDetailsRowShown }) => {
     </IconButton>
   );
 }
-const useDynamicRowsOptions = ({ rowKeyField }) => {
+const useDynamicRowsOptions = ({ rowKeyField, ...rest }) => {
   const [renderedRowSizes] = useState({});
   let estimatedItemSize = 40;
   const addRowHeight = (rowData, height) => {
@@ -441,7 +441,6 @@ const DataGrid2 = React.forwardRef(({
         dispatch={kaDispatch}
         virtualScrolling={{
           ...tableProps.virtualScrolling,
-          itemHeight
         }}
         childComponents={{
           dataRow: {
