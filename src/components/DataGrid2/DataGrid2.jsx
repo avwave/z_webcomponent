@@ -53,7 +53,7 @@ const tablePropsInit = {
   columns: [],
   rowKeyField: 'id',
   virtualScrolling: {
-    enabled: false
+    enabled: true
   },
   columnReordering: true,
   columnResizing: true,
