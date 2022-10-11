@@ -203,7 +203,7 @@ const columnData = [
 ];
 
 let rows = [];
-for (let i = 0; i < 5; i++) {
+for (let i = 0; i < 10; i++) {
   rows.push({
     id: i,
     title: faker.name.findName(),
