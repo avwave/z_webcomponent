@@ -83,7 +83,7 @@ const SelectionHeader = ({
 };
 
 const SelectionCell = ({
-  rowKeyValue, dispatch, isSelectedRow, selectedRows
+  rowKeyValue, dispatch, isSelectedRow, selectedRows, ...props
 }) => {
   return (
     <Checkbox
@@ -128,7 +128,7 @@ const RowExpanderButton = ({ dispatch, rowKeyValue, isDetailsRowShown }) => {
     </IconButton>
   );
 }
-const useDynamicRowsOptions = ({ rowKeyField }) => {
+const useDynamicRowsOptions = ({ rowKeyField, ...rest }) => {
   const [renderedRowSizes] = useState({});
   let estimatedItemSize = 40;
   const addRowHeight = (rowData, height) => {
@@ -146,8 +146,10 @@ const useDynamicRowsOptions = ({ rowKeyField }) => {
       : estimatedItemSize;
   return {
     addRowHeight,
-    itemHeight: rowData =>
-      renderedRowSizes[rowData[rowKeyField]] || estimatedItemSize
+    itemHeight: rowData => {
+      const itemHeight = renderedRowSizes[rowData[rowKeyField]] || estimatedItemSize
+      return itemHeight
+    }
   };
 };
 
@@ -312,7 +314,11 @@ const DataGrid2 = React.forwardRef(({
           break;
       }
       setTableProps(prevState => {
-        const red = kaReducer(prevState, { ...prevState, ...action })
+        let red = kaReducer(prevState, { ...prevState, ...action })
+        red={...red, virtualScrolling:{
+          ...red?.virtualScrolling,
+          enabled: red?.data?.length > 10
+        }}
         return red
       })
     },
@@ -340,12 +346,17 @@ const DataGrid2 = React.forwardRef(({
   const fetchRenderer = useCallback(
     (cellProps) => {
       cellProps = { ...cellProps, row: cellProps.rowData }
+      const targetColumn = tableProps.columns.find(col => col.key === cellProps.column.key)
       if (cellProps.column.key === "select-row") {
-        return <SelectionCell {...cellProps} />
+        if (targetColumn?.selectable) {
+          const selectable = targetColumn?.selectable(cellProps)
+          return selectable?<SelectionCell {...cellProps} />:<></>
+        } else {
+          return <SelectionCell {...cellProps}/>
+        }
       }
 
-      const targetColumn = tableProps.columns.find(col => col.key === cellProps.column.key)
-
+      
       const element = cellProps.row[cellProps.column.key];
       const isReactElem = isValidElement(element);
       const cellData = cellProps.row[cellProps.column.key]

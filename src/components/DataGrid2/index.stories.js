@@ -114,6 +114,46 @@ Basic.args = {
     },
   ]
 }
+
+export const ConditionalSelector = DefaultStory.bind({});
+ConditionalSelector.args = {
+  rows: [
+    {
+      id: 1,
+      name: 'Alice',
+      age: 20
+    },
+    {
+      id: 2,
+      name: 'Bob',
+      age: 21
+    },
+    {
+      id: 3,
+      name: 'Charlie',
+      age: 22
+    }
+  ],
+  columns: [
+    {
+      key: "select-row",
+      name: "",
+      sortable: false,
+      selectable({row}){
+        return row.id !== 2
+      }
+    },
+    {
+      key: "name",
+      name: "Name",
+    },
+    {
+      key: "age",
+      name: "Age",
+    },
+  ]
+}
+
 export const ToolbarSearchPlaceholder = DefaultStory.bind({});
 ToolbarSearchPlaceholder.args = {
   hasDateRangeFilter: true,
