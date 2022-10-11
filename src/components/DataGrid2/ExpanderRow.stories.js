@@ -48,7 +48,7 @@ const DetailRow = ({ rowData }) => {
   return (
     <Card>
       <CardContent>
-        <ReactJson src={rowData} collapsed></ReactJson>
+        <ReactJson src={rowData} ></ReactJson>
       </CardContent>
     </Card>
   );

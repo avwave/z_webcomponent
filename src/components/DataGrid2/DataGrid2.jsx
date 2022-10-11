@@ -128,7 +128,7 @@ const RowExpanderButton = ({ dispatch, rowKeyValue, isDetailsRowShown }) => {
     </IconButton>
   );
 }
-const useDynamicRowsOptions = ({ rowKeyField }) => {
+const useDynamicRowsOptions = ({ rowKeyField, ...rest }) => {
   const [renderedRowSizes] = useState({});
   let estimatedItemSize = 40;
   const addRowHeight = (rowData, height) => {
@@ -146,8 +146,10 @@ const useDynamicRowsOptions = ({ rowKeyField }) => {
       : estimatedItemSize;
   return {
     addRowHeight,
-    itemHeight: rowData =>
-      renderedRowSizes[rowData[rowKeyField]] || estimatedItemSize
+    itemHeight: rowData => {
+      const itemHeight = renderedRowSizes[rowData[rowKeyField]] || estimatedItemSize
+      return itemHeight
+    }
   };
 };
 
@@ -312,7 +314,11 @@ const DataGrid2 = React.forwardRef(({
           break;
       }
       setTableProps(prevState => {
-        const red = kaReducer(prevState, { ...prevState, ...action })
+        let red = kaReducer(prevState, { ...prevState, ...action })
+        red={...red, virtualScrolling:{
+          ...red?.virtualScrolling,
+          enabled: red?.data?.length > 10
+        }}
         return red
       })
     },
