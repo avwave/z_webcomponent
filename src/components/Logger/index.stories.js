@@ -137,28 +137,28 @@ const routeMap = [
 const ActivityLogStory = ({ logs, ...args }) => {
   return (
     <>
-    <ReactJson src={{routeMap}}/>
-    <Table>
-      <TableHead>
-        <TableCell variant="footer">Raw log</TableCell>
-        <TableCell variant="footer">Formatted log</TableCell>
-      </TableHead>
-      <TableBody>
-        {logs?.map((log, idx) => {
-          return (
-            <TableRow key={idx}>
-              <TableCell><ReactJson src={log} /></TableCell>
-              <TableCell>
-                <Logger
-                  log={log}
-                  routeMap={routeMap}
-                />
-              </TableCell>
-            </TableRow>
-          )
-        })}
-      </TableBody>
-    </Table>
+      <ReactJson src={{ routeMap }} />
+      <Table>
+        <TableHead>
+          <TableCell variant="footer">Raw log</TableCell>
+          <TableCell variant="footer">Formatted log</TableCell>
+        </TableHead>
+        <TableBody>
+          {logs?.map((log, idx) => {
+            return (
+              <TableRow key={idx}>
+                <TableCell><ReactJson src={log} /></TableCell>
+                <TableCell>
+                  <Logger
+                    log={log}
+                    routeMap={routeMap}
+                  />
+                </TableCell>
+              </TableRow>
+            )
+          })}
+        </TableBody>
+      </Table>
     </>
   )
 }
@@ -176,14 +176,36 @@ AuditLog.args = {
 
 export const OPSLog = ActivityLogStory.bind({});
 OPSLog.args = {
-  logs: [{
-    "id": "633295145a20dea26c2743a7",
-    "log_type": "CUSTOMER",
-    "log_message": "{client_id 10101 | Person of interest } of Maxicare created a booking (633295125a20dea26c2743a3) for client {wlpCustomer 2 | two man}  and {wlpCustomer 32 | d teegland}",
-    "user_id": "1419",
-    "resource_type": "CUSTOMER",
-    "resource_id": "32",
-    "change_sets": null,
-    "date_created": "2022-09-27T06:15:48Z"
-  }]
+  logs: [
+    {
+      "id": "633295145a20dea26c2743a7",
+      "log_type": "CUSTOMER",
+      "log_message": "{client_id 10101 | Person of interest } of Maxicare created a booking (633295125a20dea26c2743a3) for client {wlpCustomer 2 | two man}  and {wlpCustomer 32 | d teegland}",
+      "user_id": "1419",
+      "resource_type": "CUSTOMER",
+      "resource_id": "32",
+      "change_sets": null,
+      "date_created": "2022-09-27T06:15:48Z"
+    },
+    {
+      "id": "63567e41c2dcd747952ca952",
+      "log_type": "CUSTOMER",
+      "log_message": "Initiating voice notification for unconfirmed booking for customer profile {wlpCustomer 131 | JOSIAH ADOLFO}",
+      "user_id": "1",
+      "resource_type": "CUSTOMER",
+      "resource_id": "131",
+      "change_sets": null,
+      "date_created": "2022-10-24T12:00:01Z"
+    },
+    {
+      "id": "63567e41c2dcd747952ca952",
+      "log_type": "CUSTOMER",
+      "log_message": "user id 1 {wlpCustomer 131 | JOSIAH ADOLFO}",
+      "user_id": "1",
+      "resource_type": "CUSTOMER",
+      "resource_id": "131",
+      "change_sets": null,
+      "date_created": "2022-10-24T12:00:01Z"
+    }
+  ]
 }

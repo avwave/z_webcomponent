@@ -82,14 +82,14 @@ const Logger = ({
   const [compiledLog, setCompiledLog] = useState();
 
   const recurseOpsLog = useCallback(
-    (log, prefix='', infix='', suffix='') => {
+    (log, prefix = '', infix = '', suffix = '') => {
 
       let routeMatches = []
       routeMap.forEach(route => {
         const regex = new RegExp('{' + route?.resourceName + ' ([0-9]*) \\| (.*?)}', 'g')
         const match = regex.exec(log)
         if (match) {
-          routeMatches.push({match, route})
+          routeMatches.push({ match, route })
         }
       });
 
@@ -97,14 +97,14 @@ const Logger = ({
         return [prefix, log, infix, suffix]
       }
 
-      const parseElements = routeMatches?.map(({match, route}, idx1) => {
+      const parseElements = routeMatches?.map(({ match, route }, idx1) => {
         const prefix = match?.input?.slice(0, match?.index)
         const suffix = match?.input?.slice(match.index + match[0].length)
         let infix = match[2]
-        const lProps = CLink? {
-          to:`${generatePath(route?.pattern, { id: match[1] })}`
-        }:{
-          href:`${generatePath(route?.pattern, { id: match[1] })}`
+        const lProps = CLink ? {
+          to: `${generatePath(route?.pattern, { id: match[1] })}`
+        } : {
+          href: `${generatePath(route?.pattern, { id: match[1] })}`
         }
         infix = (
           <Link
@@ -127,6 +127,44 @@ const Logger = ({
     [CLink, linkProps, routeMap],
   );
 
+  const parseSubSublog = useCallback(
+    (logMessage, mappableRoutes) => {
+      const returnMap = mappableRoutes
+        .filter(route => {
+          return logMessage.match(`${route.identifier}`)
+        })
+        .map(route => {
+          let findIdentifier = logMessage.match(`${route.identifier}`)
+          let prefix = ''
+          let suffix = ''
+          let linkComponent = <></>
+          prefix = recurseOpsLog(logMessage.slice(0, findIdentifier.index))
+          suffix = recurseOpsLog(logMessage.slice(findIdentifier.index + `${route.identifier}`.length))
+          const lProps = CLink ? {
+            to: `${generatePath(route?.pattern, { id: findIdentifier[0] })}`
+          } : {
+            href: `${generatePath(route?.pattern, { id: findIdentifier[0] })}`
+          }
+          linkComponent = (
+            <Link
+              target="_blank"
+              component={CLink}
+              {...lProps}
+              {...linkProps}
+            >{findIdentifier[0]}
+            </Link>
+          )
+          return [...prefix, linkComponent, ...suffix]
+
+        })
+
+      if (returnMap.length > 0) {
+        return returnMap
+      }
+      return recurseOpsLog(logMessage)
+    },
+    [CLink, linkProps, recurseOpsLog],
+  );
 
   const parseSubLog = useCallback(
     (logMessage) => {
@@ -150,39 +188,18 @@ const Logger = ({
         }
       })
 
-      const returnMap = mappableRoutes
-        .filter(route => {
-          return logMessage.match(`${route.identifier}`)
-        })
-        .map(route => {
-          let findIdentifier = logMessage.match(`${route.identifier}`)
-          let prefix = ''
-          let suffix = ''
-          let linkComponent = <></>
-          prefix = recurseOpsLog(logMessage.slice(0, findIdentifier.index))
-          suffix = recurseOpsLog(logMessage.slice(findIdentifier.index + `${route.identifier}`.length))
-          const lProps = CLink? {
-            to:`${generatePath(route?.pattern, { id: findIdentifier[0] })}`
-          }:{
-            href:`${generatePath(route?.pattern, { id: findIdentifier[0] })}`
-          }
-          linkComponent = (
-            <Link
-              target="_blank"
-              component={CLink}
-              {...lProps}
-              {...linkProps}
-            >{findIdentifier[0]}
-            </Link>
-          )
-          return [...prefix, linkComponent, ...suffix]
+      const prefill = recurseOpsLog(logMessage)?.flat(20)
 
-        })
+      const prefills = prefill?.map(pf => {
+        if (typeof pf === 'string') {
+          return parseSubSublog(pf, mappableRoutes)
+        }
+        return pf
+      })
 
-      if (returnMap.length > 0) {
-        return returnMap
-      }
-      return recurseOpsLog(logMessage)
+      return prefills
+
+
     },
     [CLink, linkProps, log, routeMap],
   );
@@ -213,10 +230,10 @@ const Logger = ({
           const genLink = routeMap.find(f => f?.resourceName === 'wlpCustomer')?.pattern ?? null
           const genPattern = genLink ? generatePath(genLink, { id: customerId.trim() }) : ''
 
-          const lProps = CLink? {
-            to:genPattern
-          }:{
-            href:genPattern
+          const lProps = CLink ? {
+            to: genPattern
+          } : {
+            href: genPattern
           }
           insertClientLink = (
             <Link
@@ -242,10 +259,10 @@ const Logger = ({
         const genLink = routeMap.find(f => f?.resourceName === 'booking')?.pattern ?? null
         const genPattern = genLink ? generatePath(genLink, { id: id.trim() }) : ''
 
-        const lProps = CLink? {
-          to:genPattern
-        }:{
-          href:genPattern
+        const lProps = CLink ? {
+          to: genPattern
+        } : {
+          href: genPattern
         }
         const bookingcomponent = (
           <Link
