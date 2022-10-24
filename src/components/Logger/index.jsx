@@ -84,44 +84,49 @@ const Logger = ({
   const recurseOpsLog = useCallback(
     (log, prefix = '', infix = '', suffix = '') => {
 
-      let routeMatches = []
-      routeMap.forEach(route => {
-        const regex = new RegExp('{' + route?.resourceName + ' ([0-9]*) \\| (.*?)}', 'g')
-        const match = regex.exec(log)
-        if (match) {
-          routeMatches.push({ match, route })
+      if (typeof log === 'string' && log.length <= 0) {
+        return log
+      }
+            
+      const regex = new RegExp('{(' + routeMap?.map(route=>route.resourceName).join('|') + ') ([0-9]*) \\| (.*?)}', 'g')
+      const splitRegex = new RegExp('({(?:' + routeMap?.map(route=>route.resourceName).join('|') + ') [0-9]* \\| .*?})', 'g')
+      const split = log.split(splitRegex)
+      const matches = [...log?.matchAll(regex)]
+      const routeMatches = matches?.map(match => {
+        const route = routeMap?.find(route => route.resourceName === match[1])
+        return {
+          match,
+          route 
         }
-      });
-
+      })
+      
       if (routeMatches.length <= 0) {
-        return [prefix, log, infix, suffix]
+        return split
       }
 
-      const parseElements = routeMatches?.map(({ match, route }, idx1) => {
-        const prefix = match?.input?.slice(0, match?.index)
-        const suffix = match?.input?.slice(match.index + match[0].length)
-        let infix = match[2]
-        const lProps = CLink ? {
-          to: `${generatePath(route?.pattern, { id: match[1] })}`
-        } : {
-          href: `${generatePath(route?.pattern, { id: match[1] })}`
+      
+      const parseElements = split?.map((element, idx) => {
+        const findMatch = routeMatches?.find(match => match?.match?.[0] === element)
+        if (findMatch) {
+          const lProps = CLink ? {
+            to: `${generatePath(findMatch?.route?.pattern, { id: findMatch?.match[2] })}`
+          } : {
+            href: `${generatePath(findMatch?.route?.pattern, { id: findMatch?.match[2] })}`
+          }
+          return (
+            <Link
+              target="_blank"
+              component={CLink}
+              {...lProps}
+              {...linkProps}
+            >{findMatch?.match[3]}
+            </Link>
+          )
+        } else {
+          return element
         }
-        infix = (
-          <Link
-            target="_blank"
-            component={CLink}
-            {...lProps}
-            {...linkProps}
-          >{match[2]}
-          </Link>
-        )
-        const newPrefix = recurseOpsLog(prefix)
-        const newSuffix = recurseOpsLog(suffix)
-
-        return [newPrefix, infix, newSuffix]
-
       })
-
+      
       return parseElements
     },
     [CLink, linkProps, routeMap],

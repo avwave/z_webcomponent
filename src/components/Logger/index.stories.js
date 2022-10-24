@@ -131,6 +131,10 @@ const routeMap = [
   {
     resourceName: 'client_id',
     pattern: '/client-profile/:id'
+  },
+  {
+    resourceName: 'wlpPartner',
+    pattern: '/'
   }
 
 ]
@@ -177,6 +181,16 @@ AuditLog.args = {
 export const OPSLog = ActivityLogStory.bind({});
 OPSLog.args = {
   logs: [
+    {
+      "id": "635272995a20988849cdbdaf",
+      "log_type": "CUSTOMER",
+      "log_message": "{wlpCustomer 47 | gabrielle floirendo}, a customer of {wlpPartner 1 | Maxicare} is trying to perform birthdate validation.",
+      "user_id": "1",
+      "resource_type": "CUSTOMER",
+      "resource_id": "47",
+      "change_sets": null,
+      "date_created": "2022-10-21T10:21:13Z"
+    },
     {
       "id": "633295145a20dea26c2743a7",
       "log_type": "CUSTOMER",
