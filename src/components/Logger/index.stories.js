@@ -134,31 +134,34 @@ const routeMap = [
   }
 
 ]
-const ActivityLogStory = ({ logs, ...args }) => (
-  <Table>
-    <TableHead>
-      <TableCell variant="footer">Raw log</TableCell>
-      <TableCell variant="footer">Formatted log</TableCell>
-    </TableHead>
-    <TableBody>
-      {logs?.map((log, idx) => (
-        <TableRow key={idx}>
-          <TableCell><ReactJson src={log}/></TableCell>
-          <TableCell>
-            <Logger
-              log={log}
-              linkProps={{
-
-              }}
-              routeMap={routeMap}
-            />
-          </TableCell>
-        </TableRow>
-      ))}
-    </TableBody>
-  </Table>
-
-)
+const ActivityLogStory = ({ logs, ...args }) => {
+  return (
+    <>
+    <ReactJson src={{routeMap}}/>
+    <Table>
+      <TableHead>
+        <TableCell variant="footer">Raw log</TableCell>
+        <TableCell variant="footer">Formatted log</TableCell>
+      </TableHead>
+      <TableBody>
+        {logs?.map((log, idx) => {
+          return (
+            <TableRow key={idx}>
+              <TableCell><ReactJson src={log} /></TableCell>
+              <TableCell>
+                <Logger
+                  log={log}
+                  routeMap={routeMap}
+                />
+              </TableCell>
+            </TableRow>
+          )
+        })}
+      </TableBody>
+    </Table>
+    </>
+  )
+}
 
 export const ActivityLog = ActivityLogStory.bind({});
 ActivityLog.args = {
@@ -168,4 +171,19 @@ ActivityLog.args = {
 export const AuditLog = ActivityLogStory.bind({});
 AuditLog.args = {
   logs: auditLogs
+}
+
+
+export const OPSLog = ActivityLogStory.bind({});
+OPSLog.args = {
+  logs: [{
+    "id": "633295145a20dea26c2743a7",
+    "log_type": "CUSTOMER",
+    "log_message": "{client_id 10101 | Person of interest } of Maxicare created a booking (633295125a20dea26c2743a3) for client {wlpCustomer 2 | two man}  and {wlpCustomer 32 | d teegland}",
+    "user_id": "1419",
+    "resource_type": "CUSTOMER",
+    "resource_id": "32",
+    "change_sets": null,
+    "date_created": "2022-09-27T06:15:48Z"
+  }]
 }
