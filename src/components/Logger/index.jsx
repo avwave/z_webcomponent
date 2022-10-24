@@ -35,57 +35,11 @@ const Logger = ({
 }) => {
   const classes = useStyles()
 
-  const parseOpsLogFormat = useCallback((log) => {
-    let routeMatches = []
-    routeMap.forEach(route => {
-      const regex = new RegExp('{' + route?.resourceName + ' ([0-9]*) \\| (.*?)}', 'g')
-      const match = regex.exec(log)
-      if (match) {
-        routeMatches.push(match)
-      }
-    });
-
-    let prefix = null
-    const parseElements = routeMatches?.map((match, idx1) => {
-      return match?.matches?.map((element, idx2) => {
-        if (!prefix) {
-          prefix = element?.input?.slice(0, element.index)
-        }
-        const suffix = element?.input?.slice(element.index + element[0].length)
-        let infix = element[2]
-        infix = (
-          <Link
-            target="_blank"
-            to={`${generatePath(match?.route?.pattern, { id: element[1] })}`}
-            component={CLink}
-            {...linkProps}
-          >{element[2]}
-          </Link>
-        )
-        if (idx2 <= 0) {
-          return [prefix, infix, suffix]
-        } else {
-          return [infix, suffix]
-        }
-      })
-
-    })
-
-    if (parseElements.length <= 0) {
-      return [log]
-    }
-
-    return parseElements?.flat()
-
-  }, [CLink, linkProps, routeMap])
-
-  const [compiledLog, setCompiledLog] = useState();
-
   const recurseOpsLog = useCallback(
     (log, prefix = '', infix = '', suffix = '') => {
 
       if (typeof log === 'string' && log.length <= 0) {
-        return log
+        return [log]
       }
             
       const regex = new RegExp('{(' + routeMap?.map(route=>route.resourceName).join('|') + ') ([0-9]*) \\| (.*?)}', 'g')
@@ -193,7 +147,7 @@ const Logger = ({
         }
       })
 
-      const prefill = recurseOpsLog(logMessage)?.flat(20)
+      const prefill = recurseOpsLog(logMessage).flat(20)
 
       const prefills = prefill?.map(pf => {
         if (typeof pf === 'string') {
