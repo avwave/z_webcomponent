@@ -1,4 +1,4 @@
-import { Box, Link, List, ListItem, Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
+import { Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
 import React from "react";
 import ReactJson from "react-json-view";
 import { Logger } from ".";
@@ -121,6 +121,10 @@ const routeMap = [
     pattern: '/client-profile/:id'
   },
   {
+    resourceName: 'resource_id',
+    pattern: '/client-profile/:id'
+  },
+  {
     resourceName: 'user_id',
     pattern: '/user-profile/:id'
   },
@@ -181,6 +185,16 @@ AuditLog.args = {
 export const OPSLog = ActivityLogStory.bind({});
 OPSLog.args = {
   logs: [
+    {
+      "id": "6343c4565a20e0d38c538198",
+      "log_type": "ACCOUNT",
+      "log_message": "Login pin code sent for 1490 | gabrielle floirendo",
+      "user_id": "1",
+      "resource_type": "CLIENT",
+      "resource_id": "1490",
+      "change_sets": null,
+      "date_created": "2022-10-10T07:05:58Z"
+    },
     {
       "id": "635272995a20988849cdbdaf",
       "log_type": "CUSTOMER",

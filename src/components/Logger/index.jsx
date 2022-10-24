@@ -90,10 +90,12 @@ const Logger = ({
     (logMessage, mappableRoutes) => {
       const returnMap = mappableRoutes
         .filter(route => {
-          return logMessage.match(`${route.identifier}`)
+          const regex = new RegExp('(?!![\\w\\d])' + route.identifier + '(?![\\w\\d])', 'g')
+          return logMessage.match(regex)
         })
         .map(route => {
-          let findIdentifier = logMessage.match(`${route.identifier}`)
+          const regex = new RegExp('(?!![\\w\\d])' + route.identifier + '(?![\\w\\d])', 'g')
+          let findIdentifier = regex.exec(logMessage)
           let prefix = ''
           let suffix = ''
           let linkComponent = <></>
@@ -134,7 +136,6 @@ const Logger = ({
         change_sets,
         date_created,
         resource_type,
-        resource_id,
         ...props
       } = { ...log }
 
