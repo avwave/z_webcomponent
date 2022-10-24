@@ -1,6 +1,6 @@
 {
   "name": "@zennya/web-component-library",
-  "version": "0.7.58",
+  "version": "0.7.59",
   "private": false,
   "dependencies": {
     "@date-io/date-fns": "^2.10.11",
