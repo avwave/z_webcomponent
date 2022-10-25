@@ -25,3 +25,4 @@ export { Timepicker } from './components/Timepicker'
 export { WeekPicker } from './components/WeekPicker'
 export { Checklist } from './components/CheckList'
 
+export {Logger as ZennyaLogFormat} from './components/Logger'
