@@ -1,4 +1,4 @@
-import React, { useState, useReducer } from "react";
+import React, { useState, useReducer, useEffect } from "react";
 import { Story, Meta } from "@storybook/react";
 import {
   InfoList,
@@ -8,11 +8,25 @@ import {
   NumberInputField,
   RadioInputGroup,
 } from ".";
-import { argsTableLoadingData } from "@storybook/components";
+import { infoListAtom } from "../recoilStates";
+import {
+  atom,
+  selector,
+  useRecoilState,
+  useRecoilValue,
+  RecoilRoot,
+} from "recoil";
 
 export default {
   title: "Chat/InfoList",
   component: InfoList,
+  decorators: [
+    (Story) => (
+      <RecoilRoot>
+        <Story />
+      </RecoilRoot>
+    ),
+  ],
 };
 
 const initialInfos = [
@@ -88,6 +102,21 @@ export const List = () => {
     }
   };
 
+  const [infoList, setInfoList] = useRecoilState(infoListAtom);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      function sleep(ms) {
+        return new Promise((resolve) => setTimeout(resolve, ms));
+      }
+
+      // await sleep(1000);
+      setInfoList(listData);
+    };
+
+    fetchData().catch(console.error);
+  }, []);
+
   const [infos, dispatch] = useReducer(infoReducer, initialInfos);
 
   const handleOpen = (info) => {
@@ -111,7 +140,7 @@ export const List = () => {
             handleClickOpen={() => handleOpen(infos[0])}
             dialogContent={
               <RadioInputGroup
-                options={listData[0].selection}
+                options={infoList[0]?.selection}
                 title="Title"
                 value={infos[0].value}
                 onChange={(e) => handleOnChange(e, infos[0])}
@@ -119,8 +148,8 @@ export const List = () => {
             }
           />
         }
-        label={listData[0].label}
-        value={listData[0].display_value}
+        label={infoList[0]?.label}
+        value={infoList[0]?.display_value}
       />
 
       {/* canEnglish  BOOLEAN */}
@@ -142,8 +171,8 @@ export const List = () => {
             }
           />
         }
-        label={listData[1].label}
-        value={listData[1].display_value}
+        label={infoList[1]?.label}
+        value={infoList[1]?.display_value}
       />
 
       {/* gender - SELECT */}
@@ -157,7 +186,7 @@ export const List = () => {
             handleClickOpen={() => handleOpen(infos[2])}
             dialogContent={
               <RadioInputGroup
-                options={listData[2].selection}
+                options={infoList[2]?.selection}
                 title="Title"
                 value={infos[2].value}
                 onChange={(e) => handleOnChange(e, infos[2])}
@@ -165,8 +194,8 @@ export const List = () => {
             }
           />
         }
-        label={listData[2].label}
-        value={listData[2].display_value}
+        label={infoList[2]?.label}
+        value={infoList[2]?.display_value}
       />
 
       {/* canCommute - BOOLEAN */}
@@ -188,8 +217,8 @@ export const List = () => {
             }
           />
         }
-        label={listData[3].label}
-        value={listData[3].display_value}
+        label={infoList[3]?.label}
+        value={infoList[3]?.display_value}
       />
 
       {/* cityOfOrigin - STRING */}
@@ -210,8 +239,8 @@ export const List = () => {
             }
           />
         }
-        label={listData[4].label}
-        value={listData[4].display_value}
+        label={infoList[4]?.label}
+        value={infoList[4]?.display_value}
       />
 
       {/* age - INTEGER */}
@@ -232,8 +261,8 @@ export const List = () => {
             }
           />
         }
-        label={listData[5].label}
-        value={listData[5].display_value}
+        label={infoList[5]?.label}
+        value={infoList[5]?.display_value}
       />
 
       {/* askedRecentJob - STRING */}
@@ -254,8 +283,8 @@ export const List = () => {
             }
           />
         }
-        label={listData[6].label}
-        value={listData[6].display_value}
+        label={infoList[6]?.label}
+        value={infoList[6]?.display_value}
       />
 
       {/* askedSalary - BOOLEAN */}
@@ -277,8 +306,8 @@ export const List = () => {
             }
           />
         }
-        label={listData[7].label}
-        value={listData[7].display_value}
+        label={infoList[7]?.label}
+        value={infoList[7]?.display_value}
       />
 
       {/* mtCredentials - SELECT */}
@@ -292,7 +321,7 @@ export const List = () => {
             handleClickOpen={() => handleOpen(infos[8])}
             dialogContent={
               <RadioInputGroup
-                options={listData[8].selection}
+                options={infoList[8]?.selection}
                 title="Title"
                 value={infos[8].value}
                 onChange={(e) => handleOnChange(e, infos[8])}
@@ -300,8 +329,8 @@ export const List = () => {
             }
           />
         }
-        label={listData[8].label}
-        value={listData[8].display_value}
+        label={infoList[8]?.label}
+        value={infoList[8]?.display_value}
       />
     </InfoList>
   );

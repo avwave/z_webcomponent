@@ -47,7 +47,6 @@ import ShareIcon from "@material-ui/icons/Share";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import React, { useState } from "react";
 
-
 const useStyles = makeStyles((theme) => ({
   listContainer: {
     display: "flex",
@@ -55,26 +54,27 @@ const useStyles = makeStyles((theme) => ({
   },
   labelContainer: {
     paddingRight: theme.spacing(1),
+    width: "50%",
   },
   labelText: {
     fontWeight: "600",
   },
+  valueContainer: {width: "50%"},
+  valueText: {},
 }));
 
 export const InfoListItem = ({ label, value, inputDialog }) => {
   const classes = useStyles();
 
-
   return (
     <Box className={classes.listContainer}>
-    {inputDialog}
+      {inputDialog}
       <Box className={classes.labelContainer}>
-        <Typography className={classes.labelText}>
-          {label}:
-        </Typography>
+        <Typography className={classes.labelText}>{label}:</Typography>
       </Box>
-      <Typography> {value} </Typography>
+      <Box className={classes.valueContainer}>
+        <Typography className={classes.valueText}> {value} </Typography>
+      </Box>
     </Box>
   );
 };
-

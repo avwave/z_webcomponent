@@ -50,13 +50,14 @@ export const InputDialog = ({
   handleClickOpen,
   tooltipTitle = "Edit",
   iconButton = <EditIcon />,
+  edge= "",
 }) => {
   const classes = useStyles();
 
   return (
-    <Box>
+    <>
       <Tooltip title={tooltipTitle}>
-        <IconButton aria-label="edit" color="primary" onClick={handleClickOpen}>
+        <IconButton edge={edge} aria-label="edit" color="primary" onClick={handleClickOpen}>
           {iconButton}
         </IconButton>
       </Tooltip>
@@ -85,6 +86,6 @@ export const InputDialog = ({
           </Button>
         </DialogActions>
       </Dialog>
-    </Box>
+    </>
   );
 };

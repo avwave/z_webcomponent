@@ -1,12 +1,121 @@
 import { Notes } from "./Notes";
+import { fuzzyDate, personNameShort } from "../../utils/format";
+import EditIcon from "@material-ui/icons/Edit";
+import CloseIcon from "@material-ui/icons/Close";
+import { InputDialog } from "./InputDialog";
+import clsx from "clsx";
+import FavoriteIcon from "@material-ui/icons/Favorite";
+import ShareIcon from "@material-ui/icons/Share";
+import MoreVertIcon from "@material-ui/icons/MoreVert";
+import DeleteIcon from "@material-ui/icons/Delete";
+import React, { useState, useEffect } from "react";
+import {
+  atom,
+  selector,
+  useRecoilState,
+  useRecoilValue,
+  RecoilRoot,
+} from "recoil";
+import { noteListAtom } from "../recoilStates";
 
 export default {
   title: "Chat/Notes",
   component: Notes,
+  decorators: [
+    (Story) => (
+      <RecoilRoot>
+        <Story />
+      </RecoilRoot>
+    ),
+  ],
 };
 
 export const Default = (args) => {
-  return <Notes {...args} />;
+  const [noteList, setNoteList] = useRecoilState(noteListAtom);
+  useEffect(() => {
+    const fetchData = async () => {
+      function sleep(ms) {
+        return new Promise((resolve) => setTimeout(resolve, ms));
+      }
+
+     // await sleep(1000);
+      setNoteList(args.noteList);
+    };
+
+    fetchData().catch(console.error);
+  }, []);
+
+  const handleOpenEdit = (note, open, setOpen) => {
+    console.log("note", note);
+    console.log("open", open);
+    console.log("setopen", setOpen);
+    setOpen(!open);
+  };
+
+  const handleAcceptEdit = (note, open, setOpen) => {
+    console.log("note", note);
+    console.log("open", open);
+    console.log("setopen", setOpen);
+    setOpen(!open);
+  };
+
+  const handleOpenDelete = (note, open, setOpen) => {
+    console.log("note", note);
+    console.log("open", open);
+    console.log("setopen", setOpen);
+    setOpen(!open);
+  };
+
+  const handleAcceptDelete = (note, open, setOpen) => {
+    console.log("note", note);
+    console.log("open", open);
+    console.log("setopen", setOpen);
+    setNoteList((prevState) =>
+      prevState.filter((notes) => notes.id !== note.id)
+    );
+    setOpen(!open);
+  };
+
+  const handleEditOnChange = (e, value, setValue) => {
+    console.log("e", e);
+    console.log("value", value);
+    console.log("setvalue", setValue);
+    setValue(e.target.value);
+  };
+
+  const handleAddOnChange = (e, value, setValue) => {
+    console.log("e", e);
+    console.log("value", value);
+    console.log("setvalue", setValue);
+    setValue(e.target.value);
+  };
+
+  const handleOpenAdd = (open, setOpen) => {
+    console.log("open", open);
+    console.log("setopen", setOpen);
+    setOpen(!open);
+  };
+
+  const handleAcceptAdd = (open, setOpen) => {
+    console.log("open", open);
+    console.log("setopen", setOpen);
+    setOpen(!open);
+  };
+
+  return (
+    <Notes
+      handleOpenAdd={handleOpenAdd}
+      handleOpenEdit={handleOpenEdit}
+      handleOpenDelete={handleOpenDelete}
+      handleAcceptAdd={handleAcceptAdd}
+      handleAcceptEdit={handleAcceptEdit}
+      handleAcceptDelete={handleAcceptDelete}
+      handleEditOnChange={handleEditOnChange}
+      handleAddOnChange={handleAddOnChange}
+      noteList={noteList}
+      title={args.title}
+    />
+  );
 };
 
 Default.args = {

@@ -10,6 +10,7 @@
     "@fontsource/roboto": "^4.5.0",
     "@material-ui/pickers": "4.0.0-alpha.12",
     "@material-ui/styles": "^4.11.3",
+    "@pubnub/react-chat-components": "^0.14.0",
     "@storybook/addon-storysource": "6.4.19",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.2.6",

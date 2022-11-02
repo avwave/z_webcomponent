@@ -37,6 +37,7 @@ export const RadioInputGroup = ({ title, value, onChange, options }) => {
       value={option.value}
       control={<Radio />}
       label={option.displayValue}
+      key={option.value}
     />
   ));
 

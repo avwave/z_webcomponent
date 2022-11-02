@@ -40,7 +40,6 @@ import {
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import EditIcon from "@material-ui/icons/Edit";
 import CloseIcon from "@material-ui/icons/Close";
-import { InputDialog } from "./InputDialog";
 import clsx from "clsx";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import ShareIcon from "@material-ui/icons/Share";
@@ -48,13 +47,15 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import DeleteIcon from "@material-ui/icons/Delete";
 import React, { useState } from "react";
 import AddIcon from "@material-ui/icons/Add";
-import {fuzzyDate, personNameShort} from '../../utils/format'
+import { fuzzyDate, personNameShort } from "../../utils/format";
+import { TextInputField, InputDialog } from "./";
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
     maxWidth: 345,
-    '& .MuiCardHeader-root': {paddingBottom: 0},
-    '& .MuiCardContent-root': {paddingTop: 0}
+    "& .MuiCardHeader-root": { paddingBottom: 0 },
+    "& .MuiCardContent-root": { paddingTop: 0 },
   },
   expand: {
     transform: "rotate(0deg)",
@@ -69,28 +70,96 @@ const useStyles = makeStyles((theme) => ({
   cardTitle: { fontWeight: "600" },
 }));
 
-export const Notes = ({ title = "Info", noteList }) => {
+export const NoteItem = ({
+  title = "Info",
+  note,
+  handleOpenEdit,
+  handleOpenDelete,
+  handleAcceptEdit,
+  handleAcceptDelete,
+  handleEditOnChange
+}) => {
+  const [openEdit, setOpenEdit] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
+  const [value, setValue] = useState("");
+
+
+  return (
+    <ListItem key={note?.id}>
+      <ListItemText
+        primary={note.content}
+        secondary={`- ${personNameShort(note.owner)} | ${fuzzyDate(
+          note.last_updated
+        )}`}
+      />
+
+      <InputDialog
+        title="Title"
+        edge="end"
+        open={openEdit}
+        iconButton={<EditIcon />}
+        handleAccept={() => handleAcceptEdit(note, openEdit, setOpenEdit, value)}
+        handleClose={() => handleOpenEdit(note, openEdit, setOpenEdit, value)}
+        handleClickOpen={() => handleOpenEdit(note, openEdit, setOpenEdit, value)}
+        dialogContent={ <TextInputField
+          label="Label"
+          value={value}
+          onChange={(e) => handleEditOnChange(e, value, setValue)}
+        />}
+      />
+
+      <InputDialog
+        title="Title"
+        edge="end"
+        open={openDelete}
+        tooltipTitle="Delete"
+        iconButton={<DeleteIcon />}
+        handleAccept={() => handleAcceptDelete(note, openDelete, setOpenDelete)}
+        handleClose={() => handleOpenDelete(note, openDelete, setOpenDelete)}
+        handleClickOpen={() =>
+          handleOpenDelete(note, openDelete, setOpenDelete)
+        }
+        dialogContent={<Typography>Content text222</Typography>}
+      />
+    </ListItem>
+  );
+};
+
+export const Notes = ({
+  title = "Info",
+  noteList,
+  editDialog,
+  deleteDialog,
+  handleOpenEdit,
+  handleOpenDelete,
+  handleOpenAdd,
+  handleAcceptEdit,
+  handleAcceptDelete,
+  handleAcceptAdd,
+  handleEditOnChange,
+  handleAddOnChange
+}) => {
   const classes = useStyles();
   const [expanded, setExpanded] = useState(true);
+
+  const mappedNoteList = noteList.map((note) => (
+    <NoteItem
+      note={note}
+      handleOpenEdit={handleOpenEdit}
+      handleOpenDelete={handleOpenDelete}
+      handleAcceptEdit={handleAcceptEdit}
+      handleAcceptDelete={handleAcceptDelete}
+      handleEditOnChange={handleEditOnChange}
+    />
+  ));
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
 
-  const mappedNoteList = noteList.map((note) => (
-    <ListItem>
-      <ListItemText
-        primary={note.content}
-        secondary={`- ${personNameShort(note.owner)} | ${fuzzyDate(note.last_updated)}`}
-      />
-      <IconButton edge="end">
-        <EditIcon />
-      </IconButton>
-      <IconButton edge="end">
-        <DeleteIcon />
-      </IconButton>
-    </ListItem>
-  ));
+  const [openAdd, setOpenAdd] = useState(false);
+ const [value, setValue] = useState("");
+
 
   return (
     <Card className={classes.root}>
@@ -98,9 +167,21 @@ export const Notes = ({ title = "Info", noteList }) => {
         disableTypography
         action={
           <CardActions disableSpacing>
-            <IconButton>
-              <AddIcon />
-            </IconButton>
+            <InputDialog
+              title="Title"
+              edge="end"
+              open={openAdd}
+              tooltipTitle="Add"
+              iconButton={<AddIcon />}
+              handleAccept={() => handleAcceptAdd(openAdd, setOpenAdd)}
+              handleClose={() => handleOpenAdd(openAdd, setOpenAdd)}
+              handleClickOpen={() => handleOpenAdd(openAdd, setOpenAdd)}
+              dialogContent={ <TextInputField
+                label="Label"
+                value={value}
+                onChange={(e) => handleAddOnChange(e, value, setValue)}
+              />}
+            />
             <IconButton
               className={clsx(classes.expand, {
                 [classes.expandOpen]: expanded,
