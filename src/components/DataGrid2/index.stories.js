@@ -367,6 +367,7 @@ const SelectableStory = ({ ...args }) => {
 
   return (
     <Paper style={{ height: '80vh' }}>
+      <pre>{JSON.stringify(selectedRowIds, null, 2)}</pre>
       <DataGrid2
         {...args}
         gridProps={{
@@ -380,7 +381,6 @@ const SelectableStory = ({ ...args }) => {
           },
         }}
       />
-      <pre>{JSON.stringify(selectedRowIds, null, 2)}</pre>
     </Paper>
   );
 };
@@ -389,7 +389,14 @@ export const Selectable = SelectableStory.bind({});
 Selectable.args = {
   ...Default.args,
   rows: rows,
-  columns: [...columnData],
+  columns: [{
+    key: "select-row",
+    name: "",
+    sortable: false,
+    selectable: ({ row }) => {
+      return true
+    }
+  },...columnData],
 };
 
 function displayId({ props: { row } }) {
