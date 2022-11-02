@@ -475,7 +475,7 @@ const DataGrid2 = React.forwardRef(({
           },
           headCell: {
             content: (props) => {
-              if (props.column.key === 'select-row') {
+              if (props.column.key === 'select-row' && !props.column?.options?.noHeader) {
                 return (
                   <SelectionHeader {...props}
                   // areAllRowsSelected={kaPropsUtils.areAllFilteredRowsSelected(tableProps)}
