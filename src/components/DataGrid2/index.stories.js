@@ -356,7 +356,7 @@ ServerSort.args = {
 
 const SelectableStory = ({ ...args }) => {
   const [state, dispatch] = React.useContext(DataGridContext);
-  const [selectedRowIds, setSelectedRowIds] = useState(() => new Set());
+  const [selectedRowIds, setSelectedRowIds] = useState([]);
 
   React.useEffect(() => {
     dispatch({
@@ -368,6 +368,7 @@ const SelectableStory = ({ ...args }) => {
   return (
     <Paper style={{ height: '80vh' }}>
       <pre>{JSON.stringify(selectedRowIds, null, 2)}</pre>
+      <Button onClick={()=>setSelectedRowIds([])}>Clear</Button>
       <DataGrid2
         {...args}
         gridProps={{
