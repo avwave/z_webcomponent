@@ -206,8 +206,8 @@ const DataGrid2 = React.forwardRef(({
   const [selectedRows, setSelectedRows] = useState(new Set());
 
   useEffect(() => {
-    setSelectedRows(new Set(dataGridState.selectedRows))
-  }, [gridProps?.selectRows]);
+    setSelectedRows(new Set(gridProps?.selectedRows))
+  }, [gridProps?.selectedRows]);
   
   const [highlightedRow, setHighlightedRow] = useState();
   const { itemHeight, addRowHeight } = useDynamicRowsOptions(tableProps);
