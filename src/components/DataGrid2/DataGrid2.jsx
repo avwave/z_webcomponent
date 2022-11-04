@@ -203,8 +203,7 @@ const DataGrid2 = React.forwardRef(({
     queryKey: `${id}-sortBy`,
     disable: !useUrlAsState
   })
-  const [selectedRows, setSelectedRows] = useState(new Set());
-
+  
   const [highlightedRow, setHighlightedRow] = useState();
   const { itemHeight, addRowHeight } = useDynamicRowsOptions(tableProps);
 
@@ -297,18 +296,21 @@ const DataGrid2 = React.forwardRef(({
           onContextMenu({ data: action?.row })
           break
         case 'SelectRow':
-          setSelectedRows(new Set(selectedRows.add(action.rowKeyValue)))
+          const rset = new Set(gridProps?.selectedRows)
+          rset.add(action.rowKeyValue)
+          gridProps?.onSelectedRowsChange(Array.from(rset))
           break
         case 'DeselectRow':
-          const delrows = selectedRows.delete(action.rowKeyValue)
-          setSelectedRows(new Set(selectedRows))
+          let delrows = new Set(gridProps?.selectedRows)
+          delrows.delete(action.rowKeyValue)
+          gridProps?.onSelectedRowsChange(Array.from(delrows))
           break
         case 'SelectAllFilteredRows':
           const rowes = dataGridState.rows.map(r => r.id)
-          setSelectedRows(new Set(rowes))
+          gridProps?.onSelectedRowsChange(rowes)
           break
         case 'DeselectAllFilteredRows':
-          setSelectedRows(new Set())
+          gridProps?.onSelectedRowsChange([])
           break
         default:
           break;
@@ -322,14 +324,10 @@ const DataGrid2 = React.forwardRef(({
         return red
       })
     },
-    [onLoadMore, pageOffset, dataGridState.rows],
+    [onLoadMore, pageOffset, onContextMenu, gridProps, dataGridState.rows],
   );
 
-  useEffect(() => {
-    gridProps?.onSelectedRowsChange && gridProps?.onSelectedRowsChange(Array.from(selectedRows))
-  }, [selectedRows]);
-
-
+  
   useEffect(() => {
     if (!isEmpty(dataGridState.rows)) {
       kaDispatch(updateData(dataGridState.rows))
@@ -475,7 +473,7 @@ const DataGrid2 = React.forwardRef(({
           },
           headCell: {
             content: (props) => {
-              if (props.column.key === 'select-row') {
+              if (props.column.key === 'select-row' && !props.column?.options?.noHeader) {
                 return (
                   <SelectionHeader {...props}
                   // areAllRowsSelected={kaPropsUtils.areAllFilteredRowsSelected(tableProps)}
