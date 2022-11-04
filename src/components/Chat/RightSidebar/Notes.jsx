@@ -100,9 +100,9 @@ export const NoteItem = ({
         edge="end"
         open={openEdit}
         iconButton={<EditIcon />}
-        handleAccept={() => handleAcceptEdit(note, openEdit, setOpenEdit, value)}
-        handleClose={() => handleOpenEdit(note, openEdit, setOpenEdit, value)}
-        handleClickOpen={() => handleOpenEdit(note, openEdit, setOpenEdit, value)}
+        handleAccept={() => handleAcceptEdit(note, openEdit, setOpenEdit, value, setValue)}
+        handleClose={() => handleOpenEdit(note, openEdit, setOpenEdit, value, setValue)}
+        handleClickOpen={() => handleOpenEdit(note, openEdit, setOpenEdit, value, setValue)}
         dialogContent={ <TextInputField
           label="Note"
           value={value}
