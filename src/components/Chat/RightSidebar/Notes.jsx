@@ -145,16 +145,7 @@ export const Notes = ({
   const classes = useStyles();
   const [expanded, setExpanded] = useState(true);
 
-  const mappedNoteList = noteList.map((note) => (
-    <NoteItem
-      note={note}
-      handleOpenEdit={handleOpenEdit}
-      handleOpenDelete={handleOpenDelete}
-      handleAcceptEdit={handleAcceptEdit}
-      handleAcceptDelete={handleAcceptDelete}
-      handleEditOnChange={handleEditOnChange}
-    />
-  ));
+
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -200,7 +191,16 @@ export const Notes = ({
         title={<Typography className={classes.cardTitle}> {title} </Typography>}
       />
       <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <CardContent>{mappedNoteList}</CardContent>
+        <CardContent>{noteList.map((note) => (
+    <NoteItem
+      note={note}
+      handleOpenEdit={handleOpenEdit}
+      handleOpenDelete={handleOpenDelete}
+      handleAcceptEdit={handleAcceptEdit}
+      handleAcceptDelete={handleAcceptDelete}
+      handleEditOnChange={handleEditOnChange}
+    />
+  ))}</CardContent>
       </Collapse>
     </Card>
   );
