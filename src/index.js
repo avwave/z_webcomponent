@@ -6,6 +6,8 @@ import DataGridProvider, { DataGridContext, actions as gridActions } from './com
 import Agenda from './components/Agenda/Agenda';
 import { AgendaContext, AgendaProvider, actions as agendaActions } from './components/Agenda/AgendaContext';
 
+export { AnalyticsProvider, useAnalytics } from './components/SegmentIO';
+
 export { useInterval, useStateRef, useUrlState }
 
 export { useBranch } from './components/BranchIO/BranchProvider'
@@ -24,5 +26,7 @@ export { FormBuilder } from './components/FormBuilder'
 export { Timepicker } from './components/Timepicker'
 export { WeekPicker } from './components/WeekPicker'
 export { Checklist } from './components/CheckList'
+
+
 
 export {Logger as ZennyaLogFormat} from './components/Logger'
