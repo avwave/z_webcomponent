@@ -24,4 +24,15 @@ export { FormBuilder } from './components/FormBuilder'
 export { Timepicker } from './components/Timepicker'
 export { WeekPicker } from './components/WeekPicker'
 export { Checklist } from './components/CheckList'
-
+export {
+    InfoList,
+    InfoListItem,
+    InputDialog,
+    RightSidebar,
+    Notes,
+    LinkedProfile,
+    Schedules,
+    NumberInputField,
+    TextInputField,
+    RadioInputGroup,
+  } from './components/Chat/RightSidebar'  

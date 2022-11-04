@@ -56,6 +56,8 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: 345,
     "& .MuiCardHeader-root": { paddingBottom: 0 },
     "& .MuiCardContent-root": { paddingTop: 0 },
+    "& .MuiCardContent-root": { paddingRight: 0 },
+
   },
   expand: {
     transform: "rotate(0deg)",
@@ -94,7 +96,7 @@ export const NoteItem = ({
       />
 
       <InputDialog
-        title="Title"
+        title="Edit"
         edge="end"
         open={openEdit}
         iconButton={<EditIcon />}
@@ -102,16 +104,17 @@ export const NoteItem = ({
         handleClose={() => handleOpenEdit(note, openEdit, setOpenEdit, value)}
         handleClickOpen={() => handleOpenEdit(note, openEdit, setOpenEdit, value)}
         dialogContent={ <TextInputField
-          label="Label"
+          label="Note"
           value={value}
           onChange={(e) => handleEditOnChange(e, value, setValue)}
         />}
       />
 
       <InputDialog
-        title="Title"
+        title="Delete"
         edge="end"
         open={openDelete}
+        acceptButtonText="Delete"
         tooltipTitle="Delete"
         iconButton={<DeleteIcon />}
         handleAccept={() => handleAcceptDelete(note, openDelete, setOpenDelete)}
@@ -119,7 +122,7 @@ export const NoteItem = ({
         handleClickOpen={() =>
           handleOpenDelete(note, openDelete, setOpenDelete)
         }
-        dialogContent={<Typography>Content text222</Typography>}
+        dialogContent={<Typography>Are you sure you want to delete this note?</Typography>}
       />
     </ListItem>
   );
@@ -168,7 +171,7 @@ export const Notes = ({
         action={
           <CardActions disableSpacing>
             <InputDialog
-              title="Title"
+              title="Add"
               edge="end"
               open={openAdd}
               tooltipTitle="Add"
@@ -177,7 +180,7 @@ export const Notes = ({
               handleClose={() => handleOpenAdd(openAdd, setOpenAdd)}
               handleClickOpen={() => handleOpenAdd(openAdd, setOpenAdd)}
               dialogContent={ <TextInputField
-                label="Label"
+                label="Note"
                 value={value}
                 onChange={(e) => handleAddOnChange(e, value, setValue)}
               />}
