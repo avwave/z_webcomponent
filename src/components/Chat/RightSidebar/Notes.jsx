@@ -167,9 +167,9 @@ export const Notes = ({
               open={openAdd}
               tooltipTitle="Add"
               iconButton={<AddIcon />}
-              handleAccept={() => handleAcceptAdd(openAdd, setOpenAdd)}
-              handleClose={() => handleOpenAdd(openAdd, setOpenAdd)}
-              handleClickOpen={() => handleOpenAdd(openAdd, setOpenAdd)}
+              handleAccept={() => handleAcceptAdd(openAdd, setOpenAdd, value, setValue)}
+              handleClose={() => handleOpenAdd(openAdd, setOpenAdd, value, setValue)}
+              handleClickOpen={() => handleOpenAdd(openAdd, setOpenAdd, value, setValue)}
               dialogContent={ <TextInputField
                 label="Note"
                 value={value}
