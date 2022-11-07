@@ -69,9 +69,13 @@ const useAnalytics = () => {
 
   const identifyUser = useCallback(
     async (id, traits) => {
-      const identity = id || await (await analytics?.user())?.anonymousId()
+      const anonId = await (await analytics?.user())?.anonymousId()
+      const identity = id || anonId
       const identifiers = !!id ? { id } : { anonymousTempId: identity }
-      await analytics?.identify(identity, { ...identifiers, ...traits, appIdentifier: analytics?.appIdentifier }, COMMONPAYLOAD)
+      await analytics?.identify(identity, { ...identifiers, ...traits, appIdentifier: analytics?.appIdentifier }, {
+        ...COMMONPAYLOAD,
+        anonymousId: anonId
+      })
       // await mergeIdentity(id)
     },
     [analytics, mergeIdentity],
