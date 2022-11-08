@@ -51,7 +51,10 @@ const useAnalytics = () => {
       const aUser = await analytics?.user()
       const id = await (aUser)?.id()
       const aId = await (aUser)?.anonymousId()
-      const identifiers = (!!id && aId === id) ? { tempId: aId } : { id }
+      const identifiers = {
+        tempId: aId,
+        id
+      }
       const payload = {
         ...identifiers,
         ...properties,
