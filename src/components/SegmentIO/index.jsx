@@ -124,7 +124,7 @@ const useAnalytics = () => {
       const user = await analytics?.user()
       await user?.id(null)
       await user?.traits(null)
-      await identifyUsingIdAndTraits(null)
+      // await identifyUsingIdAndTraits(null)
     },
     [analytics, identifyUsingIdAndTraits],
   );
