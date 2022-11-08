@@ -58,7 +58,11 @@ const useAnalytics = () => {
   );
 
   const mergeIdentity = useCallback(
-    async (userId) => {
+    async (userId, forceClaim = false) => {
+      if (forceClaim) {
+        await analytics?.alias(userId, COMMONPAYLOAD)
+        return
+      }
       if (!claimed && !!userId) {
         setClaimed(true)
         await analytics?.alias(userId, COMMONPAYLOAD)
