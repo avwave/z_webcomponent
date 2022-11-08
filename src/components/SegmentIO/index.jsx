@@ -52,12 +52,18 @@ const useAnalytics = () => {
       const id = await (aUser)?.id()
       const aId = await (aUser)?.anonymousId()
       const identifiers = (!!id && aId === id) ? { tempId: aId } : { id }
-      analytics?.track(eventName, { ...identifiers, ...properties, appIdentifier: analytics?.appIdentifier }, COMMONPAYLOAD)
+      const payload = {
+        ...identifiers,
+        ...properties,
+        appIdentifier: analytics?.appIdentifier
+      }
+      console.log("📢[index.jsx:56]: payload: ", payload);
+      analytics?.track(eventName, payload, COMMONPAYLOAD)
     },
     [analytics],
   );
 
-  const mergeIdentity = useCallback(
+  const aliasTo = useCallback(
     async (userId, forceClaim = false) => {
       if (forceClaim) {
         await analytics?.alias(userId, COMMONPAYLOAD)
@@ -71,18 +77,25 @@ const useAnalytics = () => {
     [analytics, claimed, setClaimed],
   )
 
-  const identifyUser = useCallback(
+  const identifyUsingIdAndTraits = useCallback(
     async (id, traits) => {
       const anonId = await (await analytics?.user())?.anonymousId()
       const identity = id || anonId
       const identifiers = !!id ? { id } : { tempId: identity }
-      await analytics?.identify(identity, { ...identifiers, ...traits, appIdentifier: analytics?.appIdentifier }, {
+
+      const payload = {
+        ...identifiers,
+        ...traits,
+        appIdentifier: analytics?.appIdentifier
+      }
+      const options = {
         ...COMMONPAYLOAD,
         anonymousId: anonId
-      })
-      // await mergeIdentity(id)
+      }
+      await analytics?.identify(identity, payload, options)
+      // await aliasTo(id)
     },
-    [analytics, mergeIdentity],
+    [analytics, aliasTo],
   );
 
   const getAnonymousId = useCallback(
@@ -108,9 +121,9 @@ const useAnalytics = () => {
       const user = await analytics?.user()
       await user?.id(null)
       await user?.traits(null)
-      await identifyUser(null)
+      await identifyUsingIdAndTraits(null)
     },
-    [analytics, identifyUser],
+    [analytics, identifyUsingIdAndTraits],
   );
 
   const fullReset = useCallback(
@@ -129,8 +142,8 @@ const useAnalytics = () => {
     analytics,
     pageViewed,
     trackEvent,
-    identifyUser,
-    mergeIdentity,
+    identifyUsingIdAndTraits,
+    aliasTo,
     checkIsIdentified
   }
 }
