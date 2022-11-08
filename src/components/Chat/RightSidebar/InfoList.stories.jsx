@@ -28,50 +28,58 @@ export default {
     ),
   ],
 };
-
 const initialInfos = [
   {
     key: "applyType",
+    type: "select",
     value: "",
     open: false,
   },
   {
-    key: "canEnglish",
+    key: "confirmEnglish",
+    type: "boolean",
     value: "",
     open: false,
   },
   {
     key: "gender",
+    type: "select",
     value: "",
     open: false,
   },
   {
     key: "canCommute",
+    type: "boolean",
     value: "",
     open: false,
   },
   {
-    key: "cityOfOrigin",
+    key: "city",
+    type: "string",
     value: "",
     open: false,
   },
   {
     key: "age",
+    type: "integer",
     value: "",
     open: false,
   },
   {
     key: "askedRecentJob",
+    type: "string",
     value: "",
     open: false,
   },
   {
     key: "askedSalary",
+    type: "boolean",
     value: "",
     open: false,
   },
   {
-    key: "mtCredentials",
+    key: "experience",
+    type: "select",
     value: "",
     open: false,
   },
@@ -127,214 +135,290 @@ export const List = () => {
     dispatch({ type: "VALUE", key: info.key, value: e.target.value });
   };
 
+  
+  const handleAcceptInfo = async (info) => {
+    try {
+      console.log("handleAcceptInfo info", info);
+      console.log("infotype", info.type);
+
+      switch (info.type) {
+        case "boolean": {
+          const payload = {
+            key: info.key,
+            value: info.value === "true" ? true : false,
+          };
+          console.log("payload", payload);
+          //    const response = await ChatService.updateUserInfo({
+          //     cid: conversationId,
+          //      payload: payload,
+          //   });
+          //    console.log('handleAcceptInfo response', response);
+          break;
+        }
+        case "select": {
+          const payload = { key: info.key, value: info.value };
+          console.log("payload", payload);
+          //    const response = await ChatService.updateUserInfo({
+          //     cid: conversationId,
+          //      payload: payload,
+          //    });
+
+          //   console.log('handleAcceptInfo response', response);
+          break;
+        }
+        case "string": {
+          const payload = { key: info.key, value: info.value };
+          console.log("payload", payload);
+          //    const response = await ChatService.updateUserInfo({ cid: conversationId, payload: payload });
+
+          //   console.log('handleAcceptInfo response', response);
+          break;
+        }
+        case "integer": {
+          const stringifiedValue = JSON.stringify({
+            amount: info.value,
+            unit: "year",
+          });
+          const payload = { key: info.key, value: stringifiedValue };
+          console.log("payload", payload);
+          //     const response = await ChatService.updateUserInfo({ cid: conversationId, payload: payload });
+
+          //   console.log('handleAcceptInfo response', response);
+          break;
+        }
+        default: {
+          console.error("Switch case acting weird");
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
+
+    dispatch({ type: "OPEN", key: info.key });
+  };
+
+
+
   return (
     <InfoList>
-      {/* applyType  - SELECT */}
-      <InfoListItem
-        inputDialog={
-          <InputDialog
-            title="Title"
-            open={infos[0].open}
-            handleAccept={() => handleOpen(infos[0])}
-            handleClose={() => handleOpen(infos[0])}
-            handleClickOpen={() => handleOpen(infos[0])}
-            dialogContent={
-              <RadioInputGroup
-                options={infoList[0]?.selection}
-                title="Title"
-                value={infos[0].value}
-                onChange={(e) => handleOnChange(e, infos[0])}
-              />
-            }
-          />
-        }
-        label={infoList[0]?.label}
-        value={infoList[0]?.display_value}
-      />
+        {/* applyType  - SELECT */}
+        <InfoListItem
+          inputDialog={
+            <InputDialog
+              title="Edit Application Type"
+              open={infos[0].open}
+              handleAccept={() => handleAcceptInfo(infos[0])}
+              handleClose={() => handleOpen(infos[0])}
+              handleClickOpen={() => handleOpen(infos[0])}
+              dialogContent={
+                <RadioInputGroup
+                  options={applyTypeOptions}
+                  title="Application Type"
+                  value={infos[0].value}
+                  onChange={e => handleOnChange(e, infos[0])}
+                />
+              }
+            />
+          }
+          label={infoList[0]?.label}
+          value={infoList[0]?.display_value}
+        />
 
-      {/* canEnglish  BOOLEAN */}
-      <InfoListItem
-        inputDialog={
-          <InputDialog
-            title="Title"
-            open={infos[1].open}
-            handleAccept={() => handleOpen(infos[1])}
-            handleClose={() => handleOpen(infos[1])}
-            handleClickOpen={() => handleOpen(infos[1])}
-            dialogContent={
-              <RadioInputGroup
-                options={boolValues}
-                title="Title"
-                value={infos[1].value}
-                onChange={(e) => handleOnChange(e, infos[1])}
-              />
-            }
-          />
-        }
-        label={infoList[1]?.label}
-        value={infoList[1]?.display_value}
-      />
+        {/* canEnglish  BOOLEAN */}
+        <InfoListItem
+          inputDialog={
+            <InputDialog
+              title="Edit English"
+              open={infos[1].open}
+              handleAccept={() => handleAcceptInfo(infos[1])}
+              handleClose={() => handleOpen(infos[1])}
+              handleClickOpen={() => handleOpen(infos[1])}
+              dialogContent={
+                <RadioInputGroup
+                  options={boolValues}
+                  title="Can applicant speak English?"
+                  value={infos[1].value}
+                  onChange={e => handleOnChange(e, infos[1])}
+                />
+              }
+            />
+          }
+          label={infoList[1]?.label}
+          value={infoList[1]?.display_value}
+        />
 
-      {/* gender - SELECT */}
-      <InfoListItem
-        inputDialog={
-          <InputDialog
-            title="Title"
-            open={infos[2].open}
-            handleAccept={() => handleOpen(infos[2])}
-            handleClose={() => handleOpen(infos[2])}
-            handleClickOpen={() => handleOpen(infos[2])}
-            dialogContent={
-              <RadioInputGroup
-                options={infoList[2]?.selection}
-                title="Title"
-                value={infos[2].value}
-                onChange={(e) => handleOnChange(e, infos[2])}
-              />
-            }
-          />
-        }
-        label={infoList[2]?.label}
-        value={infoList[2]?.display_value}
-      />
+        {/* gender - SELECT */}
+        <InfoListItem
+          inputDialog={
+            <InputDialog
+              title="Edit Gender"
+              open={infos[2].open}
+              handleAccept={() => handleAcceptInfo(infos[2])}
+              handleClose={() => handleOpen(infos[2])}
+              handleClickOpen={() => handleOpen(infos[2])}
+              dialogContent={
+                <RadioInputGroup
+                  options={infoList[2]?.selection}
+                  title="Applicant's Gender"
+                  value={infos[2].value}
+                  onChange={e => handleOnChange(e, infos[2])}
+                />
+              }
+            />
+          }
+          label={infoList[2]?.label}
+          value={infoList[2]?.display_value}
+        />
 
-      {/* canCommute - BOOLEAN */}
-      <InfoListItem
-        inputDialog={
-          <InputDialog
-            title="Title"
-            open={infos[3].open}
-            handleAccept={() => handleOpen(infos[3])}
-            handleClose={() => handleOpen(infos[3])}
-            handleClickOpen={() => handleOpen(infos[3])}
-            dialogContent={
-              <RadioInputGroup
-                options={boolValues}
-                title="Title"
-                value={infos[3].value}
-                onChange={(e) => handleOnChange(e, infos[3])}
-              />
-            }
-          />
-        }
-        label={infoList[3]?.label}
-        value={infoList[3]?.display_value}
-      />
+        {/* canCommute - BOOLEAN */}
+        <InfoListItem
+          inputDialog={
+            <InputDialog
+              title="Edit Commute to Manila"
+              open={infos[3].open}
+              handleAccept={() => handleAcceptInfo(infos[3])}
+              handleClose={() => handleOpen(infos[3])}
+              handleClickOpen={() => handleOpen(infos[3])}
+              dialogContent={
+                <RadioInputGroup
+                  options={boolValues}
+                  title="Can Applicant Commute to Manila?"
+                  value={infos[3].value}
+                  onChange={e => handleOnChange(e, infos[3])}
+                />
+              }
+            />
+          }
+          label={infoList[3]?.label}
+          value={infoList[3]?.display_value}
+        />
 
-      {/* cityOfOrigin - STRING */}
-      <InfoListItem
-        inputDialog={
-          <InputDialog
-            title="Title"
-            open={infos[4].open}
-            handleAccept={() => handleOpen(infos[4])}
-            handleClose={() => handleOpen(infos[4])}
-            handleClickOpen={() => handleOpen(infos[4])}
-            dialogContent={
-              <TextInputField
-                label="Label"
-                value={infos[4].value}
-                onChange={(e) => handleOnChange(e, infos[4])}
-              />
-            }
-          />
-        }
-        label={infoList[4]?.label}
-        value={infoList[4]?.display_value}
-      />
+        {/* cityOfOrigin - STRING */}
+        <InfoListItem
+          inputDialog={
+            <InputDialog
+              title="Edit City of Origin"
+              open={infos[4].open}
+              handleAccept={() => handleAcceptInfo(infos[4])}
+              handleClose={() => handleOpen(infos[4])}
+              handleClickOpen={() => handleOpen(infos[4])}
+              dialogContent={
+                <TextInputField
+                  label="Applicant's City of Origin"
+                  value={infos[4].value}
+                  onChange={e => handleOnChange(e, infos[4])}
+                />
+              }
+            />
+          }
+          label={infoList[4]?.label}
+          value={infoList[4]?.display_value}
+        />
 
-      {/* age - INTEGER */}
-      <InfoListItem
-        inputDialog={
-          <InputDialog
-            title="Title"
-            open={infos[5].open}
-            handleAccept={() => handleOpen(infos[5])}
-            handleClose={() => handleOpen(infos[5])}
-            handleClickOpen={() => handleOpen(infos[5])}
-            dialogContent={
-              <NumberInputField
-                label="Label"
-                value={infos[5].value}
-                onChange={(e) => handleOnChange(e, infos[5])}
-              />
-            }
-          />
-        }
-        label={infoList[5]?.label}
-        value={infoList[5]?.display_value}
-      />
+        {/* age - INTEGER */}
+        <InfoListItem
+          inputDialog={
+            <InputDialog
+              title="Edit Age"
+              open={infos[5].open}
+              handleAccept={() => handleAcceptInfo(infos[5])}
+              handleClose={() => handleOpen(infos[5])}
+              handleClickOpen={() => handleOpen(infos[5])}
+              dialogContent={
+                <NumberInputField
+                  label="Applicant's Age"
+                  value={infos[5].value}
+                  onChange={e => handleOnChange(e, infos[5])}
+                />
+              }
+            />
+          }
+          label={infoList[5]?.label}
+          value={infoList[5]?.display_value}
+        />
 
-      {/* askedRecentJob - STRING */}
-      <InfoListItem
-        inputDialog={
-          <InputDialog
-            title="Title"
-            open={infos[6].open}
-            handleAccept={() => handleOpen(infos[6])}
-            handleClose={() => handleOpen(infos[6])}
-            handleClickOpen={() => handleOpen(infos[6])}
-            dialogContent={
-              <TextInputField
-                label="Label"
+        {/* askedRecentJob - STRING */}
+        <InfoListItem
+          inputDialog={
+            <InputDialog
+              title="Edit Recent job"
+              open={infos[6].open}
+              handleAccept={() => handleAcceptInfo(infos[6])}
+              handleClose={() => handleOpen(infos[6])}
+              handleClickOpen={() => handleOpen(infos[6])}
+              dialogContent={
+                <TextInputField
+                label="Recent Job Applicant Held"
                 value={infos[6].value}
-                onChange={(e) => handleOnChange(e, infos[6])}
-              />
-            }
-          />
-        }
-        label={infoList[6]?.label}
-        value={infoList[6]?.display_value}
-      />
+                  onChange={e => handleOnChange(e, infos[6])}
+                />
+              }
+            />
+          }
+          label={infoList[6]?.label}
+          value={infoList[6]?.display_value}
+        />
 
-      {/* askedSalary - BOOLEAN */}
-      <InfoListItem
-        inputDialog={
-          <InputDialog
-            title="Title"
-            open={infos[7].open}
-            handleAccept={() => handleOpen(infos[7])}
-            handleClose={() => handleOpen(infos[7])}
-            handleClickOpen={() => handleOpen(infos[7])}
-            dialogContent={
-              <RadioInputGroup
-                options={boolValues}
-                title="Title"
-                value={infos[7].value}
-                onChange={(e) => handleOnChange(e, infos[7])}
-              />
-            }
-          />
-        }
-        label={infoList[7]?.label}
-        value={infoList[7]?.display_value}
-      />
+        {/* askedSalary - BOOLEAN */}
+        <InfoListItem
+          inputDialog={
+            <InputDialog
+              title="Edit Asked About Salary"
+              open={infos[7].open}
+              handleAccept={() => handleAcceptInfo(infos[7])}
+              handleClose={() => handleOpen(infos[7])}
+              handleClickOpen={() => handleOpen(infos[7])}
+              dialogContent={
+                <RadioInputGroup
+                  options={boolValues}
+                  title="Asked About Salary"
+                  value={infos[7].value}
+                  onChange={e => handleOnChange(e, infos[7])}
+                />
+              }
+            />
+          }
+          label={infoList[7]?.label}
+          value={infoList[7]?.display_value}
+        />
 
-      {/* mtCredentials - SELECT */}
-      <InfoListItem
-        inputDialog={
-          <InputDialog
-            title="Title"
-            open={infos[8].open}
-            handleAccept={() => handleOpen(infos[8])}
-            handleClose={() => handleOpen(infos[8])}
-            handleClickOpen={() => handleOpen(infos[8])}
-            dialogContent={
-              <RadioInputGroup
-                options={infoList[8]?.selection}
-                title="Title"
-                value={infos[8].value}
-                onChange={(e) => handleOnChange(e, infos[8])}
-              />
-            }
-          />
-        }
-        label={infoList[8]?.label}
-        value={infoList[8]?.display_value}
-      />
-    </InfoList>
+        {/* mtCredentials - SELECT */}
+        <InfoListItem
+          inputDialog={
+            <InputDialog
+              title="Edit MT Credentials"
+              open={infos[8].open}
+              handleAccept={() => handleAcceptInfo(infos[8])}
+              handleClose={() => handleOpen(infos[8])}
+              handleClickOpen={() => handleOpen(infos[8])}
+              dialogContent={
+                <RadioInputGroup
+                  options={infoList[8]?.selection}
+                  title="Credentials"
+                  value={infos[8].value}
+                  onChange={e => handleOnChange(e, infos[8])}
+                />
+              }
+            />
+          }
+          label={infoList[8]?.label}
+          value={infoList[8]?.display_value}
+        />
+      </InfoList>
   );
 };
+
+const applyTypeOptions = [
+  {
+    value: 'Massage Therapist',
+    displayValue: 'Massage Therapist',
+  },
+  {
+    value: 'NURSE',
+    displayValue: 'Nurse',
+  },
+];
+
 
 const listData = [
   {

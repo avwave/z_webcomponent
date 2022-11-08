@@ -20,7 +20,7 @@ import {
   useRecoilValue,
   RecoilRoot,
 } from "recoil";
-import { noteListAtom, infoListAtom} from "../recoilStates";
+import { noteListAtom, infoListAtom } from "../recoilStates";
 
 export default {
   title: "Chat/RightSidebar",
@@ -37,51 +37,59 @@ export default {
 const initialInfos = [
   {
     key: "applyType",
+    type: "select",
     value: "",
     open: false,
   },
   {
-    key: "canEnglish",
+    key: "confirmEnglish",
+    type: "boolean",
     value: "",
     open: false,
   },
   {
     key: "gender",
+    type: "select",
     value: "",
     open: false,
   },
   {
     key: "canCommute",
+    type: "boolean",
     value: "",
     open: false,
   },
   {
-    key: "cityOfOrigin",
+    key: "city",
+    type: "string",
     value: "",
     open: false,
   },
   {
     key: "age",
+    type: "integer",
     value: "",
     open: false,
   },
   {
     key: "askedRecentJob",
+    type: "string",
     value: "",
     open: false,
   },
   {
     key: "askedSalary",
+    type: "boolean",
     value: "",
     open: false,
   },
   {
-    key: "mtCredentials",
+    key: "experience",
+    type: "select",
     value: "",
     open: false,
   },
 ];
-
 
 const infoReducer = (state, action) => {
   switch (action.type) {
@@ -107,11 +115,9 @@ const infoReducer = (state, action) => {
   }
 };
 
-
 export const Default = (args) => {
   const [noteList, setNoteList] = useRecoilState(noteListAtom);
   const [infoList, setInfoList] = useRecoilState(infoListAtom);
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -121,13 +127,12 @@ export const Default = (args) => {
 
       // await sleep(1000);
       setInfoList(listData);
-      console.log(infoList)
+      console.log(infoList);
     };
 
     fetchData().catch(console.error);
-    console.log(infoList)
+    console.log(infoList);
   }, []);
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -199,6 +204,66 @@ export const Default = (args) => {
     setOpen(!open);
   };
 
+  const handleAcceptInfo = async (info) => {
+    try {
+      console.log("handleAcceptInfo info", info);
+      console.log("infotype", info.type);
+
+      switch (info.type) {
+        case "boolean": {
+          const payload = {
+            key: info.key,
+            value: info.value === "true" ? true : false,
+          };
+          console.log("payload", payload);
+          //    const response = await ChatService.updateUserInfo({
+          //     cid: conversationId,
+          //      payload: payload,
+          //   });
+          //    console.log('handleAcceptInfo response', response);
+          break;
+        }
+        case "select": {
+          const payload = { key: info.key, value: info.value };
+          console.log("payload", payload);
+          //    const response = await ChatService.updateUserInfo({
+          //     cid: conversationId,
+          //      payload: payload,
+          //    });
+
+          //   console.log('handleAcceptInfo response', response);
+          break;
+        }
+        case "string": {
+          const payload = { key: info.key, value: info.value };
+          console.log("payload", payload);
+          //    const response = await ChatService.updateUserInfo({ cid: conversationId, payload: payload });
+
+          //   console.log('handleAcceptInfo response', response);
+          break;
+        }
+        case "integer": {
+          const stringifiedValue = JSON.stringify({
+            amount: info.value,
+            unit: "year",
+          });
+          const payload = { key: info.key, value: stringifiedValue };
+          console.log("payload", payload);
+          //     const response = await ChatService.updateUserInfo({ cid: conversationId, payload: payload });
+
+          //   console.log('handleAcceptInfo response', response);
+          break;
+        }
+        default: {
+          console.error("Switch case acting weird");
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
+
+    dispatch({ type: "OPEN", key: info.key });
+  };
 
   const [infos, dispatch] = useReducer(infoReducer, initialInfos);
 
@@ -219,15 +284,15 @@ export const Default = (args) => {
         <InfoListItem
           inputDialog={
             <InputDialog
-              title="Title"
+              title="Edit Application Type"
               open={infos[0].open}
-              handleAccept={() => handleOpen(infos[0])}
+              handleAccept={() => handleAcceptInfo(infos[0])}
               handleClose={() => handleOpen(infos[0])}
               handleClickOpen={() => handleOpen(infos[0])}
               dialogContent={
                 <RadioInputGroup
-                  options={infoList[0]?.selection}
-                  title="Title"
+                  options={applyTypeOptions}
+                  title="Application Type"
                   value={infos[0].value}
                   onChange={(e) => handleOnChange(e, infos[0])}
                 />
@@ -242,15 +307,15 @@ export const Default = (args) => {
         <InfoListItem
           inputDialog={
             <InputDialog
-              title="Title"
+              title="Edit English"
               open={infos[1].open}
-              handleAccept={() => handleOpen(infos[1])}
+              handleAccept={() => handleAcceptInfo(infos[1])}
               handleClose={() => handleOpen(infos[1])}
               handleClickOpen={() => handleOpen(infos[1])}
               dialogContent={
                 <RadioInputGroup
                   options={boolValues}
-                  title="Title"
+                  title="Can applicant speak English?"
                   value={infos[1].value}
                   onChange={(e) => handleOnChange(e, infos[1])}
                 />
@@ -265,15 +330,15 @@ export const Default = (args) => {
         <InfoListItem
           inputDialog={
             <InputDialog
-              title="Title"
+              title="Edit Gender"
               open={infos[2].open}
-              handleAccept={() => handleOpen(infos[2])}
+              handleAccept={() => handleAcceptInfo(infos[2])}
               handleClose={() => handleOpen(infos[2])}
               handleClickOpen={() => handleOpen(infos[2])}
               dialogContent={
                 <RadioInputGroup
                   options={infoList[2]?.selection}
-                  title="Title"
+                  title="Applicant's Gender"
                   value={infos[2].value}
                   onChange={(e) => handleOnChange(e, infos[2])}
                 />
@@ -288,15 +353,15 @@ export const Default = (args) => {
         <InfoListItem
           inputDialog={
             <InputDialog
-              title="Title"
+              title="Edit Commute to Manila"
               open={infos[3].open}
-              handleAccept={() => handleOpen(infos[3])}
+              handleAccept={() => handleAcceptInfo(infos[3])}
               handleClose={() => handleOpen(infos[3])}
               handleClickOpen={() => handleOpen(infos[3])}
               dialogContent={
                 <RadioInputGroup
                   options={boolValues}
-                  title="Title"
+                  title="Can Applicant Commute to Manila?"
                   value={infos[3].value}
                   onChange={(e) => handleOnChange(e, infos[3])}
                 />
@@ -311,14 +376,14 @@ export const Default = (args) => {
         <InfoListItem
           inputDialog={
             <InputDialog
-              title="Title"
+              title="Edit City of Origin"
               open={infos[4].open}
-              handleAccept={() => handleOpen(infos[4])}
+              handleAccept={() => handleAcceptInfo(infos[4])}
               handleClose={() => handleOpen(infos[4])}
               handleClickOpen={() => handleOpen(infos[4])}
               dialogContent={
                 <TextInputField
-                  label="Label"
+                  label="Applicant's City of Origin"
                   value={infos[4].value}
                   onChange={(e) => handleOnChange(e, infos[4])}
                 />
@@ -333,14 +398,14 @@ export const Default = (args) => {
         <InfoListItem
           inputDialog={
             <InputDialog
-              title="Title"
+              title="Edit Age"
               open={infos[5].open}
-              handleAccept={() => handleOpen(infos[5])}
+              handleAccept={() => handleAcceptInfo(infos[5])}
               handleClose={() => handleOpen(infos[5])}
               handleClickOpen={() => handleOpen(infos[5])}
               dialogContent={
                 <NumberInputField
-                  label="Label"
+                  label="Applicant's Age"
                   value={infos[5].value}
                   onChange={(e) => handleOnChange(e, infos[5])}
                 />
@@ -355,14 +420,14 @@ export const Default = (args) => {
         <InfoListItem
           inputDialog={
             <InputDialog
-              title="Title"
+              title="Edit Recent job"
               open={infos[6].open}
-              handleAccept={() => handleOpen(infos[6])}
+              handleAccept={() => handleAcceptInfo(infos[6])}
               handleClose={() => handleOpen(infos[6])}
               handleClickOpen={() => handleOpen(infos[6])}
               dialogContent={
                 <TextInputField
-                  label="Label"
+                  label="Recent Job Applicant Held"
                   value={infos[6].value}
                   onChange={(e) => handleOnChange(e, infos[6])}
                 />
@@ -377,15 +442,15 @@ export const Default = (args) => {
         <InfoListItem
           inputDialog={
             <InputDialog
-              title="Title"
+              title="Edit Asked About Salary"
               open={infos[7].open}
-              handleAccept={() => handleOpen(infos[7])}
+              handleAccept={() => handleAcceptInfo(infos[7])}
               handleClose={() => handleOpen(infos[7])}
               handleClickOpen={() => handleOpen(infos[7])}
               dialogContent={
                 <RadioInputGroup
                   options={boolValues}
-                  title="Title"
+                  title="Asked About Salary"
                   value={infos[7].value}
                   onChange={(e) => handleOnChange(e, infos[7])}
                 />
@@ -400,15 +465,15 @@ export const Default = (args) => {
         <InfoListItem
           inputDialog={
             <InputDialog
-              title="Title"
+              title="Edit MT Credentials"
               open={infos[8].open}
-              handleAccept={() => handleOpen(infos[8])}
+              handleAccept={() => handleAcceptInfo(infos[8])}
               handleClose={() => handleOpen(infos[8])}
               handleClickOpen={() => handleOpen(infos[8])}
               dialogContent={
                 <RadioInputGroup
                   options={infoList[8]?.selection}
-                  title="Title"
+                  title="Credentials"
                   value={infos[8].value}
                   onChange={(e) => handleOnChange(e, infos[8])}
                 />
@@ -421,16 +486,16 @@ export const Default = (args) => {
       </InfoList>
 
       <Notes
-      handleOpenAdd={handleOpenAdd}
-      handleOpenEdit={handleOpenEdit}
-      handleOpenDelete={handleOpenDelete}
-      handleAcceptAdd={handleAcceptAdd}
-      handleAcceptEdit={handleAcceptEdit}
-      handleAcceptDelete={handleAcceptDelete}
-      handleEditOnChange={handleEditOnChange}
-      handleAddOnChange={handleAddOnChange}
-      noteList={noteList}
-      title={args.notesArgs.title}
+        handleOpenAdd={handleOpenAdd}
+        handleOpenEdit={handleOpenEdit}
+        handleOpenDelete={handleOpenDelete}
+        handleAcceptAdd={handleAcceptAdd}
+        handleAcceptEdit={handleAcceptEdit}
+        handleAcceptDelete={handleAcceptDelete}
+        handleEditOnChange={handleEditOnChange}
+        handleAddOnChange={handleAddOnChange}
+        noteList={noteList}
+        title={args.notesArgs.title}
       />
       <Schedules {...args.schedulesArgs} />
     </RightSidebar>
@@ -544,6 +609,18 @@ const boolValues = [
   { value: "true", displayValue: "Yes" },
   { value: "false", displayValue: "No" },
 ];
+
+const applyTypeOptions = [
+  {
+    value: 'Massage Therapist',
+    displayValue: 'Massage Therapist',
+  },
+  {
+    value: 'NURSE',
+    displayValue: 'Nurse',
+  },
+];
+
 
 Default.args = {
   linkedProfileArgs: {

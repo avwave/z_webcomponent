@@ -51,11 +51,11 @@ import React, { useState } from "react";
 const useStyles = makeStyles((theme) => ({
   root: {
     maxWidth: 345,
-    height: `calc(100vh - ${theme.mixins.toolbar.minHeight * 2.5}px)`,
+    height: `calc(100vh - ${theme.mixins.toolbar.minHeight * 1.5}px)`,
   },
-  profileWrapper: { height: "20%" },
+  profileWrapper: { height: "30%" },
   cardTitle: { fontWeight: "600" },
-  scrollableSectionWrapper: { height: "80%", overflowY: "auto" },
+  scrollableSectionWrapper: { height: "70%", overflowY: "auto" },
 }));
 
 export const RightSidebar = ({ children, profileSection }) => {
