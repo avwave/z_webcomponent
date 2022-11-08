@@ -51,7 +51,7 @@ const useAnalytics = () => {
       const aUser = await analytics?.user()
       const id = await (aUser)?.id()
       const aId = await (aUser)?.anonymousId()
-      const identifiers = (!!id && aId === id) ? { anonymousTempId: aId } : { id }
+      const identifiers = (!!id && aId === id) ? { tempId: aId } : { id }
       analytics?.track(eventName, { ...identifiers, ...properties, appIdentifier: analytics?.appIdentifier }, COMMONPAYLOAD)
     },
     [analytics],
@@ -71,7 +71,7 @@ const useAnalytics = () => {
     async (id, traits) => {
       const anonId = await (await analytics?.user())?.anonymousId()
       const identity = id || anonId
-      const identifiers = !!id ? { id } : { anonymousTempId: identity }
+      const identifiers = !!id ? { id } : { tempId: identity }
       await analytics?.identify(identity, { ...identifiers, ...traits, appIdentifier: analytics?.appIdentifier }, {
         ...COMMONPAYLOAD,
         anonymousId: anonId
