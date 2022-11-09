@@ -40,8 +40,8 @@ const useAnalytics = () => {
   }
 
   const pageViewed = useCallback(
-    (name) => {
-      analytics?.page(analytics?.appIdentifier, name)
+    (name, properties) => {
+      analytics?.page(analytics?.appIdentifier, name, properties, COMMONPAYLOAD)
     },
     [analytics],
   );
