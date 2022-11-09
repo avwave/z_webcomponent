@@ -17,6 +17,4 @@ Default.args = {
     "date_first_activated": "2020-04-17T05:36:00Z",
     "jobs_finished": 0
   },
-  preferedSchedule: "There are no prefered schedules.",
-  matchedSchedule: " There are no matched schedules.",
 };
