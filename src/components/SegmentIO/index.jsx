@@ -31,7 +31,6 @@ const COMMONPAYLOAD = {
 }
 const useAnalytics = () => {
 
-  const [claimed, setClaimed] = useLocalStorage("IDClaimed", null);
 
 
   const analytics = React.useContext(AnalyticsContext)
@@ -65,8 +64,8 @@ const useAnalytics = () => {
     },
     [analytics],
   );
-
-  const aliasTo = useCallback(
+  const [claimed, setClaimed] = useLocalStorage("IDClaimed", null);
+  const aliasToV1 = useCallback(
     async (userId, forceClaim = false) => {
       if (forceClaim) {
         await analytics?.alias(userId, COMMONPAYLOAD)
@@ -80,7 +79,14 @@ const useAnalytics = () => {
     [analytics, claimed, setClaimed],
   )
 
-  const identifyUsingIdAndTraits = useCallback(
+  const aliasTo = useCallback(
+    async (userId) => {
+      await analytics?.alias(userId, COMMONPAYLOAD)
+    },
+    [analytics],
+  )
+
+  const identifyUsingIdAndTraitsV1 = useCallback(
     async (id, traits) => {
       const anonId = await (await analytics?.user())?.anonymousId()
       const identity = id || anonId
@@ -96,10 +102,30 @@ const useAnalytics = () => {
         anonymousId: anonId
       }
       await analytics?.identify(identity, payload, options)
-      // await aliasTo(id)
     },
-    [analytics, aliasTo],
+    [analytics],
   );
+
+  const identifyUsingIdAndTraits = useCallback(
+    async (id, traits) => {
+      const anonId = await (await analytics?.user())?.anonymousId()
+      const identity = id || anonId
+      const identifiers = !!id ? { id } : { tempId: identity }
+
+      const payload = {
+        ...identifiers,
+        ...traits,
+        appIdentifier: analytics?.appIdentifier
+      }
+      const options = {
+        ...COMMONPAYLOAD,
+      }
+      await analytics?.identify(identity, payload, options)
+    },
+    [analytics],
+  );
+
+
 
   const getAnonymousId = useCallback(
     async () => {
@@ -146,7 +172,9 @@ const useAnalytics = () => {
     pageViewed,
     trackEvent,
     identifyUsingIdAndTraits,
+    identifyUsingIdAndTraitsV1,
     aliasTo,
+    aliasToV1,
     checkIsIdentified
   }
 }
