@@ -108,9 +108,8 @@ const useAnalytics = () => {
 
   const identifyUsingIdAndTraits = useCallback(
     async (id, traits) => {
-      const anonId = await (await analytics?.user())?.anonymousId()
-      const identity = id || anonId
-      const identifiers = !!id ? { id } : { tempId: identity }
+      const identity = id
+      const identifiers = { id }
 
       const payload = {
         ...identifiers,
