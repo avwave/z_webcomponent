@@ -176,9 +176,8 @@ const useAnalytics = () => {
     async () => {
       await analytics?.reset()
       await setClaimed(false)
-      await reset()
     },
-    [analytics, reset, setClaimed],
+    [analytics, setClaimed],
   );
 
   return {
