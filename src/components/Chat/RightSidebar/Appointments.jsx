@@ -83,7 +83,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const Appointments = ({
-  title = "JobInfo",
+  title = "Appointments",
   appointmentsList,
   API_URL,
 }) => {

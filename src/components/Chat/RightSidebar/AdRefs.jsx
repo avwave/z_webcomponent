@@ -71,7 +71,7 @@ const useStyles = makeStyles((theme) => ({
   postId: { padding: theme.spacing(0.5) },
 }));
 
-export const AdRefs = ({ title = "AdRefs", adrefsList }) => {
+export const AdRefs = ({ title = "Adrefs", adrefsList }) => {
   const classes = useStyles();
   const [expanded, setExpanded] = useState(true);
 

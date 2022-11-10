@@ -55,8 +55,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     maxWidth: 345,
     "& .MuiCardHeader-root": { paddingBottom: 0 },
-    "& .MuiCardContent-root": { paddingTop: 0 },
-    "& .MuiCardContent-root": { paddingRight: 0 },
+    "& .MuiCardContent-root": { paddingTop: 0, paddingRight: 0},
 
   },
   expand: {
