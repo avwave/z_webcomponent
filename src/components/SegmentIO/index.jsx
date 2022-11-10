@@ -59,7 +59,7 @@ const useAnalytics = () => {
         ...properties,
         appIdentifier: analytics?.appIdentifier
       }
-      console.log("📢[index.jsx:56]: payload: ", payload);
+      console.log("SEG: 📢[index.jsx:56]: payload: ", payload);
       analytics?.track(eventName, payload, COMMONPAYLOAD)
     },
     [analytics],
@@ -81,7 +81,8 @@ const useAnalytics = () => {
 
   const aliasTo = useCallback(
     async (userId) => {
-      await analytics?.alias(userId, COMMONPAYLOAD)
+      const aliau = await analytics?.alias(userId, COMMONPAYLOAD)
+      console.log("SEG: 📢[index.jsx:81]: aliau: ", aliau);
     },
     [analytics],
   )
@@ -119,7 +120,8 @@ const useAnalytics = () => {
       const options = {
         ...COMMONPAYLOAD,
       }
-      await analytics?.identify(identity, payload, options)
+      const identUIdT = await analytics?.identify(identity, payload, options)
+      console.log("SEG: 📢[index.jsx:117]: identUIdT: ", identUIdT);
     },
     [analytics],
   );
@@ -173,7 +175,8 @@ const useAnalytics = () => {
 
   const fullReset = useCallback(
     async () => {
-      await analytics?.reset()
+      const anReset = await analytics?.reset()
+      console.log("SEG: 📢[index.jsx:172]: anReset: ", anReset);
       await setClaimed(false)
     },
     [analytics, setClaimed],
