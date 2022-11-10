@@ -125,6 +125,23 @@ const useAnalytics = () => {
     [analytics],
   );
 
+  const identifyAnon = useCallback(
+    async (traits) => {
+      const anonId = await (await analytics?.user())?.anonymousId()
+      const payload = {
+        tempId: anonId,
+        ...traits,
+        appIdentifier: analytics?.appIdentifier
+      }
+      const options = {
+        ...COMMONPAYLOAD,
+      }
+      if (!claimed) {
+        setClaimed(true)
+        await analytics?.identify(null, payload, options)
+      }
+    }, [analytics, claimed, setClaimed]
+  )
 
 
   const getAnonymousId = useCallback(
@@ -150,9 +167,9 @@ const useAnalytics = () => {
       const user = await analytics?.user()
       await user?.id(null)
       await user?.traits(null)
-      // await identifyUsingIdAndTraits(null)
+      await identifyAnon()
     },
-    [analytics, identifyUsingIdAndTraits],
+    [analytics, identifyAnon],
   );
 
   const fullReset = useCallback(
@@ -175,7 +192,8 @@ const useAnalytics = () => {
     identifyUsingIdAndTraitsV1,
     aliasTo,
     aliasToV1,
-    checkIsIdentified
+    checkIsIdentified,
+    identifyAnon
   }
 }
 
