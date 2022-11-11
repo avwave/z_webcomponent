@@ -52,18 +52,18 @@ Default.args = {
 
 const IdentifyAnonStory = ({ ...args }) => {
   const {
-    identifyUser
+    identifyUsingIdAndTraits
   } = useAnalytics()
 
   const [ident, setIdent] = useState();
 
   const identify = useCallback(
     async () => {
-      const i = await identifyUser()
+      const i = await identifyUsingIdAndTraits()
       console.log('index.stories.js (31) # i', i);
       setIdent(i)
     },
-    [identifyUser],
+    [identifyUsingIdAndTraits],
   );
   return (
     <>
@@ -78,20 +78,20 @@ export const IdentifyAnon = IdentifyAnonStory.bind({});
 
 const MergeIdentityStory = ({ ...args }) => {
   const {
-    mergeIdentity,
-    identifyUser,
+    aliasTo,
+    identifyUsingIdAndTraits,
     getAnonymousId
   } = useAnalytics()
   const [ident, setIdent] = useState();
 
   const merge = useCallback(
     async (id) => {
-      await identifyUser(id)
+      await identifyUsingIdAndTraits(id)
       const i = await getAnonymousId()
       console.log('index.stories.js (31) # i', i);
       setIdent(i)
     },
-    [getAnonymousId, identifyUser, mergeIdentity],
+    [getAnonymousId, identifyUsingIdAndTraits, aliasTo],
   );
 
   return (

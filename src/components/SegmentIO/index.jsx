@@ -3,44 +3,47 @@ import { AnalyticsBrowser } from '@segment/analytics-next';
 import React, { useCallback, useMemo } from 'react';
 import useLocalStorage from "use-local-storage";
 
+export function filterNonNull(obj) {
+  return Object.fromEntries(Object.entries(obj).filter(([k, v]) => !(v === null || v === undefined)));
+};
+
 const useStyles = makeStyles((theme) => {
   return {}
 })
 
 const AnalyticsContext = React.createContext(null)
 
-const AnalyticsProvider = ({ children, writeKey, appIdentifier }) => {
-  const analytics = useMemo(
-    () => {
-      const analytics = { ...AnalyticsBrowser.load({ writeKey }), appIdentifier }
-      return analytics
-    }, [writeKey]
-  );
-
-  return (
-    <AnalyticsContext.Provider value={analytics}>
-      {children}
-    </AnalyticsContext.Provider>
-  )
-}
-
 const COMMONPAYLOAD = {
   integrations: {
     All: true,
   }
 }
+
+const AnalyticsProvider = ({ children, writeKey, appIdentifier }) => {
+  const analytics = useMemo(
+    () => {
+      const analytics = AnalyticsBrowser.load({ writeKey })
+      return analytics
+    }, [writeKey]
+  );
+
+  return (
+    <AnalyticsContext.Provider value={{analytics, appIdentifier}}>
+      {children}
+    </AnalyticsContext.Provider>
+  )
+}
+
 const useAnalytics = () => {
 
-
-
-  const analytics = React.useContext(AnalyticsContext)
+  const {analytics, appIdentifier} = React.useContext(AnalyticsContext)
   if (!analytics) {
     throw new Error('useAnalytics must be used within a AnalyticsProvider')
   }
 
   const pageViewed = useCallback(
     (name, properties) => {
-      analytics?.page(analytics?.appIdentifier, name, properties, COMMONPAYLOAD)
+      analytics?.page(appIdentifier, name, properties, COMMONPAYLOAD)
     },
     [analytics],
   );
@@ -52,37 +55,38 @@ const useAnalytics = () => {
       const aId = await (aUser)?.anonymousId()
       const identifiers = {
         tempId: aId,
-        id
+        id,
+        userId: id
       }
-      const payload = {
+      const payload = filterNonNull({
         ...identifiers,
         ...properties,
-        appIdentifier: analytics?.appIdentifier
-      }
+        appIdentifier: appIdentifier
+      })
       console.log("SEG: 📢[index.jsx:56]: payload: ", payload);
-      analytics?.track(eventName, payload, COMMONPAYLOAD)
+      await analytics?.track(eventName, payload, COMMONPAYLOAD)
     },
     [analytics],
   );
-  const [claimed, setClaimed] = useLocalStorage("IDClaimed", null);
   const aliasToV1 = useCallback(
     async (userId, forceClaim = false) => {
+      const anonId = await (await analytics?.user())?.anonymousId()
       if (forceClaim) {
         await analytics?.alias(userId, COMMONPAYLOAD)
         return
       }
-      if (!claimed && !!userId) {
-        setClaimed(true)
-        await analytics?.alias(userId, COMMONPAYLOAD)
+      if (!(sessionStorage.getItem("IDClaimed") === 'yes') && !!userId) {
+        sessionStorage.setItem("IDClaimed", 'yes')
+        await analytics?.alias(userId, anonId, COMMONPAYLOAD)
       }
     },
-    [analytics, claimed, setClaimed],
+    [analytics],
   )
 
   const aliasTo = useCallback(
     async (userId) => {
-      const aliau = await analytics?.alias(userId, COMMONPAYLOAD)
-      console.log("SEG: 📢[index.jsx:81]: aliau: ", aliau);
+      const anonId = await (await analytics?.user())?.anonymousId()
+      const aliau = await analytics?.alias(userId, anonId, COMMONPAYLOAD)
     },
     [analytics],
   )
@@ -91,17 +95,17 @@ const useAnalytics = () => {
     async (id, traits) => {
       const anonId = await (await analytics?.user())?.anonymousId()
       const identity = id || anonId
-      const identifiers = !!id ? { id } : { tempId: identity }
+      const identifiers = !!id ? { userId:id } : { tempId: identity }
 
-      const payload = {
+      const payload = filterNonNull({
         ...identifiers,
         ...traits,
-        appIdentifier: analytics?.appIdentifier
-      }
-      const options = {
+        appIdentifier: appIdentifier
+      })
+      const options = filterNonNull({
         ...COMMONPAYLOAD,
         anonymousId: anonId
-      }
+      })
       await analytics?.identify(identity, payload, options)
     },
     [analytics],
@@ -112,11 +116,11 @@ const useAnalytics = () => {
       const identity = id
       const identifiers = { id }
 
-      const payload = {
+      const payload = filterNonNull({
         ...identifiers,
         ...traits,
-        appIdentifier: analytics?.appIdentifier
-      }
+        appIdentifier: appIdentifier
+      })
       const options = {
         ...COMMONPAYLOAD,
       }
@@ -132,16 +136,16 @@ const useAnalytics = () => {
       const payload = {
         tempId: anonId,
         ...traits,
-        appIdentifier: analytics?.appIdentifier
+        appIdentifier: appIdentifier
       }
       const options = {
         ...COMMONPAYLOAD,
       }
-      if (!claimed) {
-        setClaimed(true)
+      if (!(sessionStorage.getItem("IDClaimed") === 'yes')) {
+        sessionStorage.setItem("IDClaimed", 'yes')
         await analytics?.identify(null, payload, options)
       }
-    }, [analytics, claimed, setClaimed]
+    }, [analytics]
   )
 
 
@@ -177,9 +181,10 @@ const useAnalytics = () => {
     async () => {
       const anReset = await analytics?.reset()
       console.log("SEG: 📢[index.jsx:172]: anReset: ", anReset);
-      await setClaimed(false)
+      // await setClaimed(false)
+      // sessionStorage.removeItem("IDClaimed")
     },
-    [analytics, setClaimed],
+    [analytics],
   );
 
   return {
