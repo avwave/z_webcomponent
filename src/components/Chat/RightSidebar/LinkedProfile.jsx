@@ -373,9 +373,8 @@ const LinkedProfileDialogContent = ({
 };
 
 export const LinkedProfile = ({
-  profileLink,
+  profileLink = "#",
   profileLinkText = "View the profile",
-  avatarAlt,
   handleOpenStatusDialog,
   handleCloseStatusDialog,
   handleAcceptStatusDialog,
@@ -383,8 +382,8 @@ export const LinkedProfile = ({
   displayClinic = false,
   clinicAffiliation,
   conversationInfo,
+  chatProfileStatus
 }) => {
-  const [chatProfileStatus] = useRecoilState(chatProfileStatusAtom);
 
   const classes = useStyles();
   const [openStatusDialog, setOpenStatusDialog] = useState(false);
