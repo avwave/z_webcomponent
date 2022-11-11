@@ -2,9 +2,15 @@ import { InfoList } from "./InfoList";
 import { InfoListItem } from "./InfoListItem";
 import { InputDialog } from "./InputDialog";
 import { RightSidebar } from "./RightSidebar";
-import {LinkedProfile} from "./LinkedProfile";
-import {Notes} from "./Notes";
-import {Schedules} from "./Schedules";
+import { LinkedProfile } from "./LinkedProfile";
+import { Notes } from "./Notes";
+import { Schedules } from "./Schedules";
+import { UnLinkedProfile } from "./UnLinkedProfile";
+import { AdRefs } from "./AdRefs";
+import { Tags } from "./Tags";
+import { Appointments } from "./Appointments";
+import { JobInfo } from "./JobInfo";
+
 import {
   NumberInputField,
   TextInputField,
@@ -18,6 +24,11 @@ export {
   Notes,
   LinkedProfile,
   Schedules,
+  UnLinkedProfile,
+  AdRefs,
+  Tags,
+  Appointments,
+  JobInfo,
   NumberInputField,
   TextInputField,
   RadioInputGroup,
