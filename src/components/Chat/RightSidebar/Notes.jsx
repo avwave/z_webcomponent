@@ -45,18 +45,29 @@ import FavoriteIcon from "@material-ui/icons/Favorite";
 import ShareIcon from "@material-ui/icons/Share";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import DeleteIcon from "@material-ui/icons/Delete";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AddIcon from "@material-ui/icons/Add";
 import { fuzzyDate, personNameShort } from "../../utils/format";
 import { TextInputField, InputDialog } from "./";
+import {
+  atom,
+  selector,
+  useRecoilState,
+  useRecoilValue,
+  RecoilRoot,
+} from "recoil";
+import { noteListAtom, conversationIdAtom } from "../recoilStates";
+import { ChatService } from "../chatService";
 
+const API_URL = "http://dev.api.zennya.com";
+
+// const API_URL = process.env.REACT_APP_WEB_ADMIN_URL + '/';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     maxWidth: 345,
     "& .MuiCardHeader-root": { paddingBottom: 0 },
-    "& .MuiCardContent-root": { paddingTop: 0, paddingRight: 0},
-
+    "& .MuiCardContent-root": { paddingTop: 0, paddingRight: 0 },
   },
   expand: {
     transform: "rotate(0deg)",
@@ -78,12 +89,11 @@ export const NoteItem = ({
   handleOpenDelete,
   handleAcceptEdit,
   handleAcceptDelete,
-  handleEditOnChange
+  handleEditOnChange,
 }) => {
   const [openEdit, setOpenEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
   const [value, setValue] = useState("");
-
 
   return (
     <ListItem key={note?.id}>
@@ -99,14 +109,22 @@ export const NoteItem = ({
         edge="end"
         open={openEdit}
         iconButton={<EditIcon />}
-        handleAccept={() => handleAcceptEdit(note, openEdit, setOpenEdit, value, setValue)}
-        handleClose={() => handleOpenEdit(note, openEdit, setOpenEdit, value, setValue)}
-        handleClickOpen={() => handleOpenEdit(note, openEdit, setOpenEdit, value, setValue)}
-        dialogContent={ <TextInputField
-          label="Note"
-          value={value}
-          onChange={(e) => handleEditOnChange(e, value, setValue)}
-        />}
+        handleAccept={() =>
+          handleAcceptEdit(note, openEdit, setOpenEdit, value, setValue)
+        }
+        handleClose={() =>
+          handleOpenEdit(note, openEdit, setOpenEdit, value, setValue)
+        }
+        handleClickOpen={() =>
+          handleOpenEdit(note, openEdit, setOpenEdit, value, setValue)
+        }
+        dialogContent={
+          <TextInputField
+            label="Note"
+            value={value}
+            onChange={(e) => handleEditOnChange(e, value, setValue)}
+          />
+        }
       />
 
       <InputDialog
@@ -121,7 +139,9 @@ export const NoteItem = ({
         handleClickOpen={() =>
           handleOpenDelete(note, openDelete, setOpenDelete)
         }
-        dialogContent={<Typography>Are you sure you want to delete this note?</Typography>}
+        dialogContent={
+          <Typography>Are you sure you want to delete this note?</Typography>
+        }
       />
     </ListItem>
   );
@@ -129,30 +149,90 @@ export const NoteItem = ({
 
 export const Notes = ({
   title = "Info",
-  noteList,
-  editDialog,
-  deleteDialog,
-  handleOpenEdit,
-  handleOpenDelete,
-  handleOpenAdd,
-  handleAcceptEdit,
-  handleAcceptDelete,
-  handleAcceptAdd,
-  handleEditOnChange,
-  handleAddOnChange
 }) => {
   const classes = useStyles();
   const [expanded, setExpanded] = useState(true);
 
+  const [noteList, setNoteList] = useRecoilState(noteListAtom);
+  const [conversationId] = useRecoilState(conversationIdAtom);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await ChatService.getConversationNotes(conversationId);
+        console.log(response);
+        setNoteList(response?.data?.list);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchData().catch(console.error);
+  }, [conversationId]);
+
+  const handleOpenEdit = (note, open, setOpen) => {
+    // console.log("note", note);
+    // console.log("open", open);
+    // console.log("setopen", setOpen);
+    setOpen(!open);
+  };
+
+  const handleAcceptEdit = (note, open, setOpen) => {
+    // console.log("note", note);
+    // console.log("open", open);
+    // console.log("setopen", setOpen);
+    setOpen(!open);
+  };
+
+  const handleOpenDelete = (note, open, setOpen) => {
+    // console.log("note", note);
+    // console.log("open", open);
+    // console.log("setopen", setOpen);
+    setOpen(!open);
+  };
+
+  const handleAcceptDelete = (note, open, setOpen) => {
+    // console.log("note", note);
+    // console.log("open", open);
+    // console.log("setopen", setOpen);
+    setNoteList((prevState) =>
+      prevState.filter((notes) => notes.id !== note.id)
+    );
+    setOpen(!open);
+  };
+
+  const handleEditOnChange = (e, value, setValue) => {
+    // console.log("e", e);
+    // console.log("value", value);
+    // console.log("setvalue", setValue);
+    setValue(e.target.value);
+  };
+
+  const handleAddOnChange = (e, value, setValue) => {
+    // console.log("e", e);
+    // console.log("value", value);
+    // console.log("setvalue", setValue);
+    setValue(e.target.value);
+  };
+
+  const handleOpenAdd = (open, setOpen) => {
+    // console.log("open", open);
+    // console.log("setopen", setOpen);
+    setOpen(!open);
+  };
+
+  const handleAcceptAdd = (open, setOpen) => {
+    // console.log("open", open);
+    // console.log("setopen", setOpen);
+    setOpen(!open);
+  };
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
 
   const [openAdd, setOpenAdd] = useState(false);
- const [value, setValue] = useState("");
-
+  const [value, setValue] = useState("");
 
   return (
     <Card className={classes.root}>
@@ -166,14 +246,22 @@ export const Notes = ({
               open={openAdd}
               tooltipTitle="Add"
               iconButton={<AddIcon />}
-              handleAccept={() => handleAcceptAdd(openAdd, setOpenAdd, value, setValue)}
-              handleClose={() => handleOpenAdd(openAdd, setOpenAdd, value, setValue)}
-              handleClickOpen={() => handleOpenAdd(openAdd, setOpenAdd, value, setValue)}
-              dialogContent={ <TextInputField
-                label="Note"
-                value={value}
-                onChange={(e) => handleAddOnChange(e, value, setValue)}
-              />}
+              handleAccept={() =>
+                handleAcceptAdd(openAdd, setOpenAdd, value, setValue)
+              }
+              handleClose={() =>
+                handleOpenAdd(openAdd, setOpenAdd, value, setValue)
+              }
+              handleClickOpen={() =>
+                handleOpenAdd(openAdd, setOpenAdd, value, setValue)
+              }
+              dialogContent={
+                <TextInputField
+                  label="Note"
+                  value={value}
+                  onChange={(e) => handleAddOnChange(e, value, setValue)}
+                />
+              }
             />
             <IconButton
               className={clsx(classes.expand, {
@@ -190,16 +278,18 @@ export const Notes = ({
         title={<Typography className={classes.cardTitle}> {title} </Typography>}
       />
       <Collapse in={expanded} timeout="auto" unmountOnExit>
-        <CardContent>{noteList.map((note) => (
-    <NoteItem
-      note={note}
-      handleOpenEdit={handleOpenEdit}
-      handleOpenDelete={handleOpenDelete}
-      handleAcceptEdit={handleAcceptEdit}
-      handleAcceptDelete={handleAcceptDelete}
-      handleEditOnChange={handleEditOnChange}
-    />
-  ))}</CardContent>
+        <CardContent>
+          {noteList.map((note) => (
+            <NoteItem
+              note={note}
+              handleOpenEdit={handleOpenEdit}
+              handleOpenDelete={handleOpenDelete}
+              handleAcceptEdit={handleAcceptEdit}
+              handleAcceptDelete={handleAcceptDelete}
+              handleEditOnChange={handleEditOnChange}
+            />
+          ))}
+        </CardContent>
       </Collapse>
     </Card>
   );
