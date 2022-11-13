@@ -1,9 +1,7 @@
 import axios from 'axios';
 import moment from 'moment';
 
-const API_URL = "http://dev.api.zennya.com/"; 
-
-// const API_URL = process.env.REACT_APP_WEB_ADMIN_URL + '/';
+const API_URL = process.env.REACT_APP_WEB_ADMIN_URL + '/'
 
 var users_cache = {
   ALL: {

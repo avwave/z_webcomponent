@@ -59,9 +59,6 @@ import {
 import { noteListAtom, conversationIdAtom } from "../recoilStates";
 import { ChatService } from "../chatService";
 
-const API_URL = "http://dev.api.zennya.com";
-
-// const API_URL = process.env.REACT_APP_WEB_ADMIN_URL + '/';
 
 const useStyles = makeStyles((theme) => ({
   root: {

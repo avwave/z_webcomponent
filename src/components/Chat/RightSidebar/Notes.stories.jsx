@@ -19,9 +19,7 @@ import {
 import { rest } from "msw";
 import { noteListAtom, conversationIdAtom } from "../recoilStates";
 
-const API_URL = "http://dev.api.zennya.com/";
-
-// const API_URL = process.env.REACT_APP_WEB_ADMIN_URL + '/';
+const API_URL = process.env.REACT_APP_WEB_ADMIN_URL + '/'
 
 export default {
   title: "Chat/Notes",
@@ -59,6 +57,7 @@ Default.parameters = {
 
 Default.args = {
   title: "Notes",
+  urrl: API_URL,
   dummyNoteList: {
     list: [
       {
