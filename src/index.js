@@ -6,6 +6,8 @@ import DataGridProvider, { DataGridContext, actions as gridActions } from './com
 import Agenda from './components/Agenda/Agenda';
 import { AgendaContext, AgendaProvider, actions as agendaActions } from './components/Agenda/AgendaContext';
 
+export { AnalyticsProvider, useAnalytics } from './components/SegmentIO';
+
 export { useInterval, useStateRef, useUrlState }
 
 export { useBranch } from './components/BranchIO/BranchProvider'
@@ -41,3 +43,5 @@ export {
   TextInputField,
   RadioInputGroup,
   } from './components/Chat/RightSidebar'  
+
+export {Logger as ZennyaLogFormat} from './components/Logger'
