@@ -59,7 +59,6 @@ import {
 import { noteListAtom, conversationIdAtom } from "../recoilStates";
 import { ChatService } from "../chatService";
 
-
 const useStyles = makeStyles((theme) => ({
   root: {
     maxWidth: 345,
@@ -144,16 +143,10 @@ export const NoteItem = ({
   );
 };
 
-export const Notes = ({
-  conversationId,
-  noteList,
-  setNoteList,
-  title = "Info",
-}) => {
+export const Notes = ({ conversationId, title = "Info" }) => {
   const classes = useStyles();
   const [expanded, setExpanded] = useState(true);
-
-
+  const [noteList, setNoteList] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
