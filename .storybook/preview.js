@@ -1,18 +1,22 @@
 import "../src/reset.css";
 import "../src/index.css";
 import { withReactContext } from "storybook-react-context";
-import { muiTheme } from 'storybook-addon-material-ui'
+import { muiTheme } from "storybook-addon-material-ui";
 
-import { addDecorator } from '@storybook/react';
-import { withKnobs } from '@storybook/addon-knobs';
-import { withConsole } from '@storybook/addon-console';
-import '@storybook/addon-console';
+import { addDecorator } from "@storybook/react";
+import { withKnobs } from "@storybook/addon-knobs";
+import { withConsole } from "@storybook/addon-console";
+import "@storybook/addon-console";
+
+import { initialize, mswDecorator } from "msw-storybook-addon";
+
+initialize();
 
 addDecorator(withKnobs);
 addDecorator((storyFn, context) => withConsole()(storyFn)(context));
 
 const zennyaTheme = {
-  themeName: 'Zennya Theme',
+  themeName: "Zennya Theme",
   palette: {
     primary: {
       main: "#74BACD",
@@ -35,6 +39,7 @@ const zennyaTheme = {
 export const decorators = [
   withReactContext,
   muiTheme([zennyaTheme]),
+  mswDecorator,
 ];
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
@@ -46,7 +51,7 @@ export const parameters = {
   },
   docs: {
     source: {
-      type: 'code'
-    }
-  }
+      type: "code",
+    },
+  },
 };
