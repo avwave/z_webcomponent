@@ -145,13 +145,15 @@ export const NoteItem = ({
 };
 
 export const Notes = ({
+  conversationId,
+  noteList,
+  setNoteList,
   title = "Info",
 }) => {
   const classes = useStyles();
   const [expanded, setExpanded] = useState(true);
 
-  const [noteList, setNoteList] = useRecoilState(noteListAtom);
-  const [conversationId] = useRecoilState(conversationIdAtom);
+
 
   useEffect(() => {
     const fetchData = async () => {
