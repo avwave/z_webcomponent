@@ -146,7 +146,7 @@ export const NoteItem = ({
 export const Notes = ({ conversationId, title = "Info" }) => {
   const classes = useStyles();
   const [expanded, setExpanded] = useState(true);
-  const [noteList, setNoteList] = useState("");
+  const [noteList, setNoteList] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -271,7 +271,7 @@ export const Notes = ({ conversationId, title = "Info" }) => {
       />
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
-          {noteList.map((note) => (
+          { noteList && noteList.map((note) => (
             <NoteItem
               note={note}
               handleOpenEdit={handleOpenEdit}
