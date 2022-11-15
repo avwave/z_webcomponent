@@ -7,7 +7,7 @@ import { Notes } from "./Notes";
 import { Schedules } from "./Schedules";
 import { UnLinkedProfile } from "./UnLinkedProfile";
 import { AdRefs } from "./AdRefs";
-import { Tags } from "./Tags";
+import { Tags, TagsDialogContent } from "./Tags";
 import { Appointments } from "./Appointments";
 import { JobInfo } from "./JobInfo";
 
@@ -27,6 +27,7 @@ export {
   UnLinkedProfile,
   AdRefs,
   Tags,
+  TagsDialogContent,
   Appointments,
   JobInfo,
   NumberInputField,

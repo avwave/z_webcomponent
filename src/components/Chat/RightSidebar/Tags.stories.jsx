@@ -207,13 +207,6 @@ export const Default = (args) => {
     fetchData().catch(console.error);
   }, []);
 
-  const handleAddOnChange = (e, value, setValue) => {
-    console.log("e", e);
-    console.log("value", value);
-    console.log("setvalue", setValue);
-    setValue(e.target.value);
-  };
-
   const handleOpenAdd = (open, setOpen) => {
     console.log("open", open);
     console.log("setopen", setOpen);
@@ -240,7 +233,6 @@ export const Default = (args) => {
   return (
     <Tags
       handleOpenAdd={handleOpenAdd}
-      handleAddOnChange={handleAddOnChange}
       tagList={tagList}
       title={args.title}
       tags={tags}

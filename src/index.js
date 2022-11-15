@@ -37,6 +37,7 @@ export {
   UnLinkedProfile,
   AdRefs,
   Tags,
+  TagsDialogContent,
   Appointments,
   JobInfo,
   NumberInputField,
