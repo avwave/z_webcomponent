@@ -18,8 +18,9 @@ import {
 } from "recoil";
 import { rest } from "msw";
 import { noteListAtom, conversationIdAtom } from "../recoilStates";
+import { ChatService } from "../chatService";
 
-const API_URL = process.env.REACT_APP_WEB_ADMIN_URL + '/'
+const API_URL = process.env.REACT_APP_WEB_ADMIN_URL + "/";
 
 export default {
   title: "Chat/Notes",
@@ -33,13 +34,95 @@ export default {
   ],
 };
 
+// keeping the data handling with ChatService as example here, will probably be just displays in others
+
 export const Default = (args) => {
-  const [conversationId, setConversationId] =
-    useRecoilState(conversationIdAtom);
+  const [conversationId, setConversationId] = useState(2281);
+  const [noteList, setNoteList] = useState(null);
 
-  setConversationId(2281);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setNoteList(args.dummyNoteList.list);
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
-  return <Notes dummyNoteList={args.dummyNoteList} title={args.title} />;
+    fetchData().catch(console.error);
+  }, [conversationId]);
+
+  const handleOpenEdit = (note, open, setOpen) => {
+    // console.log("note", note);
+    // console.log("open", open);
+    // console.log("setopen", setOpen);
+    setOpen(!open);
+  };
+
+  const handleAcceptEdit = (note, open, setOpen) => {
+    // console.log("note", note);
+    // console.log("open", open);
+    // console.log("setopen", setOpen);
+    setOpen(!open);
+  };
+
+  const handleOpenDelete = (note, open, setOpen) => {
+    // console.log("note", note);
+    // console.log("open", open);
+    // console.log("setopen", setOpen);
+    setOpen(!open);
+  };
+
+  const handleAcceptDelete = (note, open, setOpen) => {
+    // console.log("note", note);
+    // console.log("open", open);
+    // console.log("setopen", setOpen);
+    setNoteList((prevState) =>
+      prevState.filter((notes) => notes.id !== note.id)
+    );
+    setOpen(!open);
+  };
+
+  const handleEditOnChange = (e, value, setValue) => {
+    // console.log("e", e);
+    // console.log("value", value);
+    // console.log("setvalue", setValue);
+    setValue(e.target.value);
+  };
+
+  const handleAddOnChange = (e, value, setValue) => {
+    // console.log("e", e);
+    // console.log("value", value);
+    // console.log("setvalue", setValue);
+    setValue(e.target.value);
+  };
+
+  const handleOpenAdd = (open, setOpen) => {
+    // console.log("open", open);
+    // console.log("setopen", setOpen);
+    setOpen(!open);
+  };
+
+  const handleAcceptAdd = (open, setOpen) => {
+    // console.log("open", open);
+    // console.log("setopen", setOpen);
+    setOpen(!open);
+  };
+
+  return (
+    <Notes
+      handleOpenAdd={handleOpenAdd}
+      handleOpenEdit={handleOpenEdit}
+      handleOpenDelete={handleOpenDelete}
+      handleAcceptAdd={handleAcceptAdd}
+      handleAcceptEdit={handleAcceptEdit}
+      handleAcceptDelete={handleAcceptDelete}
+      handleEditOnChange={handleEditOnChange}
+      handleAddOnChange={handleAddOnChange}
+      noteList={noteList}
+      title={args.title}
+    />
+  );
 };
 
 Default.parameters = {
@@ -57,7 +140,6 @@ Default.parameters = {
 
 Default.args = {
   title: "Notes",
-  urrl: API_URL,
   dummyNoteList: {
     list: [
       {

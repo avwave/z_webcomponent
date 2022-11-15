@@ -49,15 +49,6 @@ import React, { useState, useEffect } from "react";
 import AddIcon from "@material-ui/icons/Add";
 import { fuzzyDate, personNameShort } from "../../utils/format";
 import { TextInputField, InputDialog } from "./";
-import {
-  atom,
-  selector,
-  useRecoilState,
-  useRecoilValue,
-  RecoilRoot,
-} from "recoil";
-import { noteListAtom, conversationIdAtom } from "../recoilStates";
-import { ChatService } from "../chatService";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -79,7 +70,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const NoteItem = ({
-  title = "Info",
   note,
   handleOpenEdit,
   handleOpenDelete,
@@ -143,88 +133,23 @@ export const NoteItem = ({
   );
 };
 
-export const Notes = ({ conversationId, title = "Info" }) => {
+export const Notes = ({ title = "Info",  handleOpenAdd,
+handleOpenEdit,
+handleOpenDelete,
+handleAcceptAdd,
+handleAcceptEdit,
+handleAcceptDelete,
+handleEditOnChange,
+handleAddOnChange, noteList }) => {
   const classes = useStyles();
   const [expanded, setExpanded] = useState(true);
-  const [noteList, setNoteList] = useState(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await ChatService.getConversationNotes(conversationId);
-        console.log(response);
-        setNoteList(response?.data?.list);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchData().catch(console.error);
-  }, [conversationId]);
-
-  const handleOpenEdit = (note, open, setOpen) => {
-    // console.log("note", note);
-    // console.log("open", open);
-    // console.log("setopen", setOpen);
-    setOpen(!open);
-  };
-
-  const handleAcceptEdit = (note, open, setOpen) => {
-    // console.log("note", note);
-    // console.log("open", open);
-    // console.log("setopen", setOpen);
-    setOpen(!open);
-  };
-
-  const handleOpenDelete = (note, open, setOpen) => {
-    // console.log("note", note);
-    // console.log("open", open);
-    // console.log("setopen", setOpen);
-    setOpen(!open);
-  };
-
-  const handleAcceptDelete = (note, open, setOpen) => {
-    // console.log("note", note);
-    // console.log("open", open);
-    // console.log("setopen", setOpen);
-    setNoteList((prevState) =>
-      prevState.filter((notes) => notes.id !== note.id)
-    );
-    setOpen(!open);
-  };
-
-  const handleEditOnChange = (e, value, setValue) => {
-    // console.log("e", e);
-    // console.log("value", value);
-    // console.log("setvalue", setValue);
-    setValue(e.target.value);
-  };
-
-  const handleAddOnChange = (e, value, setValue) => {
-    // console.log("e", e);
-    // console.log("value", value);
-    // console.log("setvalue", setValue);
-    setValue(e.target.value);
-  };
-
-  const handleOpenAdd = (open, setOpen) => {
-    // console.log("open", open);
-    // console.log("setopen", setOpen);
-    setOpen(!open);
-  };
-
-  const handleAcceptAdd = (open, setOpen) => {
-    // console.log("open", open);
-    // console.log("setopen", setOpen);
-    setOpen(!open);
-  };
+ 
+  const [openAdd, setOpenAdd] = useState(false);
+  const [value, setValue] = useState("");
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
-
-  const [openAdd, setOpenAdd] = useState(false);
-  const [value, setValue] = useState("");
 
   return (
     <Card className={classes.root}>
