@@ -427,8 +427,11 @@ export const LinkedProfile = ({
                 openStatusDialog,
                 setOpenStatusDialog,
                 status,
+                setStatus,
                 subStatus,
-                commentValue
+                setSubStatus,
+                commentValue,
+                setCommentValue
               )
             }
             handleClose={() =>

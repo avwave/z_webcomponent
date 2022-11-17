@@ -43,11 +43,12 @@ export const Default = (args) => {
   ) => {
     console.log("open", open);
     console.log("setopen", setOpen);
-    setOpen(!open);
-
     setStatus(chatProfileStatus.status);
     setSubStatus(chatProfileStatus.sub_status);
     setCommentValue(chatProfileStatus.status_reason);
+
+    setOpen(!open);
+
   };
 
   const handleCloseStatusDialog = (open, setOpen) => {

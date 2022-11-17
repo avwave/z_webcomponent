@@ -125,7 +125,6 @@ export const TagsDialogContent = ({ tagList, tags, handleToggle }) => {
 export const Tags = ({
   title = "Tags",
   handleOpenAdd,
-  handleAddOnChange,
   tagList,
   children,
   tags,
