@@ -378,8 +378,6 @@ export const LinkedProfile = ({
   handleOpenStatusDialog,
   handleCloseStatusDialog,
   handleAcceptStatusDialog,
-  displayStatus = false,
-  displayClinic = false,
   clinicAffiliation,
   conversationInfo,
   chatProfileStatus
@@ -403,7 +401,7 @@ export const LinkedProfile = ({
           </Link>
         </Box>
       </Box>
-      {displayClinic && (
+      {clinicAffiliation?.[0]?.clinic?.label && (
         <Box className={classes.clinicAffiliationContainer}>
           <Typography className={classes.clinicTitle} component="span">
             Clinic Affiliation:{" "}
@@ -413,7 +411,7 @@ export const LinkedProfile = ({
           </Typography>
         </Box>
       )}
-      {displayStatus && (
+      {chatProfileStatus && (
         <Box className={classes.statusSection}>
           <InputDialog
             title="Update Status"
