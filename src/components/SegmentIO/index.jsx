@@ -56,14 +56,14 @@ const useAnalytics = () => {
       const identifiers = {
         tempId: aId,
         id,
-        userId: id
+        user_id: id
       }
       const payload = filterNonNull({
         ...identifiers,
         ...properties,
         appIdentifier: appIdentifier
       })
-      console.log("SEG: 📢[index.jsx:56]: payload: ", payload);
+      // console.log("SEG: 📢[index.jsx:56]: payload: ", payload);
       await analytics?.track(eventName, payload, COMMONPAYLOAD)
     },
     [analytics],
@@ -125,7 +125,7 @@ const useAnalytics = () => {
         ...COMMONPAYLOAD,
       }
       const identUIdT = await analytics?.identify(identity, payload, options)
-      console.log("SEG: 📢[index.jsx:117]: identUIdT: ", identUIdT);
+      // console.log("SEG: 📢[index.jsx:117]: identUIdT: ", identUIdT);
     },
     [analytics],
   );
@@ -180,7 +180,7 @@ const useAnalytics = () => {
   const fullReset = useCallback(
     async () => {
       const anReset = await analytics?.reset()
-      console.log("SEG: 📢[index.jsx:172]: anReset: ", anReset);
+      // console.log("SEG: 📢[index.jsx:172]: anReset: ", anReset);
       // await setClaimed(false)
       // sessionStorage.removeItem("IDClaimed")
     },
