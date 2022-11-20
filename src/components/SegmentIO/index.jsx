@@ -56,7 +56,7 @@ const useAnalytics = () => {
       const identifiers = {
         tempId: aId,
         id,
-        userId: id
+        user_id: id
       }
       const payload = filterNonNull({
         ...identifiers,
