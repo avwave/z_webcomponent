@@ -22,7 +22,7 @@ const COMMONPAYLOAD = {
 const AnalyticsProvider = ({ children, writeKey, appIdentifier }) => {
   const analytics = useMemo(
     () => {
-      const analytics = AnalyticsBrowser.load({ writeKey })
+      const analytics = AnalyticsBrowser.load({ writeKey}, { obfuscate: true })
       return analytics
     }, [writeKey]
   );
