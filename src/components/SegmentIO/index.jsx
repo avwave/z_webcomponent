@@ -112,19 +112,27 @@ const useAnalytics = () => {
   );
 
   const identifyUsingIdAndTraits = useCallback(
-    async (id, traits) => {
-      const identity = id
+    async (id = null, traits) => {
+      let identity = id
+      let anonTraits = null
+      if (id === null) {
+        identity = await (await analytics?.user())?.anonymousId()
+        anonTraits = {
+          tempId: identity
+        }
+      }
+      
       const identifiers = { id }
 
       const payload = filterNonNull({
         ...identifiers,
         ...traits,
-        appIdentifier: appIdentifier
+        ...anonTraits,
       })
       const options = {
         ...COMMONPAYLOAD,
       }
-      const identUIdT = await analytics?.identify(identity, payload, options)
+      await analytics?.identify(identity, payload, options)
       // console.log("SEG: 📢[index.jsx:117]: identUIdT: ", identUIdT);
     },
     [analytics],
