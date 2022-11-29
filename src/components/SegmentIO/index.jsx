@@ -115,10 +115,14 @@ const useAnalytics = () => {
     async (id = null, traits) => {
       let identity = id
       let anonTraits = null
+      let anonId = null
       if (id === null) {
         identity = await (await analytics?.user())?.anonymousId()
         anonTraits = {
           tempId: identity
+        }
+        anonId = {
+          anonymousId: identity
         }
       }
       
@@ -129,9 +133,11 @@ const useAnalytics = () => {
         ...traits,
         ...anonTraits,
       })
-      const options = {
+      const options = filterNonNull({
         ...COMMONPAYLOAD,
-      }
+        ...anonId
+      })
+      
       await analytics?.identify(identity, payload, options)
       // console.log("SEG: 📢[index.jsx:117]: identUIdT: ", identUIdT);
     },
@@ -180,7 +186,7 @@ const useAnalytics = () => {
       const user = await analytics?.user()
       await user?.id(null)
       await user?.traits(null)
-      await identifyAnon()
+      // await identifyAnon()
     },
     [analytics, identifyAnon],
   );
