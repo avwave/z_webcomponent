@@ -22,13 +22,13 @@ const COMMONPAYLOAD = {
 const AnalyticsProvider = ({ children, writeKey, appIdentifier }) => {
   const analytics = useMemo(
     () => {
-      const analytics = AnalyticsBrowser.load({ writeKey}, { obfuscate: true })
+      const analytics = AnalyticsBrowser.load({ writeKey }, { obfuscate: true })
       return analytics
     }, [writeKey]
   );
 
   return (
-    <AnalyticsContext.Provider value={{analytics, appIdentifier}}>
+    <AnalyticsContext.Provider value={{ analytics, appIdentifier }}>
       {children}
     </AnalyticsContext.Provider>
   )
@@ -36,7 +36,7 @@ const AnalyticsProvider = ({ children, writeKey, appIdentifier }) => {
 
 const useAnalytics = () => {
 
-  const {analytics, appIdentifier} = React.useContext(AnalyticsContext)
+  const { analytics, appIdentifier } = React.useContext(AnalyticsContext)
   if (!analytics) {
     throw new Error('useAnalytics must be used within a AnalyticsProvider')
   }
@@ -95,7 +95,7 @@ const useAnalytics = () => {
     async (id, traits) => {
       const anonId = await (await analytics?.user())?.anonymousId()
       const identity = id || anonId
-      const identifiers = !!id ? { userId:id } : { tempId: identity }
+      const identifiers = !!id ? { userId: id } : { tempId: identity }
 
       const payload = filterNonNull({
         ...identifiers,
@@ -115,17 +115,18 @@ const useAnalytics = () => {
     async (id = null, traits) => {
       let identity = id
       let anonTraits = null
-      let anonId = null
+      
+      const anonymousId = await (await analytics?.user())?.anonymousId()
+      const anonId = {
+        anonymousId
+      }
+
       if (id === null) {
-        identity = await (await analytics?.user())?.anonymousId()
         anonTraits = {
           tempId: identity
         }
-        anonId = {
-          anonymousId: identity
-        }
       }
-      
+
       const identifiers = { id }
 
       const payload = filterNonNull({
@@ -137,7 +138,7 @@ const useAnalytics = () => {
         ...COMMONPAYLOAD,
         ...anonId
       })
-      
+
       await analytics?.identify(identity, payload, options)
       // console.log("SEG: 📢[index.jsx:117]: identUIdT: ", identUIdT);
     },
