@@ -1,6 +1,6 @@
 {
   "name": "@zennya/web-component-library",
-  "version": "0.7.63",
+  "version": "0.7.64",
   "private": false,
   "dependencies": {
     "@date-io/date-fns": "^2.10.11",
@@ -10,7 +10,7 @@
     "@fontsource/roboto": "^4.5.0",
     "@material-ui/pickers": "4.0.0-alpha.12",
     "@material-ui/styles": "^4.11.3",
-    "@segment/analytics-next": "^1.45.0",
+    "@segment/analytics-next": "^1.47.0",
     "@storybook/addon-storysource": "6.4.19",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.2.6",
