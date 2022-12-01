@@ -11,7 +11,7 @@ const SegmentIOStory = {
   decorators: [
     withReactContext(),
     (Story) => (
-      <AnalyticsProvider writeKey='yalj3MiSxgrMHEgmFFGMuQa52N9y5S3D' appIdentifier='STORYBOOK'>
+      <AnalyticsProvider writeKey='kBESU3nop3e0nTVniD0rIKSvOGjvz64T' appIdentifier='STORYBOOK'>
         <Story />
       </AnalyticsProvider>
     ),
@@ -124,9 +124,9 @@ const ResetStory = ({ ...args }) => {
 
   useEffect(() => {
     getAnon()
-  
+
     return () => {
-      
+
     }
   }, []);
 
@@ -189,12 +189,12 @@ const TrackEventStory = ({ ...args }) => {
 
   return (
     <>
-    <ReactJsonView src={{ isIdent }} />
-    <Button onClick={() => track()}>Track Button Event{!isIdent && ' Anonymously'}</Button>
-    <Button disabled={!isIdent} onClick={async() => {
-      await reset()
-      isIdentified()
-    }}>Reset</Button>
+      <ReactJsonView src={{ isIdent }} />
+      <Button onClick={() => track()}>Track Button Event{!isIdent && ' Anonymously'}</Button>
+      <Button disabled={!isIdent} onClick={async () => {
+        await reset()
+        isIdentified()
+      }}>Reset</Button>
     </>
   )
 }
@@ -225,20 +225,20 @@ const TrackPageStory = ({ ...args }) => {
 
   useEffect(() => {
     pageViewed('Trackpagestory')
-  
+
   }, []);
 
   return (
     <>
-    <ReactJsonView src={{ isIdent }} />
-    <Button disabled={!isIdent} onClick={async() => {
-      await reset()
-      isIdentified()
-    }}>Reset</Button>
-    <Button disabled={!isIdent} onClick={async() => {
-      await fullReset()
-      isIdentified()
-    }}>Reset Everything (unclaim)</Button>
+      <ReactJsonView src={{ isIdent }} />
+      <Button disabled={!isIdent} onClick={async () => {
+        await reset()
+        isIdentified()
+      }}>Reset</Button>
+      <Button disabled={!isIdent} onClick={async () => {
+        await fullReset()
+        isIdentified()
+      }}>Reset Everything (unclaim)</Button>
     </>
   )
 }
