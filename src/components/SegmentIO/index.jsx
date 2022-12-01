@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core';
 import { AnalyticsBrowser } from '@segment/analytics-next';
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import useLocalStorage from "use-local-storage";
 
 export function filterNonNull(obj) {
@@ -20,15 +20,33 @@ const COMMONPAYLOAD = {
 }
 
 const AnalyticsProvider = ({ children, writeKey, appIdentifier }) => {
-  const analytics = useMemo(
-    () => {
-      const analytics = AnalyticsBrowser.load({ writeKey }, { obfuscate: true })
-      return analytics
-    }, [writeKey]
+  const [analyticsData, setAnalyticsData] = useState();
+  const [loading, setLoading] = useState(true);
+  const setupAnalytics = useCallback(
+    async () => {
+      try {
+        const [analytics, analyticsContext] = await AnalyticsBrowser.load({ writeKey }, { obfuscate: true })
+        setAnalyticsData(analytics)
+      } catch (error) {
+        console.error(error)
+      } finally {
+        setLoading(false)
+      }
+    },
+    [writeKey],
   );
 
+  useEffect(
+    () => {
+      if (writeKey) {
+        setupAnalytics()
+      }
+    }, [setupAnalytics, writeKey]
+  );
+
+
   return (
-    <AnalyticsContext.Provider value={{ analytics, appIdentifier }}>
+    <AnalyticsContext.Provider value={{ loading, analytics: analyticsData, appIdentifier }}>
       {children}
     </AnalyticsContext.Provider>
   )
@@ -36,10 +54,8 @@ const AnalyticsProvider = ({ children, writeKey, appIdentifier }) => {
 
 const useAnalytics = () => {
 
-  const { analytics, appIdentifier } = React.useContext(AnalyticsContext)
-  if (!analytics) {
-    throw new Error('useAnalytics must be used within a AnalyticsProvider')
-  }
+  const { loading, analytics, appIdentifier } = React.useContext(AnalyticsContext)
+
 
   const pageViewed = useCallback(
     (name, properties) => {
@@ -50,6 +66,9 @@ const useAnalytics = () => {
 
   const trackEvent = useCallback(
     async (eventName, properties) => {
+      if (!analytics) {
+        return  //silent error, possible show disable tracking/adblock message
+      }
       const aUser = await analytics?.user()
       const id = await (aUser)?.id()
       const aId = await (aUser)?.anonymousId()
@@ -70,6 +89,9 @@ const useAnalytics = () => {
   );
   const aliasToV1 = useCallback(
     async (userId, forceClaim = false) => {
+      if (!analytics) {
+        return  //silent error, possible show disable tracking/adblock message
+      }
       const anonId = await (await analytics?.user())?.anonymousId()
       if (forceClaim) {
         await analytics?.alias(userId, COMMONPAYLOAD)
@@ -85,6 +107,9 @@ const useAnalytics = () => {
 
   const aliasTo = useCallback(
     async (userId) => {
+      if (!analytics) {
+        return  //silent error, possible show disable tracking/adblock message
+      }
       const anonId = await (await analytics?.user())?.anonymousId()
       const aliau = await analytics?.alias(userId, anonId, COMMONPAYLOAD)
     },
@@ -93,6 +118,9 @@ const useAnalytics = () => {
 
   const identifyUsingIdAndTraitsV1 = useCallback(
     async (id, traits) => {
+      if (!analytics) {
+        return  //silent error, possible show disable tracking/adblock message
+      }
       const anonId = await (await analytics?.user())?.anonymousId()
       const identity = id || anonId
       const identifiers = !!id ? { userId: id } : { tempId: identity }
@@ -113,9 +141,12 @@ const useAnalytics = () => {
 
   const identifyUsingIdAndTraits = useCallback(
     async (id = null, traits) => {
+      if (!analytics) {
+        return  //silent error, possible show disable tracking/adblock message
+      }
       let identity = id
       let anonTraits = null
-      
+
       const anonymousId = await (await analytics?.user())?.anonymousId()
       const anonId = {
         anonymousId
@@ -147,6 +178,9 @@ const useAnalytics = () => {
 
   const identifyAnon = useCallback(
     async (traits) => {
+      if (!analytics) {
+        return  //silent error, possible show disable tracking/adblock message
+      }
       const anonId = await (await analytics?.user())?.anonymousId()
       const payload = {
         tempId: anonId,
@@ -166,14 +200,24 @@ const useAnalytics = () => {
 
   const getAnonymousId = useCallback(
     async () => {
-      const user = await analytics?.user()
-      return user?.anonymousId()
+      if (!analytics) {
+        return  //silent error, possible show disable tracking/adblock message
+      }
+      try {
+        const user = await analytics?.user()
+        return user?.anonymousId()
+      } catch (e) {
+        return null
+      }
     },
     [analytics],
   );
 
   const checkIsIdentified = useCallback(
     async () => {
+      if (!analytics) {
+        return  //silent error, possible show disable tracking/adblock message
+      }
       const user = await analytics?.user()
 
       const id = await user?.id()
