@@ -25,7 +25,7 @@ const AnalyticsProvider = ({ children, writeKey, appIdentifier }) => {
   const setupAnalytics = useCallback(
     async () => {
       try {
-        const analytics = await AnalyticsBrowser.load({ writeKey }, { obfuscate: true })
+        const [analytics, analyticsContext] = await AnalyticsBrowser.load({ writeKey }, { obfuscate: true })
         setAnalyticsData(analytics)
       } catch (error) {
         console.error(error)
