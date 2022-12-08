@@ -81,6 +81,7 @@
     "@mui/lab": "^5.0.0-alpha.111",
     "@mui/material": "^5.10.17",
     "@mui/styles": "^5.10.16",
+    "@mui/x-date-pickers": "^5.0.9",
     "yup": "^0.32.9"
   },
   "scripts": {
@@ -131,6 +132,7 @@
     "@mui/lab": "^5.0.0-alpha.111",
     "@mui/material": "^5.10.17",
     "@mui/styles": "^5.10.16",
+    "@mui/x-date-pickers": "^5.0.9",
     "@storybook/addon-actions": "^6.5.12",
     "@storybook/addon-console": "^1.2.3",
     "@storybook/addon-docs": "6.5.14",

@@ -68,7 +68,7 @@ const IdentifyAnonStory = ({ ...args }) => {
   return (
     <>
       <ReactJsonView src={{ ident }} />
-      <Button onClick={() => identify()}>Identify</Button>
+      <Button variant="text"  color="secondary" onClick={() => identify()}>Identify</Button>
     </>
 
   )

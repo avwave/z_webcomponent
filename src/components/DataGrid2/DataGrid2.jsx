@@ -370,13 +370,15 @@ const DataGrid2 = React.forwardRef(({
         targetColumn?.cellRenderer(cellProps)
       ) : (
         isReactElem ? <span style={targetColumn.cellStyles}>{element}</span> :
-          <Truncate
+          <div>
+            <Truncate
             width={targetColumn?.width}
             lines={targetColumn?.truncateLines ?? 2} ellipsis={<span>(...)</span>}
             style={targetColumn.cellStyles}
           >
             {tooltip}
           </Truncate>
+            </div>
 
       );
       const renderedTooltip =

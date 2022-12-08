@@ -351,7 +351,8 @@ Dates.args = {
   ...Default.args,
   formLayout: [
     ["date", "time"],
-    ["datetime", "daterange"],
+    ["datetime"],
+    ["daterange"],
   ],
   form: {
     daterange: {

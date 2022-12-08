@@ -31,20 +31,20 @@ import {
 import { makeStyles } from 'tss-react/mui';
 import { Add, Backspace, Close, DateRange, Schedule } from "@mui/icons-material";
 import { Autocomplete } from '@mui/material';
-import { DatePicker, DateTimePicker, LocalizationProvider, TimePicker } from "@material-ui/pickers";
+// import { DatePicker, DateTimePicker, LocalizationProvider, TimePicker } from "@material-ui/pickers";
 import MomentUtils from '@material-ui/pickers/adapter/moment';
 import { FieldArray, Formik, getIn } from "formik";
 import { get, isEmpty } from "lodash";
 import moment from "moment";
 import PropTypes from "prop-types";
-import {
-  createContext, Fragment, useCallback,
+import React, {
+  createContext, forwardRef, Fragment, useCallback,
   useContext,
   useEffect,
   useMemo,
   useState
 } from "react";
-import DurationInputMask from "react-duration-input-mask/publish/index";
+import DurationInputMask from "react-duration-input-mask";
 
 import PhoneInput from "react-phone-number-input/input";
 import "react-phone-number-input/style.css";
@@ -53,6 +53,7 @@ import { DateTimeRangePicker } from "../DateTimeRangePicker";
 import { fromEntries } from "../utils/fromEntries.polyfill";
 import { FormikPersist } from "./FormikPersist";
 import { WizardFieldArray } from "./WizardFieldArray";
+import { DatePicker, DateTimePicker, LocalizationProvider, TimePicker } from "@mui/x-date-pickers";
 
 const useStyles = makeStyles()((theme) => ({
   controlContainer: {
@@ -186,6 +187,7 @@ const FormFieldSet = ({
     },
     [],
   );
+
   const renderField = useCallback(
     (fieldName, fieldParams, fieldSource) => {
       let isRequired = !!getIn(validationSchema?.fields, fieldName)?.tests?.find(
@@ -451,6 +453,7 @@ const FormFieldSet = ({
           );
         case "duration":
           return (
+            <>
             <DurationInputMask
               component={TextField}
               name={fieldName}
@@ -482,6 +485,7 @@ const FormFieldSet = ({
               variant={variant}
               {...fieldParams?.fieldProps}
             />
+            </>
           );
         case "textonly":
           return (
@@ -991,7 +995,7 @@ const FormFieldSet = ({
             <Button
               key="reset"
               color="secondary"
-              variant={variant}
+              
               disabled={loading}
               startIcon={loading && <CircularProgress size={20} />}
               onClick={async () => {
@@ -1008,7 +1012,7 @@ const FormFieldSet = ({
           color="primary"
           disabled={loading || disableSubmit}
           startIcon={loading && <CircularProgress size={20} />}
-          variant={variant}
+          
           onClick={async () => {
             formik.handleSubmit();
             onTriggerSubmit();
@@ -1018,7 +1022,7 @@ const FormFieldSet = ({
         </Button>,
       ];
       if (formReadOnly) return <></>
-      return <ButtonGroup>{buttonArray}</ButtonGroup>;
+      return <ButtonGroup variant={variant}>{buttonArray}</ButtonGroup>;
     };
 
     switch (formFactor) {
