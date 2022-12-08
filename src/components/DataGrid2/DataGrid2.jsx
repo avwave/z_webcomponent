@@ -1,6 +1,6 @@
 import { faSignal, faSortAmountDown, faSortAmountUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { alpha, Checkbox, fade, IconButton, lighten, LinearProgress, makeStyles, Tooltip, useTheme } from '@material-ui/core';
+import { alpha, Checkbox, IconButton, lighten, LinearProgress, makeStyles, Tooltip, useTheme } from '@material-ui/core';
 import { UnfoldLess, UnfoldMore } from '@material-ui/icons';
 import clsx from 'clsx';
 import { kaReducer, Table } from "ka-table";
