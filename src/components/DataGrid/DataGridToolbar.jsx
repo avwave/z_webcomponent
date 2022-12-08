@@ -116,9 +116,9 @@ function DataGridToolbar({
     return filterColumnSettings.map((col, idx) => {
       return (
         <FormControl
+          variant="standard"
           key={`filter-${col.id}-${idx}`}
-          className={classes.filterContainer}
-        >
+          className={classes.filterContainer}>
           <FormHelperText>{col.name}</FormHelperText>
           <col.filterRenderer
             value={dataGridState.filterColumn[col.key]}

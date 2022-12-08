@@ -122,10 +122,12 @@ const AggregateEventCell = ({ event, children }) => {
     }, [event]
   );
   return (
-    <Link to={`/client-profile/${event?.white_label_customer?.client?.id}`}>
+    <Link
+      to={`/client-profile/${event?.white_label_customer?.client?.id}`}
+      underline="hover">
       <Typography variant="caption">{evtLinker} bookings</Typography>
     </Link>
-  )
+  );
 }
 const SLOT_HIGH_CONGESTION = 15
 const SLOT_MED_CONGESTION = 10
@@ -193,7 +195,9 @@ const DayViewToolTip = ({ event, children, view }) => {
       return (
         <Card elevation={0} className={classes.popupcard}>
           <CardContent>
-            <Link to={`/client-profile/${booking?.white_label_customer?.client?.id}`}>{personNameFormal(booking?.white_label_customer)}</Link>
+            <Link
+              to={`/client-profile/${booking?.white_label_customer?.client?.id}`}
+              underline="hover">{personNameFormal(booking?.white_label_customer)}</Link>
             <Divider />
             <Typography variant="caption">{booking?.id}</Typography>
             <Typography variant="body2">{booking?.type?.label}</Typography>
@@ -210,7 +214,7 @@ const DayViewToolTip = ({ event, children, view }) => {
             />
           </CardContent>
         </Card>
-      )
+      );
 
     }, [booking, event, end, start]
   );

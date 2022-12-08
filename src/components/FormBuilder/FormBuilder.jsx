@@ -637,7 +637,7 @@ const FormFieldSet = ({
 
         case "radio":
           return (
-            <FormControl>
+            <FormControl variant="standard">
               <FormLabel component="legend">{formInline ? "" : `${fieldParams.label} ${isRequired ? '*' : ''}`}</FormLabel>
               <RadioGroup
                 row={fieldParams.settings.inline}
@@ -663,7 +663,7 @@ const FormFieldSet = ({
         case "checkboxes":
           const gridSettings = fieldParams.settings?.inline ? { xs: 12 } : { ...fieldParams?.settings?.selectionGridProps };
           return (
-            <FormControl>
+            <FormControl variant="standard">
               <FormLabel component="legend">{formInline ? "" : `${fieldParams.label} ${isRequired ? '*' : ''}`}</FormLabel>
               <FormGroup
                 row={fieldParams?.settings?.inline}

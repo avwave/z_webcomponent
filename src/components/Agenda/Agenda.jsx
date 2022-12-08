@@ -130,7 +130,7 @@ function Agenda(_props) {
     });
     return (
       <Box width="100%" fontWeight="fontWeightBold">
-        <Link color="textPrimary" onClick={onDrillDown}>
+        <Link color="textPrimary" onClick={onDrillDown} underline="hover">
           <Typography variant="caption">
             {summaryStatus?.summary?.status}{" "}
           </Typography>

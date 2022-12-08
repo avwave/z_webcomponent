@@ -106,7 +106,7 @@ export const ToolbarFilterComponent = DefaultStory.bind({});
 ToolbarFilterComponent.args = {
   ...Default.args,
   pickerToolbar: true,
-  filterComponent: <TextField fullWidth onChange={(evt) => alert(evt)} />,
+  filterComponent: <TextField variant="standard" fullWidth onChange={(evt) => alert(evt)} />,
   calendarWeek: true
 };
 

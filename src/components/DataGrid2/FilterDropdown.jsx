@@ -26,53 +26,48 @@ const FilterDropdown = ({ value, name, filterRenderer: FilterRenderer, onChangeF
     setFilterAnchor(event.currentTarget);
   };
 
-  return (
-    <>
-      <Button variant={value ? "contained" : "outlined"}
-        color={value? "primary" : "inherit"}
-        className={classes.dropdownButton}
-        onClick={handleOpenFilter}
-        
-        endIcon={<FontAwesomeIcon icon={isFilterOpen?faCaretUp:faCaretDown}/>}
-      >{name}</Button>
-      <Popover
-        open={isFilterOpen}
-        anchorEl={filterAnchor}
-        onClose={() => setFilterAnchor(null)}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
-        }}
-        PaperProps={{
-          style: { minWidth: '400px' },
-        }}
-      >
-        <Card>
-          <CardContent>
-          <FormControl
-            className={classes.filterContainer}
-            fullWidth
-          >
-            <FormHelperText>{name}</FormHelperText>
-            <FilterRenderer
-              value={value}
-              onChange={(v) => {
-                onChangeFilter(v);
-              }}
-              onChangeDisplay={(v) => {
-                onChangeFilterDisplay(v);
-              }}
-            />
-          </FormControl>
-          </CardContent>
-        </Card>
-      </Popover>
-    </>
-  )
+  return <>
+    <Button variant={value ? "contained" : "outlined"}
+      color={value? "primary" : "inherit"}
+      className={classes.dropdownButton}
+      onClick={handleOpenFilter}
+      
+      endIcon={<FontAwesomeIcon icon={isFilterOpen?faCaretUp:faCaretDown}/>}
+    >{name}</Button>
+    <Popover
+      open={isFilterOpen}
+      anchorEl={filterAnchor}
+      onClose={() => setFilterAnchor(null)}
+      anchorOrigin={{
+        vertical: 'bottom',
+        horizontal: 'left',
+      }}
+      transformOrigin={{
+        vertical: 'top',
+        horizontal: 'left',
+      }}
+      PaperProps={{
+        style: { minWidth: '400px' },
+      }}
+    >
+      <Card>
+        <CardContent>
+        <FormControl variant="standard" className={classes.filterContainer} fullWidth>
+          <FormHelperText>{name}</FormHelperText>
+          <FilterRenderer
+            value={value}
+            onChange={(v) => {
+              onChangeFilter(v);
+            }}
+            onChangeDisplay={(v) => {
+              onChangeFilterDisplay(v);
+            }}
+          />
+        </FormControl>
+        </CardContent>
+      </Card>
+    </Popover>
+  </>;
 
 }
 

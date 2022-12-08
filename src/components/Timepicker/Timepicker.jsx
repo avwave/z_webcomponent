@@ -28,59 +28,51 @@ const Timepicker = ({ value, onChange, label, inputProps }) => {
   const [open, setOpen] = useState(false);
 
 
-  return (
-    <>
-      <LocalizationProvider dateAdapter={MomentUtils}>
-        {isMobile ? (
-          <MobileTimePicker
+  return <>
+    <LocalizationProvider dateAdapter={MomentUtils}>
+      {isMobile ? (
+        <MobileTimePicker
+          ref={input}
+          label={label}
+          value={value}
+          defaultValue={null}
+          onChange={newValue => onChange(newValue)}
+          renderInput={(inputParams) => (
+            <TextField variant="standard" {...inputParams} {...inputProps} />
+          )}
+          InputAdornmentProps={{
+            onClick: togglePicker,
+          }}
+        />
+      )
+        : (
+          <TimePicker
             ref={input}
             label={label}
             value={value}
+            open={false}
             defaultValue={null}
             onChange={newValue => onChange(newValue)}
             renderInput={(inputParams) => (
-              <TextField
-                {...inputParams}
-                {...inputProps}
-              />
+              <TextField variant="standard" {...inputParams} {...inputProps} />
             )}
             InputAdornmentProps={{
               onClick: togglePicker,
             }}
           />
         )
-          : (
-            <TimePicker
-              ref={input}
-              label={label}
-              value={value}
-              open={false}
-              defaultValue={null}
-              onChange={newValue => onChange(newValue)}
-              renderInput={(inputParams) => (
-                <TextField
-                  {...inputParams}
-                  {...inputProps}
-                />
-              )}
-              InputAdornmentProps={{
-                onClick: togglePicker,
-              }}
-            />
-          )
-        }
-      </LocalizationProvider>
-      {input.current && (
-        <CustomPicker
-          value={value}
-          onChange={onChange}
-          open={customPickerOpen}
-          anchorEl={input.current}
-          onClose={togglePicker}
-        />
-      )}
-    </>
-  )
+      }
+    </LocalizationProvider>
+    {input.current && (
+      <CustomPicker
+        value={value}
+        onChange={onChange}
+        open={customPickerOpen}
+        anchorEl={input.current}
+        onClose={togglePicker}
+      />
+    )}
+  </>;
 }
 
 export { Timepicker }

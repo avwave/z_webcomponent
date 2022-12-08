@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
 function TextFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
   const classes = useStyles();
   return (
-    <FormControl fullWidth className={classes.formControl}>
+    <FormControl variant="standard" fullWidth className={classes.formControl}>
       <InputLabel>{filter?.label}</InputLabel>
       <Input
         onChange={(e) => {
@@ -59,17 +59,17 @@ function TextFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
 function OptionFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
   const classes = useStyles();
   return (
-    <FormControl fullWidth className={classes.formControl}>
+    <FormControl variant="standard" fullWidth className={classes.formControl}>
       <InputLabel>{filter?.label}</InputLabel>
       <Select
+        variant="standard"
         fullWidth
         value={value ?? ""}
         onChange={(e) => {
           onChange(e.target.value)
           const item =filter.options.find(v=> v.value === e.target.value)
           onChangeDisplay(item?.label)
-        }}
-      >
+        }}>
         <MenuItem value="">
           <em>None</em>
         </MenuItem>
@@ -94,7 +94,7 @@ function AuocompleteFilterRenderer({ onChange, onChangeDisplay, value, filter })
   }, [filter?.options, filter?.valueField, value]);
 
   return (
-    <FormControl fullWidth className={classes.formControl}>
+    <FormControl variant="standard" fullWidth className={classes.formControl}>
       <Autocomplete
         value={internalValues ?? (filter?.multiple ? [] : '')}
         onChange={(e, val) => {
@@ -129,13 +129,13 @@ function AuocompleteFilterRenderer({ onChange, onChangeDisplay, value, filter })
         clearIcon={<Backspace fontSize="small" />}
         renderInput={(iParams) => (
           <TextField
+            variant="standard"
             {...iParams}
             InputLabelProps={{
               shrink: true,
             }}
             label={filter?.label}
-            placeholder={"type to search"}
-          />
+            placeholder={"type to search"} />
         )}
       />
     </FormControl>

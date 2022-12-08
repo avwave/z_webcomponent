@@ -74,9 +74,9 @@ const Logger = ({
               component={CLink}
               {...lProps}
               {...linkProps}
-            >{findMatch?.match[3]}
+              underline="hover">{findMatch?.match[3]}
             </Link>
-          )
+          );
         } else {
           return element
         }
@@ -113,7 +113,7 @@ const Logger = ({
               component={CLink}
               {...lProps}
               {...linkProps}
-            >{findIdentifier[0]}
+              underline="hover">{findIdentifier[0]}
             </Link>
           )
           return [...prefix, linkComponent, ...suffix]
@@ -202,7 +202,7 @@ const Logger = ({
               component={CLink}
               {...lProps}
               {...linkProps}
-            >{customerName}
+              underline="hover">{customerName}
             </Link>
           )
 
@@ -231,7 +231,7 @@ const Logger = ({
             component={CLink}
             {...lProps}
             {...linkProps}
-          >{id.trim()}
+            underline="hover">{id.trim()}
           </Link>
         )
         const components = [
