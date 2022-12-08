@@ -6,6 +6,8 @@
     "@date-io/date-fns": "^2.10.11",
     "@date-io/moment": "1.x",
     "@dropzone-ui/react": "^6.7.20",
+    "@emotion/react": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
     "@fingerprintjs/fingerprintjs": "^3.3.3",
     "@fontsource/roboto": "^4.5.0",
     "@material-ui/pickers": "^4.0.0-alpha.12",
@@ -74,6 +76,10 @@
     "@material-ui/core": "^4.11.3",
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.58",
+    "@mui/icons-material": "^5.10.16",
+    "@mui/lab": "^5.0.0-alpha.111",
+    "@mui/material": "^5.10.17",
+    "@mui/styles": "^5.10.16",
     "yup": "^0.32.9"
   },
   "scripts": {
@@ -137,6 +143,7 @@
     "enzyme": "^3.11.0",
     "react-test-renderer": "^18.2.0",
     "storybook-addon-material-ui": "^0.9.0-alpha.24",
+    "storybook-addon-material-ui5": "^1.0.0",
     "storybook-addon-pseudo-states": "^1.15.1",
     "storybook-react-context": "^0.6.0",
     "waait": "^1.0.5",
