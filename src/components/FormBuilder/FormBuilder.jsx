@@ -28,12 +28,11 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 import { Add, Backspace, Close, DateRange, Schedule } from "@mui/icons-material";
 import { Autocomplete } from '@mui/material';
 import { DatePicker, DateTimePicker, LocalizationProvider, TimePicker } from "@material-ui/pickers";
 import MomentUtils from '@material-ui/pickers/adapter/moment';
-import clsx from "clsx";
 import { FieldArray, Formik, getIn } from "formik";
 import { get, isEmpty } from "lodash";
 import moment from "moment";
@@ -55,7 +54,7 @@ import { fromEntries } from "../utils/fromEntries.polyfill";
 import { FormikPersist } from "./FormikPersist";
 import { WizardFieldArray } from "./WizardFieldArray";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
   controlContainer: {
     paddingBottom: theme.spacing(2),
   },
@@ -149,7 +148,7 @@ const FormFieldSet = ({
   formInline = false,
   disableSubmit = false,
 }) => {
-  const classes = useStyles();
+  const { classes, cx } = useStyles();
   const formcontext = useContext(FormContext);
   const { formik, validationSchema, initialValues } = formcontext
 
@@ -1036,7 +1035,7 @@ const FormFieldSet = ({
               {children}
               {formik.isSubmitting && <LinearProgress />}
             </CardContent>
-            <CardActions className={clsx(classes.actionBar, alignment)}>
+            <CardActions className={cx(classes.actionBar, alignment)}>
               <ActionButtons />
             </CardActions>
           </Card>
@@ -1057,29 +1056,27 @@ const FormFieldSet = ({
           </Box>
         );
       default:
-        return (
-          <>
-            <ListItemText primary={formLabel} secondary={formSubtitle} />
-            {buildFields()}
-            {children}
-            {formik.isSubmitting && <LinearProgress />}
-            <div className={clsx(classes.actionBar, alignment)}>
-              {reverse ? (
-                <>
-                  <ActionButtons />
-                  <div />
-                  {additionalActions()}
-                </>
-              ) : (
-                <>
-                  {additionalActions()}
-                  <div />
-                  <ActionButtons />
-                </>
-              )}
-            </div>
-          </>
-        );
+        return <>
+          <ListItemText primary={formLabel} secondary={formSubtitle} />
+          {buildFields()}
+          {children}
+          {formik.isSubmitting && <LinearProgress />}
+          <div className={cx(classes.actionBar, alignment)}>
+            {reverse ? (
+              <>
+                <ActionButtons />
+                <div />
+                {additionalActions()}
+              </>
+            ) : (
+              <>
+                {additionalActions()}
+                <div />
+                <ActionButtons />
+              </>
+            )}
+          </div>
+        </>;
     }
   }, [
     formFactor,

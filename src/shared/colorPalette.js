@@ -1,7 +1,7 @@
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 
 
-const colorStyles = makeStyles(theme => ({
+const colorStyles = makeStyles()(theme => ({
     //todo: primary and secondary color
     primary: {
         backgroundColor: '#A2CEE4'

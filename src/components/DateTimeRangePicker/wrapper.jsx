@@ -1,5 +1,5 @@
 import { Button, ButtonGroup, Grid, TextField } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 import { DatePicker, LocalizationProvider } from '@material-ui/pickers';
 import MomentUtils from '@material-ui/pickers/adapter/moment';
 import LitePickerLib from 'litepicker/dist/nocss/litepicker.umd';
@@ -12,7 +12,7 @@ import { Timepicker } from '../Timepicker';
 import './style.scss';
 
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     pickerContainer: {
       width: "100%",
@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => {
       justifyContent: 'flex-start'
     }
   }
-})
+});
 
 const RANGE_CONST = {
   TODAY: "Today",
@@ -49,7 +49,7 @@ const RANGE_CONST = {
 }
 
 const LitePicker = ({ onCancel = () => { }, onValueChange = () => { }, containerProps, variant = "outlined", ...props }) => {
-  const classes = useStyles()
+  const { classes } = useStyles()
   const startElement = useRef(null)
   const endElement = useRef(null)
   const parentElement = useRef(null)

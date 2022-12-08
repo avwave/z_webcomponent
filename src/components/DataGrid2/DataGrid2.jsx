@@ -1,9 +1,8 @@
 import { faSignal, faSortAmountDown, faSortAmountUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { alpha, Checkbox, IconButton, lighten, LinearProgress, Tooltip, useTheme } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 import { UnfoldLess, UnfoldMore } from '@mui/icons-material';
-import clsx from 'clsx';
 import { kaReducer, Table } from "ka-table";
 import { deselectAllFilteredRows, deselectRow, hideDetailsRow, selectAllFilteredRows, selectRow, showDetailsRow, updateData } from "ka-table/actionCreators";
 import { DataType, SortDirection, SortingMode } from "ka-table/enums";
@@ -23,7 +22,7 @@ const CONTEXT_MENU_ACTIVATE = 'zwcl-DATAGRID-CONTEXT-ROW'
 
 const TABLE_LOAD_OFFSET = 200;
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     datagrid: {
       height: '100%'
@@ -43,7 +42,7 @@ const useStyles = makeStyles((theme) => {
       color: theme.palette.primary.main
     }
   }
-})
+});
 
 const LOAD_MORE_DATA = "LOAD_MORE_DATA";
 const ROW_SELECT = 'ROW_SELECT';
@@ -104,9 +103,9 @@ const SelectionCell = ({
 
 const HeaderCell = ({ column, ...props }) => {
   const [onHover, setOnHover] = useState(false);
-  const classes = useStyles()
+  const { classes, cx } = useStyles()
   return (
-    <div className={clsx(classes.headerHover, column.sortDirection && classes.colHighlight)} onMouseEnter={() => setOnHover(true)}
+    <div className={cx(classes.headerHover, column.sortDirection && classes.colHighlight)} onMouseEnter={() => setOnHover(true)}
       onMouseLeave={() => setOnHover(false)}
       {...props}>
       <span>{column.title}</span>
@@ -117,7 +116,7 @@ const HeaderCell = ({ column, ...props }) => {
         <FontAwesomeIcon icon={column.sortDirection === SortDirection.Ascend ? faSortAmountUp : faSortAmountDown} />
       )}
     </div>
-  )
+  );
 }
 
 const RowExpanderButton = ({ dispatch, rowKeyValue, isDetailsRowShown }) => {
@@ -184,7 +183,7 @@ const DataGrid2 = React.forwardRef(({
   useUrlAsState = false,
   id = "grid"
 }, ref) => {
-  const classes = useStyles()
+  const { classes, cx } = useStyles()
   const theme = useTheme()
 
   const [tableProps, setTableProps] = useState(tablePropsInit);
@@ -414,7 +413,7 @@ const DataGrid2 = React.forwardRef(({
 
   const [scrollYoffset, setScrollYoffset] = useState(0);
   return (
-    <div className={clsx('datagrid', classes.datagrid)} style={{ ...containerStyle }}>
+    <div className={cx('datagrid', classes.datagrid)} style={{ ...containerStyle }}>
       <Datagrid2Toolbar
         useUrlAsState={useUrlAsState}
         hasDateRangeFilter={hasDateRangeFilter}

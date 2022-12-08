@@ -11,16 +11,18 @@ import {
   Typography,
   useTheme,
 } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 import { red, yellow } from '@mui/material/colors';
-import clsx from 'clsx';
 import moment from 'moment';
 import { memo, useCallback, useMemo } from 'react';
 import { personNameFormal } from '../utils/format';
 
 import { parseBookingStatus } from './bookingStates';
 
-const useStyles = makeStyles((theme) => {
+// TODO jss-to-tss-react codemod: Unable to handle style definition reliably. ArrowFunctionExpression in CSS prop.
+// TODO jss-to-tss-react codemod: Unable to handle style definition reliably. ArrowFunctionExpression in CSS prop.
+// TODO jss-to-tss-react codemod: Unable to handle style definition reliably. ArrowFunctionExpression in CSS prop.
+const useStyles = makeStyles()((theme) => {
   return {
     dayView: {
       display: 'flex',
@@ -80,9 +82,9 @@ const useStyles = makeStyles((theme) => {
       borderRadius: 20
     }
   }
-})
+});
 const DayViewCell = ({ event, ...rest }) => {
-  const classes = useStyles()
+  const { classes } = useStyles()
   const { booking } = event?.event
   const start = moment(booking?.date_scheduled)
 
@@ -102,7 +104,7 @@ const DayViewCell = ({ event, ...rest }) => {
 }
 
 const WeekViewCell = ({ event, ...rest }) => {
-  const classes = useStyles()
+  const { classes } = useStyles()
   const { booking } = event?.event
   const start = moment(booking?.date_scheduled)
   const parse = parseBookingStatus(booking)
@@ -132,7 +134,7 @@ const AggregateEventCell = ({ event, children }) => {
 const SLOT_HIGH_CONGESTION = 15
 const SLOT_MED_CONGESTION = 10
 const AggregateCell = ({ event, children }) => {
-  const classes = useStyles()
+  const { classes, cx } = useStyles()
   const congestionClass = useMemo(
     () => {
       if (event?.events?.length >= SLOT_HIGH_CONGESTION) {
@@ -145,16 +147,16 @@ const AggregateCell = ({ event, children }) => {
     }, [event]
   );
   return (
-    <div className={clsx(classes.aggregateCell, congestionClass)}>
+    <div className={cx(classes.aggregateCell, congestionClass)}>
       {children}
       
 
     </div>
-  )
+  );
 }
 
 const DayViewHeader = memo(({ event, date, dateLoadingArray }) => {
-  const classes = useStyles()
+  const { classes } = useStyles()
   const theme = useTheme()
   const loading = useMemo(
     () => {
@@ -185,7 +187,9 @@ const DayViewToolTip = ({ event, children, view }) => {
   const { booking } = event
 
   const parse = parseBookingStatus(booking)
-  const classes = useStyles(parse)
+  const { classes } = useStyles(parse, {
+    props: parse
+  })
 
   const start = moment(booking?.date_scheduled)
   const end = moment(booking?.date_scheduled_end)

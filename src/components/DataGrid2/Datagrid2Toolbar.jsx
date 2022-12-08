@@ -10,7 +10,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import withStyles from '@mui/styles/withStyles';
+import { withStyles } from 'tss-react/mui';
 import { Search, ViewColumn } from "@mui/icons-material";
 import clsx from "clsx";
 import { Table } from "ka-table";
@@ -436,4 +436,4 @@ function DGWrapper(props) {
     </CheckboxProvider>
   );
 }
-export default withStyles(styles)(DGWrapper);
+export default withStyles(DGWrapper, styles);

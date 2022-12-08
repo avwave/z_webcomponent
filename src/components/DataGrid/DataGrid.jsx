@@ -1,5 +1,5 @@
 import { Backdrop, CircularProgress, LinearProgress, Toolbar, Tooltip } from "@mui/material";
-import withStyles from '@mui/styles/withStyles';
+import { withStyles } from 'tss-react/mui';
 import PropTypes from "prop-types";
 import React, { isValidElement, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { useContextMenu } from "react-contexify";
@@ -37,7 +37,7 @@ const styles = (theme) => ({
   },
 });
 
-const LightTooltip = withStyles((theme) => ({
+const LightTooltip = withStyles(Tooltip, (theme) => ({
   tooltip: {
     backgroundColor: "#f5f5f9",
     color: "rgba(0, 0, 0, 0.87)",
@@ -45,7 +45,7 @@ const LightTooltip = withStyles((theme) => ({
     fontSize: theme.typography.pxToRem(14),
     border: "1px solid #dadde9",
   },
-}))(Tooltip);
+}));
 
 function DataGrid({
   classes,
@@ -333,7 +333,7 @@ function DGWrapper(props) {
   );
 }
 
-export default withStyles(styles)(DGWrapper);
+export default withStyles(DGWrapper, styles);
 
 DataGrid.propTypes = {
   draggable: PropTypes.bool,

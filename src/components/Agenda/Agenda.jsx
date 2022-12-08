@@ -19,7 +19,7 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 import GridBox from "../DataGrid/GridBox";
 import { EdgeContainer } from "../EdgeContainer";
 import "./AgendaStyles.scss";
@@ -37,7 +37,7 @@ import { useUrlState } from "../hooks/useUrlState";
 const dateFnsLocales = {
   "en-US": enLocale,
 };
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles()(theme => ({
   root: {
     '& .rbc-event': {
       backgroundColor: theme.palette.primary.main,
@@ -80,7 +80,7 @@ function Agenda(_props) {
     ...props
   } = _props;
 
-  const classes = useStyles()
+  const { classes } = useStyles()
   const metaRenderer = metaR ? metaR : () => { };
 
   const [currentDate, setCurrentDate] = useUrlState({

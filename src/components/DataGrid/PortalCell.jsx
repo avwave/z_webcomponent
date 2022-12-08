@@ -1,9 +1,9 @@
 import { IconButton, Popover, Portal } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     portalCell: {
       display: "flex",
@@ -17,9 +17,9 @@ const useStyles = makeStyles((theme) => {
       maxHeight: '300px'
     }
   }
-})
+});
 const PortalCell = ({ expandCell, renderedCell }) => {
-  const classes = useStyles()
+  const { classes } = useStyles()
   const [anchorEl, setAnchorEl] = useState(null);
 
   const show = Boolean(anchorEl);

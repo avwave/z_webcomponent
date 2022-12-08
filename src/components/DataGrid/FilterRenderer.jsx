@@ -9,12 +9,12 @@ import {
   Select,
   TextField,
 } from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 import { Backspace, Close } from "@mui/icons-material";
 import { Autocomplete } from '@mui/material';
 import React, { Fragment, useEffect, useState } from "react";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
   formControl: {
     margin: theme.spacing(0),
   },
@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function TextFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
-  const classes = useStyles();
+  const { classes } = useStyles();
   return (
     <FormControl variant="standard" fullWidth className={classes.formControl}>
       <InputLabel>{filter?.label}</InputLabel>
@@ -57,7 +57,7 @@ function TextFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
 }
 
 function OptionFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
-  const classes = useStyles();
+  const { classes } = useStyles();
   return (
     <FormControl variant="standard" fullWidth className={classes.formControl}>
       <InputLabel>{filter?.label}</InputLabel>
@@ -83,7 +83,7 @@ function OptionFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
   );
 }
 function AuocompleteFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
-  const classes = useStyles();
+  const { classes } = useStyles();
   const [internalValues, setInternalValues] = useState(value);
 
   useEffect(() => {

@@ -1,12 +1,11 @@
 import { Button, IconButton, Typography } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material';
-import clsx from 'clsx';
 import isEmpty from 'lodash.isempty';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { DocumentViewer } from '../DocumentViewer';
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     navigationContainer: {
       position: 'relative',
@@ -25,9 +24,9 @@ const useStyles = makeStyles((theme) => {
 
     }
   }
-})
+});
 const DocumentGallery = ({ docs = [], initialIndex=0 }) => {
-  const classes = useStyles()
+  const { classes, cx } = useStyles()
   const [currentFileIndex, setCurrentFileIndex] = useState(initialIndex);
   const [loading, setLoading] = useState(true);
   const [fileData, setFileData] = useState();
@@ -57,8 +56,8 @@ const DocumentGallery = ({ docs = [], initialIndex=0 }) => {
   }
 
   return (
-    <div className={clsx(classes.navigationContainer, 'pvx-container')}>
-      <div className={clsx(classes.galleryInfo, 'preview-bar')}>
+    <div className={cx(classes.navigationContainer, 'pvx-container')}>
+      <div className={cx(classes.galleryInfo, 'preview-bar')}>
         <IconButton
           color="inherit"
           onClick={() => { setCurrentFileIndex(currentFileIndex === 0 ? 0 : currentFileIndex - 1) }}

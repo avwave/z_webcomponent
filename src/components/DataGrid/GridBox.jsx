@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Box, useTheme } from '@mui/material';
 import withTheme from '@mui/styles/withTheme';
 import React from 'react';
 import styled from 'styled-components'
@@ -7,7 +7,8 @@ const StyledGridBox = styled(Box)`
   background: ${(props) => props.background};
 `;
 
-function GridBox({ verticalAlign='center', theme, variant, children, align = "center" }) {
+function GridBox({ verticalAlign='center', variant, children, align = "center" }) {
+  const theme = useTheme()
   return (
     <StyledGridBox
       background={variant ? theme.palette[variant].light : "transparent"}

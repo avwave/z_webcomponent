@@ -8,7 +8,7 @@ import {
   Typography,
   useTheme,
 } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 import { Close, KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material';
 import { FieldArray } from 'formik';
 import { get } from "lodash";
@@ -16,9 +16,9 @@ import { useCallback, useMemo, useState } from 'react';
 import ReactJson from 'react-json-view';
 import {isEmpty} from 'lodash'
 import { Stepper } from '../Stepper';
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {}
-})
+});
 const WizardFieldArray = ({
   fieldName,
   fieldParams,
@@ -30,7 +30,7 @@ const WizardFieldArray = ({
   stepperProps,
   wizardProps
 }) => {
-  const classes = useStyles()
+  const { classes } = useStyles()
   const theme = useTheme()
   const [currentStep, setCurrentStep] = useState(0);
   const [totalSteps, setTotalSteps] = useState(0);

@@ -1,9 +1,8 @@
 import { AppBar, LinearProgress, Toolbar, Typography } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
-import clsx from 'clsx';
+import { makeStyles } from 'tss-react/mui';
 import React, { useEffect, useMemo, useState } from 'react';
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     appBar: {
       top: 'auto',
@@ -17,7 +16,7 @@ const useStyles = makeStyles((theme) => {
       marginRight: theme.spacing(3),
     }
   }
-})
+});
 const Stepper = ({
   steps,
   activeStep,
@@ -25,7 +24,7 @@ const Stepper = ({
   backButton,
   stepperProps
 }) => {
-  const classes = useStyles()
+  const { classes, cx } = useStyles()
 
   const normalValue = useMemo(
     () => {
@@ -57,7 +56,7 @@ const Stepper = ({
 
         {stepperProps?.variant === 'progress' ?
           (
-            <LinearProgress className={clsx(classes.grow, classes.progress)} color={stepperProps?.progressColor} variant='determinate' value={offsetValue} />
+            <LinearProgress className={cx(classes.grow, classes.progress)} color={stepperProps?.progressColor} variant='determinate' value={offsetValue} />
           )
           :
           (
@@ -76,7 +75,7 @@ const Stepper = ({
         <LinearProgress color={stepperProps?.progressColor} variant='determinate' value={normalValue} />
       }
     </AppBar >
-  )
+  );
 }
 
 export { Stepper }

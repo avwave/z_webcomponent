@@ -16,16 +16,15 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 import { amber, red, teal, yellow } from "@mui/material/colors";
 import { Backspace, Close, Error } from "@mui/icons-material";
 import { Autocomplete } from '@mui/material';
-import clsx from "clsx";
 import React, { Fragment, useEffect, useState } from "react";
 import { DateTimeRangePicker } from "../DateTimeRangePicker";
 import { LitePicker } from "../DateTimeRangePicker/wrapper";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
   formControl: {
     margin: theme.spacing(0),
   },
@@ -105,7 +104,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function TextFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
-  const classes = useStyles();
+  const { classes } = useStyles();
   return (
     <FormControl variant="standard" fullWidth className={classes.formControl}>
       <InputLabel>{filter?.label}</InputLabel>
@@ -138,7 +137,7 @@ function TextFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
 }
 
 function LegacyOptionFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
-  const classes = useStyles();
+  const { classes } = useStyles();
   return (
     <FormControl variant="standard" fullWidth className={classes.formControl}>
       <InputLabel>{filter?.label}</InputLabel>
@@ -164,7 +163,7 @@ function LegacyOptionFilterRenderer({ onChange, onChangeDisplay, value, filter }
   );
 }
 function OptionFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
-  const classes = useStyles();
+  const { classes } = useStyles();
   const onLocalChange = (value) => {
     onChange(value)
     const item = filter.options.find(v => v.value === value)
@@ -195,7 +194,7 @@ function OptionFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
 }
 
 function DateRangeFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
-  const classes = useStyles();
+  const { classes } = useStyles();
   return (
     <FormControl variant="standard" fullWidth className={classes.formControl}>
       <InputLabel>{filter?.label}</InputLabel>
@@ -212,7 +211,7 @@ function DateRangeFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
 }
 
 function ChipTabsFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
-  const classes = useStyles();
+  const { classes } = useStyles();
   return (
     <Tabs indicatorColor="primary"
       variant="scrollable"
@@ -267,7 +266,7 @@ function ChipTabsFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
 }
 
 function AuocompleteFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
-  const classes = useStyles();
+  const { classes, cx } = useStyles();
   const [internalValues, setInternalValues] = useState(value);
 
   useEffect(() => {
@@ -314,15 +313,17 @@ function AuocompleteFilterRenderer({ onChange, onChangeDisplay, value, filter })
       renderOption={(option, { selected }) => {
         if (filter?.multiple) {
           return (
-            <div className={clsx(classes.option, selected && classes.selected)}>
+            <div className={cx(classes.option, selected && classes.selected)}>
               <Checkbox color="primary" size="small" checked={selected} />
               {option[filter?.renderLabel] ?? option[filter?.labelField]}
             </div>
           );
         }
-        return <div className={clsx(classes.option, selected && classes.selected)}>
-          {option[filter?.renderLabel] ?? option[filter?.labelField]}
-        </div>
+        return (
+          <div className={cx(classes.option, selected && classes.selected)}>
+            {option[filter?.renderLabel] ?? option[filter?.labelField]}
+          </div>
+        );
       }}
       clearIcon={<Backspace fontSize="small" />}
       renderInput={(iParams) => (

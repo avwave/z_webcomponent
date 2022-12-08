@@ -1,8 +1,8 @@
 import { Button } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 import React, { useEffect, useMemo, useState } from 'react';
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     active: {
       
@@ -11,9 +11,9 @@ const useStyles = makeStyles((theme) => {
 
     }
   }
-})
+});
 const SelectOption = ({value, onClick, isActive}) => {
-  const classes = useStyles()
+  const { classes } = useStyles()
   return (
     <Button 
       onClick={onClick}

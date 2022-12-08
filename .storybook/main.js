@@ -12,11 +12,10 @@ module.exports = {
     "../src/components/**/*.stories.@(js|jsx|ts|tsx)",
   ],
   "addons": [
-    "storybook-addon-material-ui",
     "@storybook/addon-links",
     "@storybook/addon-essentials",
     "@storybook/preset-create-react-app",
-    "storybook-addon-material-ui",
+    "storybook-addon-material-ui5",
     "storybook-addon-pseudo-states",
     {
       name: '@storybook/addon-storysource',

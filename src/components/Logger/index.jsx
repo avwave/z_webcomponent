@@ -1,13 +1,13 @@
 import { Link, Typography } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 import { id } from 'date-fns/locale';
 import PropTypes from "prop-types";
 import React, { useCallback, useMemo, useState } from 'react';
 import ReactJson from 'react-json-view';
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {}
-})
+});
 
 function generatePath(path, params) {
   return path
@@ -34,7 +34,7 @@ const Logger = ({
   linkProps = {},
   log
 }) => {
-  const classes = useStyles()
+  const { classes } = useStyles()
 
   const recurseOpsLog = useCallback(
     (log, prefix = '', infix = '', suffix = '') => {

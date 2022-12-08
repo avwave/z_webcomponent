@@ -1,11 +1,10 @@
 import { Box, Typography } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
-import clsx from 'clsx';
+import { makeStyles } from 'tss-react/mui';
 import moment from 'moment';
 import React, { useEffect, useMemo, useState } from 'react';
 import { SelectOption } from './SelectOption';
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     timeSelect: {
       padding: 8,
@@ -40,14 +39,14 @@ const useStyles = makeStyles((theme) => {
       gridAutoFlow: "row",
     }
   }
-})
+});
 
 const HOURS = [...Array(12).keys()].map((hour) => `${hour + 1}`)
 const MINUTES = [...Array(12).keys()].map((minute) => (minute * 5).toString().padStart(2, '0'))
 const AMPM = ['AM', 'PM']
 
 const TimeSelect = ({ value, onChange }) => {
-  const classes = useStyles()
+  const { classes, cx } = useStyles()
 
   const [hour, setHour] = useState(value?.format('h'));
   const [minute, setMinute] = useState(value?.format('mm'));
@@ -66,10 +65,10 @@ const TimeSelect = ({ value, onChange }) => {
   return (
     <Box className={classes.timeSelect}>
       <Box>
-        <Typography variant="overline" className={clsx(classes.selectListHeading, classes.scroll)}>
+        <Typography variant="overline" className={cx(classes.selectListHeading, classes.scroll)}>
           H
         </Typography>
-        <div className={clsx(classes.stack, classes.selectList, classes.scroll)}>
+        <div className={cx(classes.stack, classes.selectList, classes.scroll)}>
           {HOURS.map((hours) => (
             <SelectOption
               onClick={() => setHour(hours)}
@@ -81,10 +80,10 @@ const TimeSelect = ({ value, onChange }) => {
         </div>
       </Box>
       <Box>
-        <Typography variant="overline" className={clsx(classes.selectListHeading, classes.scroll)}>
+        <Typography variant="overline" className={cx(classes.selectListHeading, classes.scroll)}>
           M
         </Typography>
-        <div className={clsx(classes.stack, classes.selectList, classes.scroll)}>
+        <div className={cx(classes.stack, classes.selectList, classes.scroll)}>
           {MINUTES.map((minutes) => (
             <SelectOption
               onClick={() => setMinute(minutes)}
@@ -96,10 +95,10 @@ const TimeSelect = ({ value, onChange }) => {
         </div>
       </Box>
       <Box>
-      <Typography variant="overline" className={clsx(classes.selectListHeading, classes.scroll)}>
+      <Typography variant="overline" className={cx(classes.selectListHeading, classes.scroll)}>
           AM/PM
         </Typography>
-        <div className={clsx(classes.stack, classes.selectList, classes.scroll)}>
+        <div className={cx(classes.stack, classes.selectList, classes.scroll)}>
           {AMPM.map((amPM) => (
             <SelectOption
               onClick={() => setAmPm(amPM)}

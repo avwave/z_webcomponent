@@ -1,10 +1,10 @@
 import { faCaretDown, faCaretUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormControl, FormHelperText, Button, Popover, CardContent, Card } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 import React, { useEffect, useMemo, useState } from 'react';
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     filterContainer: {
       paddingBottom: theme.spacing(2),
@@ -16,9 +16,9 @@ const useStyles = makeStyles((theme) => {
       flex:'auto'
     }
   }
-})
+});
 const FilterDropdown = ({ value, name, filterRenderer: FilterRenderer, onChangeFilter, onChangeFilterDisplay }) => {
-  const classes = useStyles()
+  const { classes } = useStyles()
   const [filterAnchor, setFilterAnchor] = useState(false);
   const isFilterOpen = Boolean(filterAnchor)
 

@@ -1,12 +1,11 @@
 import { Button, IconButton } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 import { LocalizationProvider, MobileDatePicker } from '@material-ui/pickers';
 import MomentUtils from '@material-ui/pickers/adapter/moment';
-import clsx from 'clsx';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     inputRoot: {
       display: 'flex',
@@ -74,7 +73,7 @@ const useStyles = makeStyles((theme) => {
       // marginLeft: 15
     }
   }
-})
+});
 const WeekPicker = ({
   startAccessor = "start_date",
   endAccessor = "end_date",
@@ -85,7 +84,7 @@ const WeekPicker = ({
   asMonthPicker = false,
   onChange = () => { },
   ...props }) => {
-  const classes = useStyles()
+  const { classes, cx } = useStyles()
   const [selectedDate, setSelectedDate] = useState();
 
   useEffect(() => {
@@ -105,14 +104,14 @@ const WeekPicker = ({
 
     const isFirstDayOfWeek = date.weekday() === 1;
     
-    const wrapperClassName = clsx({
+    const wrapperClassName = cx({
       [classes.highlight]: dayIsBetween,
       [classes.firstHighlight]: isFirstDay,
       [classes.endHighlight]: isLastDay,
       [classes.firstDayOfWeek]: isFirstDayOfWeek
     });
 
-    const dayClassName = clsx(classes.day, {
+    const dayClassName = cx(classes.day, {
       [classes.nonCurrentMonthDay]: !dayInCurrentMonth,
       [classes.highlightNonCurrentMonthDay]: !dayInCurrentMonth && dayIsBetween
     });

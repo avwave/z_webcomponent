@@ -1,4 +1,4 @@
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 import moment from 'moment';
 import React, { useEffect, useMemo, useState } from 'react';
 import TimeGrid from 'react-big-calendar/lib/TimeGrid';
@@ -9,11 +9,11 @@ import * as dates from 'react-big-calendar/lib/utils/dates'
 
 import ReactJson from "react-json-view";
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {}
-})
+});
 const AggregateWeekView = (cProps) => {
-  const classes = useStyles()
+  const { classes } = useStyles()
 
   let {
     date,

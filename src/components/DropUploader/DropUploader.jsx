@@ -1,16 +1,16 @@
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 import React, { useEffect, useMemo, useState } from 'react';
 
 import { Dropzone, FileItem } from "@dropzone-ui/react"
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {}
-})
+});
 const DropUploader = ({ 
   onChange=()=>{},
   onUploadFinished=()=>{}
  }) => {
-  const classes = useStyles()
+  const { classes } = useStyles()
   const [files, setFiles] = useState([]);
 
   

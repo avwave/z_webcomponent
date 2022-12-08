@@ -13,7 +13,7 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import withStyles from '@mui/styles/withStyles';
+import { withStyles } from 'tss-react/mui';
 import { FilterList, ViewColumn } from "@mui/icons-material";
 import { stringify } from "javascript-stringify";
 import { isEmpty } from "lodash";
@@ -258,4 +258,4 @@ function DataGridToolbar({
     </div>
   );
 }
-export default withStyles(styles)(DataGridToolbar);
+export default withStyles(DataGridToolbar, styles);
