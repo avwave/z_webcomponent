@@ -40,6 +40,7 @@ export function DraggableHeaderRenderer({
 }) {
   const classes = useStyles();
   const [{ isDragging }, drag] = useDrag({
+    type: 'BOX',
     item: { key: column.key, type: "COLUMN_DRAG" },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),

@@ -1,4 +1,10 @@
 module.exports = {
+  "core": {
+    builder: 'webpack5',
+    options: {
+      lazyCompilation: true,
+    },
+  },
   "stories": [
     "../src/**/*.stories.mdx",
     "../src/**/*.stories.@(js|jsx|ts|tsx)",
@@ -22,10 +28,7 @@ module.exports = {
   ],
   //TODO: check if polyfills defined in storybook will break projects using this build
   webpackFinal: async (config, { configType }) => {
-    config.node = {
-      ...config.node,
-      fs: "empty",
-    }
+    config.resolve.fallback.fs = false
     return config
   }
 }

@@ -19,7 +19,7 @@ import DataGridProvider, {
 import { DataGrid2 } from "./DataGrid2";
 import { columnData, rows } from "./gridData";
 
-import faker from "faker";
+import {faker} from '@faker-js/faker'
 import ReactJson from "react-json-view";
 faker.seed(123);
 

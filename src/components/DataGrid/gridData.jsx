@@ -1,4 +1,4 @@
-import faker from "faker";
+import {faker} from '@faker-js/faker'
 import { FormControlLabel, MenuItem, Select } from "@material-ui/core";
 import Checkbox from "../../shared/Checkbox";
 import { TriStateSelect } from "../TriStateSelect";
@@ -130,7 +130,7 @@ for (let i = 0; i < 20; i++) {
   rows.push({
     id: `row${i}`,
     title: faker.name.findName(),
-    col3Type: faker.random.number().toString(),
+    col3Type: faker.datatype.number().toString(),
     col4Type: faker.date.recent().toISOString(),
     col5Type: faker.lorem.paragraphs(2),
     col6Type: faker.datatype.boolean() ? "Tip" : "Top",
