@@ -1,4 +1,4 @@
-import { makeStyles } from '@material-ui/core';
+import makeStyles from '@mui/styles/makeStyles';
 import moment from 'moment';
 import React, { useEffect, useMemo, useState } from 'react';
 import TimeGrid from 'react-big-calendar/lib/TimeGrid';

@@ -1,11 +1,5 @@
-import {
-  Backdrop,
-  CircularProgress,
-  LinearProgress,
-  Toolbar,
-  Tooltip,
-  withStyles,
-} from "@material-ui/core";
+import { Backdrop, CircularProgress, LinearProgress, Toolbar, Tooltip } from "@mui/material";
+import withStyles from '@mui/styles/withStyles';
 import PropTypes from "prop-types";
 import React, { isValidElement, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { useContextMenu } from "react-contexify";

@@ -8,7 +8,6 @@ import {
   Input,
   InputAdornment,
   InputLabel,
-  makeStyles,
   MenuItem,
   MenuList,
   Select,
@@ -16,10 +15,11 @@ import {
   Tabs,
   TextField,
   Typography,
-} from "@material-ui/core";
-import { amber, red, teal, yellow } from "@material-ui/core/colors";
-import { Backspace, Close, Error } from "@material-ui/icons";
-import { Autocomplete } from "@material-ui/lab";
+} from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
+import { amber, red, teal, yellow } from "@mui/material/colors";
+import { Backspace, Close, Error } from "@mui/icons-material";
+import { Autocomplete } from '@mui/material';
 import clsx from "clsx";
 import React, { Fragment, useEffect, useState } from "react";
 import { DateTimeRangePicker } from "../DateTimeRangePicker";
@@ -308,7 +308,7 @@ function AuocompleteFilterRenderer({ onChange, onChangeDisplay, value, filter })
       getOptionLabel={(option) => {
         return option[filter?.labelField] ?? ""
       }}
-      getOptionSelected={(option, t) => {
+      isOptionEqualToValue={(option, t) => {
         return option[filter?.valueField] === t[filter?.valueField]
       }}
       renderOption={(option, { selected }) => {
@@ -324,7 +324,7 @@ function AuocompleteFilterRenderer({ onChange, onChangeDisplay, value, filter })
           {option[filter?.renderLabel] ?? option[filter?.labelField]}
         </div>
       }}
-      closeIcon={<Backspace fontSize="small" />}
+      clearIcon={<Backspace fontSize="small" />}
       renderInput={(iParams) => (
         <TextField
           {...iParams}
@@ -336,8 +336,7 @@ function AuocompleteFilterRenderer({ onChange, onChangeDisplay, value, filter })
         />
       )}
     />
-
-  )
+  );
 }
 
 export { ChipTabsFilterRenderer, TextFilterRenderer, OptionFilterRenderer, AuocompleteFilterRenderer, DateRangeFilterRenderer };

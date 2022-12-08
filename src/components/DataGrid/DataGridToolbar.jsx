@@ -12,9 +12,9 @@ import {
   Popover,
   Toolbar,
   Typography,
-  withStyles,
-} from "@material-ui/core";
-import { FilterList, ViewColumn } from "@material-ui/icons";
+} from "@mui/material";
+import withStyles from '@mui/styles/withStyles';
+import { FilterList, ViewColumn } from "@mui/icons-material";
 import { stringify } from "javascript-stringify";
 import { isEmpty } from "lodash";
 import React, { useContext, useEffect, useMemo, useState } from "react";
@@ -149,7 +149,7 @@ function DataGridToolbar({
           <div style={{ flex: 1 }} />
           {showSelector ? (
             <>
-              <IconButton variant="default" onClick={handleOpenCheckList}>
+              <IconButton variant="default" onClick={handleOpenCheckList} size="large">
                 <ViewColumn />
               </IconButton>
 
@@ -169,7 +169,7 @@ function DataGridToolbar({
           )}
           {filterable ? (
             <>
-              <IconButton variant="default" onClick={handleOpenFilterList}>
+              <IconButton variant="default" onClick={handleOpenFilterList} size="large">
                 <FilterList />
               </IconButton>
               <Popover

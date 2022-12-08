@@ -6,7 +6,7 @@ import {
   ListItem,
   ListSubheader,
   Paper,
-} from "@material-ui/core";
+} from "@mui/material";
 import { isEmpty } from "lodash";
 import React from "react";
 import { DndProvider } from "react-dnd";

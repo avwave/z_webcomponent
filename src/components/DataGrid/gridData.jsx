@@ -1,8 +1,8 @@
 import {faker} from '@faker-js/faker'
-import { FormControlLabel, MenuItem, Select } from "@material-ui/core";
+import { FormControlLabel, MenuItem, Select } from "@mui/material";
 import Checkbox from "../../shared/Checkbox";
 import { TriStateSelect } from "../TriStateSelect";
-import { HotTubSharp, LocalHospital } from "@material-ui/icons";
+import { HotTubSharp, LocalHospital } from "@mui/icons-material";
 const columnData = [
   {
     key: "id",

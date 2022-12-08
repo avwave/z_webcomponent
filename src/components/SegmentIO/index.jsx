@@ -1,4 +1,4 @@
-import { makeStyles } from '@material-ui/core';
+import makeStyles from '@mui/styles/makeStyles';
 import { AnalyticsBrowser } from '@segment/analytics-next';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import useLocalStorage from "use-local-storage";

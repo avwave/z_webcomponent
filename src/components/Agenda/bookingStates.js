@@ -1,4 +1,4 @@
-import { grey, red, yellow } from "@material-ui/core/colors";
+import { grey, red, yellow } from "@mui/material/colors";
 
 const ACTIVE = "active";
 const TIMED_OUT = "timed out";

@@ -6,24 +6,31 @@ import {
   CardActions,
   CardContent,
   CardHeader,
-  Checkbox, CircularProgress, Container,
+  Checkbox,
+  CircularProgress,
+  Container,
   FormControl,
-  FormControlLabel, FormGroup, FormHelperText,
+  FormControlLabel,
+  FormGroup,
+  FormHelperText,
   FormLabel,
   Grid,
   IconButton,
   InputAdornment,
   LinearProgress,
   ListItemText,
-  makeStyles,
-  MenuItem, Radio,
+  MenuItem,
+  Radio,
   RadioGroup,
   Switch,
   TextField,
-  Toolbar, Tooltip, Typography
-} from "@material-ui/core";
-import { Add, Backspace, Close, DateRange, Schedule } from "@material-ui/icons";
-import { Autocomplete } from "@material-ui/lab";
+  Toolbar,
+  Tooltip,
+  Typography,
+} from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
+import { Add, Backspace, Close, DateRange, Schedule } from "@mui/icons-material";
+import { Autocomplete } from '@mui/material';
 import { DatePicker, DateTimePicker, LocalizationProvider, TimePicker } from "@material-ui/pickers";
 import MomentUtils from '@material-ui/pickers/adapter/moment';
 import clsx from "clsx";
@@ -436,7 +443,7 @@ const FormFieldSet = ({
                   </InputAdornment>
                 ) : undefined,
                 inputProps: {
-                  ...fieldParams.inputProps ?? {}
+                  ...(fieldParams.inputProps ?? {})
                 }
               }}
               variant={variant}
@@ -469,14 +476,14 @@ const FormFieldSet = ({
                   </InputAdornment>
                 ) : undefined,
                 inputProps: {
-                  ...fieldParams.inputProps ?? {}
+                  ...(fieldParams.inputProps ?? {})
                 }
               }}
               maskDelay={1000}
               variant={variant}
               {...fieldParams?.fieldProps}
             />
-          )
+          );
         case "textonly":
           return (
             <TextField
@@ -520,7 +527,7 @@ const FormFieldSet = ({
                   country: "PH",
                   international: true,
                   withCountryCallingCode: true,
-                  ...fieldParams.inputProps ?? {}
+                  ...(fieldParams.inputProps ?? {})
                 }
               }}
               variant={variant}
@@ -717,7 +724,7 @@ const FormFieldSet = ({
               getOptionLabel={(option) => {
                 return option[fieldParams.settings.labelField] ?? "";
               }}
-              getOptionSelected={(option, t) => {
+              isOptionEqualToValue={(option, t) => {
                 return option[fieldParams.settings.valueField] === t[fieldParams.settings.valueField];
               }}
               renderOption={(option, { selected }) => {
@@ -731,7 +738,7 @@ const FormFieldSet = ({
                 }
                 return option[fieldParams.settings.labelField];
               }}
-              closeIcon={<Backspace fontSize="small" />}
+              clearIcon={<Backspace fontSize="small" />}
               renderInput={(iParams) => (
                 <TextField
                   {...iParams}
@@ -766,73 +773,71 @@ const FormFieldSet = ({
                 name={fieldName}
                 render={(arrayHelpers) => {
                   if (Array.isArray(get(arrayHelpers.form.values, fieldName))) {
-                    return (
-                      <>
-                        {get(arrayHelpers.form.values, fieldName).map(
-                          (subform, idx) => {
-                            return (
-                              <Box component={fieldParams.settings?.formInset ? Card : 'div'} key={`${fieldName}-${idx}`}
-                                className={fieldParams.inline && classes.subformInline}>
-                                {!fieldParams.inline &&
-                                  <Box className={classes.subformHeader} >
-                                    <Typography variant="body2" className={classes.subformHeaderTitle}>
-                                      {formInline ? "" : `${fieldParams.label} ${isRequired ? '*' : ''}`}
-                                    </Typography>
-                                    {
-                                      formReadOnly ? null :
-                                        <IconButton
-                                          aria-label=""
-                                          onClick={() => {
-                                            arrayHelpers.remove(idx);
-                                          }}
-                                        >
-                                          <Close />
-                                        </IconButton>
-                                    }
-                                  </Box>
-                                }
-                                <Box component={fieldParams.inline ? 'div' : CardContent} className={classes.subformContent}>
-                                  {buildComponent(
-                                    fieldParams.formLayout,
-                                    fieldParams.formTemplate,
-                                    fieldParams.formLayout.length,
-                                    `${fieldName}-${idx}`,
-                                    `${fieldName}[${idx}]`
-                                  )}
+                    return <>
+                      {get(arrayHelpers.form.values, fieldName).map(
+                        (subform, idx) => {
+                          return (
+                            <Box component={fieldParams.settings?.formInset ? Card : 'div'} key={`${fieldName}-${idx}`}
+                              className={fieldParams.inline && classes.subformInline}>
+                              {!fieldParams.inline &&
+                                <Box className={classes.subformHeader} >
+                                  <Typography variant="body2" className={classes.subformHeaderTitle}>
+                                    {formInline ? "" : `${fieldParams.label} ${isRequired ? '*' : ''}`}
+                                  </Typography>
+                                  {
+                                    formReadOnly ? null :
+                                      <IconButton
+                                        aria-label=""
+                                        onClick={() => {
+                                          arrayHelpers.remove(idx);
+                                        }}
+                                        size="large">
+                                        <Close />
+                                      </IconButton>
+                                  }
                                 </Box>
-                                {fieldParams.inline &&
-
-                                  (formReadOnly || fieldParams?.readOnly) ? null :
-                                  <IconButton
-                                    className={classes.inlineDelete}
-                                    aria-label=""
-                                    onClick={() => {
-                                      arrayHelpers.remove(idx);
-                                    }}
-                                  >
-                                    <Close />
-                                  </IconButton>
-                                }
+                              }
+                              <Box component={fieldParams.inline ? 'div' : CardContent} className={classes.subformContent}>
+                                {buildComponent(
+                                  fieldParams.formLayout,
+                                  fieldParams.formTemplate,
+                                  fieldParams.formLayout.length,
+                                  `${fieldName}-${idx}`,
+                                  `${fieldName}[${idx}]`
+                                )}
                               </Box>
-                            );
-                          }
-                        )}
-                        {(!formReadOnly && !fieldParams?.readOnly) &&
-                          <div>
-                            <Button
-                              variant="contained"
-                              onClick={() => {
-                                arrayHelpers.push(fieldParams.formValueTemplate);
-                              }}
-                              startIcon={<Add />}
-                              color="primary"
-                            >
-                              Add {`${fieldParams.label}`}
-                            </Button>
-                          </div>
+                              {fieldParams.inline &&
+
+                                (formReadOnly || fieldParams?.readOnly) ? null :
+                                <IconButton
+                                  className={classes.inlineDelete}
+                                  aria-label=""
+                                  onClick={() => {
+                                    arrayHelpers.remove(idx);
+                                  }}
+                                  size="large">
+                                  <Close />
+                                </IconButton>
+                              }
+                            </Box>
+                          );
                         }
-                      </>
-                    );
+                      )}
+                      {(!formReadOnly && !fieldParams?.readOnly) &&
+                        <div>
+                          <Button
+                            variant="contained"
+                            onClick={() => {
+                              arrayHelpers.push(fieldParams.formValueTemplate);
+                            }}
+                            startIcon={<Add />}
+                            color="primary"
+                          >
+                            Add {`${fieldParams.label}`}
+                          </Button>
+                        </div>
+                      }
+                    </>;
                   }
                   if (formReadOnly && fieldParams?.readOnly) return <></>
                   return (

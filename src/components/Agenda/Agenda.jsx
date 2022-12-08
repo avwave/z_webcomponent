@@ -14,10 +14,12 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText, Link,
-  makeStyles,
-  Paper, Typography
-} from "@material-ui/core";
+  DialogContentText,
+  Link,
+  Paper,
+  Typography,
+} from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
 import GridBox from "../DataGrid/GridBox";
 import { EdgeContainer } from "../EdgeContainer";
 import "./AgendaStyles.scss";

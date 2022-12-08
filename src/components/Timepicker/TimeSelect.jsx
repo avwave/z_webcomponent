@@ -1,4 +1,5 @@
-import { Box, makeStyles, Typography } from '@material-ui/core';
+import { Box, Typography } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import clsx from 'clsx';
 import moment from 'moment';
 import React, { useEffect, useMemo, useState } from 'react';

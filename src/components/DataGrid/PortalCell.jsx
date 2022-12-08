@@ -1,5 +1,6 @@
-import { IconButton, makeStyles, Popover, Portal } from '@material-ui/core';
-import { ArrowDropDown, ArrowDropUp } from '@material-ui/icons';
+import { IconButton, Popover, Portal } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 const useStyles = makeStyles((theme) => {

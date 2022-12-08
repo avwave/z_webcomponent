@@ -4,8 +4,8 @@ import { Checkbox } from "../Checkbox";
 import styled from "styled-components";
 import { CheckboxContext } from "./checklistContext";
 import isEmpty from "lodash.isempty";
-import { withTheme } from "@material-ui/core/styles";
-import { Button } from "@material-ui/core";
+import withTheme from '@mui/styles/withTheme';
+import { Button } from "@mui/material";
 
 const StyledList = styled.ul`
   list-style-type: none;

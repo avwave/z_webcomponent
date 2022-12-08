@@ -1,4 +1,5 @@
-import { AppBar, LinearProgress, makeStyles, Toolbar, Typography } from '@material-ui/core';
+import { AppBar, LinearProgress, Toolbar, Typography } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import clsx from 'clsx';
 import React, { useEffect, useMemo, useState } from 'react';
 

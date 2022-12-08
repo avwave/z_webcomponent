@@ -5,13 +5,13 @@ import {
   Input,
   InputAdornment,
   InputLabel,
-  makeStyles,
   MenuItem,
   Select,
   TextField,
-} from "@material-ui/core";
-import { Backspace, Close } from "@material-ui/icons";
-import { Autocomplete } from "@material-ui/lab";
+} from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
+import { Backspace, Close } from "@mui/icons-material";
+import { Autocomplete } from '@mui/material';
 import React, { Fragment, useEffect, useState } from "react";
 
 const useStyles = makeStyles((theme) => ({
@@ -112,7 +112,7 @@ function AuocompleteFilterRenderer({ onChange, onChangeDisplay, value, filter })
         getOptionLabel={(option) => {
           return option[filter?.labelField] ?? ""
         }}
-        getOptionSelected={(option, t) => {
+        isOptionEqualToValue={(option, t) => {
           return option[filter?.valueField] === t[filter?.valueField]
         }}
         renderOption={(option, { selected }) => {
@@ -126,7 +126,7 @@ function AuocompleteFilterRenderer({ onChange, onChangeDisplay, value, filter })
           }
           return option[filter?.labelField];
         }}
-        closeIcon={<Backspace fontSize="small" />}
+        clearIcon={<Backspace fontSize="small" />}
         renderInput={(iParams) => (
           <TextField
             {...iParams}
@@ -139,7 +139,7 @@ function AuocompleteFilterRenderer({ onChange, onChangeDisplay, value, filter })
         )}
       />
     </FormControl>
-  )
+  );
 }
 
 export { TextFilterRenderer, OptionFilterRenderer, AuocompleteFilterRenderer };

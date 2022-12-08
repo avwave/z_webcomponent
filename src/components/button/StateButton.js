@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
-import {Button} from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import {Button} from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
 import { colorStyles } from "../../shared/colorPalette.js";
 
 const useStyles = makeStyles(theme => ({

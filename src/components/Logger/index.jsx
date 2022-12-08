@@ -1,4 +1,5 @@
-import { Link, makeStyles, Typography } from '@material-ui/core';
+import { Link, Typography } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import { id } from 'date-fns/locale';
 import PropTypes from "prop-types";
 import React, { useCallback, useMemo, useState } from 'react';

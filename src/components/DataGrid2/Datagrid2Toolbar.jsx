@@ -1,10 +1,17 @@
 import {
-  Button, Chip, debounce, IconButton, InputAdornment, Popover, TextField, Toolbar,
+  Button,
+  Chip,
+  debounce,
+  IconButton,
+  InputAdornment,
+  Popover,
+  TextField,
+  Toolbar,
   Tooltip,
   Typography,
-  withStyles
-} from "@material-ui/core";
-import { Search, ViewColumn } from "@material-ui/icons";
+} from "@mui/material";
+import withStyles from '@mui/styles/withStyles';
+import { Search, ViewColumn } from "@mui/icons-material";
 import clsx from "clsx";
 import { Table } from "ka-table";
 import { hideColumn, showColumn } from "ka-table/actionCreators";
@@ -51,7 +58,7 @@ const styles = (theme) => ({
     [theme.breakpoints.up('md')]: {
       flexWrap: "nowrap",
     },
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
       flexWrap: 'wrap'
     },
     flexDirection: "row",
@@ -70,7 +77,7 @@ const styles = (theme) => ({
     [theme.breakpoints.up('md')]: {
       minWidth: 215
     },
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('md')]: {
 
     },
   },

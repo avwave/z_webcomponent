@@ -1,5 +1,5 @@
-import { Button, ButtonGroup, Grid, Toolbar, Typography } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import { Button, ButtonGroup, Grid, Toolbar, Typography } from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
 import { DatePicker, LocalizationProvider, MobileDatePicker } from "@material-ui/pickers";
 import MomentUtils from '@material-ui/pickers/adapter/moment';
 import clsx from "clsx";
@@ -173,7 +173,7 @@ const AgendaToolbar = ({
   );
   return (
     <Toolbar className={classes.root}>
-      <Grid container spacing={16} justify="flex-start" className={classes.container}>
+      <Grid container spacing={16} justifyContent="flex-start" className={classes.container}>
         <Grid item xs={12} sm={6} md={defColWidth}>
           {!resources ?
             <ButtonGroup variant="text" size="small" className={classes.leftGroup}>
@@ -211,7 +211,6 @@ const AgendaToolbar = ({
         </Grid>
       </Grid>
     </Toolbar>
-
   );
 }
 

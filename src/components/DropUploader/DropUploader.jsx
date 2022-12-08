@@ -1,4 +1,4 @@
-import { makeStyles } from '@material-ui/core';
+import makeStyles from '@mui/styles/makeStyles';
 import React, { useEffect, useMemo, useState } from 'react';
 
 import { Dropzone, FileItem } from "@dropzone-ui/react"

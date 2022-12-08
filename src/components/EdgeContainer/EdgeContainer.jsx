@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { withTheme } from "@material-ui/core/styles";
+import withTheme from '@mui/styles/withTheme';
 
 const Edge = styled.div`
   border-left: ${(props) => `${props.edgeWidth}px`} solid;

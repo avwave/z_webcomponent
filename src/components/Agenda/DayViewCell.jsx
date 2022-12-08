@@ -1,7 +1,18 @@
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Card, CardContent, Chip, darken, Divider, Link, makeStyles, Tooltip, Typography, useTheme } from '@material-ui/core';
-import { red, yellow } from '@material-ui/core/colors';
+import {
+  Card,
+  CardContent,
+  Chip,
+  darken,
+  Divider,
+  Link,
+  Tooltip,
+  Typography,
+  useTheme,
+} from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import { red, yellow } from '@mui/material/colors';
 import clsx from 'clsx';
 import moment from 'moment';
 import { memo, useCallback, useMemo } from 'react';

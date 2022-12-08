@@ -1,7 +1,8 @@
 import { faSignal, faSortAmountDown, faSortAmountUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { alpha, Checkbox, IconButton, lighten, LinearProgress, makeStyles, Tooltip, useTheme } from '@material-ui/core';
-import { UnfoldLess, UnfoldMore } from '@material-ui/icons';
+import { alpha, Checkbox, IconButton, lighten, LinearProgress, Tooltip, useTheme } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import { UnfoldLess, UnfoldMore } from '@mui/icons-material';
 import clsx from 'clsx';
 import { kaReducer, Table } from "ka-table";
 import { deselectAllFilteredRows, deselectRow, hideDetailsRow, selectAllFilteredRows, selectRow, showDetailsRow, updateData } from "ka-table/actionCreators";
@@ -121,9 +122,11 @@ const HeaderCell = ({ column, ...props }) => {
 
 const RowExpanderButton = ({ dispatch, rowKeyValue, isDetailsRowShown }) => {
   return (
-    <IconButton onClick={() => {
-      dispatch(isDetailsRowShown ? hideDetailsRow(rowKeyValue) : showDetailsRow(rowKeyValue));
-    }}>
+    <IconButton
+      onClick={() => {
+        dispatch(isDetailsRowShown ? hideDetailsRow(rowKeyValue) : showDetailsRow(rowKeyValue));
+      }}
+      size="large">
       {isDetailsRowShown ? <UnfoldLess /> : <UnfoldMore />}
     </IconButton>
   );
@@ -258,8 +261,8 @@ const DataGrid2 = React.forwardRef(({
         filterRenderer: getFilterRenderer(col),
         isResizable: col.resizable,
         style: { width: 200, minWidth: 200 },
-        ...col.key === 'select-row' ? { width: 50 } : {},
-        ...col.key === sortColumn ? { sortDirection: sortDirection === 'ASC' ? 'ascend' : 'descend' } : {}
+        ...(col.key === 'select-row' ? { width: 50 } : {}),
+        ...(col.key === sortColumn ? { sortDirection: sortDirection === 'ASC' ? 'ascend' : 'descend' } : {})
       }
       return column
     })

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Chip from "@material-ui/core/Chip";
+import Chip from "@mui/material/Chip";
 import getStatusColor from "../../shared/getStatusColor";
 
 export default class TagCellRender extends Component {

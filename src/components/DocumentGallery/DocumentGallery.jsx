@@ -1,5 +1,6 @@
-import { Button, IconButton, makeStyles, Typography } from '@material-ui/core';
-import { ArrowBackIos, ArrowForwardIos } from '@material-ui/icons';
+import { Button, IconButton, Typography } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material';
 import clsx from 'clsx';
 import isEmpty from 'lodash.isempty';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
@@ -58,16 +59,28 @@ const DocumentGallery = ({ docs = [], initialIndex=0 }) => {
   return (
     <div className={clsx(classes.navigationContainer, 'pvx-container')}>
       <div className={clsx(classes.galleryInfo, 'preview-bar')}>
-        <IconButton color="inherit" onClick={() => { setCurrentFileIndex(currentFileIndex === 0 ? 0 : currentFileIndex - 1) }} ><ArrowBackIos /></IconButton>
+        <IconButton
+          color="inherit"
+          onClick={() => { setCurrentFileIndex(currentFileIndex === 0 ? 0 : currentFileIndex - 1) }}
+          size="large"><ArrowBackIos /></IconButton>
         <Typography style={{ flex: 1 }} variant="caption">{docs[currentFileIndex]?.displayName ?? docs[currentFileIndex]?.name}</Typography>
         <Typography variant="caption">{currentFileIndex + 1} of {docs.length}</Typography>
-        <IconButton color="inherit" onClick={() => { setCurrentFileIndex(currentFileIndex === (docs.length - 1) ? docs.length - 1 : currentFileIndex + 1) }} ><ArrowForwardIos /></IconButton>
+        <IconButton
+          color="inherit"
+          onClick={() => { setCurrentFileIndex(currentFileIndex === (docs.length - 1) ? docs.length - 1 : currentFileIndex + 1) }}
+          size="large"><ArrowForwardIos /></IconButton>
       </div>
       <DocumentViewer loading={loading} downloadName={docs[currentFileIndex]?.name} data={fileData} mimeType={docs[currentFileIndex]?.mimeType} url={docs[currentFileIndex]?.url} />
-      <IconButton onClick={() => { setCurrentFileIndex(currentFileIndex === 0 ? 0 : currentFileIndex - 1) }} className={classes.previous}><ArrowBackIos /></IconButton>
-      <IconButton onClick={() => { setCurrentFileIndex(currentFileIndex === (docs.length - 1) ? docs.length - 1 : currentFileIndex + 1) }} className={classes.next}><ArrowForwardIos /></IconButton>
+      <IconButton
+        onClick={() => { setCurrentFileIndex(currentFileIndex === 0 ? 0 : currentFileIndex - 1) }}
+        className={classes.previous}
+        size="large"><ArrowBackIos /></IconButton>
+      <IconButton
+        onClick={() => { setCurrentFileIndex(currentFileIndex === (docs.length - 1) ? docs.length - 1 : currentFileIndex + 1) }}
+        className={classes.next}
+        size="large"><ArrowForwardIos /></IconButton>
     </div>
-  )
+  );
 }
 
 export { DocumentGallery }

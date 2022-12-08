@@ -14,7 +14,7 @@ import { views } from "react-big-calendar/lib/utils/constants";
 import { largeData } from "./largedataset";
 import moment from "moment";
 import { parseBookingStatus } from "./bookingStates";
-import { Chip, Link, Typography } from "@material-ui/core";
+import { Chip, Link, Typography } from "@mui/material";
 import { personNameFormal } from "../utils/format";
 import { AggregateWeekView } from "./AggregateWeekView";
 import { AggregateCell, AggregateEventCell, DayViewCell, DayViewHeader, DayViewToolTip, WeekViewCell } from "./DayViewCell";

@@ -1,5 +1,6 @@
 import MomentUtils from '@material-ui/pickers/adapter/moment';
-import { makeStyles, TextField, useMediaQuery } from '@material-ui/core';
+import { TextField, useMediaQuery } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import { LocalizationProvider, MobileTimePicker, TimePicker } from '@material-ui/pickers';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { CustomPicker } from './CustomPicker';
@@ -11,7 +12,7 @@ const Timepicker = ({ value, onChange, label, inputProps }) => {
   const classes = useStyles()
   const input = useRef()
 
-  const isMobile = useMediaQuery((theme) => theme.breakpoints.down("xs"), {
+  const isMobile = useMediaQuery((theme) => theme.breakpoints.down('sm'), {
     noSsr: true,
   });
 

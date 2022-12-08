@@ -10,8 +10,8 @@ import CheckboxProvider, {
   checkboxReducer,
 } from "./checklistContext";
 import { Button } from "../Button";
-import { InputAdornment, TextField } from "@material-ui/core";
-import { Search } from "@material-ui/icons";
+import { InputAdornment, TextField } from "@mui/material";
+import { Search } from "@mui/icons-material";
 
 let defaultItems = [
   { id: "id1", title: "Task one", state: status.UNCHECKED },

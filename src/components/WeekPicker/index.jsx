@@ -1,4 +1,5 @@
-import { Button, IconButton, makeStyles } from '@material-ui/core';
+import { Button, IconButton } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import { LocalizationProvider, MobileDatePicker } from '@material-ui/pickers';
 import MomentUtils from '@material-ui/pickers/adapter/moment';
 import clsx from 'clsx';
@@ -120,9 +121,12 @@ const WeekPicker = ({
     return (
       <div className={classes.dayWrapper}>
         <div className={wrapperClassName}>
-          <IconButton className={dayClassName} onClick={()=> {
-            dayInCurrentMonth.onDaySelect(dayInCurrentMonth.day)
-          }}>
+          <IconButton
+            className={dayClassName}
+            onClick={()=> {
+              dayInCurrentMonth.onDaySelect(dayInCurrentMonth.day)
+            }}
+            size="large">
             <span>{date.format("DD")} </span>
           </IconButton>
         </div>

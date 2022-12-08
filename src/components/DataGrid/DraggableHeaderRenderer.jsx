@@ -1,5 +1,6 @@
-import { makeStyles, Typography } from "@material-ui/core";
-import { Sort } from "@material-ui/icons";
+import { Typography } from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
+import { Sort } from "@mui/icons-material";
 import React, { useCallback } from "react";
 import { SortableHeaderCell } from "react-data-grid";
 import { useDrag, useDrop } from "react-dnd";

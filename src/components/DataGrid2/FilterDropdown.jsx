@@ -1,6 +1,7 @@
 import { faCaretDown, faCaretUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { makeStyles, FormControl, FormHelperText, Button, Popover, CardContent, Card } from '@material-ui/core';
+import { FormControl, FormHelperText, Button, Popover, CardContent, Card } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import React, { useEffect, useMemo, useState } from 'react';
 
 const useStyles = makeStyles((theme) => {

@@ -1,4 +1,5 @@
-import { Avatar, Chip, makeStyles } from '@material-ui/core';
+import { Avatar, Chip } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import React from 'react';
 
 const useStyles = makeStyles((theme) => {

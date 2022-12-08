@@ -1,5 +1,15 @@
-import { Box, Button, Card, CardContent, IconButton, makeStyles, MobileStepper, Typography, useTheme } from '@material-ui/core';
-import { Close, KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons';
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  IconButton,
+  MobileStepper,
+  Typography,
+  useTheme,
+} from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import { Close, KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material';
 import { FieldArray } from 'formik';
 import { get } from "lodash";
 import { useCallback, useMemo, useState } from 'react';

@@ -1,4 +1,5 @@
-import { makeStyles, CircularProgress } from '@material-ui/core';
+import { CircularProgress } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import React, { useMemo } from 'react';
 import FilePreviewer, { FilePreviewerThumbnail } from 'react-file-previewer';
 import "react-file-previewer/src/styles.css";
