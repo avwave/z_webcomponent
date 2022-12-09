@@ -31,7 +31,6 @@ import {
 import { makeStyles } from 'tss-react/mui';
 import { Add, Backspace, Close, DateRange, Schedule } from "@mui/icons-material";
 import { Autocomplete } from '@mui/material';
-// import { DatePicker, DateTimePicker, LocalizationProvider, TimePicker } from "@material-ui/pickers";
 import { FieldArray, Formik, getIn } from "formik";
 import { get, isEmpty } from "lodash";
 import moment from "moment";
@@ -454,37 +453,37 @@ const FormFieldSet = ({
         case "duration":
           return (
             <>
-            <DurationInputMask
-              component={TextField}
-              name={fieldName}
-              type={fieldParams.type}
-              label={formInline ? "" : `${fieldParams.label} ${isRequired ? '*' : ''}`}
-              value={formValue}
-              handleChange={(value) => {
-                onChangeOverride(value)
-              }}
-              handleBlur={(value) => {
-                onChangeOverride(value)
-              }}
-              disabled={fieldParams.readOnly || formReadOnly}
-              error={hasError}
-              InputLabelProps={{
-                shrink: true,
-              }}
-              InputProps={{
-                startAdornment: fieldParams.icon ? (
-                  <InputAdornment position="start">
-                    {fieldParams.icon}
-                  </InputAdornment>
-                ) : undefined,
-                inputProps: {
-                  ...(fieldParams.inputProps ?? {})
-                }
-              }}
-              maskDelay={1000}
-              variant={variant}
-              {...fieldParams?.fieldProps}
-            />
+              <DurationInputMask
+                component={TextField}
+                name={fieldName}
+                type={fieldParams.type}
+                label={formInline ? "" : `${fieldParams.label} ${isRequired ? '*' : ''}`}
+                value={formValue}
+                handleChange={(value) => {
+                  onChangeOverride(value)
+                }}
+                handleBlur={(value) => {
+                  onChangeOverride(value)
+                }}
+                disabled={fieldParams.readOnly || formReadOnly}
+                error={hasError}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                InputProps={{
+                  startAdornment: fieldParams.icon ? (
+                    <InputAdornment position="start">
+                      {fieldParams.icon}
+                    </InputAdornment>
+                  ) : undefined,
+                  inputProps: {
+                    ...(fieldParams.inputProps ?? {})
+                  }
+                }}
+                maskDelay={1000}
+                variant={variant}
+                {...fieldParams?.fieldProps}
+              />
             </>
           );
         case "textonly":
@@ -730,16 +729,18 @@ const FormFieldSet = ({
               isOptionEqualToValue={(option, t) => {
                 return option[fieldParams.settings.valueField] === t[fieldParams.settings.valueField];
               }}
-              renderOption={(option, { selected }) => {
+              renderOption={(props, option, { selected }) => {
                 if (fieldParams.settings?.multiple) {
                   return (
-                    <Fragment>
-                      <Checkbox checked={selected} />
-                      {option[fieldParams.settings.labelField]}
-                    </Fragment>
+                    <li {...props}>
+                      <Fragment>
+                        <Checkbox checked={selected} />
+                        {option[fieldParams.settings.labelField]}
+                      </Fragment>
+                    </li>
                   );
                 }
-                return option[fieldParams.settings.labelField];
+                return <li {...props}>{option[fieldParams.settings.labelField]}</li>
               }}
               clearIcon={<Backspace fontSize="small" />}
               renderInput={(iParams) => (
@@ -995,7 +996,7 @@ const FormFieldSet = ({
             <Button
               key="reset"
               color="secondary"
-              
+
               disabled={loading}
               startIcon={loading && <CircularProgress size={20} />}
               onClick={async () => {
@@ -1012,7 +1013,7 @@ const FormFieldSet = ({
           color="primary"
           disabled={loading || disableSubmit}
           startIcon={loading && <CircularProgress size={20} />}
-          
+
           onClick={async () => {
             formik.handleSubmit();
             onTriggerSubmit();

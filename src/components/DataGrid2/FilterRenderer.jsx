@@ -310,19 +310,23 @@ function AuocompleteFilterRenderer({ onChange, onChangeDisplay, value, filter })
       isOptionEqualToValue={(option, t) => {
         return option[filter?.valueField] === t[filter?.valueField]
       }}
-      renderOption={(option, { selected }) => {
+      renderOption={(props, option, { selected }) => {
         if (filter?.multiple) {
           return (
-            <div className={cx(classes.option, selected && classes.selected)}>
-              <Checkbox color="primary" size="small" checked={selected} />
-              {option[filter?.renderLabel] ?? option[filter?.labelField]}
-            </div>
+            <li {...props}>
+              <div className={cx(classes.option, selected && classes.selected)}>
+                <Checkbox color="primary" size="small" checked={selected} />
+                {option[filter?.renderLabel] ?? option[filter?.labelField]}
+              </div>
+            </li>
           );
         }
         return (
-          <div className={cx(classes.option, selected && classes.selected)}>
-            {option[filter?.renderLabel] ?? option[filter?.labelField]}
-          </div>
+          <li {...props}>
+            <div className={cx(classes.option, selected && classes.selected)}>
+              {option[filter?.renderLabel] ?? option[filter?.labelField]}
+            </div>
+          </li>
         );
       }}
       clearIcon={<Backspace fontSize="small" />}

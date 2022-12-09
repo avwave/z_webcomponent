@@ -67,7 +67,7 @@ function OptionFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
         value={value ?? ""}
         onChange={(e) => {
           onChange(e.target.value)
-          const item =filter.options.find(v=> v.value === e.target.value)
+          const item = filter.options.find(v => v.value === e.target.value)
           onChangeDisplay(item?.label)
         }}>
         <MenuItem value="">
@@ -115,16 +115,18 @@ function AuocompleteFilterRenderer({ onChange, onChangeDisplay, value, filter })
         isOptionEqualToValue={(option, t) => {
           return option[filter?.valueField] === t[filter?.valueField]
         }}
-        renderOption={(option, { selected }) => {
+        renderOption={(props, option, { selected }) => {
           if (filter?.multiple) {
             return (
-              <Fragment>
-                <Checkbox checked={selected} />
-                {option[filter?.labelField]}
-              </Fragment>
+              <li {...props}>
+                <Fragment>
+                  <Checkbox checked={selected} />
+                  {option[filter?.labelField]}
+                </Fragment>
+              </li>
             );
           }
-          return option[filter?.labelField];
+          return <li {...props}>{option[filter?.labelField]}</li>
         }}
         clearIcon={<Backspace fontSize="small" />}
         renderInput={(iParams) => (

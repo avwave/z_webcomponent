@@ -9,11 +9,21 @@ const useStyles = makeStyles()((theme) => {
     filterContainer: {
       paddingBottom: theme.spacing(2),
       maxWidth: '40vw',
+      height: '100%',
+      maxHeight: '80vh',
+      minHeight: '200px',
     },
     dropdownButton: {
       marginRight: theme.spacing(1),
       marginBottom: theme.spacing(1),
-      flex:'auto'
+      flex: 'auto'
+    },
+    dropdownContainer: {
+        minWidth: 400,
+        height: '100%',
+        maxHeight: '80vh',
+        minHeight: '200px',
+        overflowY: 'auto'
     }
   }
 });
@@ -28,11 +38,11 @@ const FilterDropdown = ({ value, name, filterRenderer: FilterRenderer, onChangeF
 
   return <>
     <Button variant={value ? "contained" : "outlined"}
-      color={value? "primary" : "inherit"}
+      color={value ? "primary" : "inherit"}
       className={classes.dropdownButton}
       onClick={handleOpenFilter}
-      
-      endIcon={<FontAwesomeIcon icon={isFilterOpen?faCaretUp:faCaretDown}/>}
+
+      endIcon={<FontAwesomeIcon icon={isFilterOpen ? faCaretUp : faCaretDown} />}
     >{name}</Button>
     <Popover
       open={isFilterOpen}
@@ -47,23 +57,23 @@ const FilterDropdown = ({ value, name, filterRenderer: FilterRenderer, onChangeF
         horizontal: 'left',
       }}
       PaperProps={{
-        style: { minWidth: '400px' },
+        // minWidth: '400px',
       }}
     >
-      <Card>
+      <Card className={classes.dropdownContainer}>
         <CardContent>
-        <FormControl variant="standard" className={classes.filterContainer} fullWidth>
-          <FormHelperText>{name}</FormHelperText>
-          <FilterRenderer
-            value={value}
-            onChange={(v) => {
-              onChangeFilter(v);
-            }}
-            onChangeDisplay={(v) => {
-              onChangeFilterDisplay(v);
-            }}
-          />
-        </FormControl>
+          <FormControl variant="standard" className={classes.filterContainer} fullWidth>
+            <FormHelperText>{name}</FormHelperText>
+            <FilterRenderer
+              value={value}
+              onChange={(v) => {
+                onChangeFilter(v);
+              }}
+              onChangeDisplay={(v) => {
+                onChangeFilterDisplay(v);
+              }}
+            />
+          </FormControl>
         </CardContent>
       </Card>
     </Popover>
