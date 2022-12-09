@@ -1,13 +1,12 @@
 import { Button, ButtonGroup, Grid, Toolbar, Typography } from "@mui/material";
 import { makeStyles } from 'tss-react/mui';
-import { DatePicker, LocalizationProvider, MobileDatePicker } from "@material-ui/pickers";
-import MomentUtils from '@material-ui/pickers/adapter/moment';
 import moment from "moment";
 import React, { useMemo } from "react";
 import { Navigate } from "react-big-calendar";
 import { views as calendarViews } from "react-big-calendar/lib/utils/constants";
 import { WeekPicker } from "../WeekPicker";
-
+import { LocalizationProvider, MobileDatePicker } from "@mui/x-date-pickers";
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment'
 
 const useStyles = makeStyles()((theme) => ({
   leftGroup: {
@@ -219,7 +218,7 @@ const WrapPicker = props => {
   //NOTE: Use this pattern to set the filters beforehand to prevent unecessary rerendering
   // const [state, dispatch] = useReducer(dataGridReducer, { ...initState, filterColumn: { partner: '', statuses: '' } });
   return (
-    <LocalizationProvider dateAdapter={MomentUtils}>
+    <LocalizationProvider dateAdapter={AdapterMoment}>
       <AgendaToolbar {...props} />
     </LocalizationProvider>
   );

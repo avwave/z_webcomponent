@@ -3,10 +3,9 @@ import { makeStyles } from 'tss-react/mui';
 import React, { useEffect, useMemo, useState } from 'react';
 import { LitePicker } from './wrapper';
 import moment from 'moment'
-import MomentUtils from '@material-ui/pickers/adapter/moment';
 
 import { DateRange } from '@mui/icons-material';
-import { LocalizationProvider } from '@material-ui/pickers';
+
 
 const useStyles = makeStyles()((theme) => {
   return {

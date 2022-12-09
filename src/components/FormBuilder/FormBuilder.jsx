@@ -32,7 +32,6 @@ import { makeStyles } from 'tss-react/mui';
 import { Add, Backspace, Close, DateRange, Schedule } from "@mui/icons-material";
 import { Autocomplete } from '@mui/material';
 // import { DatePicker, DateTimePicker, LocalizationProvider, TimePicker } from "@material-ui/pickers";
-import MomentUtils from '@material-ui/pickers/adapter/moment';
 import { FieldArray, Formik, getIn } from "formik";
 import { get, isEmpty } from "lodash";
 import moment from "moment";
@@ -54,6 +53,7 @@ import { fromEntries } from "../utils/fromEntries.polyfill";
 import { FormikPersist } from "./FormikPersist";
 import { WizardFieldArray } from "./WizardFieldArray";
 import { DatePicker, DateTimePicker, LocalizationProvider, TimePicker } from "@mui/x-date-pickers";
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment'
 
 const useStyles = makeStyles()((theme) => ({
   controlContainer: {
@@ -1207,7 +1207,7 @@ const WrapBuilder = props => {
   //NOTE: Use this pattern to set the filters beforehand to prevent unecessary rerendering
   // const [state, dispatch] = useReducer(dataGridReducer, { ...initState, filterColumn: { partner: '', statuses: '' } });
   return (
-    <LocalizationProvider dateAdapter={MomentUtils}>
+    <LocalizationProvider dateAdapter={AdapterMoment}>
       <FormBuilder {...props} />
     </LocalizationProvider>
   );

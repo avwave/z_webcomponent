@@ -1,7 +1,7 @@
 import { Button, IconButton } from '@mui/material';
 import { makeStyles } from 'tss-react/mui';
 import { LocalizationProvider, MobileDatePicker } from '@material-ui/pickers';
-import MomentUtils from '@material-ui/pickers/adapter/moment';
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment'
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 
@@ -183,7 +183,7 @@ const WrapPicker = props => {
   //NOTE: Use this pattern to set the filters beforehand to prevent unecessary rerendering
   // const [state, dispatch] = useReducer(dataGridReducer, { ...initState, filterColumn: { partner: '', statuses: '' } });
   return (
-    <LocalizationProvider dateAdapter={MomentUtils}>
+    <LocalizationProvider dateAdapter={AdapterMoment}>
       <WeekPicker {...props} />
     </LocalizationProvider>
   );

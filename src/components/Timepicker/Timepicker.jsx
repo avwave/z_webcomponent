@@ -1,9 +1,9 @@
-import MomentUtils from '@material-ui/pickers/adapter/moment';
 import { TextField, useMediaQuery, useTheme } from '@mui/material';
 import { makeStyles } from 'tss-react/mui';
 import { LocalizationProvider, MobileTimePicker, TimePicker } from '@material-ui/pickers';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { CustomPicker } from './CustomPicker';
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment'
 
 const useStyles = makeStyles()((theme) => {
   return {}
@@ -30,7 +30,7 @@ const Timepicker = ({ value, onChange, label, inputProps }) => {
 
 
   return <>
-    <LocalizationProvider dateAdapter={MomentUtils}>
+    <LocalizationProvider dateAdapter={AdapterMoment}>
       {isMobile ? (
         <MobileTimePicker
           ref={input}
