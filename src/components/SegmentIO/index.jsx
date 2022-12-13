@@ -56,15 +56,7 @@ const AnalyticsProvider = ({ children, writeKey, appIdentifier }) => {
 
 const useAnalytics = () => {
 
-  const { loading, analytics, appIdentifier } = React.useContext(AnalyticsContext)
-  const [analyticsLib, setAnalyticsLib] = useState(null);
-  useEffect(
-    () => {
-      if (!loading) {
-        setAnalyticsLib(analytics)
-      }
-    }, [loading]
-  );
+  const { loading, analytics:analyticsLib, appIdentifier } = React.useContext(AnalyticsContext)
 
   const pageViewed = useCallback(
     (name, properties) => {
