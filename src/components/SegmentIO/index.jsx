@@ -1,4 +1,4 @@
-import { makeStyles } from '@material-ui/core';
+import { CircularProgress, makeStyles } from '@material-ui/core';
 import { AnalyticsBrowser } from '@segment/analytics-next';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import useLocalStorage from "use-local-storage";
@@ -44,7 +44,9 @@ const AnalyticsProvider = ({ children, writeKey, appIdentifier }) => {
     }, [setupAnalytics, writeKey]
   );
 
-
+  if(loading) {
+    return <CircularProgress/>
+  }
   return (
     <AnalyticsContext.Provider value={{ loading, analytics: analyticsData, appIdentifier }}>
       {children}
@@ -54,22 +56,21 @@ const AnalyticsProvider = ({ children, writeKey, appIdentifier }) => {
 
 const useAnalytics = () => {
 
-  const { loading, analytics, appIdentifier } = React.useContext(AnalyticsContext)
-
+  const { loading, analytics:analyticsLib, appIdentifier } = React.useContext(AnalyticsContext)
 
   const pageViewed = useCallback(
     (name, properties) => {
-      analytics?.page(appIdentifier, name, properties, COMMONPAYLOAD)
+      analyticsLib?.page(appIdentifier, name, properties, COMMONPAYLOAD)
     },
-    [analytics],
+    [analyticsLib],
   );
 
   const trackEvent = useCallback(
     async (eventName, properties) => {
-      if (!analytics) {
+      if (!analyticsLib) {
         return  //silent error, possible show disable tracking/adblock message
       }
-      const aUser = await analytics?.user()
+      const aUser = await analyticsLib?.user()
       const id = await (aUser)?.id()
       const aId = await (aUser)?.anonymousId()
       const identifiers = {
@@ -83,45 +84,45 @@ const useAnalytics = () => {
         appIdentifier: appIdentifier
       })
       // console.log("SEG: 📢[index.jsx:56]: payload: ", payload);
-      await analytics?.track(eventName, payload, COMMONPAYLOAD)
+      await analyticsLib?.track(eventName, payload, COMMONPAYLOAD)
     },
-    [analytics],
+    [analyticsLib],
   );
   const aliasToV1 = useCallback(
     async (userId, forceClaim = false) => {
-      if (!analytics) {
+      if (!analyticsLib) {
         return  //silent error, possible show disable tracking/adblock message
       }
-      const anonId = await (await analytics?.user())?.anonymousId()
+      const anonId = await (await analyticsLib?.user())?.anonymousId()
       if (forceClaim) {
-        await analytics?.alias(userId, COMMONPAYLOAD)
+        await analyticsLib?.alias(userId, COMMONPAYLOAD)
         return
       }
       if (!(sessionStorage.getItem("IDClaimed") === 'yes') && !!userId) {
         sessionStorage.setItem("IDClaimed", 'yes')
-        await analytics?.alias(userId, anonId, COMMONPAYLOAD)
+        await analyticsLib?.alias(userId, anonId, COMMONPAYLOAD)
       }
     },
-    [analytics],
+    [analyticsLib],
   )
 
   const aliasTo = useCallback(
     async (userId) => {
-      if (!analytics) {
+      if (!analyticsLib) {
         return  //silent error, possible show disable tracking/adblock message
       }
-      const anonId = await (await analytics?.user())?.anonymousId()
-      const aliau = await analytics?.alias(userId, anonId, COMMONPAYLOAD)
+      const anonId = await (await analyticsLib?.user())?.anonymousId()
+      const aliau = await analyticsLib?.alias(userId, anonId, COMMONPAYLOAD)
     },
-    [analytics],
+    [analyticsLib],
   )
 
   const identifyUsingIdAndTraitsV1 = useCallback(
     async (id, traits) => {
-      if (!analytics) {
+      if (!analyticsLib) {
         return  //silent error, possible show disable tracking/adblock message
       }
-      const anonId = await (await analytics?.user())?.anonymousId()
+      const anonId = await (await analyticsLib?.user())?.anonymousId()
       const identity = id || anonId
       const identifiers = !!id ? { userId: id } : { tempId: identity }
 
@@ -134,20 +135,20 @@ const useAnalytics = () => {
         ...COMMONPAYLOAD,
         anonymousId: anonId
       })
-      await analytics?.identify(identity, payload, options)
+      await analyticsLib?.identify(identity, payload, options)
     },
-    [analytics],
+    [analyticsLib],
   );
 
   const identifyUsingIdAndTraits = useCallback(
     async (id = null, traits) => {
-      if (!analytics) {
+      if (!analyticsLib) {
         return  //silent error, possible show disable tracking/adblock message
       }
       let identity = id
       let anonTraits = null
 
-      const anonymousId = await (await analytics?.user())?.anonymousId()
+      const anonymousId = await (await analyticsLib?.user())?.anonymousId()
       const anonId = {
         anonymousId
       }
@@ -170,18 +171,18 @@ const useAnalytics = () => {
         ...anonId
       })
 
-      await analytics?.identify(identity, payload, options)
+      await analyticsLib?.identify(identity, payload, options)
       // console.log("SEG: 📢[index.jsx:117]: identUIdT: ", identUIdT);
     },
-    [analytics],
+    [analyticsLib],
   );
 
   const identifyAnon = useCallback(
     async (traits) => {
-      if (!analytics) {
+      if (!analyticsLib) {
         return  //silent error, possible show disable tracking/adblock message
       }
-      const anonId = await (await analytics?.user())?.anonymousId()
+      const anonId = await (await analyticsLib?.user())?.anonymousId()
       const payload = {
         tempId: anonId,
         ...traits,
@@ -192,65 +193,65 @@ const useAnalytics = () => {
       }
       if (!(sessionStorage.getItem("IDClaimed") === 'yes')) {
         sessionStorage.setItem("IDClaimed", 'yes')
-        await analytics?.identify(null, payload, options)
+        await analyticsLib?.identify(null, payload, options)
       }
-    }, [analytics]
+    }, [analyticsLib]
   )
 
 
   const getAnonymousId = useCallback(
     async () => {
-      if (!analytics) {
+      if (!analyticsLib) {
         return  //silent error, possible show disable tracking/adblock message
       }
       try {
-        const user = await analytics?.user()
+        const user = await analyticsLib?.user()
         return user?.anonymousId()
       } catch (e) {
         return null
       }
     },
-    [analytics],
+    [analyticsLib],
   );
 
   const checkIsIdentified = useCallback(
     async () => {
-      if (!analytics) {
+      if (!analyticsLib) {
         return  //silent error, possible show disable tracking/adblock message
       }
-      const user = await analytics?.user()
+      const user = await analyticsLib?.user()
 
       const id = await user?.id()
       return id
     },
-    [analytics],
+    [analyticsLib],
   );
 
   const reset = useCallback(
     async () => {
-      const user = await analytics?.user()
+      const user = await analyticsLib?.user()
       await user?.id(null)
       await user?.traits(null)
       // await identifyAnon()
     },
-    [analytics, identifyAnon],
+    [analyticsLib, identifyAnon],
   );
 
   const fullReset = useCallback(
     async () => {
-      const anReset = await analytics?.reset()
+      const anReset = await analyticsLib?.reset()
       // console.log("SEG: 📢[index.jsx:172]: anReset: ", anReset);
       // await setClaimed(false)
       // sessionStorage.removeItem("IDClaimed")
     },
-    [analytics],
+    [analyticsLib],
   );
 
   return {
     getAnonymousId,
     reset,
     fullReset,
-    analytics,
+    analyticsLib,
     pageViewed,
     trackEvent,
     identifyUsingIdAndTraits,
