@@ -54,11 +54,9 @@ const AnalyticsProvider = ({ children, writeKey, appIdentifier }) => {
 
 const useAnalytics = () => {
 
-  const { loading, analytics, appIdentifier } = React.useContext(AnalyticsContext)
-
-
   const pageViewed = useCallback(
     (name, properties) => {
+      const { loading, analytics, appIdentifier } = React.useContext(AnalyticsContext)
       analytics?.page(appIdentifier, name, properties, COMMONPAYLOAD)
     },
     [analytics],
@@ -66,6 +64,7 @@ const useAnalytics = () => {
 
   const trackEvent = useCallback(
     async (eventName, properties) => {
+      const { loading, analytics, appIdentifier } = React.useContext(AnalyticsContext)
       if (!analytics) {
         return  //silent error, possible show disable tracking/adblock message
       }
@@ -89,6 +88,7 @@ const useAnalytics = () => {
   );
   const aliasToV1 = useCallback(
     async (userId, forceClaim = false) => {
+      const { loading, analytics, appIdentifier } = React.useContext(AnalyticsContext)
       if (!analytics) {
         return  //silent error, possible show disable tracking/adblock message
       }
@@ -107,6 +107,7 @@ const useAnalytics = () => {
 
   const aliasTo = useCallback(
     async (userId) => {
+      const { loading, analytics, appIdentifier } = React.useContext(AnalyticsContext)
       if (!analytics) {
         return  //silent error, possible show disable tracking/adblock message
       }
@@ -118,6 +119,7 @@ const useAnalytics = () => {
 
   const identifyUsingIdAndTraitsV1 = useCallback(
     async (id, traits) => {
+      const { loading, analytics, appIdentifier } = React.useContext(AnalyticsContext)
       if (!analytics) {
         return  //silent error, possible show disable tracking/adblock message
       }
@@ -141,6 +143,7 @@ const useAnalytics = () => {
 
   const identifyUsingIdAndTraits = useCallback(
     async (id = null, traits) => {
+      const { loading, analytics, appIdentifier } = React.useContext(AnalyticsContext)
       if (!analytics) {
         return  //silent error, possible show disable tracking/adblock message
       }
@@ -178,6 +181,7 @@ const useAnalytics = () => {
 
   const identifyAnon = useCallback(
     async (traits) => {
+      const { loading, analytics, appIdentifier } = React.useContext(AnalyticsContext)
       if (!analytics) {
         return  //silent error, possible show disable tracking/adblock message
       }
@@ -200,6 +204,7 @@ const useAnalytics = () => {
 
   const getAnonymousId = useCallback(
     async () => {
+      const { loading, analytics, appIdentifier } = React.useContext(AnalyticsContext)
       if (!analytics) {
         return  //silent error, possible show disable tracking/adblock message
       }
@@ -215,6 +220,7 @@ const useAnalytics = () => {
 
   const checkIsIdentified = useCallback(
     async () => {
+      const { loading, analytics, appIdentifier } = React.useContext(AnalyticsContext)
       if (!analytics) {
         return  //silent error, possible show disable tracking/adblock message
       }
@@ -228,6 +234,7 @@ const useAnalytics = () => {
 
   const reset = useCallback(
     async () => {
+      const { loading, analytics, appIdentifier } = React.useContext(AnalyticsContext)
       const user = await analytics?.user()
       await user?.id(null)
       await user?.traits(null)
@@ -238,6 +245,7 @@ const useAnalytics = () => {
 
   const fullReset = useCallback(
     async () => {
+      const { loading, analytics, appIdentifier } = React.useContext(AnalyticsContext)
       const anReset = await analytics?.reset()
       // console.log("SEG: 📢[index.jsx:172]: anReset: ", anReset);
       // await setClaimed(false)
