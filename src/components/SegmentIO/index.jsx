@@ -240,7 +240,7 @@ const useAnalytics = () => {
       await user?.traits(null)
       // await identifyAnon()
     },
-    [analytics, identifyAnon],
+    [],
   );
 
   const fullReset = useCallback(
