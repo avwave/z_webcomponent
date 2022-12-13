@@ -258,7 +258,6 @@ const useAnalytics = () => {
     getAnonymousId,
     reset,
     fullReset,
-    analytics,
     pageViewed,
     trackEvent,
     identifyUsingIdAndTraits,
