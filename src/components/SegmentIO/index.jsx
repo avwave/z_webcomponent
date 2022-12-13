@@ -59,7 +59,7 @@ const useAnalytics = () => {
       const { loading, analytics, appIdentifier } = React.useContext(AnalyticsContext)
       analytics?.page(appIdentifier, name, properties, COMMONPAYLOAD)
     },
-    [analytics],
+    [],
   );
 
   const trackEvent = useCallback(
@@ -84,7 +84,7 @@ const useAnalytics = () => {
       // console.log("SEG: 📢[index.jsx:56]: payload: ", payload);
       await analytics?.track(eventName, payload, COMMONPAYLOAD)
     },
-    [analytics],
+    [],
   );
   const aliasToV1 = useCallback(
     async (userId, forceClaim = false) => {
@@ -102,7 +102,7 @@ const useAnalytics = () => {
         await analytics?.alias(userId, anonId, COMMONPAYLOAD)
       }
     },
-    [analytics],
+    [],
   )
 
   const aliasTo = useCallback(
@@ -114,7 +114,7 @@ const useAnalytics = () => {
       const anonId = await (await analytics?.user())?.anonymousId()
       const aliau = await analytics?.alias(userId, anonId, COMMONPAYLOAD)
     },
-    [analytics],
+    [],
   )
 
   const identifyUsingIdAndTraitsV1 = useCallback(
@@ -138,7 +138,7 @@ const useAnalytics = () => {
       })
       await analytics?.identify(identity, payload, options)
     },
-    [analytics],
+    [],
   );
 
   const identifyUsingIdAndTraits = useCallback(
@@ -176,7 +176,7 @@ const useAnalytics = () => {
       await analytics?.identify(identity, payload, options)
       // console.log("SEG: 📢[index.jsx:117]: identUIdT: ", identUIdT);
     },
-    [analytics],
+    [],
   );
 
   const identifyAnon = useCallback(
@@ -198,7 +198,7 @@ const useAnalytics = () => {
         sessionStorage.setItem("IDClaimed", 'yes')
         await analytics?.identify(null, payload, options)
       }
-    }, [analytics]
+    }, []
   )
 
 
@@ -215,7 +215,7 @@ const useAnalytics = () => {
         return null
       }
     },
-    [analytics],
+    [],
   );
 
   const checkIsIdentified = useCallback(
@@ -229,7 +229,7 @@ const useAnalytics = () => {
       const id = await user?.id()
       return id
     },
-    [analytics],
+    [],
   );
 
   const reset = useCallback(
@@ -251,7 +251,7 @@ const useAnalytics = () => {
       // await setClaimed(false)
       // sessionStorage.removeItem("IDClaimed")
     },
-    [analytics],
+    [],
   );
 
   return {
