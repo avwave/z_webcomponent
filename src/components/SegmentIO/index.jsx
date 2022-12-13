@@ -95,7 +95,7 @@ const useAnalytics = () => {
       }
       const anonId = await (await analyticsLib?.user())?.anonymousId()
       if (forceClaim) {
-        await analyticsLib?.alias(userId, COMMONPAYLOAD)
+        await analyticsLib?.alias(userId, anonId, COMMONPAYLOAD)
         return
       }
       if (!(sessionStorage.getItem("IDClaimed") === 'yes') && !!userId) {
