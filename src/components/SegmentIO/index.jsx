@@ -141,7 +141,7 @@ const useAnalytics = () => {
   );
 
   const identifyUsingIdAndTraits = useCallback(
-    async (id = null, traits, blankTraits = true) => {
+    async (id = null, traits, blankTraits = false) => {
       if (!analyticsLib) {
         return  //silent error, possible show disable tracking/adblock message
       }
