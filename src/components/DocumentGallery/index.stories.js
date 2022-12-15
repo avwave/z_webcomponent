@@ -1,4 +1,4 @@
-import { Grid, Typography } from "@material-ui/core";
+import { Grid, Typography } from "@mui/material";
 import React, { useCallback } from "react";
 import { DocumentGallery } from ".";
 import { pdfBase64Data, pngBase64Data } from "../DocumentViewer/data";

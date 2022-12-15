@@ -1,8 +1,8 @@
-import faker from "faker";
-import { FormControlLabel, IconButton, Chip, Select } from "@material-ui/core";
+import {faker} from '@faker-js/faker'
+import { FormControlLabel, IconButton, Chip, Select } from "@mui/material";
 import Checkbox from "../../shared/Checkbox";
 import { TriStateSelect } from "../TriStateSelect";
-import { Delete, HotTubSharp, LocalHospital } from "@material-ui/icons";
+import { Delete, HotTubSharp, LocalHospital } from "@mui/icons-material";
 import moment from "moment";
 faker.seed(123);
 
@@ -165,10 +165,11 @@ const columnData = [
         <IconButton
           onClick={() => {
             alert(JSON.stringify({column, row}, null, 2))
-          }}>
+          }}
+          size="large">
           <Delete color="secondary" />
         </IconButton>
-      )
+      );
     }
   },
   {
@@ -207,7 +208,7 @@ for (let i = 0; i < 10; i++) {
   rows.push({
     id: i,
     title: faker.name.findName(),
-    col3Type: faker.random.number().toString(),
+    col3Type: faker.datatype.number().toString(),
     col4Type: faker.date.recent().toISOString(),
     col5Type: faker.lorem.paragraphs(2),
     col6Type: faker.datatype.boolean() ? "Tip" : "Top",

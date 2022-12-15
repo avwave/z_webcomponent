@@ -12,9 +12,9 @@ import {
   Popover,
   Toolbar,
   Typography,
-  withStyles,
-} from "@material-ui/core";
-import { FilterList, ViewColumn } from "@material-ui/icons";
+} from "@mui/material";
+import { withStyles } from 'tss-react/mui';
+import { FilterList, ViewColumn } from "@mui/icons-material";
 import { stringify } from "javascript-stringify";
 import { isEmpty } from "lodash";
 import React, { useContext, useEffect, useMemo, useState } from "react";
@@ -116,9 +116,9 @@ function DataGridToolbar({
     return filterColumnSettings.map((col, idx) => {
       return (
         <FormControl
+          variant="standard"
           key={`filter-${col.id}-${idx}`}
-          className={classes.filterContainer}
-        >
+          className={classes.filterContainer}>
           <FormHelperText>{col.name}</FormHelperText>
           <col.filterRenderer
             value={dataGridState.filterColumn[col.key]}
@@ -149,7 +149,7 @@ function DataGridToolbar({
           <div style={{ flex: 1 }} />
           {showSelector ? (
             <>
-              <IconButton variant="default" onClick={handleOpenCheckList}>
+              <IconButton variant="default" onClick={handleOpenCheckList} size="large">
                 <ViewColumn />
               </IconButton>
 
@@ -169,7 +169,7 @@ function DataGridToolbar({
           )}
           {filterable ? (
             <>
-              <IconButton variant="default" onClick={handleOpenFilterList}>
+              <IconButton variant="default" onClick={handleOpenFilterList} size="large">
                 <FilterList />
               </IconButton>
               <Popover
@@ -258,4 +258,4 @@ function DataGridToolbar({
     </div>
   );
 }
-export default withStyles(styles)(DataGridToolbar);
+export default withStyles(DataGridToolbar, styles);

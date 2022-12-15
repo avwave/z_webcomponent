@@ -1,5 +1,5 @@
 
-import { Checkbox } from '@material-ui/core';
+import { Checkbox } from '@mui/material';
 import React, { forwardRef, Ref, useEffect, useRef, useState } from 'react';
 
 function TriStateCheckbox({ name, checked, onFocus, onChange, onBlur }, ref){

@@ -1,7 +1,7 @@
 import "../src/reset.css";
 import "../src/index.css";
 import { withReactContext } from "storybook-react-context";
-import { muiTheme } from 'storybook-addon-material-ui'
+import { muiTheme } from 'storybook-addon-material-ui5'
 
 import { addDecorator } from '@storybook/react';
 import { withKnobs } from '@storybook/addon-knobs';

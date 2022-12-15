@@ -3,7 +3,7 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 
 import * as Styles from "./styles";
-import { LinearProgress } from "@material-ui/core";
+import { LinearProgress } from "@mui/material";
 import { actions, GridContext } from "../GridContext";
 
 const StyledContainer = styled.div``;

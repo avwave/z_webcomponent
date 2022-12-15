@@ -1,12 +1,13 @@
-import { Link, makeStyles, Typography } from '@material-ui/core';
+import { Link, Typography } from '@mui/material';
+import { makeStyles } from 'tss-react/mui';
 import { id } from 'date-fns/locale';
 import PropTypes from "prop-types";
 import React, { useCallback, useMemo, useState } from 'react';
 import ReactJson from 'react-json-view';
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {}
-})
+});
 
 function generatePath(path, params) {
   return path
@@ -33,7 +34,7 @@ const Logger = ({
   linkProps = {},
   log
 }) => {
-  const classes = useStyles()
+  const { classes } = useStyles()
 
   const recurseOpsLog = useCallback(
     (log, prefix = '', infix = '', suffix = '') => {
@@ -73,9 +74,9 @@ const Logger = ({
               component={CLink}
               {...lProps}
               {...linkProps}
-            >{findMatch?.match[3]}
+              underline="hover">{findMatch?.match[3]}
             </Link>
-          )
+          );
         } else {
           return element
         }
@@ -112,7 +113,7 @@ const Logger = ({
               component={CLink}
               {...lProps}
               {...linkProps}
-            >{findIdentifier[0]}
+              underline="hover">{findIdentifier[0]}
             </Link>
           )
           return [...prefix, linkComponent, ...suffix]
@@ -201,7 +202,7 @@ const Logger = ({
               component={CLink}
               {...lProps}
               {...linkProps}
-            >{customerName}
+              underline="hover">{customerName}
             </Link>
           )
 
@@ -230,7 +231,7 @@ const Logger = ({
             component={CLink}
             {...lProps}
             {...linkProps}
-          >{id.trim()}
+            underline="hover">{id.trim()}
           </Link>
         )
         const components = [

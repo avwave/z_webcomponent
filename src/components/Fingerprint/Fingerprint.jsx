@@ -1,13 +1,13 @@
-import { makeStyles } from '@material-ui/core';
+import { makeStyles } from 'tss-react/mui';
 import React, { useEffect, useMemo, useState } from 'react';
 import FingerprintJS from '@fingerprintjs/fingerprintjs'
 import { get, set } from "idb-keyval"
 import { v4 as uuidv4 } from "uuid";
 import isEmpty from 'lodash.isempty';
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {}
-})
+});
 
 let fpPromise = null
 
@@ -37,7 +37,7 @@ const resetFingerprint = async () => {
 }
 
 const Fingerprint = ({ guid=false, onFingerprint = () => { } }) => {
-  const classes = useStyles()
+  const { classes } = useStyles()
 
   useEffect(() => {
     if (!fpPromise) throw new Error('FingerprintJS not loaded, add registerFingerprint() closest to root as possible (possibly index.js)')

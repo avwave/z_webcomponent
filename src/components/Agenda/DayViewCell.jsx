@@ -1,15 +1,28 @@
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Card, CardContent, Chip, darken, Divider, Link, makeStyles, Tooltip, Typography, useTheme } from '@material-ui/core';
-import { red, yellow } from '@material-ui/core/colors';
-import clsx from 'clsx';
+import {
+  Card,
+  CardContent,
+  Chip,
+  darken,
+  Divider,
+  Link,
+  Tooltip,
+  Typography,
+  useTheme,
+} from '@mui/material';
+import { makeStyles } from 'tss-react/mui';
+import { red, yellow } from '@mui/material/colors';
 import moment from 'moment';
 import { memo, useCallback, useMemo } from 'react';
 import { personNameFormal } from '../utils/format';
 
 import { parseBookingStatus } from './bookingStates';
 
-const useStyles = makeStyles((theme) => {
+// TODO jss-to-tss-react codemod: Unable to handle style definition reliably. ArrowFunctionExpression in CSS prop.
+// TODO jss-to-tss-react codemod: Unable to handle style definition reliably. ArrowFunctionExpression in CSS prop.
+// TODO jss-to-tss-react codemod: Unable to handle style definition reliably. ArrowFunctionExpression in CSS prop.
+const useStyles = makeStyles()((theme) => {
   return {
     dayView: {
       display: 'flex',
@@ -69,9 +82,9 @@ const useStyles = makeStyles((theme) => {
       borderRadius: 20
     }
   }
-})
+});
 const DayViewCell = ({ event, ...rest }) => {
-  const classes = useStyles()
+  const { classes } = useStyles()
   const { booking } = event?.event
   const start = moment(booking?.date_scheduled)
 
@@ -91,7 +104,7 @@ const DayViewCell = ({ event, ...rest }) => {
 }
 
 const WeekViewCell = ({ event, ...rest }) => {
-  const classes = useStyles()
+  const { classes } = useStyles()
   const { booking } = event?.event
   const start = moment(booking?.date_scheduled)
   const parse = parseBookingStatus(booking)
@@ -111,15 +124,17 @@ const AggregateEventCell = ({ event, children }) => {
     }, [event]
   );
   return (
-    <Link to={`/client-profile/${event?.white_label_customer?.client?.id}`}>
+    <Link
+      to={`/client-profile/${event?.white_label_customer?.client?.id}`}
+      underline="hover">
       <Typography variant="caption">{evtLinker} bookings</Typography>
     </Link>
-  )
+  );
 }
 const SLOT_HIGH_CONGESTION = 15
 const SLOT_MED_CONGESTION = 10
 const AggregateCell = ({ event, children }) => {
-  const classes = useStyles()
+  const { classes, cx } = useStyles()
   const congestionClass = useMemo(
     () => {
       if (event?.events?.length >= SLOT_HIGH_CONGESTION) {
@@ -132,16 +147,16 @@ const AggregateCell = ({ event, children }) => {
     }, [event]
   );
   return (
-    <div className={clsx(classes.aggregateCell, congestionClass)}>
+    <div className={cx(classes.aggregateCell, congestionClass)}>
       {children}
       
 
     </div>
-  )
+  );
 }
 
 const DayViewHeader = memo(({ event, date, dateLoadingArray }) => {
-  const classes = useStyles()
+  const { classes } = useStyles()
   const theme = useTheme()
   const loading = useMemo(
     () => {
@@ -172,7 +187,9 @@ const DayViewToolTip = ({ event, children, view }) => {
   const { booking } = event
 
   const parse = parseBookingStatus(booking)
-  const classes = useStyles(parse)
+  const { classes } = useStyles(parse, {
+    props: parse
+  })
 
   const start = moment(booking?.date_scheduled)
   const end = moment(booking?.date_scheduled_end)
@@ -182,7 +199,9 @@ const DayViewToolTip = ({ event, children, view }) => {
       return (
         <Card elevation={0} className={classes.popupcard}>
           <CardContent>
-            <Link to={`/client-profile/${booking?.white_label_customer?.client?.id}`}>{personNameFormal(booking?.white_label_customer)}</Link>
+            <Link
+              to={`/client-profile/${booking?.white_label_customer?.client?.id}`}
+              underline="hover">{personNameFormal(booking?.white_label_customer)}</Link>
             <Divider />
             <Typography variant="caption">{booking?.id}</Typography>
             <Typography variant="body2">{booking?.type?.label}</Typography>
@@ -199,7 +218,7 @@ const DayViewToolTip = ({ event, children, view }) => {
             />
           </CardContent>
         </Card>
-      )
+      );
 
     }, [booking, event, end, start]
   );

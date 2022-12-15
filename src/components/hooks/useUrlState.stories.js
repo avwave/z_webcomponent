@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { action, actions } from "@storybook/addon-actions";
 
 import ReactJsonView from 'react-json-view';
-import { TextField } from "@material-ui/core";
+import { TextField } from "@mui/material";
 import { DateTimeRangePicker } from "../DateTimeRangePicker";
 import { DatePicker } from "@material-ui/pickers";
 import { useUrlState } from "./useUrlState";
@@ -18,13 +18,13 @@ export const Default = ({ ...args }) => {
   return (
     <div>
       <TextField
+        variant="standard"
         label="Query Term"
         value={queryTerm}
-        onChange={(e) => setQueryTerm(e.target.value)}
-      />
+        onChange={(e) => setQueryTerm(e.target.value)} />
       {queryTerm}
     </div>
-  )
+  );
 };
 
 export const Disable = ({ ...args }) => {
@@ -32,13 +32,13 @@ export const Disable = ({ ...args }) => {
   return (
     <div>
       <TextField
+        variant="standard"
         label="Query Term"
         value={queryTerm}
-        onChange={(e) => setQueryTerm(e.target.value)}
-      />
+        onChange={(e) => setQueryTerm(e.target.value)} />
       {queryTerm}
     </div>
-  )
+  );
 };
 
 export const Multiple = ({ ...args }) => {
@@ -50,18 +50,18 @@ export const Multiple = ({ ...args }) => {
   return (
     <div>
       <TextField
+        variant="standard"
         label="Query Term"
         value={queryTerm}
-        onChange={(e) => setQueryTerm(e.target.value)}
-      />
+        onChange={(e) => setQueryTerm(e.target.value)} />
       <TextField
+        variant="standard"
         label="Query Term 2"
         value={queryTerm2}
-        onChange={(e) => setQueryTerm2(e.target.value)}
-      />
+        onChange={(e) => setQueryTerm2(e.target.value)} />
       <ReactJsonView src={{queryTerm, queryTerm2}}/>
     </div>
-  )
+  );
 };
 
 export const JSON = ({ ...args }) => {
@@ -69,13 +69,13 @@ export const JSON = ({ ...args }) => {
   return (
     <div>
       <TextField
+        variant="standard"
         label="Query Term"
         value={queryTerm?.wrap?.value}
-        onChange={(e) => setQueryTerm({ wrap: { value: e.target.value } })}
-      />
+        onChange={(e) => setQueryTerm({ wrap: { value: e.target.value } })} />
       <ReactJsonView src={{ queryTerm }} />
     </div>
-  )
+  );
 }
 
 export const DateRange = ({ ...args }) => {

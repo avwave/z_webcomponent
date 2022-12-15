@@ -1,5 +1,6 @@
-import { makeStyles, Typography } from "@material-ui/core";
-import { Sort } from "@material-ui/icons";
+import { Typography } from "@mui/material";
+import { makeStyles } from 'tss-react/mui';
+import { Sort } from "@mui/icons-material";
 import React, { useCallback } from "react";
 import { SortableHeaderCell } from "react-data-grid";
 import { useDrag, useDrop } from "react-dnd";
@@ -16,7 +17,7 @@ function useCombinedRefs(...refs) {
   }, refs);
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
   headerCell: {
     textTransform: "uppercase",
     display: "inline-flex",
@@ -38,8 +39,9 @@ export function DraggableHeaderRenderer({
   sortDirection,
   onSort,
 }) {
-  const classes = useStyles();
+  const { classes } = useStyles();
   const [{ isDragging }, drag] = useDrag({
+    type: 'BOX',
     item: { key: column.key, type: "COLUMN_DRAG" },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
