@@ -79,7 +79,7 @@ const useAnalytics = () => {
         user_id: id
       }
       const payload = filterNonNull({
-        ...identifiers,
+        // ...identifiers,
         ...properties,
         appIdentifier: appIdentifier
       })
@@ -162,13 +162,13 @@ const useAnalytics = () => {
       const identifiers = { id }
 
       const payload = blankTraits?{}:filterNonNull({
-        ...identifiers,
+        // ...identifiers,
         ...traits,
-        ...anonTraits,
+        // ...anonTraits,
       })
       const options = filterNonNull({
         ...COMMONPAYLOAD,
-        ...anonId
+        // ...anonId
       })
 
       await analyticsLib?.identify(identity, payload, options)
