@@ -720,16 +720,20 @@ const FormFieldSet = ({
               getOptionSelected={(option, t) => {
                 return option[fieldParams.settings.valueField] === t[fieldParams.settings.valueField];
               }}
-              renderOption={(option, { selected }) => {
+              renderOption={(option, { selected, ...rest }) => {
                 if (fieldParams.settings?.multiple) {
                   return (
                     <Fragment>
                       <Checkbox checked={selected} />
-                      {option[fieldParams.settings.labelField]}
+                      <div {...rest} >
+                        {option[fieldParams.settings.labelField]}
+                      </div>
                     </Fragment>
                   );
                 }
-                return option[fieldParams.settings.labelField];
+                return <li {...rest}>
+                  {option[fieldParams.settings.labelField]}
+                </li>
               }}
               closeIcon={<Backspace fontSize="small" />}
               renderInput={(iParams) => (
