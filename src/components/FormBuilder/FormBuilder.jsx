@@ -714,7 +714,9 @@ const FormFieldSet = ({
               }}
               multiple={fieldParams.settings?.multiple}
               options={options}
-        
+              getOptionLabel={(option) => {
+                return option[fieldParams.settings.labelField] ?? "";
+              }}
               getOptionSelected={(option, t) => {
                 return option[fieldParams.settings.valueField] === t[fieldParams.settings.valueField];
               }}
@@ -724,13 +726,13 @@ const FormFieldSet = ({
                     <Fragment>
                       <Checkbox checked={selected} />
                       <div {...rest} >
-                        {option[fieldParams.settings.labelField]}
+                        {option[fieldParams?.settings?.renderField||fieldParams?.settings?.labelField]}
                       </div>
                     </Fragment>
                   );
                 }
                 return <li {...rest}>
-                  {option[fieldParams.settings.labelField]}
+                  {option[fieldParams?.settings?.renderField || fieldParams?.settings?.labelField]}
                 </li>
               }}
               closeIcon={<Backspace fontSize="small" />}
