@@ -10,15 +10,15 @@ module.exports = {
     "@storybook/addon-essentials",
     "@storybook/preset-create-react-app",
     "storybook-addon-material-ui",
-    "storybook-addon-pseudo-states",
-    {
-      name: '@storybook/addon-storysource',
-      options: {
-        loaderOptions: {
-          injectStoryParameters: false,
-        },
-      },
-    },
+    // "storybook-addon-pseudo-states",
+    // {
+    //   name: '@storybook/addon-storysource',
+    //   options: {
+    //     loaderOptions: {
+    //       injectStoryParameters: false,
+    //     },
+    //   },
+    // },
   ],
   //TODO: check if polyfills defined in storybook will break projects using this build
   webpackFinal: async (config, { configType }) => {
