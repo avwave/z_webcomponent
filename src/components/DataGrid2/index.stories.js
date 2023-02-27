@@ -28,6 +28,8 @@ import { Menu as ContextMenu, Item as ContextItem } from "react-contexify";
 import { action } from "@storybook/addon-actions";
 import { DataGrid2 } from "./DataGrid2";
 import ReactJson from "react-json-view";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faColumns } from "@fortawesome/free-solid-svg-icons";
 
 const DataGridStory = {
   component: DataGrid2,
@@ -113,6 +115,19 @@ Basic.args = {
       name: "Age",
     },
   ]
+}
+
+export const CustomColumnDisplay = DefaultStory.bind({});
+CustomColumnDisplay.args = {
+  ...Default.args,
+  customColumnDisplay: {
+    component: Button,
+    props:{
+      variant: 'contained',
+      children:<FontAwesomeIcon icon={faColumns} />
+    }
+  },
+  showSelector: true,
 }
 
 export const ConditionalSelector = DefaultStory.bind({});
