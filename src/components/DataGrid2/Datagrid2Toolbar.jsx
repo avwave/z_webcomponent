@@ -185,7 +185,8 @@ function DataGrid2Toolbar({
   searchPlaceholder = 'Search',
   hasDateRangeFilter = true,
   useUrlAsState = false,
-  gridId
+  gridId,
+  customColumnDisplay: CustomColumnDisplay,
 }) {
   const [columnAnchor, setColumnAnchor] = useState();
   const [filterAnchor, setFilterAnchor] = useState();
@@ -383,9 +384,14 @@ function DataGrid2Toolbar({
                 )}
                 {showSelector ? (
                   <>
-                    <IconButton size="small" variant="default" onClick={handleOpenCheckList}>
-                      <ViewColumn />
-                    </IconButton>
+                    {CustomColumnDisplay ? (
+                      <CustomColumnDisplay.component {...CustomColumnDisplay.props} onClick={handleOpenCheckList} />
+                    ) : (
+                      <IconButton size="small" variant="default" onClick={handleOpenCheckList}>
+                        <ViewColumn />
+                      </IconButton>
+                    )
+                    }
 
                     <Popover
                       id={columnPopoverId}
