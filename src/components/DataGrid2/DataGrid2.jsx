@@ -40,6 +40,11 @@ const useStyles = makeStyles((theme) => {
     },
     colHighlight: {
       color: theme.palette.primary.main
+    },
+    checkboxHeader: {
+      width: '15px'
+      // marginLeft: 0-theme.spacing(.75),
+      // paddingRight: theme.spacing(1)
     }
   }
 })
@@ -66,8 +71,10 @@ const tablePropsInit = {
 const SelectionHeader = ({
   dispatch, areAllRowsSelected,
 }) => {
+  const classes = useStyles()
   return (
     <Checkbox
+      className={classes.checkboxHeader}
       color="primary"
       checked={areAllRowsSelected}
       onChange={(event) => {
@@ -179,7 +186,8 @@ const DataGrid2 = React.forwardRef(({
   extendedRowAttributes = () => { },
   deferLoading = false,
   useUrlAsState = false,
-  id = "grid"
+  id = "grid",
+  customColumnDisplay
 }, ref) => {
   const classes = useStyles()
   const theme = useTheme()
@@ -434,6 +442,7 @@ const DataGrid2 = React.forwardRef(({
         gridProps={gridProps}
         onClearFilters={() => onClearFilters()}
         gridId={id}
+        customColumnDisplay={customColumnDisplay}
       />
       <div style={{ display: 'none' }}>{sortColumn}{sortDirection}</div>
       {dataGridState.loading ? <LinearProgress /> : <LinearProgress variant="determinate" value={0} />}
@@ -490,6 +499,8 @@ const DataGrid2 = React.forwardRef(({
                 style: {
                   ...column.style,
                   position: 'sticky',
+                  padding: 0,
+                  paddingLeft: 20,
                   left: 0,
                   zIndex: 11,
                   backgroundColor: theme.palette.grey[100],
