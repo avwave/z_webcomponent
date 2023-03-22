@@ -19,7 +19,7 @@ const COMMONPAYLOAD = {
   }
 }
 
-const AnalyticsProvider = ({ children, writeKey, appIdentifier }) => {
+const AnalyticsProvider = ({ children, writeKey, appIdentifier, eventPrefix }) => {
   const [analyticsData, setAnalyticsData] = useState();
   const [loading, setLoading] = useState(true);
   const setupAnalytics = useCallback(
@@ -48,7 +48,7 @@ const AnalyticsProvider = ({ children, writeKey, appIdentifier }) => {
     return <CircularProgress/>
   }
   return (
-    <AnalyticsContext.Provider value={{ loading, analytics: analyticsData, appIdentifier }}>
+    <AnalyticsContext.Provider value={{ loading, analytics: analyticsData, appIdentifier, eventPrefix }}>
       {children}
     </AnalyticsContext.Provider>
   )
@@ -56,7 +56,7 @@ const AnalyticsProvider = ({ children, writeKey, appIdentifier }) => {
 
 const useAnalytics = () => {
 
-  const { loading, analytics:analyticsLib, appIdentifier } = React.useContext(AnalyticsContext)
+  const { loading, analytics:analyticsLib, appIdentifier, eventPrefix } = React.useContext(AnalyticsContext)
 
   const pageViewed = useCallback(
     (name, properties) => {
@@ -259,7 +259,8 @@ const useAnalytics = () => {
     aliasTo,
     aliasToV1,
     checkIsIdentified,
-    identifyAnon
+    identifyAnon,
+    eventPrefix
   }
 }
 
