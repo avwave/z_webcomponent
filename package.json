@@ -40,12 +40,10 @@
     "moment": "^2.29.1",
     "query-string": "^7.1.1",
     "rc-tooltip": "^5.1.0",
-    "react": "^18.2.0",
     "react-big-calendar": "1.5.2",
     "react-contexify": "^6.0.0",
     "react-data-grid": "7.0.0-canary.46",
     "react-device-detect": "^2.2.2",
-    "react-dom": "^18.2.0",
     "react-duration-input-mask": "^0.6.1",
     "react-fast-compare": "^3.2.0",
     "react-file-previewer": "^0.6.3",
@@ -166,7 +164,9 @@
     "waait": "^1.0.5",
     "webpack": "5.47",
     "webpack-manifest-plugin": "^5.0.0",
-    "yup": "^0.32.9"
+    "yup": "^0.32.9",
+    "react": "17.0.2",
+    "react-dom": "17.0.1"
   },
   "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
   "main": "index.js",
