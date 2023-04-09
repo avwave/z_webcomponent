@@ -8,14 +8,6 @@ import { Button } from "@material-ui/core";
 const SegmentIOStory = {
 
   title: "SegmentIO",
-  decorators: [
-    withReactContext(),
-    (Story) => (
-      <AnalyticsProvider writeKey='kBESU3nop3e0nTVniD0rIKSvOGjvz64T' appIdentifier='STORYBOOK'>
-        <Story />
-      </AnalyticsProvider>
-    ),
-  ],
 };
 
 export default SegmentIOStory;

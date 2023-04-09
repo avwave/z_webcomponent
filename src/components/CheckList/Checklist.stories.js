@@ -28,14 +28,7 @@ let defaultItems = [
 const ChecklistStory = {
   component: Checklist,
   title: "Checklist/List",
-  decorators: [
-    withReactContext(),
-    (Story) => (
-      <CheckboxProvider>
-        <Story />
-      </CheckboxProvider>
-    ),
-  ],
+
   onToggle: () => {},
   argTypes: {
     maxDisplayHeight: "500px",

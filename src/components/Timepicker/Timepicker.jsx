@@ -11,7 +11,10 @@ const Timepicker = ({ value, onChange, label, inputProps }) => {
   const classes = useStyles()
   const input = useRef()
 
-  const isMobile = useMediaQuery((theme) => theme.breakpoints.down("xs"), {
+  const isMobile = useMediaQuery((theme) => {
+
+    return theme?.breakpoints?.down("xs")
+  }, {
     noSsr: true,
   });
 

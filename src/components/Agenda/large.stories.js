@@ -35,14 +35,6 @@ const AgendaStory = {
     chromatic: { disable: true },
     storyshots: { disable: true },
   },
-  decorators: [
-    withReactContext(),
-    (Story) => (
-      <AgendaProvider>
-        <Story />
-      </AgendaProvider>
-    ),
-  ],
 };
 
 export default AgendaStory;

@@ -23,16 +23,6 @@ const DataGridStory = {
     chromatic: { disable: true },
     storyshots: { disable: true },
   },
-  decorators: [
-    withReactContext(),
-    (Story) => (
-      <DndProvider backend={HTML5Backend}>
-        <DataGridProvider>
-          <Story />
-        </DataGridProvider>
-      </DndProvider>
-    ),
-  ],
 };
 
 export default DataGridStory;

@@ -30,16 +30,7 @@ import { action } from "@storybook/addon-actions";
 const DataGridStory = {
   component: DataGrid,
   title: "DataGrid/DataGrid",
-  decorators: [
-    withReactContext(),
-    (Story) => (
-      <DndProvider backend={HTML5Backend}>
-        <DataGridProvider>
-          <Story />
-        </DataGridProvider>
-      </DndProvider>
-    ),
-  ],
+
 };
 
 export default DataGridStory;
