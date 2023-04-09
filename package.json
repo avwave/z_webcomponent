@@ -45,8 +45,6 @@
     "react-contexify": "^6.0.0",
     "react-data-grid": "7.0.0-canary.46",
     "react-device-detect": "^2.2.2",
-    "react-dnd": "^16.0.1",
-    "react-dnd-html5-backend": "^16.0.1",
     "react-dom": "^18.2.0",
     "react-duration-input-mask": "^0.6.1",
     "react-fast-compare": "^3.2.0",

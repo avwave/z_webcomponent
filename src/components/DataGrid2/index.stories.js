@@ -20,8 +20,6 @@ import DataGridProvider, {
   actions,
   initState,
 } from "../DataGrid/DataGridContext";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
 import { SelectColumn } from "react-data-grid";
 
 import { Menu as ContextMenu, Item as ContextItem } from "react-contexify";

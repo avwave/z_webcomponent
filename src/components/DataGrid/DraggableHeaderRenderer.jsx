@@ -3,7 +3,7 @@ import { makeStyles } from 'tss-react/mui';
 import { Sort } from "@mui/icons-material";
 import React, { useCallback } from "react";
 import { SortableHeaderCell } from "react-data-grid";
-import { useDrag, useDrop } from "react-dnd";
+
 
 function useCombinedRefs(...refs) {
   return useCallback((handle) => {
@@ -40,33 +40,11 @@ export function DraggableHeaderRenderer({
   onSort,
 }) {
   const { classes } = useStyles();
-  const [{ isDragging }, drag] = useDrag({
-    type: 'BOX',
-    item: { key: column.key, type: "COLUMN_DRAG" },
-    collect: (monitor) => ({
-      isDragging: !!monitor.isDragging(),
-    }),
-  });
-
-  const [{ isOver }, drop] = useDrop({
-    accept: "COLUMN_DRAG",
-    drop({ key, type }) {
-      if (type === "COLUMN_DRAG") {
-        onColumnsReorder(key, column.key);
-      }
-    },
-    collect: (monitor) => ({
-      isOver: !!monitor.isOver(),
-      canDrop: !!monitor.canDrop(),
-    }),
-  });
-
+  
   return (
     <div
-      ref={useCombinedRefs(drag, drop)}
+    
       style={{
-        opacity: isDragging ? 0.5 : 1,
-        backgroundColor: isOver ? "#ececec" : "inherit",
         cursor: "move",
         display:'inline-block'
       }}

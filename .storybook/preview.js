@@ -1,8 +1,6 @@
 import "../src/reset.css";
 import "../src/index.css";
-import { DndProvider } from "react-dnd";
 import DataGridProvider from "../src/components/DataGrid/DataGridContext";
-import { HTML5Backend } from "react-dnd-html5-backend";
 import AgendaProvider from "../src/components/Agenda/AgendaContext";
 import CheckboxProvider from "../src/components/CheckList/checklistContext";
 import GridProvider from "../src/components/Grid/GridContext";
@@ -36,7 +34,6 @@ const theme = createTheme();
 const withDataGridContextProvider = (Story, context) => {
   return (
     <MuiThemeProvider theme={theme}>
-    <DndProvider backend={HTML5Backend}>
       <AnalyticsProvider writeKey='kBESU3nop3e0nTVniD0rIKSvOGjvz64T' appIdentifier='STORYBOOK'>
         <GridProvider>
           <CheckboxProvider>
@@ -48,7 +45,6 @@ const withDataGridContextProvider = (Story, context) => {
           </CheckboxProvider>
         </GridProvider>
       </AnalyticsProvider>
-    </DndProvider>
     </MuiThemeProvider>
   );
 };
