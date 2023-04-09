@@ -44,6 +44,7 @@ const columnData = [
     key: "title",
     name: "Filter: Text",
     sortable: true,
+    resizable: true,
     width: 300,
     filter: {
       label: "Contains",
@@ -59,6 +60,7 @@ const columnData = [
     key: "col6Type",
     name: "Filter: Option",
     sortable: true,
+    resizable: true,
     filter: {
       type: "autocomplete",
       default: "",
@@ -84,6 +86,7 @@ const columnData = [
     key: "col9Type",
     name: "Daterange Filter",
     sortable: false,
+    resizable: true,
     filter: {
       type: "dateRange",
       default: null,
@@ -164,7 +167,7 @@ const columnData = [
       return (
         <IconButton
           onClick={() => {
-            alert(JSON.stringify({column, row}, null, 2))
+            alert(JSON.stringify(row?.values, null, 2))
           }}
           size="large">
           <Delete color="secondary" />
@@ -204,7 +207,7 @@ const columnData = [
 ];
 
 let rows = [];
-for (let i = 0; i < 10; i++) {
+for (let i = 0; i < 100; i++) {
   rows.push({
     id: i,
     title: faker.name.findName(),
@@ -213,7 +216,7 @@ for (let i = 0; i < 10; i++) {
     col5Type: faker.lorem.paragraphs(2),
     col6Type: faker.datatype.boolean() ? "Tip" : "Top",
     col7Type: { obj: 1 },
-    col8Type: <h1>REACTNODE</h1>,
+    col8Type: <>{[...Array(faker.datatype.number({min:1, max:15}))]?.map(d=><h1>REACTNODE</h1>)}</>,
     col9Type: faker.datatype.boolean() ? faker.random.word() : null,
     tests: [...Array(faker.datatype.number({
       min:1,

@@ -126,7 +126,7 @@ const columnData = [
 
 let rows = [];
 faker.seed(123);
-for (let i = 0; i < 20; i++) {
+for (let i = 0; i < 100; i++) {
   rows.push({
     id: `row${i}`,
     title: faker.name.findName(),
