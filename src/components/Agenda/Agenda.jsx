@@ -14,10 +14,12 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText, Link,
-  makeStyles,
-  Paper, Typography
-} from "@material-ui/core";
+  DialogContentText,
+  Link,
+  Paper,
+  Typography,
+} from "@mui/material";
+import { makeStyles } from 'tss-react/mui';
 import GridBox from "../DataGrid/GridBox";
 import { EdgeContainer } from "../EdgeContainer";
 import "./AgendaStyles.scss";
@@ -35,7 +37,7 @@ import { useUrlState } from "../hooks/useUrlState";
 const dateFnsLocales = {
   "en-US": enLocale,
 };
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles()(theme => ({
   root: {
     '& .rbc-event': {
       backgroundColor: theme.palette.primary.main,
@@ -78,7 +80,7 @@ function Agenda(_props) {
     ...props
   } = _props;
 
-  const classes = useStyles()
+  const { classes } = useStyles()
   const metaRenderer = metaR ? metaR : () => { };
 
   const [currentDate, setCurrentDate] = useUrlState({
@@ -128,7 +130,7 @@ function Agenda(_props) {
     });
     return (
       <Box width="100%" fontWeight="fontWeightBold">
-        <Link color="textPrimary" onClick={onDrillDown}>
+        <Link color="textPrimary" onClick={onDrillDown} underline="hover">
           <Typography variant="caption">
             {summaryStatus?.summary?.status}{" "}
           </Typography>

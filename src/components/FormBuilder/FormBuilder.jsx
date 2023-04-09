@@ -6,39 +6,43 @@ import {
   CardActions,
   CardContent,
   CardHeader,
-  Checkbox, CircularProgress, Container,
+  Checkbox,
+  CircularProgress,
+  Container,
   FormControl,
-  FormControlLabel, FormGroup, FormHelperText,
+  FormControlLabel,
+  FormGroup,
+  FormHelperText,
   FormLabel,
   Grid,
   IconButton,
   InputAdornment,
   LinearProgress,
   ListItemText,
-  makeStyles,
-  MenuItem, Radio,
+  MenuItem,
+  Radio,
   RadioGroup,
   Switch,
   TextField,
-  Toolbar, Tooltip, Typography
-} from "@material-ui/core";
-import { Add, Backspace, Close, DateRange, Schedule } from "@material-ui/icons";
-import { Autocomplete } from "@material-ui/lab";
-import { DatePicker, DateTimePicker, LocalizationProvider, TimePicker } from "@material-ui/pickers";
-import MomentUtils from '@material-ui/pickers/adapter/moment';
-import clsx from "clsx";
+  Toolbar,
+  Tooltip,
+  Typography,
+} from "@mui/material";
+import { makeStyles } from 'tss-react/mui';
+import { Add, Backspace, Close, DateRange, Schedule } from "@mui/icons-material";
+import { Autocomplete } from '@mui/material';
 import { FieldArray, Formik, getIn } from "formik";
 import { get, isEmpty } from "lodash";
 import moment from "moment";
 import PropTypes from "prop-types";
-import {
-  createContext, Fragment, useCallback,
+import React, {
+  createContext, forwardRef, Fragment, useCallback,
   useContext,
   useEffect,
   useMemo,
   useState
 } from "react";
-import DurationInputMask from "react-duration-input-mask/publish/index";
+import DurationInputMask from "react-duration-input-mask";
 
 import PhoneInput from "react-phone-number-input/input";
 import "react-phone-number-input/style.css";
@@ -47,8 +51,10 @@ import { DateTimeRangePicker } from "../DateTimeRangePicker";
 import { fromEntries } from "../utils/fromEntries.polyfill";
 import { FormikPersist } from "./FormikPersist";
 import { WizardFieldArray } from "./WizardFieldArray";
+import { DatePicker, DateTimePicker, LocalizationProvider, TimePicker } from "@mui/x-date-pickers";
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
   controlContainer: {
     paddingBottom: theme.spacing(2),
   },
@@ -142,7 +148,7 @@ const FormFieldSet = ({
   formInline = false,
   disableSubmit = false,
 }) => {
-  const classes = useStyles();
+  const { classes, cx } = useStyles();
   const formcontext = useContext(FormContext);
   const { formik, validationSchema, initialValues } = formcontext
 
@@ -180,6 +186,7 @@ const FormFieldSet = ({
     },
     [],
   );
+
   const renderField = useCallback(
     (fieldName, fieldParams, fieldSource) => {
       let isRequired = !!getIn(validationSchema?.fields, fieldName)?.tests?.find(
@@ -436,7 +443,7 @@ const FormFieldSet = ({
                   </InputAdornment>
                 ) : undefined,
                 inputProps: {
-                  ...fieldParams.inputProps ?? {}
+                  ...(fieldParams.inputProps ?? {})
                 }
               }}
               variant={variant}
@@ -445,38 +452,40 @@ const FormFieldSet = ({
           );
         case "duration":
           return (
-            <DurationInputMask
-              component={TextField}
-              name={fieldName}
-              type={fieldParams.type}
-              label={formInline ? "" : `${fieldParams.label} ${isRequired ? '*' : ''}`}
-              value={formValue}
-              handleChange={(value) => {
-                onChangeOverride(value)
-              }}
-              handleBlur={(value) => {
-                onChangeOverride(value)
-              }}
-              disabled={fieldParams.readOnly || formReadOnly}
-              error={hasError}
-              InputLabelProps={{
-                shrink: true,
-              }}
-              InputProps={{
-                startAdornment: fieldParams.icon ? (
-                  <InputAdornment position="start">
-                    {fieldParams.icon}
-                  </InputAdornment>
-                ) : undefined,
-                inputProps: {
-                  ...fieldParams.inputProps ?? {}
-                }
-              }}
-              maskDelay={1000}
-              variant={variant}
-              {...fieldParams?.fieldProps}
-            />
-          )
+            <>
+              <DurationInputMask
+                component={TextField}
+                name={fieldName}
+                type={fieldParams.type}
+                label={formInline ? "" : `${fieldParams.label} ${isRequired ? '*' : ''}`}
+                value={formValue}
+                handleChange={(value) => {
+                  onChangeOverride(value)
+                }}
+                handleBlur={(value) => {
+                  onChangeOverride(value)
+                }}
+                disabled={fieldParams.readOnly || formReadOnly}
+                error={hasError}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                InputProps={{
+                  startAdornment: fieldParams.icon ? (
+                    <InputAdornment position="start">
+                      {fieldParams.icon}
+                    </InputAdornment>
+                  ) : undefined,
+                  inputProps: {
+                    ...(fieldParams.inputProps ?? {})
+                  }
+                }}
+                maskDelay={1000}
+                variant={variant}
+                {...fieldParams?.fieldProps}
+              />
+            </>
+          );
         case "textonly":
           return (
             <TextField
@@ -520,7 +529,7 @@ const FormFieldSet = ({
                   country: "PH",
                   international: true,
                   withCountryCallingCode: true,
-                  ...fieldParams.inputProps ?? {}
+                  ...(fieldParams.inputProps ?? {})
                 }
               }}
               variant={variant}
@@ -630,7 +639,7 @@ const FormFieldSet = ({
 
         case "radio":
           return (
-            <FormControl>
+            <FormControl variant="standard">
               <FormLabel component="legend">{formInline ? "" : `${fieldParams.label} ${isRequired ? '*' : ''}`}</FormLabel>
               <RadioGroup
                 row={fieldParams.settings.inline}
@@ -656,7 +665,7 @@ const FormFieldSet = ({
         case "checkboxes":
           const gridSettings = fieldParams.settings?.inline ? { xs: 12 } : { ...fieldParams?.settings?.selectionGridProps };
           return (
-            <FormControl>
+            <FormControl variant="standard">
               <FormLabel component="legend">{formInline ? "" : `${fieldParams.label} ${isRequired ? '*' : ''}`}</FormLabel>
               <FormGroup
                 row={fieldParams?.settings?.inline}
@@ -717,25 +726,23 @@ const FormFieldSet = ({
               getOptionLabel={(option) => {
                 return option[fieldParams.settings.labelField] ?? "";
               }}
-              getOptionSelected={(option, t) => {
+              isOptionEqualToValue={(option, t) => {
                 return option[fieldParams.settings.valueField] === t[fieldParams.settings.valueField];
               }}
-              renderOption={(option, { selected, ...rest }) => {
+              renderOption={(props, option, { selected }) => {
                 if (fieldParams.settings?.multiple) {
                   return (
-                    <Fragment>
-                      <Checkbox checked={selected} />
-                      <div {...rest} >
-                        {option[fieldParams?.settings?.renderField||fieldParams?.settings?.labelField]}
-                      </div>
-                    </Fragment>
+                    <li {...props}>
+                      <Fragment>
+                        <Checkbox checked={selected} />
+                        {option[fieldParams.settings.labelField]}
+                      </Fragment>
+                    </li>
                   );
                 }
-                return <li {...rest}>
-                  {option[fieldParams?.settings?.renderField || fieldParams?.settings?.labelField]}
-                </li>
+                return <li {...props}>{option[fieldParams.settings.labelField]}</li>
               }}
-              closeIcon={<Backspace fontSize="small" />}
+              clearIcon={<Backspace fontSize="small" />}
               renderInput={(iParams) => (
                 <TextField
                   {...iParams}
@@ -770,73 +777,71 @@ const FormFieldSet = ({
                 name={fieldName}
                 render={(arrayHelpers) => {
                   if (Array.isArray(get(arrayHelpers.form.values, fieldName))) {
-                    return (
-                      <>
-                        {get(arrayHelpers.form.values, fieldName).map(
-                          (subform, idx) => {
-                            return (
-                              <Box component={fieldParams.settings?.formInset ? Card : 'div'} key={`${fieldName}-${idx}`}
-                                className={fieldParams.inline && classes.subformInline}>
-                                {!fieldParams.inline &&
-                                  <Box className={classes.subformHeader} >
-                                    <Typography variant="body2" className={classes.subformHeaderTitle}>
-                                      {formInline ? "" : `${fieldParams.label} ${isRequired ? '*' : ''}`}
-                                    </Typography>
-                                    {
-                                      formReadOnly ? null :
-                                        <IconButton
-                                          aria-label=""
-                                          onClick={() => {
-                                            arrayHelpers.remove(idx);
-                                          }}
-                                        >
-                                          <Close />
-                                        </IconButton>
-                                    }
-                                  </Box>
-                                }
-                                <Box component={fieldParams.inline ? 'div' : CardContent} className={classes.subformContent}>
-                                  {buildComponent(
-                                    fieldParams.formLayout,
-                                    fieldParams.formTemplate,
-                                    fieldParams.formLayout.length,
-                                    `${fieldName}-${idx}`,
-                                    `${fieldName}[${idx}]`
-                                  )}
+                    return <>
+                      {get(arrayHelpers.form.values, fieldName).map(
+                        (subform, idx) => {
+                          return (
+                            <Box component={fieldParams.settings?.formInset ? Card : 'div'} key={`${fieldName}-${idx}`}
+                              className={fieldParams.inline && classes.subformInline}>
+                              {!fieldParams.inline &&
+                                <Box className={classes.subformHeader} >
+                                  <Typography variant="body2" className={classes.subformHeaderTitle}>
+                                    {formInline ? "" : `${fieldParams.label} ${isRequired ? '*' : ''}`}
+                                  </Typography>
+                                  {
+                                    formReadOnly ? null :
+                                      <IconButton
+                                        aria-label=""
+                                        onClick={() => {
+                                          arrayHelpers.remove(idx);
+                                        }}
+                                        size="large">
+                                        <Close />
+                                      </IconButton>
+                                  }
                                 </Box>
-                                {fieldParams.inline &&
-
-                                  (formReadOnly || fieldParams?.readOnly) ? null :
-                                  <IconButton
-                                    className={classes.inlineDelete}
-                                    aria-label=""
-                                    onClick={() => {
-                                      arrayHelpers.remove(idx);
-                                    }}
-                                  >
-                                    <Close />
-                                  </IconButton>
-                                }
+                              }
+                              <Box component={fieldParams.inline ? 'div' : CardContent} className={classes.subformContent}>
+                                {buildComponent(
+                                  fieldParams.formLayout,
+                                  fieldParams.formTemplate,
+                                  fieldParams.formLayout.length,
+                                  `${fieldName}-${idx}`,
+                                  `${fieldName}[${idx}]`
+                                )}
                               </Box>
-                            );
-                          }
-                        )}
-                        {(!formReadOnly && !fieldParams?.readOnly) &&
-                          <div>
-                            <Button
-                              variant="contained"
-                              onClick={() => {
-                                arrayHelpers.push(fieldParams.formValueTemplate);
-                              }}
-                              startIcon={<Add />}
-                              color="primary"
-                            >
-                              Add {`${fieldParams.label}`}
-                            </Button>
-                          </div>
+                              {fieldParams.inline &&
+
+                                (formReadOnly || fieldParams?.readOnly) ? null :
+                                <IconButton
+                                  className={classes.inlineDelete}
+                                  aria-label=""
+                                  onClick={() => {
+                                    arrayHelpers.remove(idx);
+                                  }}
+                                  size="large">
+                                  <Close />
+                                </IconButton>
+                              }
+                            </Box>
+                          );
                         }
-                      </>
-                    );
+                      )}
+                      {(!formReadOnly && !fieldParams?.readOnly) &&
+                        <div>
+                          <Button
+                            variant="contained"
+                            onClick={() => {
+                              arrayHelpers.push(fieldParams.formValueTemplate);
+                            }}
+                            startIcon={<Add />}
+                            color="primary"
+                          >
+                            Add {`${fieldParams.label}`}
+                          </Button>
+                        </div>
+                      }
+                    </>;
                   }
                   if (formReadOnly && fieldParams?.readOnly) return <></>
                   return (
@@ -991,7 +996,7 @@ const FormFieldSet = ({
             <Button
               key="reset"
               color="secondary"
-              variant={variant}
+
               disabled={loading}
               startIcon={loading && <CircularProgress size={20} />}
               onClick={async () => {
@@ -1008,7 +1013,7 @@ const FormFieldSet = ({
           color="primary"
           disabled={loading || disableSubmit}
           startIcon={loading && <CircularProgress size={20} />}
-          variant={variant}
+
           onClick={async () => {
             formik.handleSubmit();
             onTriggerSubmit();
@@ -1018,7 +1023,7 @@ const FormFieldSet = ({
         </Button>,
       ];
       if (formReadOnly) return <></>
-      return <ButtonGroup>{buttonArray}</ButtonGroup>;
+      return <ButtonGroup variant={variant}>{buttonArray}</ButtonGroup>;
     };
 
     switch (formFactor) {
@@ -1035,7 +1040,7 @@ const FormFieldSet = ({
               {children}
               {formik.isSubmitting && <LinearProgress />}
             </CardContent>
-            <CardActions className={clsx(classes.actionBar, alignment)}>
+            <CardActions className={cx(classes.actionBar, alignment)}>
               <ActionButtons />
             </CardActions>
           </Card>
@@ -1056,29 +1061,27 @@ const FormFieldSet = ({
           </Box>
         );
       default:
-        return (
-          <>
-            <ListItemText primary={formLabel} secondary={formSubtitle} />
-            {buildFields()}
-            {children}
-            {formik.isSubmitting && <LinearProgress />}
-            <div className={clsx(classes.actionBar, alignment)}>
-              {reverse ? (
-                <>
-                  <ActionButtons />
-                  <div />
-                  {additionalActions()}
-                </>
-              ) : (
-                <>
-                  {additionalActions()}
-                  <div />
-                  <ActionButtons />
-                </>
-              )}
-            </div>
-          </>
-        );
+        return <>
+          <ListItemText primary={formLabel} secondary={formSubtitle} />
+          {buildFields()}
+          {children}
+          {formik.isSubmitting && <LinearProgress />}
+          <div className={cx(classes.actionBar, alignment)}>
+            {reverse ? (
+              <>
+                <ActionButtons />
+                <div />
+                {additionalActions()}
+              </>
+            ) : (
+              <>
+                {additionalActions()}
+                <div />
+                <ActionButtons />
+              </>
+            )}
+          </div>
+        </>;
     }
   }, [
     formFactor,
@@ -1205,7 +1208,7 @@ const WrapBuilder = props => {
   //NOTE: Use this pattern to set the filters beforehand to prevent unecessary rerendering
   // const [state, dispatch] = useReducer(dataGridReducer, { ...initState, filterColumn: { partner: '', statuses: '' } });
   return (
-    <LocalizationProvider dateAdapter={MomentUtils}>
+    <LocalizationProvider dateAdapter={AdapterMoment}>
       <FormBuilder {...props} />
     </LocalizationProvider>
   );

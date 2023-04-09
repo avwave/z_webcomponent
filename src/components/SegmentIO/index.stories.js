@@ -3,7 +3,7 @@ import { AnalyticsProvider, useAnalytics } from ".";
 import { useState } from '../DataGrid2/stateref';
 import ReactJsonView from 'react-json-view';
 import { withReactContext } from "storybook-react-context";
-import { Button } from "@material-ui/core";
+import { Button } from "@mui/material";
 
 const SegmentIOStory = {
 
@@ -60,7 +60,7 @@ const IdentifyAnonStory = ({ ...args }) => {
   return (
     <>
       <ReactJsonView src={{ ident }} />
-      <Button onClick={() => identify()}>Identify</Button>
+      <Button variant="text"  color="secondary" onClick={() => identify()}>Identify</Button>
     </>
 
   )

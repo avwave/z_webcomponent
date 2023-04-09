@@ -6,9 +6,9 @@ const filledDay = () => {
     return {
       id: `fill-${key}`,
       title: `FillEvent-${key}`,
-      start: moment().add(1, "d").startOf("day").hour(key).toDate(),
+      start: moment().add(-1, "d").startOf("day").hour(key).toDate(),
       end: moment()
-        .add(1, "d")
+        .add(-1, "d")
         .startOf("day")
         .hour(key + 1)
         .toDate(),

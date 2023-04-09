@@ -1,9 +1,9 @@
 import React, {useEffect, useState} from "react";
-import {Button} from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import {Button} from "@mui/material";
+import { makeStyles } from 'tss-react/mui';
 import { colorStyles } from "../../shared/colorPalette.js";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles()(theme => ({
     roundedButton: {
         borderRadius: 25
     }
@@ -11,7 +11,7 @@ const useStyles = makeStyles(theme => ({
 
 
 export default function StateButton(props) {
-    const classes = useStyles();
+    const { classes } = useStyles();
     const cPlt = colorStyles();
     const {color, text, textColor, variant, disableRipple, icon, onClick, size, disabled} = props
     const possibleColors = ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark'];
@@ -98,7 +98,7 @@ export default function StateButton(props) {
         else if (color && color.trim().indexOf('#') == 0) {
             //custom color
             setButtonColor('primary');
-            setCustomColor(makeStyles(theme => ({
+            setCustomColor(makeStyles()(theme => ({
                 custom: {
                     backgroundColor: color
                 }

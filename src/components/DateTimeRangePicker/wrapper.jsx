@@ -1,6 +1,7 @@
-import { Button, ButtonGroup, Grid, makeStyles, TextField } from '@material-ui/core';
-import { DatePicker, LocalizationProvider } from '@material-ui/pickers';
-import MomentUtils from '@material-ui/pickers/adapter/moment';
+import { Button, ButtonGroup, Grid, TextField } from '@mui/material';
+import { makeStyles } from 'tss-react/mui';
+
+
 import LitePickerLib from 'litepicker/dist/nocss/litepicker.umd';
 // import NoCssLP from 'litepicker/dist/nocss/litepicker.umd';
 import 'litepicker/dist/plugins/mobilefriendly';
@@ -9,9 +10,11 @@ import moment from 'moment';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Timepicker } from '../Timepicker';
 import './style.scss';
+import { DatePicker, LocalizationProvider} from '@mui/x-date-pickers';
 
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment'
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     pickerContainer: {
       width: "100%",
@@ -37,7 +40,7 @@ const useStyles = makeStyles((theme) => {
       justifyContent: 'flex-start'
     }
   }
-})
+});
 
 const RANGE_CONST = {
   TODAY: "Today",
@@ -48,7 +51,7 @@ const RANGE_CONST = {
 }
 
 const LitePicker = ({ onCancel = () => { }, onValueChange = () => { }, containerProps, variant = "outlined", ...props }) => {
-  const classes = useStyles()
+  const { classes } = useStyles()
   const startElement = useRef(null)
   const endElement = useRef(null)
   const parentElement = useRef(null)
@@ -306,7 +309,7 @@ const WrapPicker = props => {
   //NOTE: Use this pattern to set the filters beforehand to prevent unecessary rerendering
   // const [state, dispatch] = useReducer(dataGridReducer, { ...initState, filterColumn: { partner: '', statuses: '' } });
   return (
-    <LocalizationProvider dateAdapter={MomentUtils}>
+    <LocalizationProvider dateAdapter={AdapterMoment}>
       <LitePicker {...props} />
     </LocalizationProvider>
   );

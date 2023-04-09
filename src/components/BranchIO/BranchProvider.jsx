@@ -1,10 +1,10 @@
-import { makeStyles } from '@material-ui/core';
+import { makeStyles } from 'tss-react/mui';
 import branchSdk from 'branch-sdk';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {}
-})
+});
 
 const BranchProvider = ({ apiKey, children, ...props }) => {
   const branchOptions = {

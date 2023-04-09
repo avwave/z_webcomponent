@@ -6,7 +6,7 @@ import {
   ListItem,
   Paper,
   Typography,
-} from "@material-ui/core";
+} from "@mui/material";
 import { Row } from "react-data-grid";
 import React, { useState } from "react";
 import { withReactContext } from "storybook-react-context";

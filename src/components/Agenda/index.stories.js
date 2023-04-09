@@ -1,4 +1,4 @@
-import { Chip, TextField } from "@material-ui/core";
+import { Chip, TextField } from "@mui/material";
 import React from "react";
 import { withReactContext } from "storybook-react-context";
 import { Agenda } from ".";
@@ -98,7 +98,7 @@ export const ToolbarFilterComponent = DefaultStory.bind({});
 ToolbarFilterComponent.args = {
   ...Default.args,
   pickerToolbar: true,
-  filterComponent: <TextField fullWidth onChange={(evt) => alert(evt)} />,
+  filterComponent: <TextField variant="standard" fullWidth onChange={(evt) => alert(evt)} />,
   calendarWeek: true
 };
 

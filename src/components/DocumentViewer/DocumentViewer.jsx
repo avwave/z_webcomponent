@@ -1,4 +1,5 @@
-import { makeStyles, CircularProgress } from '@material-ui/core';
+import { CircularProgress } from '@mui/material';
+import { makeStyles } from 'tss-react/mui';
 import React, { useMemo } from 'react';
 import FilePreviewer, { FilePreviewerThumbnail } from 'react-file-previewer';
 import "react-file-previewer/src/styles.css";
@@ -6,7 +7,7 @@ import "./styles.scss";
 import mime from 'mime-types';
 import * as base64Utils from 'base64-utils'
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     documentContainer: {
       minHeight: "calc(100vh - 88px) !important",
@@ -20,7 +21,7 @@ const useStyles = makeStyles((theme) => {
 
     }
   }
-})
+});
 const DocumentViewer = ({
   url,
   data,
@@ -29,7 +30,7 @@ const DocumentViewer = ({
   asThumbnail = false,
   loading = false
 }) => {
-  const classes = useStyles()
+  const { classes } = useStyles()
 
   const file = useMemo(() => {
     let file = {

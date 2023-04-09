@@ -10,8 +10,8 @@ import CheckboxProvider, {
   checkboxReducer,
 } from "./checklistContext";
 import { Button } from "../Button";
-import { InputAdornment, TextField } from "@material-ui/core";
-import { Search } from "@material-ui/icons";
+import { InputAdornment, TextField } from "@mui/material";
+import { Search } from "@mui/icons-material";
 
 let defaultItems = [
   { id: "id1", title: "Task one", state: status.UNCHECKED },
@@ -205,17 +205,19 @@ export const Filtering = ({ ...args }) => {
       type: actions.LOAD_ITEMS,
     });
   };
-  return (
-    <>
-      <Checklist
-        title="Filterable Checklist"
-        filterActionComponent={
-          <TextField type="search" label="Filter..." onChange={handleChange} />
-        }
-      />
-      <div>{output}</div>
-    </>
-  );
+  return <>
+    <Checklist
+      title="Filterable Checklist"
+      filterActionComponent={
+        <TextField
+          variant="standard"
+          type="search"
+          label="Filter..."
+          onChange={handleChange} />
+      }
+    />
+    <div>{output}</div>
+  </>;
 };
 
 Filtering.args = {
@@ -228,7 +230,7 @@ LongFilter.args = {
   items: [...defaultItems, ...defaultItems],
   maxDisplayHeight: "200px",
   actionComponent: <Button title="Action" />,
-  filterActionComponent: <TextField type="search" label="Filter..." />,
+  filterActionComponent: <TextField variant="standard" type="search" label="Filter..." />,
 };
 
 export const TitleLess = Default.bind({});
@@ -250,11 +252,11 @@ DefaultActionComponent.args = {
   },
   filterActionComponent: (
     <TextField
+      variant="standard"
       InputProps={{
         startAdornment: <InputAdornment position="start"><Search/></InputAdornment>
       }}
       type="search"
-      label="Filter..."
-    />
+      label="Filter..." />
   ),
 };

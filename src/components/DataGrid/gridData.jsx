@@ -1,8 +1,8 @@
-import faker from "faker";
-import { FormControlLabel, MenuItem, Select } from "@material-ui/core";
+import {faker} from '@faker-js/faker'
+import { FormControlLabel, MenuItem, Select } from "@mui/material";
 import Checkbox from "../../shared/Checkbox";
 import { TriStateSelect } from "../TriStateSelect";
-import { HotTubSharp, LocalHospital } from "@material-ui/icons";
+import { HotTubSharp, LocalHospital } from "@mui/icons-material";
 const columnData = [
   {
     key: "id",
@@ -130,7 +130,7 @@ for (let i = 0; i < 20; i++) {
   rows.push({
     id: `row${i}`,
     title: faker.name.findName(),
-    col3Type: faker.random.number().toString(),
+    col3Type: faker.datatype.number().toString(),
     col4Type: faker.date.recent().toISOString(),
     col5Type: faker.lorem.paragraphs(2),
     col6Type: faker.datatype.boolean() ? "Tip" : "Top",
