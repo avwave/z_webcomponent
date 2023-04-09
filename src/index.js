@@ -15,7 +15,7 @@ export { useInterval, useStateRef, useUrlState }
 export { useBranch } from './components/BranchIO/BranchProvider'
 
 // export { DataGrid2 as DataGrid, DataGridContext, DataGridProvider, gridActions }
-export { VirtuosoDataGrid as DataGrid2, DatagridContext, DataGridProvider, gridActions } 
+export { VirtuosoDataGrid as DataGrid2, DataGridContext, DataGridProvider, gridActions } 
 export { Agenda, AgendaContext, AgendaProvider, agendaActions }
 
 export { DateTimeRange, DateTimeRangePicker } from './components/DateTimeRangePicker'
