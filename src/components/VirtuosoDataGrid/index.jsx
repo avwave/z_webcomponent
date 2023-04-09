@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/core';
 import React, { useContext, useMemo } from 'react';
-import { useFlexLayout, useResizeColumns, useRowSelect, useTable } from 'react-table';
+import reactTable from 'react-table';
 import { TableVirtuoso } from 'react-virtuoso';
 import { DataGridContext } from '../DataGrid/DataGridContext';
 import { useUrlState } from '../hooks/useUrlState';
@@ -177,16 +177,16 @@ const VirtuosoDataGrid = ({
     headerGroups,
     rows,
     prepareRow,
-  } = useTable({
+  } = reactTable.useTable({
     columns,
     data,
     initialState: {
       hiddenColumns: hiddenColumns
     }
   },
-    useFlexLayout,
-    useRowSelect,
-    useResizeColumns
+    reactTable.useFlexLayout,
+    reactTable.useRowSelect,
+    reactTable.useResizeColumns
   )
 
   return (
