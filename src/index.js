@@ -2,6 +2,8 @@ import { useInterval } from './components/hooks/useInterval'
 import { useStateRef } from './components/hooks/useStateRef';
 import { useUrlState } from './components/hooks/useUrlState';
 import { DataGrid2 } from './components/DataGrid2/DataGrid2';
+import { VirtuosoDataGrid } from './components/VirtuosoDataGrid';
+
 import DataGridProvider, { DataGridContext, actions as gridActions } from './components/DataGrid/DataGridContext';
 import Agenda from './components/Agenda/Agenda';
 import { AgendaContext, AgendaProvider, actions as agendaActions } from './components/Agenda/AgendaContext';
@@ -12,7 +14,8 @@ export { useInterval, useStateRef, useUrlState }
 
 export { useBranch } from './components/BranchIO/BranchProvider'
 
-export { DataGrid2 as DataGrid, DataGridContext, DataGridProvider, gridActions }
+// export { DataGrid2 as DataGrid, DataGridContext, DataGridProvider, gridActions }
+export { VirtuosoDataGrid as DataGrid2, DatagridContext, DataGridProvider, gridActions } 
 export { Agenda, AgendaContext, AgendaProvider, agendaActions }
 
 export { DateTimeRange, DateTimeRangePicker } from './components/DateTimeRangePicker'
