@@ -154,7 +154,7 @@ const VirtuosoDataGrid = ({
   useEffect(
     () => {
       const mapToArray = Object.keys(selectedRows).map((key) => key)
-      gridProps?.onSelectedRowsChange(mapToArray)
+      gridProps?.onSelectedRowsChange?.(mapToArray)
     }, [selectedRows]
   );
 
