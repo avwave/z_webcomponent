@@ -68,6 +68,14 @@ const VirtuosoDataGrid = ({
         return {
           header: col.name,
           accessorKey: col.key,
+          Cell: ({row, renderedCellValue, ...rest}) => {
+            if (col?.cellRenderer) {
+              return <div>{col?.cellRenderer({row: row?.original})}</div>
+            } else {
+              return <div>{renderedCellValue}</div>
+            }
+          }
+
         }
       })
     }, [dataGridState?.columns]
@@ -78,6 +86,8 @@ const VirtuosoDataGrid = ({
       enableGlobalFilter={false}
       enableColumnOrdering
       enableColumnResizing
+      enablePagination={false}
+      enableRowVirtualization
       enableColumnVirtualization
       enableRowSelection
       enableColumnFilters={false}

@@ -167,7 +167,7 @@ const columnData = [
       return (
         <IconButton
           onClick={() => {
-            alert(JSON.stringify(row?.values, null, 2))
+            alert(JSON.stringify(row, null, 2))
           }}
           size="large">
           <Delete color="secondary" />
