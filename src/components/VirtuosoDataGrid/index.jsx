@@ -1,9 +1,11 @@
 import MaterialReactTable from 'material-react-table';
-import React, { useContext, useMemo } from 'react';
+import React, { isValidElement, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { makeStyles } from 'tss-react/mui';
 import { useUrlState } from '../hooks/useUrlState';
 
 import { DataGridContext } from '../DataGrid/DataGridContext';
+import Truncate from 'react-truncate';
+import { LinearProgress } from '@material-ui/core';
 const useStyles = makeStyles()(theme => ({
 }));
 const VirtuosoDataGrid = ({
@@ -35,6 +37,8 @@ const VirtuosoDataGrid = ({
 }) => {
   const { classes } = useStyles()
 
+  const tableContainerRef = useRef(null)
+  const rowVirtualizerInstanceRef = useRef(null)
 
   const [filters, setFilters, filtersRef] = useUrlState({
     queryKey: `${id}-filters`,
@@ -53,6 +57,7 @@ const VirtuosoDataGrid = ({
     disable: !useUrlAsState
   })
 
+  const [selectedRows, setSelectedRows] = useState({});
 
   const data = useMemo(
     () => {
@@ -63,36 +68,145 @@ const VirtuosoDataGrid = ({
 
   const columns = useMemo(
     () => {
-      const cols = dataGridState?.columns
-      return cols?.map((col) => {
+      const cols = dataGridState?.columns?.map((col) => {
         return {
           header: col.name,
           accessorKey: col.key,
-          Cell: ({row, renderedCellValue, ...rest}) => {
+          enableHiding: !!col?.hidden,
+          Cell: ({ row, renderedCellValue, ...rest }) => {
             if (col?.cellRenderer) {
-              return <div>{col?.cellRenderer({row: row?.original})}</div>
+              return <div>{col?.cellRenderer({ row: row?.original })}</div>
             } else {
-              return <div>{renderedCellValue}</div>
+              const v = rest?.cell?.renderValue()
+              if (isValidElement(renderedCellValue) || col?.key==='select-row') {
+                return <div>{renderedCellValue}</div>
+              }
+              return <div>
+                <Truncate
+                  lines={col?.truncateLines ?? 2} ellipsis={<span>(...)</span>}
+                  style={col.cellStyles}
+                >
+                  {String(renderedCellValue)}
+                </Truncate>
+              </div>
             }
           }
 
         }
       })
+      return cols
     }, [dataGridState?.columns]
   );
 
+  //scroll events for loadmore
+  const fetchMoreOnBottomReached = useCallback(
+    (containerRefElement) => {
+      if (containerRefElement) {
+        const { scrollHeight, scrollTop, clientHeight } = containerRefElement;
+        //once the user has scrolled within 400px of the bottom of the table, fetch more data if we can
+        if (
+          scrollHeight - scrollTop - clientHeight < 400
+        ) {
+          onLoadMore && onLoadMore()
+        }
+      }
+    },
+    [onLoadMore],
+  );
+
+  //check on mount if needs to load more to fill the table
+  useEffect(
+    () => {
+      fetchMoreOnBottomReached(tableContainerRef.current)
+    }, [fetchMoreOnBottomReached]
+  );
+
+  //onfilter and onsort change
+  useEffect(() => {
+    try {
+      rowVirtualizerInstanceRef.current?.scrollToIndex?.(0);
+    } catch (error) {
+      console.error(error);
+    }
+  }, [sortColumn, sortDirection, filters]);
+
+  const defaultColumnOrder = useMemo(
+    () => {
+      if (dataGridState?.columns?.length <= 0) {
+        return null
+      }
+      const cols = dataGridState?.columns?.map((col) => col.key)
+      return ['mrt-row-select', ...cols]
+    }, [dataGridState?.columns]
+  );
+
+  const defaultHideColumns = useMemo(
+    () => {
+      if (dataGridState?.columns?.length <= 0) {
+        return null
+      }
+      const objMap = dataGridState?.columns?.filter(col=>col.hidden)?.map(col => [col.key, !col.hidden])
+      const obj = Object.fromEntries(objMap)
+      return obj
+    }, [dataGridState?.columns]
+  );
+
+  useEffect(
+    () => {
+      const mapToArray = Object.keys(selectedRows).map((key) => key)
+      gridProps?.onSelectedRowsChange(mapToArray)
+    }, [selectedRows]
+  );
+
+  if (defaultHideColumns === null && defaultColumnOrder === null) {
+    return <LinearProgress/>
+  }
   return (
     <MaterialReactTable
-      enableGlobalFilter={false}
+      columnResizeMode='onChange'
+      manualFiltering
+      manualSorting
+      memoMode="cells" 
+      enableDensityToggle={false}
       enableColumnOrdering
       enableColumnResizing
       enablePagination={false}
       enableRowVirtualization
       enableColumnVirtualization
       enableRowSelection
+      enableHiding
+      enableColumnDragging
       enableColumnFilters={false}
       data={data}
       columns={columns}
+      onRowSelectionChange={(sRows) => {
+        setSelectedRows(sRows)
+      }}
+      muiTableContainerProps={{
+        ref: tableContainerRef,
+        sx: {
+          maxHeight: '70vh'
+        },
+        onScroll: (e) => {
+          fetchMoreOnBottomReached(e.target)
+        }
+      }}
+      state={{
+        isLoading: dataGridState.loading,
+        showProgressBars: dataGridState.loading,
+        rowSelection: selectedRows
+        
+      }}
+      onSortingChange={(sortArr) => {
+        setSortColumn(sortArr?.[0]?.id)
+        setSortDirection(sortArr?.[0]?.desc ? "desc" : "asc")
+      }}
+      rowVirtualizerInstanceRef={rowVirtualizerInstanceRef}
+      rowVirtualizerProps={{ overscan: 4 }}
+      initialState={{
+        columnOrder: defaultColumnOrder,
+        columnVisibility: defaultHideColumns,
+      }}
     />
   )
 }

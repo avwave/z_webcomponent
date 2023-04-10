@@ -109,7 +109,7 @@ const columnData = [
   },
   {
     key: "col3Type",
-    name: "Long column name should really be wrappable up until small screens.  ideally should not be this long",
+    name: "Hidden",
     cellStyles: {
       color: "green",
       fontWeight: "bold",
@@ -207,7 +207,7 @@ const columnData = [
 ];
 
 let rows = [];
-for (let i = 0; i < 100; i++) {
+for (let i = 0; i < 30; i++) {
   rows.push({
     id: i,
     title: faker.name.findName(),

@@ -393,14 +393,16 @@ export const Selectable = SelectableStory.bind({});
 Selectable.args = {
   ...Default.args,
   rows: rows,
-  columns: [{
-    key: "select-row",
-    name: "",
-    sortable: false,
-    selectable: ({ row }) => {
-      return true
-    }
-  }, ...columnData],
+  columns: [
+    // {
+    //   key: "select-row",
+    //   name: "",
+    //   sortable: false,
+    //   selectable: ({ row }) => {
+    //     return true
+    //   }
+    // },
+    ...columnData],
 };
 
 function displayId({ props: { row } }) {
