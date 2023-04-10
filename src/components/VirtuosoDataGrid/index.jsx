@@ -192,10 +192,9 @@ const VirtuosoDataGrid = ({
         }
       }}
       state={{
-        isLoading: dataGridState.loading,
         showProgressBars: dataGridState.loading,
-        rowSelection: selectedRows
-        
+        rowSelection: selectedRows,
+        showSkeletons: false,
       }}
       onSortingChange={(sortArr) => {
         setSortColumn(sortArr?.[0]?.id)
