@@ -345,6 +345,7 @@ const ServerSortStory = ({ ...args }) => {
 
   return <DataGrid2 {...args}
     onSort={(col, dir) => {
+        
       handleSort(col, dir)
     }}
   />
@@ -394,14 +395,14 @@ Selectable.args = {
   ...Default.args,
   rows: rows,
   columns: [
-    // {
-    //   key: "select-row",
-    //   name: "",
-    //   sortable: false,
-    //   selectable: ({ row }) => {
-    //     return true
-    //   }
-    // },
+    {
+      key: "select-row",
+      name: "",
+      sortable: false,
+      selectable: ({ row }) => {
+        return true
+      }
+    },
     ...columnData],
 };
 

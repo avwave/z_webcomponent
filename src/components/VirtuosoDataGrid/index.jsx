@@ -1,11 +1,13 @@
-import MaterialReactTable from 'material-react-table';
+import MaterialReactTable, { MRT_FullScreenToggleButton, MRT_ShowHideColumnsButton, MRT_ToggleDensePaddingButton, MRT_ToggleFiltersButton } from 'material-react-table';
 import React, { isValidElement, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { makeStyles } from 'tss-react/mui';
 import { useUrlState } from '../hooks/useUrlState';
 
-import { DataGridContext } from '../DataGrid/DataGridContext';
-import Truncate from 'react-truncate';
 import { LinearProgress } from '@material-ui/core';
+import Truncate from 'react-truncate';
+import { DataGridContext } from '../DataGrid/DataGridContext';
+import { DataGridToolbar } from './DataGridToolbar';
+import { Box, Typography } from '@mui/material';
 const useStyles = makeStyles()(theme => ({
 }));
 const VirtuosoDataGrid = ({
@@ -38,6 +40,7 @@ const VirtuosoDataGrid = ({
   const { classes } = useStyles()
 
   const tableContainerRef = useRef(null)
+  const tableInstanceRef = useRef(null)
   const rowVirtualizerInstanceRef = useRef(null)
 
   const [filters, setFilters, filtersRef] = useUrlState({
@@ -48,6 +51,8 @@ const VirtuosoDataGrid = ({
 
   const [dataGridState, dataGridDispatch] = useContext(DataGridContext);
 
+
+  const [sortState, setSortState] = useState([]);
   const [sortColumn, setSortColumn] = useUrlState({
     queryKey: `${id}-sortOn`,
     disable: !useUrlAsState
@@ -57,6 +62,7 @@ const VirtuosoDataGrid = ({
     disable: !useUrlAsState
   })
 
+  const enableRowSelection = Boolean(gridProps?.onSelectedRowsChange)
   const [selectedRows, setSelectedRows] = useState({});
 
   const data = useMemo(
@@ -72,17 +78,19 @@ const VirtuosoDataGrid = ({
         return {
           header: col.name,
           accessorKey: col.key,
-          enableHiding: !!col?.hidden,
-          Cell: ({ row, renderedCellValue, ...rest }) => {
+          enableSorting: !!col.sortable,
+          // enableHiding: !col?.hidden,
+          Cell: ({ row, column, renderedCellValue, ...rest }) => {
             if (col?.cellRenderer) {
               return <div>{col?.cellRenderer({ row: row?.original })}</div>
             } else {
               const v = rest?.cell?.renderValue()
-              if (isValidElement(renderedCellValue) || col?.key==='select-row') {
+              if (isValidElement(renderedCellValue) || col?.key === 'select-row') {
                 return <div>{renderedCellValue}</div>
               }
               return <div>
                 <Truncate
+                  width={column?.getSize()}
                   lines={col?.truncateLines ?? 2} ellipsis={<span>(...)</span>}
                   style={col.cellStyles}
                 >
@@ -136,16 +144,32 @@ const VirtuosoDataGrid = ({
         return null
       }
       const cols = dataGridState?.columns?.map((col) => col.key)
-      return ['mrt-row-select', ...cols]
+      if (enableRowSelection) {
+        return ['mrt-row-select', ...cols]
+      }
+      return cols
     }, [dataGridState?.columns]
   );
 
+  const defaultPinnedColumns = useMemo(
+    () => {
+      const cols = dataGridState?.columns?.filter(col => col.frozen)?.map(col => col.key)
+      if (enableRowSelection) {
+        return {
+          left: ['mrt-row-select', ...cols],
+        }
+      }
+      return {
+        left: cols,
+      }
+    }, [dataGridState?.columns]
+  );
   const defaultHideColumns = useMemo(
     () => {
       if (dataGridState?.columns?.length <= 0) {
         return null
       }
-      const objMap = dataGridState?.columns?.filter(col=>col.hidden)?.map(col => [col.key, !col.hidden])
+      const objMap = dataGridState?.columns?.filter(col => col.hidden)?.map(col => [col.key, !col.hidden])
       const obj = Object.fromEntries(objMap)
       return obj
     }, [dataGridState?.columns]
@@ -158,55 +182,94 @@ const VirtuosoDataGrid = ({
     }, [selectedRows]
   );
 
-  if (defaultHideColumns === null && defaultColumnOrder === null) {
-    return <LinearProgress/>
-  }
+  useEffect(
+    () => {
+      if (sortState?.[0]?.id) {
+        onSort(sortState?.[0]?.id, sortState?.[0]?.desc ? 'DESC' : 'ASC')
+      }
+    }, [sortState]
+  );
+
+  if (defaultHideColumns === null && defaultColumnOrder === null)
+    return <LinearProgress />
+
   return (
-    <MaterialReactTable
-      columnResizeMode='onChange'
-      manualFiltering
-      manualSorting
-      memoMode="cells" 
-      enableDensityToggle={false}
-      enableColumnOrdering
-      enableColumnResizing
-      enablePagination={false}
-      enableRowVirtualization
-      enableColumnVirtualization
-      enableRowSelection
-      enableHiding
-      enableColumnDragging
-      enableColumnFilters={false}
-      data={data}
-      columns={columns}
-      onRowSelectionChange={(sRows) => {
-        setSelectedRows(sRows)
-      }}
-      muiTableContainerProps={{
-        ref: tableContainerRef,
-        sx: {
-          maxHeight: '70vh'
-        },
-        onScroll: (e) => {
-          fetchMoreOnBottomReached(e.target)
-        }
-      }}
-      state={{
-        showProgressBars: dataGridState.loading,
-        rowSelection: selectedRows,
-        showSkeletons: false,
-      }}
-      onSortingChange={(sortArr) => {
-        setSortColumn(sortArr?.[0]?.id)
-        setSortDirection(sortArr?.[0]?.desc ? "desc" : "asc")
-      }}
-      rowVirtualizerInstanceRef={rowVirtualizerInstanceRef}
-      rowVirtualizerProps={{ overscan: 4 }}
-      initialState={{
-        columnOrder: defaultColumnOrder,
-        columnVisibility: defaultHideColumns,
-      }}
-    />
+    <div className={classes.rootContainer}>
+      <DataGridToolbar
+        tableRef={tableInstanceRef}
+        useUrlAsState={useUrlAsState}
+        hasDateRangeFilter={hasDateRangeFilter}
+        searchPlaceholder={searchPlaceholder}
+        hasSearchFilter={hasSearchFilter}
+        columns={dataGridState?.columns}
+        showSelector={showSelector}
+        filterable={filterable}
+        onFilterChange={(f) => {
+          setFilters(f)
+        }}
+        rightAccessory={rightAccessory}
+        leftAccessory={leftAccessory}
+        centerAccessory={centerAccessory}
+        totalCount={totalCount}
+        loadedCount={dataGridState.rows.length}
+        defaultFilters={defaultFilters}
+        gridProps={gridProps}
+        onClearFilters={() => onClearFilters()}
+        gridId={id}
+        customColumnDisplay={customColumnDisplay}
+      />
+      <MaterialReactTable
+        tableInstanceRef={tableInstanceRef}
+        columnResizeMode='onChange'
+        manualFiltering
+        manualSorting
+        memoMode="cells"
+        enableDensityToggle={false}
+        enableGlobalFilter={false}
+        enableColumnOrdering
+        enableColumnResizing
+        enablePagination={false}
+        enableRowVirtualization
+        // enableColumnVirtualization
+        enableRowSelection={enableRowSelection}
+        enableHiding
+        enableColumnDragging
+        enablePinning
+        enableSorting
+        enableSortingRemoval
+        enableColumnFilters={false}
+        enableMultiSort={false}
+        data={data}
+        columns={columns}
+        onRowSelectionChange={(sRows) => {
+          setSelectedRows(sRows)
+        }}
+        muiTableContainerProps={{
+          ref: tableContainerRef,
+          sx: {
+            maxHeight: '70vh'
+          },
+          onScroll: (e) => {
+            fetchMoreOnBottomReached(e.target)
+          }
+        }}
+        state={{
+          showProgressBars: dataGridState.loading,
+          rowSelection: selectedRows,
+          showSkeletons: false,
+          sorting: sortState,
+        }}
+        onSortingChange={setSortState}
+        rowVirtualizerInstanceRef={rowVirtualizerInstanceRef}
+        rowVirtualizerProps={{ overscan: 4 }}
+        initialState={{
+          columnOrder: defaultColumnOrder,
+          columnVisibility: defaultHideColumns,
+          columnPinning: defaultPinnedColumns,
+        }}
+
+      />
+    </div>
   )
 }
 
