@@ -1,7 +1,7 @@
 import { makeStyles } from 'tss-react/mui';
 import React, { useEffect, useMemo, useState } from 'react';
 import FingerprintJS from '@fingerprintjs/fingerprintjs'
-import { get, set } from "idb-keyval"
+
 import { v4 as uuidv4 } from "uuid";
 import isEmpty from 'lodash.isempty';
 
@@ -15,9 +15,9 @@ const registerFingerprint = async () => {
   fpPromise = FingerprintJS.load({
     monitoring: false,
   })
-  const fp = await get('fingerprint')
+  const fp = await localStorage.getItem('fingerprint')
   if (isEmpty(fp)) {
-    await set('fingerprint', uuidv4())
+    await localStorage.setItem('fingerprint', uuidv4())
   }
 }
 
@@ -29,11 +29,11 @@ const useFingerprint = async () => {
 
 
 const useFingerprintGuid = async () => {
-  return await get('fingerprint')
+  return await localStorage.getItem('fingerprint')
 }
 
 const resetFingerprint = async () => {
-  await set('fingerprint', uuidv4())
+  await localStorage.setItem('fingerprint', uuidv4())
 }
 
 const Fingerprint = ({ guid=false, onFingerprint = () => { } }) => {
@@ -44,7 +44,7 @@ const Fingerprint = ({ guid=false, onFingerprint = () => { } }) => {
     const fetchFP = async () => {
       const fp = await fpPromise
       const fpData = await fp.get()
-      const guidFp = await get('fingerprint')
+      const guidFp = await localStorage.getItem('fingerprint')
       
       onFingerprint(guid ? guidFp : fpData?.visitorId)
     }

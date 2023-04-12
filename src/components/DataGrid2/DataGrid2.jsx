@@ -71,7 +71,7 @@ const tablePropsInit = {
 const SelectionHeader = ({
   dispatch, areAllRowsSelected,
 }) => {
-  const classes = useStyles()
+  const { classes } = useStyles()
   return (
     <Checkbox
       className={classes.checkboxHeader}

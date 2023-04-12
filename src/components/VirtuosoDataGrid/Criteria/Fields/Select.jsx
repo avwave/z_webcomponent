@@ -14,7 +14,7 @@ const CriteriaSelect = ({
 }) => {
   const { classes } = useStyles()
   return (
-    <FormControl variant="standard" fullWidth className={classes.formControl}>
+    <FormControl variant="outlined" fullWidth className={classes.formControl}>
       <MenuList
         fullWidth
       >

@@ -1,6 +1,6 @@
 import { Button, ButtonGroup, Grid, TextField } from '@mui/material';
 import { makeStyles } from 'tss-react/mui';
-
+import { useStateRef } from '../hooks/useStateRef';
 
 import LitePickerLib from 'litepicker/dist/nocss/litepicker.umd';
 // import NoCssLP from 'litepicker/dist/nocss/litepicker.umd';
@@ -50,17 +50,19 @@ const RANGE_CONST = {
   LAST_MONTH: "Last Month",
 }
 
-const LitePicker = ({ onCancel = () => { }, onValueChange = () => { }, containerProps, variant = "outlined", ...props }) => {
+const LitePicker = ({ 
+  immediate = false,
+  onCancel = () => { }, onValueChange = () => { }, containerProps, variant = "outlined", ...props }) => {
   const { classes } = useStyles()
   const startElement = useRef(null)
   const endElement = useRef(null)
   const parentElement = useRef(null)
   const picker = useRef()
 
-  const [startTime, setStartTime] = useState(props?.value?.startDate);
-  const [endTime, setEndTime] = useState(props?.value?.endDate);
-  const [startDate, setStartDate] = useState(props?.value?.startDate || new Date());
-  const [endDate, setEndDate] = useState(props?.value?.endDate || new Date());
+  const [startTime, setStartTime, startTimeRef] = useStateRef(props?.value?.startDate);
+  const [endTime, setEndTime, endTimeRef] = useStateRef(props?.value?.endDate);
+  const [startDate, setStartDate, startDateRef] = useStateRef(props?.value?.startDate || new Date());
+  const [endDate, setEndDate, endDateRef] = useStateRef(props?.value?.endDate || new Date());
 
   const [dateRange, setDateRange] = useState([null, null]);
   const [date1, setDate1] = useState(new Date());
@@ -103,6 +105,7 @@ const LitePicker = ({ onCancel = () => { }, onValueChange = () => { }, container
       pickerElem.on('selected', (date1, date2) => {
         setStartDate(date1.dateInstance)
         setEndDate(date2.dateInstance)
+        immediate && sendParsedDates()
       })
 
       pickerElem.setDateRange(moment(startDate), moment(endDate))
@@ -126,12 +129,12 @@ const LitePicker = ({ onCancel = () => { }, onValueChange = () => { }, container
   const sendParsedDates = useCallback(
     () => {
       const val = {
-        startDate: mergeTime(startTime, startDate),
-        endDate: mergeTime(endTime, endDate),
+        startDate: mergeTime(startTimeRef?.current, startDateRef?.current),
+        endDate: mergeTime(endTimeRef?.current, endDateRef?.current),
       }
       onValueChange({ ...val })
     },
-    [endDate, endTime, mergeTime, onValueChange, startDate, startTime],
+    [endDateRef, endTimeRef, mergeTime, onValueChange, startDateRef, startTimeRef],
   );
 
   const clearDates = useCallback(
@@ -200,6 +203,7 @@ const LitePicker = ({ onCancel = () => { }, onValueChange = () => { }, container
           }
           onChange={evt => {
             setStartDate(evt)
+            immediate && sendParsedDates()
             if (picker.current) {
               picker.current.setDateRange(evt, endDate)
             }
@@ -214,6 +218,7 @@ const LitePicker = ({ onCancel = () => { }, onValueChange = () => { }, container
         <Timepicker
           onChange={evt => {
             setStartTime(evt)
+            immediate && sendParsedDates()
           }}
           label="Start Time"
           value={moment(startTime)}
@@ -248,6 +253,7 @@ const LitePicker = ({ onCancel = () => { }, onValueChange = () => { }, container
           }
           onChange={evt => {
             setEndDate(evt)
+            immediate && sendParsedDates()
             if (picker.current) {
               picker.current.setDateRange(startDate, evt)
             }
@@ -260,6 +266,7 @@ const LitePicker = ({ onCancel = () => { }, onValueChange = () => { }, container
         <Timepicker
           onChange={evt => {
             setEndTime(evt)
+            immediate && sendParsedDates()
           }}
           label="End Time"
           value={moment(endTime)}
@@ -274,7 +281,7 @@ const LitePicker = ({ onCancel = () => { }, onValueChange = () => { }, container
           }}
         />
       </Grid>
-      <Grid container item xs={12} spacing={2}>
+      <Grid container item xs={12} spacing={2} sx={{pb: 2}}>
         <Grid item xs={12} className={classes.calendarHolder} ref={parentElement} />
         <Grid item xs={12} className={classes.rangeSelectContainer} >
           <ButtonGroup disableElevation variant="text" size="small" >
@@ -283,6 +290,7 @@ const LitePicker = ({ onCancel = () => { }, onValueChange = () => { }, container
             )}
           </ButtonGroup>
         </Grid>
+        {!immediate && (
         <Grid item xs={12} className={classes.bottomBar}>
           <Button variant="text" color="inherit"
             onClick={() => onCancel()
@@ -300,6 +308,7 @@ const LitePicker = ({ onCancel = () => { }, onValueChange = () => { }, container
 
 
         </Grid>
+        )}
       </Grid>
     </Grid>
   )

@@ -15355,7 +15355,7 @@ react-contexify@^6.0.0:
   dependencies:
     clsx "^1.2.1"
 
-react-criteria@^0.6.1:
+react-criteria@0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/react-criteria/-/react-criteria-0.6.1.tgz#f7f5921c109c8c31256a69d17cb6b5e001a68759"
   integrity sha512-tYWcxjyc1UQLzrycRX+W33J59XJiwF/aML3pi64mvMrU3uYxp+XYg1TbCOmFwcNWGuPAKoBbLi4d1pKgqaO9Rw==

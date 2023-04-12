@@ -25,6 +25,12 @@ const POPUP_MODE = {
 };
 
 const useStyles = makeStyles()(theme => ({
+  actionBar:{
+    flex:1,
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+  },
   toolbarLeft: {
     flexGrow: 1,
     flexBasis: 0,
@@ -47,6 +53,10 @@ const useStyles = makeStyles()(theme => ({
   },
   filterBar: {
     width: "100%",
+    "& > div": {
+      width: "100%",
+      overflowX: 'overlay',
+    },
     display: "flex",
     [theme.breakpoints.up('md')]: {
       flexWrap: "nowrap",
@@ -56,6 +66,7 @@ const useStyles = makeStyles()(theme => ({
     },
     flexDirection: "row",
     justifyContent: "flex-end",
+
   },
   filterSection: {
     display: 'flex',
@@ -175,40 +186,29 @@ const DataGridToolbar = ({
           </div>
         </Toolbar>
       )
-      return accessoryBar
+      if (leftAccessory || centerAccessory || rightAccessory || children) return accessoryBar;
+      return <></>
 
     }, [centerAccessory, children, classes.toolbarLeft, classes.toolbarRight, leftAccessory, rightAccessory]
   );
 
   return (
-    <AppBar position="sticky" color="default" elevation={0}>
+    <div className={classes.actionBar}>
       {renderAccessories}
       {filterable && (
         <Toolbar variant="dense" className={classes.toolbar}>
           <div className={classes.filterBar}>
             <CriteriaEditor
+              columns={columns}
               onCriteriaChange={(values) => {
                 console.log('DataGridToolbar.jsx (188) # values', values);
               }}
             />
-            <div style={{flex:1}}/>
-            <Button
-              variant="contained"
-              color="secondary"
-              disabled={isDeeplyEmpty(filterValues)}
-              onClick={() => {
-                const filterV = {}
-                setFilterValues(filterV);
-                setSearchField("")
-                onFilterChange(filterV)
-                setFilterDisplay({})
-                onClearFilters()
-              }}>Clear</Button>
           </div>
         </Toolbar>
       )}
 
-    </AppBar>
+    </div>
 
   );
 }

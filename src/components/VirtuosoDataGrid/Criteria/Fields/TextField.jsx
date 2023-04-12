@@ -14,18 +14,17 @@ const CriteriaTextField = ({
 }) => {
   const { classes } = useStyles()
 
-  const onChange = React.useCallback(
-    (ev) => {
-      if (typeof onChangeProp !== "function") return;
-      onChangeProp(ev.target.value);
-    },
-    [onChangeProp]
-  );
-
   return (
     <TextField
       {...otherProps}
+      autoComplete='off'
+      variant='outlined'
+      InputLabelProps={{
+        shrink: true,
+      }}
+      label={label}
       value={value}
+      fullWidth
       onChange={(evt) => {
         onChangeProp(evt.target.value);
       }}

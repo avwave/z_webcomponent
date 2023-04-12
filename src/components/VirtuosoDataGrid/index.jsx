@@ -195,29 +195,6 @@ const VirtuosoDataGrid = ({
 
   return (
     <div className={classes.rootContainer}>
-      <DataGridToolbar
-        tableRef={tableInstanceRef}
-        useUrlAsState={useUrlAsState}
-        hasDateRangeFilter={hasDateRangeFilter}
-        searchPlaceholder={searchPlaceholder}
-        hasSearchFilter={hasSearchFilter}
-        columns={dataGridState?.columns}
-        showSelector={showSelector}
-        filterable={filterable}
-        onFilterChange={(f) => {
-          setFilters(f)
-        }}
-        rightAccessory={rightAccessory}
-        leftAccessory={leftAccessory}
-        centerAccessory={centerAccessory}
-        totalCount={totalCount}
-        loadedCount={dataGridState.rows.length}
-        defaultFilters={defaultFilters}
-        gridProps={gridProps}
-        onClearFilters={() => onClearFilters()}
-        gridId={id}
-        customColumnDisplay={customColumnDisplay}
-      />
       <MaterialReactTable
         tableInstanceRef={tableInstanceRef}
         columnResizeMode='onChange'
@@ -267,6 +244,30 @@ const VirtuosoDataGrid = ({
           columnVisibility: defaultHideColumns,
           columnPinning: defaultPinnedColumns,
         }}
+        renderTopToolbarCustomActions={(props) => (
+          <DataGridToolbar
+            useUrlAsState={useUrlAsState}
+            hasDateRangeFilter={hasDateRangeFilter}
+            searchPlaceholder={searchPlaceholder}
+            hasSearchFilter={hasSearchFilter}
+            columns={dataGridState?.columns}
+            showSelector={showSelector}
+            filterable={filterable}
+            onFilterChange={(f) => {
+              setFilters(f)
+            }}
+            rightAccessory={rightAccessory}
+            leftAccessory={leftAccessory}
+            centerAccessory={centerAccessory}
+            totalCount={totalCount}
+            loadedCount={dataGridState.rows.length}
+            defaultFilters={defaultFilters}
+            gridProps={gridProps}
+            onClearFilters={() => onClearFilters()}
+            gridId={id}
+            customColumnDisplay={customColumnDisplay}
+          />
+        )}
 
       />
     </div>

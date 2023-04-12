@@ -5,6 +5,26 @@ import React, { useEffect, useState } from 'react';
 import { makeStyles } from 'tss-react/mui';
 
 const useStyles = makeStyles()(theme => ({
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  },
+  selected: {
+    color: theme.palette.primary.main,
+    backgroundColor: theme.palette.action.hover,
+  },
+  option: {
+    minHeight: 'auto',
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    '&[aria-selected="true"]': {
+      backgroundColor: 'transparent',
+    },
+    '&[data-focus="true"]': {
+      backgroundColor: theme.palette.action.hover,
+    },
+  }
 }));
 const CriteriaAutocomplete = ({
   value,
@@ -80,7 +100,8 @@ const CriteriaAutocomplete = ({
         clearIcon={<Backspace fontSize="small" />}
         renderInput={(iParams) => (
           <TextField
-            variant="standard"
+            variant="outlined"
+            fullWidth
             {...iParams}
             InputLabelProps={{
               shrink: true,

@@ -1,39 +1,26 @@
-import { Chip, useTheme } from '@mui/material';
-import React, { useMemo, useState } from 'react';
+import { Button, Chip, useTheme } from '@mui/material';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import ReactCriteria, {
   I18nContext,
-  ThemeProvider,
   createTheme as createCriteriaTheme
-} from 'react-criteria';
+} from '../Criteria/src';
 import { makeStyles } from 'tss-react/mui';
 import { CriteriaAutocomplete } from './Criteria/Fields/Autocomplete';
 import { CriteriaSelect } from './Criteria/Fields/Select';
 import { CriteriaTextField } from './Criteria/Fields/TextField';
-
+import { CriteriaDateRange } from './Criteria/Fields/DateRange';
+import moment from 'moment';
+import ReactJson from 'react-json-view';
+import isEmpty from 'lodash.isempty';
 
 const useStyles = makeStyles()(theme => ({
 }));
 const CriteriaEditor = ({
+  columns,
   onCriteriaChange = () => { },
 }) => {
   const { classes } = useStyles()
   const [data, setData] = useState([]);
-
-  const muiTheme = useTheme()
-  const theme = createCriteriaTheme({
-    palette: {
-      primary: {
-        primary: muiTheme.palette.primary.main,
-        secondary: muiTheme.palette.secondary.main,
-      },
-    },
-    button: {
-      defaultColor: muiTheme.palette.primary.contrastText,
-      primaryColor: muiTheme.palette.primary.contrastText,
-      secondaryColor: muiTheme.palette.secondary.contrastText,
-      defaultBackgroundColor: muiTheme.palette.primary.main,
-    }
-  })
 
   const i18n = {
     'criteria.manage-criteria': amount => `Manage Filter (${amount})`,
@@ -60,17 +47,17 @@ const CriteriaEditor = ({
   const criteria = useMemo(() => {
     const gender = ["Male", "Female", "Other"];
     return {
-      name: {
-        label: "Name",
+      text: {
+        label: "text",
         component: {
           component: CriteriaTextField,
           props: {
-            placeholder: "Enter name",
+            placeholder: "Enter text",
           }
         }
       },
-      surname: {
-        label: "Autocomplete",
+      autocomplete: {
+        label: "autocomplete",
         value: (value) => {
           if (Array.isArray(value)) {
             return value?.join(", ")
@@ -83,8 +70,6 @@ const CriteriaEditor = ({
             multiple: true,
             labelField: "label",
             valueField: "value",
-
-            type: "autocomplete",
             options: [
               {
                 renderLabel: <Chip label="All" />,
@@ -126,8 +111,8 @@ const CriteriaEditor = ({
           }
         }
       },
-      gender: {
-        label: "Gender",
+      option: {
+        label: "option",
         value: (value) => gender[value],
         component: {
           component: CriteriaSelect,
@@ -140,19 +125,138 @@ const CriteriaEditor = ({
             })
           }
         }
-      }
+      },
+      date: {
+        label: "date",
+        value: (value) => {
+          const ret = `${moment(value?.startDate).format("MM/DD/YYYY LT")} - ${moment(value?.endDate).format("MM/DD/YYYY LT")}`
+          return ret
+        },
+        component: {
+          component: CriteriaDateRange,
+          props: {
+            placeholder: "Enter date",
+          }
+        }
+      },
     };
   }, [])
 
+  const mapFilterToCriteria = useCallback(
+    (col) => {
+      const baseProps = {
+        label: col.name,
+      }
+      let criteriaOptions = {}
+      switch (col?.filter?.type) {
+        case 'option': 
+          criteriaOptions = {
+            value: (value) => {
+              if (Array.isArray(value)) {
+                return value?.join(", ")
+              }
+              return value
+            },
+            component:{
+              component: CriteriaSelect,
+              props: {
+                options: col?.filter?.options,
+                multiple: col?.filter?.multiple,
+                labelField: col?.filter?.labelField,
+                valueField: col?.filter?.valueField,
+                renderLabel: col?.filter?.renderLabel,
+              }
+            } 
+          }
+          break;
+        case 'autocomplete': 
+          criteriaOptions = {
+            value: (value) => {
+              if (Array.isArray(value)) {
+                return value?.join(", ")
+              }
+              return value
+            },
+            component: {
+              component: CriteriaAutocomplete,
+              props: {
+                options: col?.filter?.options,
+                multiple: col?.filter?.multiple,
+                labelField: col?.filter?.labelField,
+                valueField: col?.filter?.valueField,
+                renderLabel: col?.filter?.renderLabel,
+              }
+            }
+          }
+          break;
+        case 'dateRange': 
+          criteriaOptions = {
+            value: (value) => {
+              const ret = `${moment(value?.startDate).format("MM/DD/YYYY LT")} - ${moment(value?.endDate).format("MM/DD/YYYY LT")}`
+              return ret
+            },
+            component: {
+              component: CriteriaDateRange,
+              props: {
+              }
+            }
+          }
+          break;
+        case 'text': 
+        default:
+          criteriaOptions = {
+            component: {
+              component: CriteriaTextField,
+              props: {
+                placeholder: "Enter text",
+              }
+            }
+          }
+          break;
+      }
+      const props = {
+        ...baseProps,
+        ...criteriaOptions
+      }
+      return props
+    },
+    [],
+  );
+  const filterColumns = useMemo(
+    () => {
+      const colsWithFilters = columns?.filter(col => col.filter)
+        ?.map(col => {
+          const criteria = mapFilterToCriteria(col)
+          return [col.key, criteria]
+        })
+
+      return Object.fromEntries(colsWithFilters)
+    }, [columns, mapFilterToCriteria]
+  );
+
+  useEffect(
+    () => {
+      onCriteriaChange(data)
+    }, [data]
+  );
+
   return (
     <I18nContext.Provider value={i18n}>
-      <ThemeProvider theme={theme}>
-        <ReactCriteria
-          data={data}
-          onChange={setData}
-          criteria={criteria}
-        />
-      </ThemeProvider>
+      <ReactCriteria
+        data={data}
+        onChange={setData}
+        criteria={filterColumns}
+      >
+        <Button
+          size="small"
+          variant="contained"
+          color="secondary"
+          disabled={isEmpty(data)}
+          onClick={() => {
+            setData([])
+          }}
+        >Clear</Button>
+      </ReactCriteria>
     </I18nContext.Provider>
   )
 
