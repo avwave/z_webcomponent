@@ -172,7 +172,25 @@ const DataGridToolbar = ({
     [filterValues],
   );
 
+  const renderChipFilters = useMemo(() => {
+    return columns.filter(f => {
+      return f?.filter?.type === 'chiptabs'
+    }).map((col, idx) => {
+      return <ChipTabsFilterRenderer
+        filter={col?.filter}
+        value={dataGridState.filterColumn[col.key]}
+        onChange={(v) => {
+          changeFilter(col.key, v);
+        }}
+      />
+    })
+  }, [changeFilter, dataGridState.filterColumn, columns]);
 
+
+  const hasChipFilter = useMemo(() => {
+    const result = columns.some(f => f?.filter?.type === 'chiptabs')
+    return result
+  }, [columns]);
 
   const mapCriteriaToFilter = useCallback(
     debounce(values => {
@@ -193,7 +211,6 @@ const DataGridToolbar = ({
   );
   return (
     <div className={classes.actionBar}>
-      
       {filterable && (
         <Toolbar variant="dense" className={classes.toolbar}>
           <div className={classes.filterBar}>
@@ -206,6 +223,9 @@ const DataGridToolbar = ({
             />
           </div>
         </Toolbar>
+      )}
+      {hasChipFilter && (
+        <Toolbar variant="dense" className={classes.toolbar}>{renderChipFilters}</Toolbar>
       )}
 
     </div>
