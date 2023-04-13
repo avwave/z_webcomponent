@@ -44,103 +44,11 @@ const CriteriaEditor = ({
     'popover.overlay-title': 'Close Filters'
   }
 
-  const criteria = useMemo(() => {
-    const gender = ["Male", "Female", "Other"];
-    return {
-      text: {
-        label: "text",
-        component: {
-          component: CriteriaTextField,
-          props: {
-            placeholder: "Enter text",
-          }
-        }
-      },
-      autocomplete: {
-        label: "autocomplete",
-        value: (value) => {
-          if (Array.isArray(value)) {
-            return value?.join(", ")
-          }
-          return value
-        },
-        component: {
-          component: CriteriaAutocomplete,
-          props: {
-            multiple: true,
-            labelField: "label",
-            valueField: "value",
-            options: [
-              {
-                renderLabel: <Chip label="All" />,
-                value: '',
-                label: 'All'
-              },
-
-              {
-                renderLabel: <Chip label="Pending Result" />,
-                value: 'PENDING',
-                label: 'Pending Result'
-              },
-              {
-                renderLabel: <Chip label="With Missing Specimens" />,
-                value: 'MISSING_SPECIMENS',
-                label: 'With Missing Specimens'
-              },
-              {
-                renderLabel: <Chip label="Incomplete" />,
-                value: 'INCOMPLETE',
-                label: 'Incomplete'
-              },
-              {
-                renderLabel: <Chip label="None Encoded (Incomplete)" />,
-                value: 'INCOMPLETE_NONE_ENCODED',
-                label: 'None Encoded (Incomplete)"'
-              },
-              {
-                renderLabel: <Chip label="Partially Encoded (Incomplete)" />,
-                value: 'INCOMPLETE_PARTIALLY_ENCODED',
-                label: 'Partially Encoded (Incomplete)"'
-              },
-              {
-                renderLabel: <Chip label="Complete Result" />,
-                value: 'COMPLETED',
-                label: 'Complete Result'
-              },
-            ]
-          }
-        }
-      },
-      option: {
-        label: "option",
-        value: (value) => gender[value],
-        component: {
-          component: CriteriaSelect,
-          props: {
-            options: gender.map((name, index) => {
-              return {
-                value: index,
-                label: name
-              };
-            })
-          }
-        }
-      },
-      date: {
-        label: "date",
-        value: (value) => {
-          const ret = `${moment(value?.startDate).format("MM/DD/YYYY LT")} - ${moment(value?.endDate).format("MM/DD/YYYY LT")}`
-          return ret
-        },
-        component: {
-          component: CriteriaDateRange,
-          props: {
-            placeholder: "Enter date",
-          }
-        }
-      },
-    };
-  }, [])
+  useEffect(
+    () => {
+      onCriteriaChange(data)
+    }, [data]
+  );
 
   const mapFilterToCriteria = useCallback(
     (col) => {
@@ -152,6 +60,7 @@ const CriteriaEditor = ({
         case 'option': 
           criteriaOptions = {
             value: (value) => {
+            console.log('CriteriaEditor.jsx (55) # value', value);
               if (Array.isArray(value)) {
                 return value?.join(", ")
               }
@@ -172,8 +81,12 @@ const CriteriaEditor = ({
         case 'autocomplete': 
           criteriaOptions = {
             value: (value) => {
+            console.log('CriteriaEditor.jsx (75) # value', value);
               if (Array.isArray(value)) {
-                return value?.join(", ")
+                return col?.filter?.options?.filter(opt => {
+                  return value.includes(opt?.[col?.filter?.valueField])
+                })?.map(opt => opt?.[col?.filter?.labelField])
+                ?.join(',')
               }
               return value
             },

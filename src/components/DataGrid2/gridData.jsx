@@ -41,6 +41,18 @@ const columnData = [
     frozen: true,
   },
   {
+    key: "labarray",
+    name:'LabArray',
+    filter:{
+      type:'autocomplete',
+      label:'LabArray',
+      options: [{ "id": 6, "label": "Arc Hospital, Lapu Lapu City" }, { "id": 1, "label": "Exact Check" }, { "id": 8, "label": "New World Diagnostics" }, { "id": 4, "label": "Reliance" }, { "id": 7, "label": "Singapore Diagnostics, Cebu" }, { "id": 3, "label": "Singapore Diagnostics, Makati" }, { "id": 5, "label": "SMC" }],
+      labelField:'label',
+      valueField:'id',
+      multiple:true,
+    }
+  },
+  {
     key: "title",
     name: "Filter: Text",
     sortable: true,

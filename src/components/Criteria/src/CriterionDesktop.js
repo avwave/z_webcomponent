@@ -160,7 +160,7 @@ function CriterionDesktop(props) {
 
   return (
     <>
-      <ButtonGroup sx={{ pr: 2 }}>
+      <ButtonGroup sx={{ pr: 2, minWidth: 'fit-content'}}>
         <Button
           size="small"
           variant="contained"
@@ -172,6 +172,7 @@ function CriterionDesktop(props) {
           size="small"
           variant="outlined"
           onClick={handleClick}
+          sx={{ textTransform: 'initial' }}
         >
           {summaryValue}
         </Button>

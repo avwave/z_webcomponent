@@ -25,8 +25,8 @@ const POPUP_MODE = {
 };
 
 const useStyles = makeStyles()(theme => ({
-  actionBar:{
-    flex:1,
+  actionBar: {
+    flex: 1,
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
@@ -192,6 +192,19 @@ const DataGridToolbar = ({
     }, [centerAccessory, children, classes.toolbarLeft, classes.toolbarRight, leftAccessory, rightAccessory]
   );
 
+  const mapCriteriaToFilter = useCallback(
+    debounce(values => {
+      const mappedValueEntries = values?.map(({ type, value }) => {
+        return [type, value]
+      })
+      const mappedFilters = Object.fromEntries(mappedValueEntries)
+      setFilterValues(mappedFilters)
+      onFilterChange(mappedFilters)
+
+
+    }, 500),
+    [onFilterChange, setFilterValues],
+  );
   return (
     <div className={classes.actionBar}>
       {renderAccessories}
@@ -201,7 +214,7 @@ const DataGridToolbar = ({
             <CriteriaEditor
               columns={columns}
               onCriteriaChange={(values) => {
-                console.log('DataGridToolbar.jsx (188) # values', values);
+                mapCriteriaToFilter(values)
               }}
             />
           </div>

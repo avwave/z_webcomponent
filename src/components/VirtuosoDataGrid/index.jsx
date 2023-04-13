@@ -5,7 +5,7 @@ import { useUrlState } from '../hooks/useUrlState';
 
 import { LinearProgress } from '@material-ui/core';
 import Truncate from 'react-truncate';
-import { DataGridContext } from '../DataGrid/DataGridContext';
+import { DataGridContext, actions as dataGridActions } from '../DataGrid/DataGridContext';
 import { DataGridToolbar } from './DataGridToolbar';
 import { Box, Typography } from '@mui/material';
 const useStyles = makeStyles()(theme => ({
@@ -61,6 +61,15 @@ const VirtuosoDataGrid = ({
     queryKey: `${id}-sortBy`,
     disable: !useUrlAsState
   })
+
+  useEffect(() => {
+    dataGridDispatch({
+      type: dataGridActions.FILTER_COLUMN,
+      payload: {
+        filterColumn: filters,
+      },
+    });
+  }, [filters]);
 
   const enableRowSelection = Boolean(gridProps?.onSelectedRowsChange)
   const [selectedRows, setSelectedRows] = useState({});
