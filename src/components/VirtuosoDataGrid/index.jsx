@@ -124,11 +124,13 @@ const VirtuosoDataGrid = ({
         if (
           scrollHeight - scrollTop - clientHeight < 400
         ) {
-          onLoadMore && onLoadMore()
+          if (totalCount < dataGridState?.rows?.length) {
+            onLoadMore && onLoadMore()
+          }
         }
       }
     },
-    [onLoadMore],
+    [dataGridState?.rows?.length, onLoadMore, totalCount],
   );
 
   //check on mount if needs to load more to fill the table
@@ -213,14 +215,14 @@ const VirtuosoDataGrid = ({
           <Box>
             {leftAccessory ? leftAccessory() : <></>}
           </Box>
-          <Box sx={{flexGrow:1, display: 'flex', flexDirection: 'row',  justifyContent:'center'}}>
-          {centerAccessory ? centerAccessory() : <></>}
+          <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
+            {centerAccessory ? centerAccessory() : <></>}
           </Box>
           <Box >
             {rightAccessory ? rightAccessory() : <></>}
           </Box>
         </Toolbar>
-        
+
       )
       if (leftAccessory || centerAccessory || rightAccessory) return accessoryBar;
       return <></>
@@ -289,7 +291,7 @@ const VirtuosoDataGrid = ({
         }}
         muiSearchTextFieldProps={{
           placeholder: 'Search',
-          
+
           variant: 'outlined',
           size: 'small',
         }}
@@ -303,7 +305,7 @@ const VirtuosoDataGrid = ({
             showSelector={showSelector}
             filterable={filterable}
             onFilterChange={(f) => {
-              setFilters({...filters, ...f})
+              setFilters({ ...filters, ...f })
             }}
             rightAccessory={rightAccessory}
             leftAccessory={leftAccessory}
