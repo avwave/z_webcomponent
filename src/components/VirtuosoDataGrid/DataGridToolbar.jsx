@@ -198,6 +198,7 @@ const DataGridToolbar = ({
         <Toolbar variant="dense" className={classes.toolbar}>
           <div className={classes.filterBar}>
             <CriteriaEditor
+              hasDateRangeFilter={hasDateRangeFilter}
               columns={columns}
               onCriteriaChange={(values) => {
                 mapCriteriaToFilter(values)

@@ -18,6 +18,7 @@ const useStyles = makeStyles()(theme => ({
 const CriteriaEditor = ({
   columns,
   onCriteriaChange = () => { },
+  hasDateRangeFilter=true
 }) => {
   const { classes } = useStyles()
   const [data, setData] = useState([]);
@@ -149,8 +150,12 @@ const CriteriaEditor = ({
         name:'Date Range',
 
       })
-      return Object.fromEntries([...colsWithFilters, ['ZWC_defaultdaterange', defaultDataRangeCriteria]])
-    }, [columns, mapFilterToCriteria]
+      if (hasDateRangeFilter) {
+        return Object.fromEntries([['ZWC_defaultdaterange', defaultDataRangeCriteria], ...colsWithFilters])
+      } else {
+        return Object.fromEntries(colsWithFilters)
+      }
+    }, [columns, hasDateRangeFilter, mapFilterToCriteria]
   );
 
   useEffect(

@@ -283,7 +283,7 @@ const VirtuosoDataGrid = ({
           columnPinning: defaultPinnedColumns,
           showGlobalFilter: true,
         }}
-        
+        enableGlobalFilter={hasSearchFilter}
         onGlobalFilterChange={(f) => {
           debounceSearch(f)
         }}
