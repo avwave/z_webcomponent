@@ -160,7 +160,7 @@ function CriterionDesktop(props) {
 
   return (
     <>
-      <ButtonGroup sx={{ pr: 2, minWidth: 'fit-content'}}>
+      <ButtonGroup sx={{ pr: 2, minWidth: 'max-content'}}>
         <Button
           size="small"
           variant="contained"

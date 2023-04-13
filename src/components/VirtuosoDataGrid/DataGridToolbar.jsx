@@ -172,32 +172,18 @@ const DataGridToolbar = ({
     [filterValues],
   );
 
-  const renderAccessories = useMemo(
-    () => {
-      const accessoryBar = (
-        <Toolbar variant="dense">
-          <div className={classes.toolbarLeft}>
-            {leftAccessory ? leftAccessory() : <></>}
-          </div>
-          {centerAccessory ? centerAccessory() : <></>}
-          <div className={classes.toolbarRight}>
-            {children}
-            {rightAccessory ? rightAccessory() : <></>}
-          </div>
-        </Toolbar>
-      )
-      if (leftAccessory || centerAccessory || rightAccessory || children) return accessoryBar;
-      return <></>
 
-    }, [centerAccessory, children, classes.toolbarLeft, classes.toolbarRight, leftAccessory, rightAccessory]
-  );
 
   const mapCriteriaToFilter = useCallback(
     debounce(values => {
-      const mappedValueEntries = values?.map(({ type, value }) => {
+      const mappedValueEntries = values?.filter(f => f?.type !== 'ZWC_defaultdaterange')?.map(({ type, value }) => {
         return [type, value]
       })
-      const mappedFilters = Object.fromEntries(mappedValueEntries)
+      const defaultdaterangefilter = values?.filter(f => f?.type === 'ZWC_defaultdaterange')?.reduce((acc, { value }) => {
+        return { ...acc, ...value }
+      }, {})
+
+      const mappedFilters = {...Object.fromEntries(mappedValueEntries), ...defaultdaterangefilter }
       setFilterValues(mappedFilters)
       onFilterChange(mappedFilters)
 
@@ -207,7 +193,7 @@ const DataGridToolbar = ({
   );
   return (
     <div className={classes.actionBar}>
-      {renderAccessories}
+      
       {filterable && (
         <Toolbar variant="dense" className={classes.toolbar}>
           <div className={classes.filterBar}>

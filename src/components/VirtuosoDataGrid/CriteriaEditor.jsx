@@ -142,8 +142,14 @@ const CriteriaEditor = ({
           const criteria = mapFilterToCriteria(col)
           return [col.key, criteria]
         })
+      const defaultDataRangeCriteria = mapFilterToCriteria({
+        filter:{
+          type: 'dateRange'
+        },
+        name:'Date Range',
 
-      return Object.fromEntries(colsWithFilters)
+      })
+      return Object.fromEntries([...colsWithFilters, ['ZWC_defaultdaterange', defaultDataRangeCriteria]])
     }, [columns, mapFilterToCriteria]
   );
 

@@ -9,8 +9,6 @@ const useStyles = makeStyles()(theme => ({
   root: {
     display: 'flex',
     backgroundColor: theme.palette.background.paper,
-    padding: '16px 16px 8px 16px',
-    boxShadow: '0px 1px 5px 0px rgba(0, 0, 0, .2)'
   },
   add:{
     display: 'flex',

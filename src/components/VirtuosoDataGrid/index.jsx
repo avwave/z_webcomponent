@@ -3,11 +3,11 @@ import React, { isValidElement, useCallback, useContext, useEffect, useMemo, use
 import { makeStyles } from 'tss-react/mui';
 import { useUrlState } from '../hooks/useUrlState';
 
-import { LinearProgress } from '@material-ui/core';
+import { AppBar, LinearProgress } from '@material-ui/core';
 import Truncate from 'react-truncate';
 import { DataGridContext, actions as dataGridActions } from '../DataGrid/DataGridContext';
 import { DataGridToolbar } from './DataGridToolbar';
-import { Box, Typography } from '@mui/material';
+import { Box, Toolbar, Typography, debounce } from '@mui/material';
 const useStyles = makeStyles()(theme => ({
 }));
 const VirtuosoDataGrid = ({
@@ -199,11 +199,41 @@ const VirtuosoDataGrid = ({
     }, [sortState]
   );
 
+  const debounceSearch = useCallback(
+    debounce(f => {
+      setFilters({ ...filters, search: f })
+    }, 500),
+    [],
+  );
+
+  const renderAccessories = useMemo(
+    () => {
+      const accessoryBar = (
+        <Toolbar variant="dense">
+          <Box>
+            {leftAccessory ? leftAccessory() : <></>}
+          </Box>
+          <Box sx={{flexGrow:1, display: 'flex', flexDirection: 'row',  justifyContent:'center'}}>
+          {centerAccessory ? centerAccessory() : <></>}
+          </Box>
+          <Box >
+            {rightAccessory ? rightAccessory() : <></>}
+          </Box>
+        </Toolbar>
+        
+      )
+      if (leftAccessory || centerAccessory || rightAccessory) return accessoryBar;
+      return <></>
+
+    }, [centerAccessory, classes.toolbarLeft, classes.toolbarRight, leftAccessory, rightAccessory]
+  );
+
   if (defaultHideColumns === null && defaultColumnOrder === null)
     return <LinearProgress />
 
   return (
     <div className={classes.rootContainer}>
+      {renderAccessories}
       <MaterialReactTable
         tableInstanceRef={tableInstanceRef}
         columnResizeMode='onChange'
@@ -211,7 +241,6 @@ const VirtuosoDataGrid = ({
         manualSorting
         memoMode="cells"
         enableDensityToggle={false}
-        enableGlobalFilter={false}
         enableColumnOrdering
         enableColumnResizing
         enablePagination={false}
@@ -252,6 +281,17 @@ const VirtuosoDataGrid = ({
           columnOrder: defaultColumnOrder,
           columnVisibility: defaultHideColumns,
           columnPinning: defaultPinnedColumns,
+          showGlobalFilter: true,
+        }}
+        
+        onGlobalFilterChange={(f) => {
+          debounceSearch(f)
+        }}
+        muiSearchTextFieldProps={{
+          placeholder: 'Search',
+          
+          variant: 'outlined',
+          size: 'small',
         }}
         renderTopToolbarCustomActions={(props) => (
           <DataGridToolbar
@@ -263,7 +303,7 @@ const VirtuosoDataGrid = ({
             showSelector={showSelector}
             filterable={filterable}
             onFilterChange={(f) => {
-              setFilters(f)
+              setFilters({...filters, ...f})
             }}
             rightAccessory={rightAccessory}
             leftAccessory={leftAccessory}
