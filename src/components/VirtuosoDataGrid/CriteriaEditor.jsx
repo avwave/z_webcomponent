@@ -139,7 +139,7 @@ const CriteriaEditor = ({
   );
   const filterColumns = useMemo(
     () => {
-      const colsWithFilters = columns?.filter(col => col.filter)
+      const colsWithFilters = columns?.filter(col => col.filter && col?.filter?.type !== 'chiptabs')
         ?.map(col => {
           const criteria = mapFilterToCriteria(col)
           return [col.key, criteria]
