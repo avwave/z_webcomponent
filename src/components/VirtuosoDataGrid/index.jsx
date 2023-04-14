@@ -1,13 +1,15 @@
-import MaterialReactTable, { MRT_FullScreenToggleButton, MRT_ShowHideColumnsButton, MRT_ToggleDensePaddingButton, MRT_ToggleFiltersButton } from 'material-react-table';
+import MaterialReactTable from 'material-react-table';
 import React, { isValidElement, useCallback, useContext, useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import { makeStyles } from 'tss-react/mui';
 import { useUrlState } from '../hooks/useUrlState';
 
-import { AppBar, LinearProgress } from '@material-ui/core';
+import { LinearProgress } from '@material-ui/core';
+import { Box, Toolbar, debounce } from '@mui/material';
+import ReactJson from 'react-json-view';
 import Truncate from 'react-truncate';
 import { DataGridContext, actions as dataGridActions } from '../DataGrid/DataGridContext';
 import { DataGridToolbar } from './DataGridToolbar';
-import { Box, Toolbar, Typography, debounce } from '@mui/material';
+import { PortalCell } from '../DataGrid/PortalCell';
 const useStyles = makeStyles()(theme => ({
 }));
 const VirtuosoDataGrid = ({
@@ -83,34 +85,42 @@ const VirtuosoDataGrid = ({
 
   const columns = useMemo(
     () => {
-      const cols = dataGridState?.columns?.map((col) => {
-        return {
-          header: col.name,
-          accessorKey: col.key,
-          enableSorting: !!col.sortable,
-          // enableHiding: !col?.hidden,
-          Cell: ({ row, column, renderedCellValue, ...rest }) => {
-            if (col?.cellRenderer) {
-              return <div>{col?.cellRenderer({ row: row?.original })}</div>
-            } else {
-              const v = rest?.cell?.renderValue()
-              if (isValidElement(renderedCellValue) || col?.key === 'select-row') {
-                return <div>{renderedCellValue}</div>
+      const cols = dataGridState?.columns
+        ?.filter(col => !col.expanderControl)
+        ?.map((col) => {
+          return {
+            header: col.name,
+            accessorKey: col.key,
+            enableSorting: !!col.sortable,
+            // enableHiding: !col?.hidden,
+            Cell: ({ row, column, renderedCellValue, ...rest }) => {
+              let finalizedCell = <></>
+              if (col?.cellRenderer) {
+                finalizedCell =  <div>{col?.cellRenderer({ row: row?.original })}</div>
+              } else {
+                const v = rest?.cell?.renderValue()
+                if (isValidElement(renderedCellValue) || col?.key === 'select-row') {
+                  finalizedCell =  <div>{renderedCellValue}</div>
+                } else {
+                  finalizedCell = <div>
+                    <Truncate
+                      width={column?.getSize()}
+                      lines={col?.truncateLines ?? 2} ellipsis={<span>(...)</span>}
+                      style={col.cellStyles}
+                    >
+                      {String(renderedCellValue)}
+                    </Truncate>
+                  </div>
+                }
               }
-              return <div>
-                <Truncate
-                  width={column?.getSize()}
-                  lines={col?.truncateLines ?? 2} ellipsis={<span>(...)</span>}
-                  style={col.cellStyles}
-                >
-                  {String(renderedCellValue)}
-                </Truncate>
-              </div>
+              const expanderContent = col?.expandRenderer && col?.expandRenderer({ row: row?.original })
+              if (expanderContent) {
+                return <PortalCell expandCell={expanderContent} renderedCell={finalizedCell} />
+              }
+              return finalizedCell
             }
           }
-
-        }
-      })
+        })
       return cols
     }, [dataGridState?.columns]
   );
@@ -149,29 +159,38 @@ const VirtuosoDataGrid = ({
     }
   }, [sortColumn, sortDirection, filters]);
 
+
+  const defaultCols = useMemo(
+    () => {
+      const colmap = []
+      if (enableRowSelection) {
+        colmap.push('mrt-row-select')
+      }
+      if (tableComponents?.detailsRow?.content) {
+        colmap.push('mrt-row-expand')
+      }
+      return colmap
+
+    }, [enableRowSelection, tableComponents?.detailsRow?.content]
+  );
+
   const defaultColumnOrder = useMemo(
     () => {
       if (dataGridState?.columns?.length <= 0) {
         return null
       }
       const cols = dataGridState?.columns?.map((col) => col.key)
-      if (enableRowSelection) {
-        return ['mrt-row-select', ...cols]
-      }
-      return cols
-    }, [dataGridState?.columns]
+
+      return [...defaultCols, ...cols]
+    }, [dataGridState?.columns, defaultCols]
   );
 
   const defaultPinnedColumns = useMemo(
     () => {
       const cols = dataGridState?.columns?.filter(col => col.frozen)?.map(col => col.key)
-      if (enableRowSelection) {
-        return {
-          left: ['mrt-row-select', ...cols],
-        }
-      }
+
       return {
-        left: cols,
+        left: [...defaultCols, ...cols],
       }
     }, [dataGridState?.columns]
   );
@@ -238,6 +257,14 @@ const VirtuosoDataGrid = ({
   const [showColumnFilters, setShowColumnFilters] = useState(false);
   const [pinnedColumns, setPinnedColumns] = useState(defaultPinnedColumns);
 
+  const renderDetailPanel = useCallback(
+    ({ row }) => {
+      const DetailRowComponent = tableComponents?.detailsRow?.content ?? <></>
+      return <DetailRowComponent rowData={row?.original} />
+    },
+    [tableComponents?.detailsRow?.content],
+  );
+
   if (defaultHideColumns === null && defaultColumnOrder === null)
     return <LinearProgress />
 
@@ -254,7 +281,7 @@ const VirtuosoDataGrid = ({
         showSelector={showSelector}
         filterable={filterable}
         onFilterChange={(f) => {
-          setFilters({...f })
+          setFilters({ ...f })
         }}
         rightAccessory={rightAccessory}
         leftAccessory={leftAccessory}
@@ -362,33 +389,9 @@ const VirtuosoDataGrid = ({
           );
           queueMicrotask(rerender); //hack to rerender after state update
         }}
-
-        // renderTopToolbarCustomActions={(props) => (
-        //   <DataGridToolbar
-        //     tableInstanceRef={tableInstanceRef}
-        //     useUrlAsState={useUrlAsState}
-        //     hasDateRangeFilter={hasDateRangeFilter}
-        //     searchPlaceholder={searchPlaceholder}
-        //     hasSearchFilter={hasSearchFilter}
-        //     columns={dataGridState?.columns}
-        //     showSelector={showSelector}
-        //     filterable={filterable}
-        //     onFilterChange={(f) => {
-        //       setFilters({ ...filters, ...f })
-        //     }}
-        //     rightAccessory={rightAccessory}
-        //     leftAccessory={leftAccessory}
-        //     centerAccessory={centerAccessory}
-        //     totalCount={totalCount}
-        //     loadedCount={dataGridState.rows.length}
-        //     defaultFilters={defaultFilters}
-        //     gridProps={gridProps}
-        //     onClearFilters={() => onClearFilters()}
-        //     gridId={id}
-        //     customColumnDisplay={customColumnDisplay}
-        //   />
-        // )}
-
+        renderDetailPanel={({ row }) => {
+          return renderDetailPanel({ row })
+        }}
       />
     </div>
   )
