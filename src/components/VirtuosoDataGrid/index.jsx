@@ -124,7 +124,7 @@ const VirtuosoDataGrid = ({
         if (
           scrollHeight - scrollTop - clientHeight < 400
         ) {
-          if (totalCount < dataGridState?.rows?.length) {
+          if (totalCount > dataGridState?.rows?.length) {
             onLoadMore && onLoadMore()
           }
         }
