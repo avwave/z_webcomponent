@@ -1,5 +1,5 @@
 import MaterialReactTable, { MRT_FullScreenToggleButton, MRT_ShowHideColumnsButton, MRT_ToggleDensePaddingButton, MRT_ToggleFiltersButton } from 'material-react-table';
-import React, { isValidElement, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import React, { isValidElement, useCallback, useContext, useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import { makeStyles } from 'tss-react/mui';
 import { useUrlState } from '../hooks/useUrlState';
 
@@ -230,12 +230,43 @@ const VirtuosoDataGrid = ({
     }, [centerAccessory, classes.toolbarLeft, classes.toolbarRight, leftAccessory, rightAccessory]
   );
 
+  const rerender = useReducer(() => ({}), {})[1];
+  const [columnVisibility, setColumnVisibility] = useState({});
+  const [density, setDensity] = useState('comfortable');
+  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 5 });
+  const [rowSelection, setRowSelection] = useState({});
+  const [showColumnFilters, setShowColumnFilters] = useState(false);
+  const [pinnedColumns, setPinnedColumns] = useState(defaultPinnedColumns);
+
   if (defaultHideColumns === null && defaultColumnOrder === null)
     return <LinearProgress />
 
   return (
     <div className={classes.rootContainer}>
       {renderAccessories}
+      <DataGridToolbar
+        tableInstanceRef={tableInstanceRef}
+        useUrlAsState={useUrlAsState}
+        hasDateRangeFilter={hasDateRangeFilter}
+        searchPlaceholder={searchPlaceholder}
+        hasSearchFilter={hasSearchFilter}
+        columns={dataGridState?.columns}
+        showSelector={showSelector}
+        filterable={filterable}
+        onFilterChange={(f) => {
+          setFilters({...f })
+        }}
+        rightAccessory={rightAccessory}
+        leftAccessory={leftAccessory}
+        centerAccessory={centerAccessory}
+        totalCount={totalCount}
+        loadedCount={dataGridState.rows.length}
+        defaultFilters={defaultFilters}
+        gridProps={gridProps}
+        onClearFilters={() => onClearFilters()}
+        gridId={id}
+        customColumnDisplay={customColumnDisplay}
+      />
       <MaterialReactTable
         tableInstanceRef={tableInstanceRef}
         columnResizeMode='onChange'
@@ -275,10 +306,15 @@ const VirtuosoDataGrid = ({
           rowSelection: selectedRows,
           showSkeletons: false,
           sorting: sortState,
+          columnVisibility,
+          density,
+          pagination,
+          showColumnFilters,
+          columnPinning: pinnedColumns,
         }}
         onSortingChange={setSortState}
         rowVirtualizerInstanceRef={rowVirtualizerInstanceRef}
-        rowVirtualizerProps={{ overscan: 4 }}
+        // rowVirtualizerProps={{ overscan: 4 }}
         initialState={{
           columnOrder: defaultColumnOrder,
           columnVisibility: defaultHideColumns,
@@ -295,30 +331,63 @@ const VirtuosoDataGrid = ({
           variant: 'outlined',
           size: 'small',
         }}
-        renderTopToolbarCustomActions={(props) => (
-          <DataGridToolbar
-            useUrlAsState={useUrlAsState}
-            hasDateRangeFilter={hasDateRangeFilter}
-            searchPlaceholder={searchPlaceholder}
-            hasSearchFilter={hasSearchFilter}
-            columns={dataGridState?.columns}
-            showSelector={showSelector}
-            filterable={filterable}
-            onFilterChange={(f) => {
-              setFilters({ ...filters, ...f })
-            }}
-            rightAccessory={rightAccessory}
-            leftAccessory={leftAccessory}
-            centerAccessory={centerAccessory}
-            totalCount={totalCount}
-            loadedCount={dataGridState.rows.length}
-            defaultFilters={defaultFilters}
-            gridProps={gridProps}
-            onClearFilters={() => onClearFilters()}
-            gridId={id}
-            customColumnDisplay={customColumnDisplay}
-          />
-        )}
+        enableTopToolbar={false}
+        onColumnPinningChange={(updater) => {
+          setPinnedColumns((prev) =>
+            updater instanceof Function ? updater(prev) : updater,
+          );
+          queueMicrotask(rerender); //hack to rerender after state update
+        }}
+        onColumnVisibilityChange={(updater) => {
+          setColumnVisibility((prev) =>
+            updater instanceof Function ? updater(prev) : updater,
+          );
+          queueMicrotask(rerender); //hack to rerender after state update
+        }}
+        onDensityChange={(updater) => {
+          setDensity((prev) =>
+            updater instanceof Function ? updater(prev) : updater,
+          );
+          queueMicrotask(rerender); //hack to rerender after state update
+        }}
+        onPaginationChange={(updater) => {
+          setPagination((prev) =>
+            updater instanceof Function ? updater(prev) : updater,
+          );
+          queueMicrotask(rerender); //hack to rerender after state update
+        }}
+        onShowColumnFiltersChange={(updater) => {
+          setShowColumnFilters((prev) =>
+            updater instanceof Function ? updater(prev) : updater,
+          );
+          queueMicrotask(rerender); //hack to rerender after state update
+        }}
+
+        // renderTopToolbarCustomActions={(props) => (
+        //   <DataGridToolbar
+        //     tableInstanceRef={tableInstanceRef}
+        //     useUrlAsState={useUrlAsState}
+        //     hasDateRangeFilter={hasDateRangeFilter}
+        //     searchPlaceholder={searchPlaceholder}
+        //     hasSearchFilter={hasSearchFilter}
+        //     columns={dataGridState?.columns}
+        //     showSelector={showSelector}
+        //     filterable={filterable}
+        //     onFilterChange={(f) => {
+        //       setFilters({ ...filters, ...f })
+        //     }}
+        //     rightAccessory={rightAccessory}
+        //     leftAccessory={leftAccessory}
+        //     centerAccessory={centerAccessory}
+        //     totalCount={totalCount}
+        //     loadedCount={dataGridState.rows.length}
+        //     defaultFilters={defaultFilters}
+        //     gridProps={gridProps}
+        //     onClearFilters={() => onClearFilters()}
+        //     gridId={id}
+        //     customColumnDisplay={customColumnDisplay}
+        //   />
+        // )}
 
       />
     </div>

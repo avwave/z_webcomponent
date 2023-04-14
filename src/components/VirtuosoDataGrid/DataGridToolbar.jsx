@@ -1,22 +1,14 @@
 import {
-  AppBar,
-  Button,
+  Box,
   debounce,
-  InputAdornment,
-  TextField,
-  Toolbar,
-  Tooltip
+  Toolbar
 } from "@mui/material";
+import { MRT_FullScreenToggleButton, MRT_GlobalFilterTextField, MRT_ShowHideColumnsButton, MRT_ToggleDensePaddingButton, MRT_ToggleFiltersButton } from "material-react-table";
 import React, { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { makeStyles } from "tss-react/mui";
 import { DataGridContext } from "../DataGrid/DataGridContext";
-import { FilterDropdown } from "../DataGrid2/FilterDropdown";
+import { ChipTabsFilterRenderer } from "../DataGrid2/FilterRenderer";
 import { useUrlState } from "../hooks/useUrlState";
-import { isDeeplyEmpty } from "../utils/isDeepEmpty";
-import clsx from "clsx";
-import { DateTimeRangePicker } from "../DateTimeRangePicker";
-import { Search } from "@mui/icons-material";
-import { AuocompleteFilterRenderer, ChipTabsFilterRenderer, DateRangeFilterRenderer, OptionFilterRenderer, TextFilterRenderer } from "../DataGrid2/FilterRenderer";
 import { CriteriaEditor } from "./CriteriaEditor";
 
 const POPUP_MODE = {
@@ -52,7 +44,7 @@ const useStyles = makeStyles()(theme => ({
     height: '2.3rem'
   },
   filterBar: {
-    width: "100%",
+    flex: 1,
     "& > div": {
       width: "100%",
       overflowX: 'overlay',
@@ -147,6 +139,7 @@ const DataGridToolbar = ({
   useUrlAsState = false,
   gridId,
   customColumnDisplay: CustomColumnDisplay,
+  tableInstanceRef
 }) => {
   const { classes } = useStyles()
 
@@ -201,7 +194,7 @@ const DataGridToolbar = ({
         return { ...acc, ...value }
       }, {})
 
-      const mappedFilters = {...Object.fromEntries(mappedValueEntries), ...defaultdaterangefilter }
+      const mappedFilters = { ...Object.fromEntries(mappedValueEntries), ...defaultdaterangefilter }
       setFilterValues(mappedFilters)
       onFilterChange(mappedFilters)
 
@@ -212,20 +205,31 @@ const DataGridToolbar = ({
   return (
     <div className={classes.actionBar}>
       {filterable && (
-        <Toolbar variant="dense" className={classes.toolbar}>
-          <div className={classes.filterBar}>
-            <CriteriaEditor
-              hasDateRangeFilter={hasDateRangeFilter}
-              columns={columns}
-              onCriteriaChange={(values) => {
-                mapCriteriaToFilter(values)
-              }}
-            />
-          </div>
-        </Toolbar>
-      )}
-      {hasChipFilter && (
-        <Toolbar variant="dense" className={classes.toolbar}>{renderChipFilters}</Toolbar>
+        <>
+          <Toolbar disableGutters variant="dense" className={classes.toolbar}>
+            <div className={classes.filterBar}>
+              <CriteriaEditor
+                hasDateRangeFilter={hasDateRangeFilter}
+                columns={columns}
+                onCriteriaChange={(values) => {
+                  mapCriteriaToFilter(values)
+                }}
+                filters={filterValues}
+              />
+            </div>
+            {tableInstanceRef.current && (
+              <Box sx={{ paddingLeft: 2, flexShrink: 0, display: 'flex', flexDirection: 'row' }}>
+                <MRT_GlobalFilterTextField table={tableInstanceRef.current} />
+                {/* <MRT_ToggleFiltersButton table={tableInstanceRef.current} /> */}
+                <MRT_ShowHideColumnsButton table={tableInstanceRef.current} />
+                {/* <MRT_FullScreenToggleButton table={tableInstanceRef.current} /> */}
+              </Box>
+            )}
+          </Toolbar>
+          {hasChipFilter && (
+            <Toolbar disableGutters variant="dense" className={classes.toolbar}>{renderChipFilters}</Toolbar>
+          )}
+        </>
       )}
 
     </div>

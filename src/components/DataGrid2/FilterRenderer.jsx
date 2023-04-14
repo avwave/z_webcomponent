@@ -3,6 +3,7 @@ import {
   Box,
   Checkbox,
   Chip,
+  Divider,
   FormControl,
   IconButton,
   Input,
@@ -64,8 +65,7 @@ const useStyles = makeStyles()((theme) => ({
     margin: 0,
   },
   chipTabRoot: {
-    paddingLeft: theme.spacing(0.5),
-    paddingRight: theme.spacing(0.5),
+    padding: theme.spacing(0.5),
   },
   chipTabIndicator: {
     display: 'flex',
@@ -74,7 +74,7 @@ const useStyles = makeStyles()((theme) => ({
   },
   chipTabSelected: {
     border: `1px solid ${theme.palette.action.focus}`,
-    borderBottom: 0,
+
     borderRadius: theme.shape.borderRadius,
   },
   chip: {
@@ -97,6 +97,7 @@ const useStyles = makeStyles()((theme) => ({
     borderRadius: '1em/50%',
     paddingLeft: '0.5rem',
     paddingRight: '0.5rem',
+
   },
   label: {
 
@@ -213,14 +214,16 @@ function DateRangeFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
 function ChipTabsFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
   const { classes } = useStyles();
   return (
-    <Tabs indicatorColor="primary"
+    <Tabs
+      indicatorColor="primary"
       variant="scrollable"
+      scrollButtons="auto"
       value={value}
       onChange={(e, val) => {
         onChange(val)
       }}
       classes={{ indicator: classes.chipTabIndicator }}
-      scrollButtons="auto">
+    >
       {filter?.options.map((option, idx) => {
         let icon
         switch (option?.type) {
@@ -244,20 +247,29 @@ function ChipTabsFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
             wrapped
             classes={{ root: classes.chipTabRoot, selected: classes.chipTabSelected }}
             label={
-              <Chip
-                size="small"
-                variant="outlined"
-                color={value === option?.v ? "primary" : "default"}
-                label={icon}
-                className={classes.chip}
-                // onClick={() => onChange(option?.v)}
-                avatar={<Avatar>{option?.count}</Avatar>}
-                classes={{
-                  root: classes.chipRoot,
-                  avatar: classes.chipAvatar,
-                  label: classes.label,
-                }}
-              />
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <Box sx={{ pl: 1, pr: 1 }}>
+                  {icon}
+                </Box>
+                <Divider orientation="vertical" flexItem />
+                <Box sx={{ pl: 1, pr: 1 }}>
+                  {option?.count}
+                </Box>
+              </Box>
+              // <Chip
+              //   size="small"
+              //   variant="outlined"
+              //   color={value === option?.v ? "primary" : "default"}
+              //   label={icon}
+              //   className={classes.chip}
+              //   // onClick={() => onChange(option?.v)}
+              //   avatar={<Avatar>{option?.count}</Avatar>}
+              //   classes={{
+              //     root: classes.chipRoot,
+              //     avatar: classes.chipAvatar,
+              //     label: classes.label,
+              //   }}
+              // />
             }
           />)
       })}

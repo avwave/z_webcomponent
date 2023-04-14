@@ -18,7 +18,8 @@ const useStyles = makeStyles()(theme => ({
 const CriteriaEditor = ({
   columns,
   onCriteriaChange = () => { },
-  hasDateRangeFilter=true
+  hasDateRangeFilter = true,
+  filters
 }) => {
   const { classes } = useStyles()
   const [data, setData] = useState([]);
@@ -45,11 +46,11 @@ const CriteriaEditor = ({
     'popover.overlay-title': 'Close Filters'
   }
 
-  useEffect(
-    () => {
-      onCriteriaChange(data)
-    }, [data]
-  );
+  // useEffect(
+  //   () => {
+  //     onCriteriaChange(data)
+  //   }, [data]
+  // );
 
   const mapFilterToCriteria = useCallback(
     (col) => {
@@ -58,16 +59,16 @@ const CriteriaEditor = ({
       }
       let criteriaOptions = {}
       switch (col?.filter?.type) {
-        case 'option': 
+        case 'option':
           criteriaOptions = {
             value: (value) => {
-            console.log('CriteriaEditor.jsx (55) # value', value);
+              console.log('CriteriaEditor.jsx (55) # value', value);
               if (Array.isArray(value)) {
                 return value?.join(", ")
               }
               return value
             },
-            component:{
+            component: {
               component: CriteriaSelect,
               props: {
                 options: col?.filter?.options,
@@ -76,18 +77,18 @@ const CriteriaEditor = ({
                 valueField: col?.filter?.valueField,
                 renderLabel: col?.filter?.renderLabel,
               }
-            } 
+            }
           }
           break;
-        case 'autocomplete': 
+        case 'autocomplete':
           criteriaOptions = {
             value: (value) => {
-            console.log('CriteriaEditor.jsx (75) # value', value);
+              console.log('CriteriaEditor.jsx (75) # value', value);
               if (Array.isArray(value)) {
                 return col?.filter?.options?.filter(opt => {
                   return value.includes(opt?.[col?.filter?.valueField])
                 })?.map(opt => opt?.[col?.filter?.labelField])
-                ?.join(',')
+                  ?.join(',')
               }
               return value
             },
@@ -103,7 +104,7 @@ const CriteriaEditor = ({
             }
           }
           break;
-        case 'dateRange': 
+        case 'dateRange':
           criteriaOptions = {
             value: (value) => {
               const ret = `${moment(value?.startDate).format("MM/DD/YYYY LT")} - ${moment(value?.endDate).format("MM/DD/YYYY LT")}`
@@ -116,7 +117,7 @@ const CriteriaEditor = ({
             }
           }
           break;
-        case 'text': 
+        case 'text':
         default:
           criteriaOptions = {
             component: {
@@ -144,10 +145,10 @@ const CriteriaEditor = ({
           return [col.key, criteria]
         })
       const defaultDataRangeCriteria = mapFilterToCriteria({
-        filter:{
+        filter: {
           type: 'dateRange'
         },
-        name:'Date Range',
+        name: 'Date Range',
 
       })
       if (hasDateRangeFilter) {
@@ -157,18 +158,42 @@ const CriteriaEditor = ({
       }
     }, [columns, hasDateRangeFilter, mapFilterToCriteria]
   );
+  const [initialData, setInitialData] = useState([]);
 
   useEffect(
     () => {
-      onCriteriaChange(data)
-    }, [data]
-  );
+      const { endDate, startDate, ...baseFilters } = { ...filters }
+      const filterEntries = Object.entries(baseFilters)
+      const filterObjects = filterEntries?.map(([key, value]) => {
+        return {
+          type: key,
+          value
+        }
+      })
+      const dateRangeFilter = (startDate && endDate) ? ([{
+        type: 'ZWC_defaultdaterange',
+        value: {
+          startDate,
+          endDate
+        }
+      }]) : []
 
+      const mappedFilters = [
+        ...filterObjects,
+        ...dateRangeFilter
+      ]
+      setData(mappedFilters)
+
+    }, [filters]
+  );
   return (
     <I18nContext.Provider value={i18n}>
       <ReactCriteria
-        data={data}
-        onChange={setData}
+        data={data || initialData}
+        onChange={v => {
+          onCriteriaChange(v)
+          setData(v)
+        }}
         criteria={filterColumns}
       >
         <Button
@@ -177,6 +202,7 @@ const CriteriaEditor = ({
           color="secondary"
           disabled={isEmpty(data)}
           onClick={() => {
+            onCriteriaChange([])
             setData([])
           }}
         >Clear</Button>

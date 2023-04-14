@@ -250,6 +250,7 @@ const ServerFilterStory = ({ ...args }) => {
   }, [args.rows]);
 
   React.useEffect(() => {
+    console.log('vgrid.js (252) recieved filter command', state?.filterColumn)
     const searchKeys = isEmpty(state.filterColumn)
       ? []
       : Object.keys(state.filterColumn);
@@ -278,10 +279,6 @@ const ServerFilterStory = ({ ...args }) => {
 
         }
       });
-      console.log(
-        `Filtering {${searchKey} ${state.filterColumn[searchKey]}`,
-        filteredRows
-      );
     });
     dispatch({
       payload: { rows: filteredRows },
@@ -301,6 +298,7 @@ const ServerFilterStory = ({ ...args }) => {
 export const ServerFilter = ServerFilterStory.bind({});
 ServerFilter.args = {
   ...Default.args,
+  useUrlAsState: true,
   showSelector: true,
   filterable: true,
 };
