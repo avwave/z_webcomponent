@@ -434,6 +434,7 @@ const VirtuosoDataGrid = ({
         renderDetailPanel={({ row }) => {
           return renderDetailPanel({ row })
         }}
+        {...gridProps}
       />
     </div>
   )
