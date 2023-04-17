@@ -5,11 +5,11 @@ import { useUrlState } from '../hooks/useUrlState';
 
 import { LinearProgress } from '@material-ui/core';
 import { Box, Toolbar, debounce } from '@mui/material';
-import ReactJson from 'react-json-view';
 import Truncate from 'react-truncate';
 import { DataGridContext, actions as dataGridActions } from '../DataGrid/DataGridContext';
-import { DataGridToolbar } from './DataGridToolbar';
 import { PortalCell } from '../DataGrid/PortalCell';
+import { DataGridToolbar } from './DataGridToolbar';
+import ReactJson from 'react-json-view';
 const useStyles = makeStyles()(theme => ({
 }));
 const VirtuosoDataGrid = ({
@@ -53,6 +53,13 @@ const VirtuosoDataGrid = ({
 
   const [dataGridState, dataGridDispatch] = useContext(DataGridContext);
 
+  const rerender = useReducer(() => ({}), {})[1];
+  const [columnVisibility, setColumnVisibility] = useState({});
+  const [density, setDensity] = useState('comfortable');
+  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 5 });
+  const [rowSelection, setRowSelection] = useState({});
+  const [showColumnFilters, setShowColumnFilters] = useState(false);
+  const [pinnedColumns, setPinnedColumns] = useState();
 
   const [sortState, setSortState] = useState([]);
   const [sortColumn, setSortColumn] = useUrlState({
@@ -73,8 +80,25 @@ const VirtuosoDataGrid = ({
     });
   }, [filters]);
 
-  const enableRowSelection = Boolean(gridProps?.onSelectedRowsChange)
   const [selectedRows, setSelectedRows] = useState({});
+
+  //per row selection enable
+
+  const enableTableSelection = useMemo(
+    () => {
+      const selectableFilter = dataGridState?.columns?.filter(col => col?.selectable)
+      const isSelectable =  selectableFilter?.length > 0 || !!gridProps?.onSelectedRowsChange
+      return isSelectable
+    }, [dataGridState?.columns, gridProps?.onSelectedRowsChange]
+  );
+  const enableRowSelection = useCallback(
+    (row) => {
+      const selectableFilter = dataGridState?.columns?.filter(col => col?.selectable)
+      const firstFilter = selectableFilter?.[0]
+      const isFilterable =  firstFilter?.selectable({ row })
+      return isFilterable
+    }, [dataGridState?.columns]
+  );
 
   const data = useMemo(
     () => {
@@ -92,15 +116,23 @@ const VirtuosoDataGrid = ({
             header: col.name,
             accessorKey: col.key,
             enableSorting: !!col.sortable,
+            enablePinning: !col.hidden,
             // enableHiding: !col?.hidden,
+            Header: ({ column, ...rest }) => {
+              if (col?.columnHeaderRenderer) {
+                return <div>{col?.columnHeaderRenderer()}</div>
+              } else {
+                return <div>{col?.name}</div>
+              }
+            },
             Cell: ({ row, column, renderedCellValue, ...rest }) => {
               let finalizedCell = <></>
               if (col?.cellRenderer) {
-                finalizedCell =  <div>{col?.cellRenderer({ row: row?.original })}</div>
+                finalizedCell = <div>{col?.cellRenderer({ row: row?.original })}</div>
               } else {
                 const v = rest?.cell?.renderValue()
                 if (isValidElement(renderedCellValue) || col?.key === 'select-row') {
-                  finalizedCell =  <div>{renderedCellValue}</div>
+                  finalizedCell = <div>{renderedCellValue}</div>
                 } else {
                   finalizedCell = <div>
                     <Truncate
@@ -163,7 +195,7 @@ const VirtuosoDataGrid = ({
   const defaultCols = useMemo(
     () => {
       const colmap = []
-      if (enableRowSelection) {
+      if (enableTableSelection) {
         colmap.push('mrt-row-select')
       }
       if (tableComponents?.detailsRow?.content) {
@@ -171,7 +203,7 @@ const VirtuosoDataGrid = ({
       }
       return colmap
 
-    }, [enableRowSelection, tableComponents?.detailsRow?.content]
+    }, [enableTableSelection, tableComponents?.detailsRow?.content]
   );
 
   const defaultColumnOrder = useMemo(
@@ -188,10 +220,10 @@ const VirtuosoDataGrid = ({
   const defaultPinnedColumns = useMemo(
     () => {
       const cols = dataGridState?.columns?.filter(col => col.frozen)?.map(col => col.key)
-
-      return {
+      const pinopts = {
         left: [...defaultCols, ...cols],
       }
+      setPinnedColumns(pinopts)
     }, [dataGridState?.columns]
   );
   const defaultHideColumns = useMemo(
@@ -199,8 +231,9 @@ const VirtuosoDataGrid = ({
       if (dataGridState?.columns?.length <= 0) {
         return null
       }
-      const objMap = dataGridState?.columns?.filter(col => col.hidden)?.map(col => [col.key, !col.hidden])
+      const objMap = dataGridState?.columns?.filter(col => col.hidden)?.map(col => [col.key, false])
       const obj = Object.fromEntries(objMap)
+      setColumnVisibility(obj)
       return obj
     }, [dataGridState?.columns]
   );
@@ -249,22 +282,29 @@ const VirtuosoDataGrid = ({
     }, [centerAccessory, classes.toolbarLeft, classes.toolbarRight, leftAccessory, rightAccessory]
   );
 
-  const rerender = useReducer(() => ({}), {})[1];
-  const [columnVisibility, setColumnVisibility] = useState({});
-  const [density, setDensity] = useState('comfortable');
-  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 5 });
-  const [rowSelection, setRowSelection] = useState({});
-  const [showColumnFilters, setShowColumnFilters] = useState(false);
-  const [pinnedColumns, setPinnedColumns] = useState(defaultPinnedColumns);
-
   const renderDetailPanel = useCallback(
     ({ row }) => {
-      const DetailRowComponent = tableComponents?.detailsRow?.content ?? <></>
-      return <DetailRowComponent rowData={row?.original} />
+      const DetailRowComponent = tableComponents?.detailsRow?.content
+      if (DetailRowComponent) {
+        return <DetailRowComponent rowData={row?.original} />
+      }
+      return null
+        
     },
     [tableComponents?.detailsRow?.content],
   );
 
+  //hack: tableref doesnt update on first set, wait for ref to be available, then do hacky rerender
+  const [oneShot, setOneShot] = useState(false);
+  useEffect(
+    () => {
+      const r = tableInstanceRef?.current
+      if(oneShot && r) return;
+      setOneShot(true)
+      queueMicrotask(rerender);
+    }, [tableInstanceRef?.current]
+  );
+  
   if (defaultHideColumns === null && defaultColumnOrder === null)
     return <LinearProgress />
 
@@ -303,12 +343,14 @@ const VirtuosoDataGrid = ({
         enableDensityToggle={false}
         enableColumnOrdering
         enableColumnResizing
+        enableExpandAll={false}
         enablePagination={false}
         enableRowVirtualization
         // enableColumnVirtualization
-        enableRowSelection={enableRowSelection}
+        enableRowSelection={enableTableSelection ? row => enableRowSelection(row) : false}
         enableHiding
-        enableColumnDragging
+        enableGrouping={false}
+        // enableColumnDragging
         enablePinning
         enableSorting
         enableSortingRemoval
@@ -334,10 +376,10 @@ const VirtuosoDataGrid = ({
           showSkeletons: false,
           sorting: sortState,
           columnVisibility,
-          density,
           pagination,
           showColumnFilters,
           columnPinning: pinnedColumns,
+
         }}
         onSortingChange={setSortState}
         rowVirtualizerInstanceRef={rowVirtualizerInstanceRef}

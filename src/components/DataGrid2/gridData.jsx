@@ -50,10 +50,11 @@ const columnData = [
       labelField:'label',
       valueField:'id',
       multiple:true,
-    }
+    },
+    frozen: true,
   },
   {
-    key: "title",
+    key: "filter_text",
     name: "Filter: Text",
     sortable: true,
     resizable: true,
@@ -69,7 +70,7 @@ const columnData = [
     },
   },
   {
-    key: "col6Type",
+    key: "col_filter_option",
     name: "Filter: Option",
     sortable: true,
     resizable: true,
@@ -95,7 +96,7 @@ const columnData = [
     },
   },
   {
-    key: "col9Type",
+    key: "col_filter_daterange",
     name: "Daterange Filter",
     sortable: false,
     resizable: true,
@@ -120,7 +121,7 @@ const columnData = [
     },
   },
   {
-    key: "col3Type",
+    key: "col_hidden",
     name: "Hidden",
     cellStyles: {
       color: "green",
@@ -129,11 +130,11 @@ const columnData = [
     resizable: true,
     hidden: true,
     tooltip: (props) => {
-      return props?.row?.col4Type
+      return props?.row?.col_customheader
     },
   },
   {
-    key: "col4Type",
+    key: "col_customheader",
     name: "Custom Header",
     sortable: false,
     minWidth: 200,
@@ -144,11 +145,11 @@ const columnData = [
       return <div {...props}><LocalHospital style={{ color: '#6A99CA' }} />Custom Header</div>
     },
     cellRenderer: (props) => {
-      return <span>{moment(props.row.col4Type).format('LL LTS')}</span>
+      return <span>{moment(props.row.col_customheader).format('LL LTS')}</span>
     }
   },
   {
-    key: "col5Type",
+    key: "col_truncate",
     name: "Truncate",
     sortable: false,
     align: "flex-start",
@@ -174,7 +175,7 @@ const columnData = [
     key: "button",
     name: "Button",
     sortable: false,
-    // getCellValue: (row) => JSON.stringify(row.col7Type),
+    // getCellValue: (row) => JSON.stringify(row.col_json),
     cellRenderer({row, column}) {
       return (
         <IconButton
@@ -188,16 +189,16 @@ const columnData = [
     }
   },
   {
-    key: "col7Typer",
+    key: "col_jsonr",
     name: "Formatted JSON",
     sortable: false,
-    // getCellValue: (row) => JSON.stringify(row.col7Type),
+    // getCellValue: (row) => JSON.stringify(row.col_json),
     cellRenderer({row}) {
-      return <span>stringified{JSON.stringify(row?.col7Type)}</span>
+      return <span>stringified{JSON.stringify(row?.col_json)}</span>
     }
   },
   {
-    key: "col8Type",
+    key: "col_react",
     name: "React Component",
     sortable: false,
     width: 250,
@@ -222,14 +223,14 @@ let rows = [];
 for (let i = 0; i < 30; i++) {
   rows.push({
     id: i,
-    title: faker.name.findName(),
-    col3Type: faker.datatype.number().toString(),
-    col4Type: faker.date.recent().toISOString(),
-    col5Type: faker.lorem.paragraphs(2),
-    col6Type: faker.datatype.boolean() ? "Tip" : "Top",
-    col7Type: { obj: 1 },
-    col8Type: <>{[...Array(faker.datatype.number({min:1, max:15}))]?.map(d=><h1>REACTNODE</h1>)}</>,
-    col9Type: faker.datatype.boolean() ? faker.random.word() : null,
+    filter_text: faker.name.findName(),
+    col_hidden: faker.datatype.number().toString(),
+    col_customheader: faker.date.recent().toISOString(),
+    col_truncate: faker.lorem.paragraphs(2),
+    col_filter_option: faker.datatype.boolean() ? "Tip" : "Top",
+    col_json: { obj: 1 },
+    col_react: <>{[...Array(faker.datatype.number({min:1, max:15}))]?.map(d=><h1>REACTNODE</h1>)}</>,
+    col_filter_daterange: faker.datatype.boolean() ? faker.random.word() : null,
     tests: [...Array(faker.datatype.number({
       min:1,
       max:5

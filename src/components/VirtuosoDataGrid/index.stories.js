@@ -118,7 +118,39 @@ CustomColumnDisplay.args = {
   showSelector: true,
 }
 
-export const ConditionalSelector = DefaultStory.bind({});
+const SelectableStory = ({ ...args }) => {
+  const [state, dispatch] = React.useContext(DataGridContext);
+  const [selectedRowIds, setSelectedRowIds] = useState([]);
+
+  React.useEffect(() => {
+    dispatch({
+      payload: { rows: args.rows, columns: args.columns },
+      type: actions.LOAD_DATA,
+    });
+  }, [args.columns, args.rows, dispatch]);
+
+  return (
+    <Paper style={{ height: '80vh' }}>
+      <pre>{JSON.stringify(selectedRowIds, null, 2)}</pre>
+      <Button onClick={() => setSelectedRowIds([])}>Clear</Button>
+      <DataGrid2
+        {...args}
+        gridProps={{
+          selectedRows: selectedRowIds,
+          onSelectedRowsChange: (rows) => {
+            console.log("📢[index.stories.js:231]: ", rows);
+            setSelectedRowIds(rows);
+          },
+          rowKeyGetter: (row) => {
+            return row.id;
+          },
+        }}
+      />
+    </Paper>
+  );
+};
+
+export const ConditionalSelector = SelectableStory.bind({});
 ConditionalSelector.args = {
   rows: [
     {
@@ -142,8 +174,9 @@ ConditionalSelector.args = {
       key: "select-row",
       name: "",
       sortable: false,
+      hidden:true,
       selectable({ row }) {
-        return row.id !== 2
+        return row.id !== '2'
       }
     },
     {
@@ -176,12 +209,12 @@ const CellFormatting = ({ value }) => {
 };
 const applyDateColumn = [
   {
-    key: "col5Type",
+    key: "col_customheader",
     colId: "col4",
     name: "Column4",
     align: "flex-start",
     cellRenderer(props) {
-      return <CellFormatting value={{ ...props, key: "col5Type" }} />;
+      return <CellFormatting value={{ ...props, key: "col_truncate" }} />;
     },
   },
 ];
@@ -354,38 +387,6 @@ ServerSort.args = {
   ...Default.args,
   showSelector: true,
   filterable: true,
-};
-
-const SelectableStory = ({ ...args }) => {
-  const [state, dispatch] = React.useContext(DataGridContext);
-  const [selectedRowIds, setSelectedRowIds] = useState([]);
-
-  React.useEffect(() => {
-    dispatch({
-      payload: { rows: args.rows, columns: args.columns },
-      type: actions.LOAD_DATA,
-    });
-  }, [args.columns, args.rows, dispatch]);
-
-  return (
-    <Paper style={{ height: '80vh' }}>
-      <pre>{JSON.stringify(selectedRowIds, null, 2)}</pre>
-      <Button onClick={() => setSelectedRowIds([])}>Clear</Button>
-      <DataGrid2
-        {...args}
-        gridProps={{
-          selectedRows: selectedRowIds,
-          onSelectedRowsChange: (rows) => {
-            console.log("📢[index.stories.js:231]: ", rows);
-            setSelectedRowIds(rows);
-          },
-          rowKeyGetter: (row) => {
-            return row.id;
-          },
-        }}
-      />
-    </Paper>
-  );
 };
 
 export const Selectable = SelectableStory.bind({});
