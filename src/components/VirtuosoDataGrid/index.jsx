@@ -372,6 +372,7 @@ const VirtuosoDataGrid = ({
           ...gridProps?.tableContainerProps
         }}
         state={{
+          isLoading: dataGridState.loading,
           showProgressBars: dataGridState.loading,
           rowSelection: selectedRows,
           showSkeletons: false,
