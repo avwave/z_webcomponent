@@ -368,7 +368,8 @@ const VirtuosoDataGrid = ({
           },
           onScroll: (e) => {
             fetchMoreOnBottomReached(e.target)
-          }
+          },
+          ...gridProps?.tableContainerProps
         }}
         state={{
           showProgressBars: dataGridState.loading,
@@ -379,7 +380,7 @@ const VirtuosoDataGrid = ({
           pagination,
           showColumnFilters,
           columnPinning: pinnedColumns,
-
+          ...gridProps?.gridState
         }}
         onSortingChange={setSortState}
         rowVirtualizerInstanceRef={rowVirtualizerInstanceRef}
