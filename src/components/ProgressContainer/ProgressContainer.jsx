@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components'
 import withTheme from '@mui/styles/withTheme';
+import { useTheme } from '@mui/material';
 
 const ProgressMeter = styled.div`
   height: 100%;
@@ -18,11 +19,12 @@ const ProgressDiv = styled.div`
   z-index: -1;
 `;
 
-function ProgressContainer({theme, progress, variant="primary", foregroundColor, backgroundColor, children}){
+function ProgressContainer({progress, variant="primary", foregroundColor, backgroundColor, children}){
+  const theme = useTheme()
   return (
-    <ProgressMeter background={backgroundColor ?? theme.palette[variant].dark}>
+    <ProgressMeter background={backgroundColor ?? theme?.palette?.[variant]?.dark}>
       <ProgressDiv
-        background={foregroundColor ?? theme.palette[variant].light}
+        background={foregroundColor ?? theme?.palette?.[variant]?.light}
         progress={progress}
       />
       {children}
