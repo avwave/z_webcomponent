@@ -241,6 +241,8 @@ const VirtuosoDataGrid = ({
   useEffect(
     () => {
       const mapToArray = Object.keys(selectedRows).map((key) => key)
+      const tsrows= tableInstanceRef?.current?.getState()?.rowSelection;
+    
       gridProps?.onSelectedRowsChange?.(mapToArray)
     }, [selectedRows]
   );
@@ -434,6 +436,7 @@ const VirtuosoDataGrid = ({
         renderDetailPanel={({ row }) => {
           return renderDetailPanel({ row })
         }}
+        getRowId={(orow)=>orow?.id}
         {...gridProps}
       />
     </div>

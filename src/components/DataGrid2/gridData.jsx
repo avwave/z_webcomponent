@@ -222,7 +222,7 @@ const columnData = [
 let rows = [];
 for (let i = 0; i < 30; i++) {
   rows.push({
-    id: i,
+    id: `id-${i}`,
     filter_text: faker.name.findName(),
     col_hidden: faker.datatype.number().toString(),
     col_customheader: faker.date.recent().toISOString(),
