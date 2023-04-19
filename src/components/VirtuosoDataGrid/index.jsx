@@ -10,6 +10,7 @@ import { DataGridContext, actions as dataGridActions } from '../DataGrid/DataGri
 import { PortalCell } from '../DataGrid/PortalCell';
 import { DataGridToolbar } from './DataGridToolbar';
 import ReactJson from 'react-json-view';
+import { useStateRef } from '../hooks/useStateRef';
 const useStyles = makeStyles()(theme => ({
 }));
 const VirtuosoDataGrid = ({
@@ -160,7 +161,7 @@ const VirtuosoDataGrid = ({
   );
 
   //scroll events for loadmore
-  const [loadMoreLoadingDeferred, setLoadMoreLoadingDeferred] = useState(false);
+  const [loadMoreLoadingDeferred, setLoadMoreLoadingDeferred, loadMoreLoadingDeferredRef] = useStateRef(false);
   const fetchMoreOnBottomReached = useCallback(
     (containerRefElement) => {
       if (containerRefElement) {
@@ -180,11 +181,11 @@ const VirtuosoDataGrid = ({
 
   useEffect(
     () => {
-      if (!dataGridState?.loading && loadMoreLoadingDeferred) {
+      if (!dataGridState?.loading && !!loadMoreLoadingDeferredRef?.current) {
         onLoadMore && onLoadMore()
         setLoadMoreLoadingDeferred(false)
       }
-    }, [dataGridState?.loading, loadMoreLoadingDeferred]
+    }, [dataGridState?.loading, loadMoreLoadingDeferredRef?.current]
   );
 
   //check on mount if needs to load more to fill the table
