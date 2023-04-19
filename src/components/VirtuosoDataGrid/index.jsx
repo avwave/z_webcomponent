@@ -179,16 +179,19 @@ const VirtuosoDataGrid = ({
     [dataGridState?.rows?.length, totalCount],
   );
 
+  const memoLoadMoreCallback = useCallback(
+    async () => {
+      if (!dataGridState?.loading && !!loadMoreLoadingDeferredRef?.current) {
+        setLoadMoreLoadingDeferred(false)
+        await onLoadMore()
+      }
+    },
+    [dataGridState?.loading, loadMoreLoadingDeferredRef, onLoadMore, setLoadMoreLoadingDeferred],
+  );
   useEffect(
     () => {
-      const fn = async () => {
-        if (!dataGridState?.loading && !!loadMoreLoadingDeferredRef?.current) {
-          await onLoadMore()
-          setLoadMoreLoadingDeferred(false)
-        }
-      }
-      fn()
-    }, [dataGridState?.loading]
+      memoLoadMoreCallback()
+    }, [dataGridState?.loading, loadMoreLoadingDeferredRef?.current]
   );
 
   //check on mount if needs to load more to fill the table
