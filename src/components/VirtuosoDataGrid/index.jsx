@@ -24,7 +24,7 @@ const VirtuosoDataGrid = ({
   leftAccessory,
   rightAccessory,
   centerAccessory,
-  onLoadMore = () => { },
+  onLoadMore = async () => { },
   totalCount,
   resetScroll,
   onContextMenu = () => { },
@@ -88,7 +88,7 @@ const VirtuosoDataGrid = ({
   const enableTableSelection = useMemo(
     () => {
       const selectableFilter = dataGridState?.columns?.filter(col => col?.selectable)
-      const isSelectable =  selectableFilter?.length > 0 || !!gridProps?.onSelectedRowsChange
+      const isSelectable = selectableFilter?.length > 0 || !!gridProps?.onSelectedRowsChange
       return isSelectable
     }, [dataGridState?.columns, gridProps?.onSelectedRowsChange]
   );
@@ -96,7 +96,7 @@ const VirtuosoDataGrid = ({
     (row) => {
       const selectableFilter = dataGridState?.columns?.filter(col => col?.selectable)
       const firstFilter = selectableFilter?.[0]
-      const isFilterable =  firstFilter?.selectable({ row })
+      const isFilterable = firstFilter?.selectable({ row })
       return isFilterable
     }, [dataGridState?.columns]
   );
@@ -181,10 +181,13 @@ const VirtuosoDataGrid = ({
 
   useEffect(
     () => {
-      if (!dataGridState?.loading && !!loadMoreLoadingDeferredRef?.current) {
-        onLoadMore && onLoadMore()
-        setLoadMoreLoadingDeferred(false)
+      const fn = async () => {
+        if (!dataGridState?.loading && !!loadMoreLoadingDeferredRef?.current) {
+          await onLoadMore()
+          setLoadMoreLoadingDeferred(false)
+        }
       }
+      fn()
     }, [dataGridState?.loading, loadMoreLoadingDeferredRef?.current]
   );
 
@@ -254,8 +257,8 @@ const VirtuosoDataGrid = ({
   useEffect(
     () => {
       const mapToArray = Object.keys(selectedRows).map((key) => key)
-      const tsrows= tableInstanceRef?.current?.getState()?.rowSelection;
-    
+      const tsrows = tableInstanceRef?.current?.getState()?.rowSelection;
+
       gridProps?.onSelectedRowsChange?.(mapToArray)
     }, [selectedRows]
   );
@@ -304,7 +307,7 @@ const VirtuosoDataGrid = ({
         return <DetailRowComponent rowData={row?.original} />
       }
       return null
-        
+
     },
     [tableComponents?.detailsRow?.content],
   );
@@ -314,12 +317,12 @@ const VirtuosoDataGrid = ({
   useEffect(
     () => {
       const r = tableInstanceRef?.current
-      if(oneShot && r) return;
+      if (oneShot && r) return;
       setOneShot(true)
       queueMicrotask(rerender);
     }, [tableInstanceRef?.current]
   );
-  
+
   if (defaultHideColumns === null && defaultColumnOrder === null)
     return <LinearProgress />
 
@@ -386,11 +389,11 @@ const VirtuosoDataGrid = ({
           },
           ...gridProps?.tableContainerProps
         }}
-        
+
         muiTableHeadCellProps={{
           sx: {
             '& .Mui-TableHeadCell-Content': {
-              display:'flex',
+              display: 'flex',
               flexDirection: 'column',
             },
             '& .Mui-TableHeadCell-Content-Actions': {
@@ -461,7 +464,7 @@ const VirtuosoDataGrid = ({
         renderDetailPanel={({ row }) => {
           return renderDetailPanel({ row })
         }}
-        getRowId={(orow)=>orow?.id}
+        getRowId={(orow) => orow?.id}
         {...gridProps}
       />
     </div>
