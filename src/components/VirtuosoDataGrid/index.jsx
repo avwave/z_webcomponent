@@ -375,6 +375,18 @@ const VirtuosoDataGrid = ({
           },
           ...gridProps?.tableContainerProps
         }}
+        
+        muiTableHeadCellProps={{
+          sx: {
+            '& .Mui-TableHeadCell-Content': {
+              display:'flex',
+              flexDirection: 'column',
+            },
+            '& .Mui-TableHeadCell-Content-Actions': {
+              alignSelf: 'flex-end',
+            }
+          }
+        }}
         state={{
           showProgressBars: dataGridState.loading,
           rowSelection: selectedRows,
