@@ -180,7 +180,7 @@ const VirtuosoDataGrid = ({
 
   useEffect(
     () => {
-      if (dataGridState?.loading && loadMoreLoadingDeferred) {
+      if (!dataGridState?.loading && loadMoreLoadingDeferred) {
         onLoadMore && onLoadMore()
         setLoadMoreLoadingDeferred(false)
       }
