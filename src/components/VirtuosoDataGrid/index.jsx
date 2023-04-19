@@ -118,6 +118,8 @@ const VirtuosoDataGrid = ({
             enableSorting: !!col.sortable,
             enablePinning: !col.hidden,
             // enableHiding: !col?.hidden,
+            size: col?.width,
+            minSize: col?.minWidth,
             Header: ({ column, ...rest }) => {
               if (col?.columnHeaderRenderer) {
                 return <div>{col?.columnHeaderRenderer()}</div>

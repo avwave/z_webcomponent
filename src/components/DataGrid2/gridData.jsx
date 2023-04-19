@@ -74,6 +74,7 @@ const columnData = [
     name: "Filter: Option",
     sortable: true,
     resizable: true,
+    width: 100,
     filter: {
       type: "autocomplete",
       default: "",
