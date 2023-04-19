@@ -161,37 +161,21 @@ const VirtuosoDataGrid = ({
   );
 
   //scroll events for loadmore
-  const [loadMoreLoadingDeferred, setLoadMoreLoadingDeferred, loadMoreLoadingDeferredRef] = useStateRef(false);
   const fetchMoreOnBottomReached = useCallback(
-    (containerRefElement) => {
+    async (containerRefElement) => {
       if (containerRefElement) {
         const { scrollHeight, scrollTop, clientHeight } = containerRefElement;
         //once the user has scrolled within 400px of the bottom of the table, fetch more data if we can
         if (
-          scrollHeight - scrollTop - clientHeight < 400
+          scrollHeight - scrollTop - clientHeight < 200 
+          && !dataGridState?.loading
+          && totalCount > dataGridState?.rows?.length
         ) {
-          if ((totalCount > dataGridState?.rows?.length)) {
-            setLoadMoreLoadingDeferred(true)
-          }
+          await onLoadMore()
         }
       }
     },
-    [dataGridState?.rows?.length, totalCount],
-  );
-
-  const memoLoadMoreCallback = useCallback(
-    async () => {
-      if (!dataGridState?.loading && !!loadMoreLoadingDeferredRef?.current) {
-        setLoadMoreLoadingDeferred(false)
-        await onLoadMore()
-      }
-    },
-    [dataGridState?.loading, loadMoreLoadingDeferredRef, onLoadMore, setLoadMoreLoadingDeferred],
-  );
-  useEffect(
-    () => {
-      memoLoadMoreCallback()
-    }, [dataGridState?.loading, loadMoreLoadingDeferredRef?.current]
+    [dataGridState?.loading, dataGridState?.rows?.length, onLoadMore, totalCount],
   );
 
   //check on mount if needs to load more to fill the table
