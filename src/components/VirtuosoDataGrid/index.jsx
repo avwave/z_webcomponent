@@ -188,7 +188,7 @@ const VirtuosoDataGrid = ({
         }
       }
       fn()
-    }, [dataGridState?.loading, loadMoreLoadingDeferredRef?.current]
+    }, [dataGridState?.loading]
   );
 
   //check on mount if needs to load more to fill the table
