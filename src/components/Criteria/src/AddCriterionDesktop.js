@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import AddCriterion from './AddCriterion'
 import useI18nLabel from './hooks/useI18nLabel'
 import useCriterionAddableChecker from './hooks/useCriterionAddableChecker'
-import { Button, Card, CardContent, CardHeader, Popover, Typography } from '@mui/material'
+import { Button, Card, CardContent, CardHeader, Container, Popover, Typography, useTheme } from '@mui/material'
 
 AddCriterionDesktop.propTypes = {
   onAdd: PropTypes.func,
@@ -65,6 +65,7 @@ function AddCriterionDesktop(props) {
   }
 
 
+  const theme = useTheme()
   return (
     isCriterionAddable === true && (
       <div ref={rootElementRef}>
@@ -91,7 +92,8 @@ function AddCriterionDesktop(props) {
           }}
           PaperProps={{
             sx: {
-              width: '100%',
+              width: theme.breakpoints.values.sm,
+              
             }
           }}
         >
@@ -104,6 +106,7 @@ function AddCriterionDesktop(props) {
                 criteria={criteria}
                 onSubmit={onAdd}
               />
+
             </CardContent>
           </Card>
         </Popover>

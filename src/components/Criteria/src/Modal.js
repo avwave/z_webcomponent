@@ -14,6 +14,7 @@ const useStyles = makeStyles()(theme => ({
     position: 'fixed',
     flexDirection: 'column',
     backgroundColor: theme.palette.background.paper,
+    zIndex: theme.zIndex.modal,
   },
   
   header: {

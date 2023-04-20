@@ -44,9 +44,12 @@ const CriteriaAutocomplete = ({
     let filtered
     if (multiple) {
       filtered = options?.filter(v => {
-        return [...value]?.some(vv => {
-          return vv === v?.[valueField]
-        })
+        if (Array.isArray(value)) {
+          return [...value]?.some(vv => {
+            return vv === v?.[valueField]
+          })
+        }
+        return false
       });
     } else {
       filtered = options?.find(v => value === v?.[valueField]);
