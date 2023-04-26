@@ -70,6 +70,8 @@ const DocumentGallery = ({ docs = [], initialIndex=0 }) => {
           size="large"><ArrowForwardIos /></IconButton>
       </div>
       <DocumentViewer loading={loading} downloadName={docs[currentFileIndex]?.name} data={fileData} mimeType={docs[currentFileIndex]?.mimeType} url={docs[currentFileIndex]?.url} />
+      {!loading && (
+      <>
       <IconButton
         onClick={() => { setCurrentFileIndex(currentFileIndex === 0 ? 0 : currentFileIndex - 1) }}
         className={classes.previous}
@@ -78,6 +80,8 @@ const DocumentGallery = ({ docs = [], initialIndex=0 }) => {
         onClick={() => { setCurrentFileIndex(currentFileIndex === (docs.length - 1) ? docs.length - 1 : currentFileIndex + 1) }}
         className={classes.next}
         size="large"><ArrowForwardIos /></IconButton>
+      </>
+      )}
     </div>
   );
 }

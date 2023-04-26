@@ -47,24 +47,16 @@ const DocumentViewer = ({
   mimeType = "image/*",
   downloadName = "download",
   asThumbnail = false,
-  loading = false
+  loading:dataLoading = false
 }) => {
   const { classes } = useStyles()
 
   const [file, setFile] = useState([]);
+  const [pdfLoading, setPdfLoading] = useState(true);
 
   const [pageWidth, setPageWidth] = useState(0);
   const [pageHeight, setPageHeight] = useState(0);
   const [ref, { width: wrapperWidth, height: wrapperHeight }] = useElementSize();
-
-  const fitHorizontal = useMemo(() => {
-    const wRatio = pageWidth / wrapperWidth;
-    const hRatio = pageHeight / wrapperHeight;
-    if (wRatio < hRatio) {
-      return false;
-    }
-    return true;
-  }, [pageHeight, pageWidth, wrapperWidth, wrapperHeight]);
 
   const fileCB = useCallback(async () => {
     let file = {
@@ -107,8 +99,15 @@ const DocumentViewer = ({
     }));
   }, []);
 
+  const loading = useMemo(
+    () => {
+      return pdfLoading && dataLoading
+      
+    }, [pdfLoading, dataLoading]
+  );
+
   if (!file?.data) {
-    return <>no file</>
+    return <Alert severity="warning">waiting for file...</Alert>
   }
 
   if (loading) {
@@ -134,6 +133,7 @@ const DocumentViewer = ({
           }}
           pageObject={visiblePages}
           pageCount={pdfPages}
+          isPageCountVisible={file?.mimeType === 'application/pdf'}
         />
       )}
       <div ref={ref} className={classes.rootContainer}>
@@ -154,6 +154,7 @@ const DocumentViewer = ({
             onLoadError={(e) => {
               console.log('onLoadError', e)
               setError(e?.message)
+              setPdfLoading(false)
             }}
             onLoadProgress={(e) => {
               console.log('onLoadProgress', e)
@@ -164,13 +165,16 @@ const DocumentViewer = ({
               } else {
                 setPdfPages(e?.numPages ?? 0)
               }
+              setPdfLoading(false)
             }}
             onSourceError={(e) => {
               console.log('onSourceError', e)
               setError(e?.message)
+              setPdfLoading(false)
             }}
             onSourceSuccess={(e) => {
               console.log('onSourceSuccess', e)
+              setPdfLoading(true)
 
             }}
           >
@@ -184,7 +188,7 @@ const DocumentViewer = ({
               } else {
                 return <PageWithObserver
                   key={`page_${index + 1}`} pageNumber={index + 1}
-                  width={fitHorizontal ? wrapperWidth : null}
+                  width={wrapperWidth}
                   setPageVisibility={setPageVisibility}
                   scale={scaleFactor}
                   onLoadSuccess={page => {
@@ -223,7 +227,7 @@ const PageWithObserver = ({ pageNumber, setPageVisibility, ...otherProps }) => {
   );
 
   const pageConfig = {
-    threshold: 0
+    threshold: [.5]
   }
 
   useIntersectionObserver(page, pageConfig, onIntersectionChange);

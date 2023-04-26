@@ -22,22 +22,22 @@ const DocumentToolbar = ({
   onSetPageDown=()=>{},
   pageCount,
   pageObject,
-  
+  isPageCountVisible=true
 }) => {
 
   const currentPage = useMemo(
     () => {
       const visiblePages =  Object.entries(pageObject).filter(([key, value]) => value).map(([key, value]) => key)
       return visiblePages?.[visiblePages.length - 1]
-      
     }, [pageObject]
   );
   const { classes } = useStyles()
   return (
     <AppBar position='static' color='primary'>
       <Toolbar variant="dense">
-
+        {isPageCountVisible && (
         <Typography variant="body1" color="inherit">{currentPage}/{pageCount}</Typography>
+        )}
         <Box flexGrow={1}/>
         <IconButton onClick={()=>onDownload()}>
           <Download/>
