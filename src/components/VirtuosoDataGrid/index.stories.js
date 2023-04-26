@@ -28,6 +28,7 @@ import { VirtuosoDataGrid as DataGrid2 } from "./index";
 import ReactJson from "react-json-view";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faColumns } from "@fortawesome/free-solid-svg-icons";
+import { Box } from "@mui/material";
 
 const DataGridStory = {
   component: DataGrid2,
@@ -236,6 +237,13 @@ Blank.args = {
   rows: [],
   draggable: true,
   columns: columnData,
+  gridProps:{
+    emptyRowsRenderer: () => (
+      <Box textAlign="center" p="1rem" color="grey">
+        No matching records found
+      </Box>
+    ),
+  }
 };
 
 export const GridProps = DefaultStory.bind({});

@@ -452,6 +452,11 @@ const VirtuosoDataGrid = ({
           return renderDetailPanel({ row })
         }}
         getRowId={(orow) => orow?.id}
+        {...gridProps?.emptyRowsRenderer && {
+          renderEmptyRowsFallback: () => {
+            return gridProps?.emptyRowsRenderer()
+          }
+        }}
         {...gridProps}
       />
     </div>
