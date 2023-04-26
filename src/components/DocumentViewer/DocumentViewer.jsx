@@ -28,14 +28,18 @@ const useStyles = makeStyles()((theme) => {
     },
     documentContainer: {
       overflow: 'scroll',
-      height: 'calc(100vh - 66px)',
+      // height: 'calc(100vh - 66px)',
     },
     documentThumbnail: {
       width: 80,
       height: 80,
     },
     rootContainer: {
-      position: 'relative'
+      position: 'relative',
+      minHeight: '20vh',
+      maxHeight: '70vh',
+      display: 'flex',
+      flexDirection: 'column',
     }
   }
 });
