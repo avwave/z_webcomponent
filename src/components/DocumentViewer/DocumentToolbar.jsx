@@ -50,16 +50,24 @@ const DocumentToolbar = ({
 
 const DocumentOverlayControl = ({
   onChangeScale=(scale)=>{},
+  onZoomIn=()=>{},
+  onZoomOut=()=>{},
   scale=1,
   onReset = () => { }
 }) => {
   const { classes } = useStyles()
   return (
     <div className={classes.overlay}>
-      <Button size="large" color="info" onClick={()=> onChangeScale(scale + .5)}>
+      <Button size="large" color="info" onClick={()=> {
+        onChangeScale(scale + .5)
+        onZoomIn()
+      }}>
         <AddBox/>
       </Button>
-      <Button size="large" color="info" onClick={()=>onChangeScale(scale - .5)}>
+      <Button size="large" color="info" onClick={()=>{
+        onChangeScale(scale - .5)
+        onZoomOut()
+      }}>
         <IndeterminateCheckBox/>
       </Button>
       <Button size="large" color="info" onClick={()=>{

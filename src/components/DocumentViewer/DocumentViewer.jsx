@@ -110,10 +110,6 @@ const DocumentViewer = ({
     }, [pdfLoading, dataLoading]
   );
 
-  if (!file?.data) {
-    return <Alert severity="warning">waiting for file...</Alert>
-  }
-
   if (loading) {
     return (
       <LinearProgress />
@@ -141,76 +137,76 @@ const DocumentViewer = ({
         />
       )}
       <div ref={ref} className={classes.rootContainer}>
-        {!asThumbnail && (
-          <DocumentOverlayControl
-            onChangeScale={(value) => setScaleFactor(value)}
-            onReset={() => setReset(Math.random())}
-            scale={scaleFactor}
-          />
-        )}
-        {file?.mimeType === 'application/pdf' ? (
-          <Document
-            renderMode='canvas'
+        {file?.mimeType === 'application/pdf' && !asThumbnail ? (
+          <>
+            <DocumentOverlayControl
+              onChangeScale={(value) => setScaleFactor(value)}
+              onReset={() => setReset(Math.random())}
+              scale={scaleFactor}
+            />
+            <Document
+              renderMode='canvas'
 
-            file={file?.data}
-            className={asThumbnail ? classes.documentThumbnail : classes.documentContainer}
-            onLoadError={(e) => {
-              console.log('onLoadError', e)
-              setError(e?.message)
-              setPdfLoading(false)
-            }}
-            onLoadProgress={(e) => {
-              console.log('onLoadProgress', e)
-            }}
-            onLoadSuccess={(e) => {
-              if (asThumbnail) {
-                setPdfPages(1)
-              } else {
-                setPdfPages(e?.numPages ?? 0)
+              file={file?.data}
+              className={asThumbnail ? classes.documentThumbnail : classes.documentContainer}
+              onLoadError={(e) => {
+                console.log('onLoadError', e)
+                setError(e?.message)
+                setPdfLoading(false)
+              }}
+              onLoadProgress={(e) => {
+                console.log('onLoadProgress', e)
+              }}
+              onLoadSuccess={(e) => {
+                if (asThumbnail) {
+                  setPdfPages(1)
+                } else {
+                  setPdfPages(e?.numPages ?? 0)
+                }
+                setPdfLoading(false)
+              }}
+              onSourceError={(e) => {
+                console.log('onSourceError', e)
+                setError(e?.message)
+                setPdfLoading(false)
+              }}
+              onSourceSuccess={(e) => {
+                console.log('onSourceSuccess', e)
+                setPdfLoading(true)
+
+              }}
+            >
+              {Array.from(new Array(pdfPages), (el, index) => {
+                if (asThumbnail) {
+                  return <Page
+                    key={`page_${index + 1}`} pageNumber={index + 1}
+                    height={80}
+                    scale={1}
+                    renderAnnotationLayer={false}
+                    renderInteractiveForms={false}
+                    renderTextLayer={false}
+                  />
+                } else {
+                  return <PageWithObserver
+                    rootRef={rootRef}
+                    key={`page_${index + 1}`} pageNumber={index + 1}
+                    width={wrapperWidth}
+                    setPageVisibility={setPageVisibility}
+                    scale={scaleFactor}
+                    onLoadSuccess={page => {
+                      setPageHeight(page?.width)
+                      setPageWidth(page?.height)
+                    }}
+                    renderAnnotationLayer={false}
+                    renderInteractiveForms={false}
+
+                  />
+                }
               }
-              setPdfLoading(false)
-            }}
-            onSourceError={(e) => {
-              console.log('onSourceError', e)
-              setError(e?.message)
-              setPdfLoading(false)
-            }}
-            onSourceSuccess={(e) => {
-              console.log('onSourceSuccess', e)
-              setPdfLoading(true)
+              )}
 
-            }}
-          >
-            {Array.from(new Array(pdfPages), (el, index) => {
-              if (asThumbnail) {
-                return <Page
-                  key={`page_${index + 1}`} pageNumber={index + 1}
-                  height={80}
-                  scale={1}
-                  renderAnnotationLayer={false}
-                  renderInteractiveForms={false}
-                  renderTextLayer={false}
-                />
-              } else {
-                return <PageWithObserver
-                  rootRef={rootRef}
-                  key={`page_${index + 1}`} pageNumber={index + 1}
-                  width={wrapperWidth}
-                  setPageVisibility={setPageVisibility}
-                  scale={scaleFactor}
-                  onLoadSuccess={page => {
-                    setPageHeight(page?.width)
-                    setPageWidth(page?.height)
-                  }}
-                  renderAnnotationLayer={false}
-                  renderInteractiveForms={false}
-
-                />
-              }
-            }
-            )}
-
-          </Document>
+            </Document>
+          </>
         ) : (
           <ImageLoader
             asThumbnail={asThumbnail}

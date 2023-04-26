@@ -67,6 +67,7 @@
     "react-truncate": "^2.4.0",
     "react-virtuoso": "^4.2.0",
     "recoil": "^0.7.6",
+    "reselect": "^4.1.8",
     "sass": "^1.58.3",
     "styled-components": "^5.2.1",
     "tss-react": "^4.4.5",

@@ -66,6 +66,12 @@ Base64.args = {
   mimeType: "image/png",
 };
 
+export const LargeImage = DefaultStory.bind({});
+LargeImage.args = {
+  url: 'https://i.imgur.com/tJK66LE.jpeg',
+  mimeType: "image/jpeg",
+}
+
 export const PDFBase64 = DefaultStory.bind({});
 PDFBase64.args = {
   data: pdfBase64Data,
