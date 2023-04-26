@@ -37,7 +37,7 @@ const PDFURLStory = ({ ...args }) => {
   const [data, setData] = useState(null);
   const d = useCallback(
     async () => {
-      setData(await fetchData("scientific"))
+      setData(await fetchData("zennyaannotated"))
     }, []
   );
   useEffect(

@@ -1,5 +1,5 @@
 import { makeStyles } from 'tss-react/mui';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import mime from 'mime-types';
 import saveFile from 'file-saver';
 
@@ -23,7 +23,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.vers
 
 const useStyles = makeStyles()((theme) => {
   return {
-    root:{
+    root: {
       backgroundColor: theme.palette.grey[700],
     },
     documentContainer: {
@@ -51,7 +51,7 @@ const DocumentViewer = ({
   mimeType = "image/*",
   downloadName = "download",
   asThumbnail = false,
-  loading:dataLoading = false
+  loading: dataLoading = false
 }) => {
   const { classes } = useStyles()
 
@@ -92,7 +92,7 @@ const DocumentViewer = ({
   const [pdfPages, setPdfPages] = useState(0);
   const [scaleFactor, setScaleFactor] = useState(1);
   const [reset, setReset] = useState(0);
-
+  const rootRef = useRef(null);
 
   const [error, setError] = useState(null);
   const [visiblePages, setVisiblePages] = useState({});
@@ -106,7 +106,7 @@ const DocumentViewer = ({
   const loading = useMemo(
     () => {
       return pdfLoading && dataLoading
-      
+
     }, [pdfLoading, dataLoading]
   );
 
@@ -128,7 +128,7 @@ const DocumentViewer = ({
   }
 
   return (
-    <div className={clsx(classes.root, asThumbnail&&classes.documentThumbnail)}>
+    <div ref={rootRef} className={clsx(classes.root, asThumbnail && classes.documentThumbnail)}>
       {!asThumbnail && (
         <DocumentToolbar
           onDownload={() => {
@@ -144,15 +144,14 @@ const DocumentViewer = ({
         {!asThumbnail && (
           <DocumentOverlayControl
             onChangeScale={(value) => setScaleFactor(value)}
-            onReset={()=>setReset(Math.random())}
+            onReset={() => setReset(Math.random())}
             scale={scaleFactor}
           />
         )}
         {file?.mimeType === 'application/pdf' ? (
           <Document
             renderMode='canvas'
-            renderAnnotationLayer={false}
-            renderTextLayer={false}
+
             file={file?.data}
             className={asThumbnail ? classes.documentThumbnail : classes.documentContainer}
             onLoadError={(e) => {
@@ -188,9 +187,13 @@ const DocumentViewer = ({
                   key={`page_${index + 1}`} pageNumber={index + 1}
                   height={80}
                   scale={1}
+                  renderAnnotationLayer={false}
+                  renderInteractiveForms={false}
+                  renderTextLayer={false}
                 />
               } else {
                 return <PageWithObserver
+                  rootRef={rootRef}
                   key={`page_${index + 1}`} pageNumber={index + 1}
                   width={wrapperWidth}
                   setPageVisibility={setPageVisibility}
@@ -199,6 +202,9 @@ const DocumentViewer = ({
                     setPageHeight(page?.width)
                     setPageWidth(page?.height)
                   }}
+                  renderAnnotationLayer={false}
+                  renderInteractiveForms={false}
+
                 />
               }
             }
@@ -206,7 +212,7 @@ const DocumentViewer = ({
 
           </Document>
         ) : (
-          <ImageLoader 
+          <ImageLoader
             asThumbnail={asThumbnail}
             file={file}
             scale={scaleFactor}
@@ -220,7 +226,7 @@ const DocumentViewer = ({
   )
 }
 
-const PageWithObserver = ({ pageNumber, setPageVisibility, ...otherProps }) => {
+const PageWithObserver = ({ rootRef, pageNumber, setPageVisibility, ...otherProps }) => {
   const [page, setPage] = useState();
 
   const onIntersectionChange = useCallback(
@@ -231,7 +237,8 @@ const PageWithObserver = ({ pageNumber, setPageVisibility, ...otherProps }) => {
   );
 
   const pageConfig = {
-    threshold: [.5]
+    root: rootRef.current,
+    threshold: 0
   }
 
   useIntersectionObserver(page, pageConfig, onIntersectionChange);
