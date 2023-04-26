@@ -16,7 +16,10 @@ import { useElementSize } from 'usehooks-ts';
 import { DocumentOverlayControl, DocumentToolbar } from './DocumentToolbar';
 import { ImageLoader } from './ImageLoader';
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+// pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
+
+
 
 const useStyles = makeStyles()((theme) => {
   return {
