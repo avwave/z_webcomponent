@@ -5,7 +5,9 @@ import AgendaProvider from "../src/components/Agenda/AgendaContext";
 import CheckboxProvider from "../src/components/CheckList/checklistContext";
 import GridProvider from "../src/components/Grid/GridContext";
 import { AnalyticsProvider } from "../src/components/SegmentIO";
-import { MuiThemeProvider, createTheme } from "@material-ui/core";
+import { ThemeProvider } from "@mui/styles";
+import { createTheme } from "@mui/material";
+
 
 
 const zennyaTheme = {
@@ -33,7 +35,7 @@ const theme = createTheme();
 
 const withDataGridContextProvider = (Story, context) => {
   return (
-    <MuiThemeProvider theme={theme}>
+    <ThemeProvider theme={theme}>
       <AnalyticsProvider writeKey='kBESU3nop3e0nTVniD0rIKSvOGjvz64T' appIdentifier='STORYBOOK'>
         <GridProvider>
           <CheckboxProvider>
@@ -45,7 +47,7 @@ const withDataGridContextProvider = (Story, context) => {
           </CheckboxProvider>
         </GridProvider>
       </AnalyticsProvider>
-    </MuiThemeProvider>
+    </ThemeProvider>
   );
 };
 

@@ -1,7 +1,9 @@
 import { Grid, Typography } from "@mui/material";
-import React from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { DocumentViewer } from ".";
 import { pdfBase64Data, pngBase64Data } from "./data";
+import { base64ArrayBuffer } from "../DocumentGallery/b64util";
+import axios from "axios";
 
 const DocumentViewerStory = {
   component: DocumentViewer,
@@ -10,6 +12,11 @@ const DocumentViewerStory = {
 };
 
 export default DocumentViewerStory;
+
+const fetchData = async (pdfName) => {
+  const result = (await axios.get(`http://localhost:7001/pdfs/${pdfName}.pdf`, { responseType: "arraybuffer" }))?.data;
+  return base64ArrayBuffer(result)
+};
 
 const DefaultStory = ({ ...args }) => (
   <Grid container>
@@ -26,16 +33,29 @@ const ThumbnailStory = ({ ...args }) => (
   <DocumentViewer {...args} />
 )
 
-const PDFURLStory = ({ ...args }) => (
-  <div>
-    <h3>Demo requires CORS anywhere access</h3>
-    <a target="_blank" href="https://cors-anywhere.herokuapp.com/corsdemo">
-      Request demo access first, then reload demo
-    </a>
-    <br />
-    <DocumentViewer {...args} />
-  </div>
-);
+const PDFURLStory = ({ ...args }) => {
+  const [data, setData] = useState(null);
+  const d = useCallback(
+    async () => {
+      setData(await fetchData("scientific"))
+    }, []
+  );
+  useEffect(
+    () => {
+      d()
+    }, [d]
+  );
+  return (
+    <Grid container>
+      <Grid item xs={6}>
+        placeholder
+      </Grid>
+      <Grid item xs={6}>
+        <DocumentViewer {...args} data={data} />
+      </Grid>
+    </Grid>
+  )
+};
 
 export const Default = DefaultStory.bind({});
 Default.args = {};
@@ -54,8 +74,6 @@ PDFBase64.args = {
 
 export const PDFURL = PDFURLStory.bind({});
 PDFURL.args = {
-  url:
-    "https://cors-anywhere.herokuapp.com/http://africau.edu/images/default/sample.pdf",
   mimeType: "application/pdf",
 };
 

@@ -260,7 +260,7 @@ export const ColumnDisplaySelection = DefaultStory.bind({});
 ColumnDisplaySelection.args = {
   ...Default.args,
   showSelector: true,
-  filterable: false,
+  filterable: true,
 };
 
 const ServerFilterStory = ({ ...args }) => {
@@ -610,6 +610,7 @@ const InfiniteLoaderStory = ({ ...args }) => {
       <Grid item xs={12}>
         <Paper style={{ height: '300px' }}>
           <DataGrid2 {...args}
+          totalCount={Number.MAX_VALUE}
             onLoadMore={() => simulateLoading()}
           />
         </Paper>

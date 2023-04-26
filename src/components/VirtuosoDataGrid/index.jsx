@@ -400,7 +400,7 @@ const VirtuosoDataGrid = ({
         }}
         onSortingChange={setSortState}
         rowVirtualizerInstanceRef={rowVirtualizerInstanceRef}
-        // rowVirtualizerProps={{ overscan: 4 }}
+        rowVirtualizerProps={{ overscan: 10 }}
         initialState={{
           columnOrder: defaultColumnOrder,
           columnVisibility: defaultHideColumns,
@@ -412,7 +412,7 @@ const VirtuosoDataGrid = ({
           debounceSearch(f)
         }}
         muiSearchTextFieldProps={{
-          placeholder: 'Search',
+          placeholder: searchPlaceholder ?? 'Search',
 
           variant: 'outlined',
           size: 'small',
