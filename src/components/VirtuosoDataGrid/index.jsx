@@ -218,7 +218,7 @@ const VirtuosoDataGrid = ({
   useEffect(
     () => {
       fetchMoreOnBottomReached(tableContainerRef.current)
-    }, [fetchMoreOnBottomReached]
+    }, [fetchMoreOnBottomReached, manualLoadMore]
   );
 
   //onfilter and onsort change
