@@ -83,7 +83,6 @@ const CriteriaEditor = ({
         case 'autocomplete':
           criteriaOptions = {
             value: (value) => {
-              console.log('CriteriaEditor.jsx (75) # value', value);
               if (Array.isArray(value)) {
                 return col?.filter?.options?.filter(opt => {
                   return value.includes(opt?.[col?.filter?.valueField])

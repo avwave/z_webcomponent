@@ -101,17 +101,19 @@ const CriteriaAutocomplete = ({
           );
         }}
         clearIcon={<Backspace fontSize="small" />}
-        renderInput={(iParams) => (
-          <TextField
-            variant="outlined"
-            fullWidth
-            {...iParams}
-            InputLabelProps={{
-              shrink: true,
-            }}
-            label={label}
-            placeholder={"type to search"} />
-        )}
+        renderInput={(iParams) => {
+          return (
+            <TextField
+              variant="outlined"
+              fullWidth
+              {...iParams}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              label={label}
+              placeholder={"type to search"} />
+          )
+        }}
       />
     </>
   );
