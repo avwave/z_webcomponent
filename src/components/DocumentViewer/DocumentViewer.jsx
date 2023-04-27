@@ -129,7 +129,7 @@ const DocumentViewer = ({
         <DocumentToolbar
           onDownload={() => {
             const uri = file?.url || file?.data
-            return saveFile(uri, file?.downloadName)
+            return saveFile(uri, file?.name)
           }}
           pageObject={visiblePages}
           pageCount={pdfPages}
