@@ -90,7 +90,7 @@ const CriteriaEditor = ({
                 })?.map(opt => opt?.[col?.filter?.labelField])
                   ?.join(',')
               }
-              return value
+              return col?.filter?.options?.find(opt => opt?.[col?.filter?.valueField] === value)?.[col?.filter?.labelField]
             },
             component: {
               component: CriteriaAutocomplete,
