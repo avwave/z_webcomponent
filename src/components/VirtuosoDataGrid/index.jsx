@@ -3,8 +3,8 @@ import React, { isValidElement, useCallback, useContext, useEffect, useMemo, use
 import { makeStyles } from 'tss-react/mui';
 import { useUrlState } from '../hooks/useUrlState';
 
-import { LinearProgress } from '@material-ui/core';
-import { Box, Button, CircularProgress, Toolbar, debounce } from '@mui/material';
+
+import { Box, Button, CircularProgress, LinearProgress, Toolbar, debounce } from '@mui/material';
 import Truncate from 'react-truncate';
 import { DataGridContext, actions as dataGridActions } from '../DataGrid/DataGridContext';
 import { PortalCell } from '../DataGrid/PortalCell';

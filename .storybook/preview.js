@@ -6,7 +6,7 @@ import CheckboxProvider from "../src/components/CheckList/checklistContext";
 import GridProvider from "../src/components/Grid/GridContext";
 import { AnalyticsProvider } from "../src/components/SegmentIO";
 import { ThemeProvider } from "@mui/styles";
-import { createTheme } from "@mui/material";
+import { AppBar, Toolbar, createTheme } from "@mui/material";
 
 
 
@@ -34,21 +34,34 @@ const zennyaTheme = {
 const theme = createTheme();
 
 const withDataGridContextProvider = (Story, context) => {
-  return (
+  const Default = (
     <ThemeProvider theme={theme}>
-      <AnalyticsProvider writeKey='kBESU3nop3e0nTVniD0rIKSvOGjvz64T' appIdentifier='STORYBOOK'>
+      
         <GridProvider>
           <CheckboxProvider>
             <AgendaProvider>
               <DataGridProvider>
+                <AppBar position="static" color="primary">
+                  <Toolbar>
+                    <h1 style={{ color: "white" }}>Zennya Storybook</h1>
+                  </Toolbar>
+                </AppBar>
                 <Story />
               </DataGridProvider>
             </AgendaProvider>
           </CheckboxProvider>
         </GridProvider>
-      </AnalyticsProvider>
+      
     </ThemeProvider>
   );
+  if (context?.componentId === 'segmentio') {
+    return (
+      <AnalyticsProvider writeKey='kBESU3nop3e0nTVniD0rIKSvOGjvz64T' appIdentifier='STORYBOOK'>
+        {Default}
+      </AnalyticsProvider>
+    )
+  }
+  return Default
 };
 
 const parameters = {

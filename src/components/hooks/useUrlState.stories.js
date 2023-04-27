@@ -4,7 +4,6 @@ import { action, actions } from "@storybook/addon-actions";
 import ReactJsonView from 'react-json-view';
 import { TextField } from "@mui/material";
 import { DateTimeRangePicker } from "../DateTimeRangePicker";
-import { DatePicker } from "@material-ui/pickers";
 import { useUrlState } from "./useUrlState";
 
 const useURLStateStory = {

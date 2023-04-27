@@ -6,8 +6,8 @@ import useCriterionSummaryValue from './hooks/useCriterionSummaryValue'
 
 
 import { makeStyles } from 'tss-react/mui';
-import { Button, ButtonGroup, CardContent, Divider, Popover } from '@mui/material'
-import { Card } from '@material-ui/core'
+import { Button, ButtonGroup, Card, CardContent, Divider, Popover } from '@mui/material'
+
 const useStyles = makeStyles()(theme => ({
   root: {
     display: 'flex',
