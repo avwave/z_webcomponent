@@ -4,13 +4,14 @@ import { makeStyles } from 'tss-react/mui';
 import { useUrlState } from '../hooks/useUrlState';
 
 
-import { Box, Button, CircularProgress, LinearProgress, Toolbar, debounce } from '@mui/material';
+import { Box, Button, CircularProgress, LinearProgress, Toolbar, Tooltip, debounce } from '@mui/material';
 import Truncate from 'react-truncate';
 import { DataGridContext, actions as dataGridActions } from '../DataGrid/DataGridContext';
 import { PortalCell } from '../DataGrid/PortalCell';
 import { DataGridToolbar } from './DataGridToolbar';
 import ReactJson from 'react-json-view';
 import { useStateRef } from '../hooks/useStateRef';
+import {isEmpty} from 'lodash';
 const useStyles = makeStyles()(theme => ({
 }));
 const VirtuosoDataGrid = ({
@@ -153,6 +154,17 @@ const VirtuosoDataGrid = ({
               if (expanderContent) {
                 return <PortalCell expandCell={expanderContent} renderedCell={finalizedCell} />
               }
+              const renderedTooltip = typeof col?.tooltip === "function" ? col?.tooltip({row:row?.original}) : renderedCellValue;
+
+              if (!(col?.noTooltip || isEmpty(renderedTooltip))) {
+                return <Tooltip
+                  title={renderedTooltip}
+                  placement="bottom-start"
+                  className={classes.tooltip}
+                >
+                  {finalizedCell}
+                </Tooltip>
+              }
               return finalizedCell
             }
           }
@@ -199,7 +211,7 @@ const VirtuosoDataGrid = ({
     [dataGridState?.loading, dataGridState?.rows?.length, doLoadMore, totalCount],
   );
 
-  
+
   //render manual bottom toolbar if loadmore is manual (for erroneous loadmore
   const renderBottomToolbar = useMemo(
     () => {
@@ -210,7 +222,7 @@ const VirtuosoDataGrid = ({
             onClick={() => {
               doLoadMore()
             }}
-            startIcon={loadMoreLoading && <CircularProgress size={16} /> }
+            startIcon={loadMoreLoading && <CircularProgress size={16} />}
           >Load more</Button>
         </Box>
       }
@@ -499,6 +511,12 @@ const VirtuosoDataGrid = ({
         }}
         renderBottomToolbar={() => {
           return renderBottomToolbar
+        }}
+        muiTableBodyRowProps={({ row }) => {
+          const attribs = extendedRowAttributes(row?.original)
+          return { ...attribs,
+            title:null
+          }
         }}
         {...gridProps}
       />
