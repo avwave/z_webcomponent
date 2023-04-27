@@ -638,6 +638,12 @@ InfiniteLoader.args = {
   columns: [SelectColumn, ...columnData],
 };
 
+export const InfiniteLoaderManualOverride = InfiniteLoaderStory.bind({});
+InfiniteLoaderManualOverride.args = {
+  ...InfiniteLoader.args,
+  manualLoadMore: true
+}
+
 export const ExtendedRowAttributes = DefaultStory.bind({});
 ExtendedRowAttributes.args = {
   ...Default.args,

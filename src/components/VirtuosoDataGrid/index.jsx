@@ -4,7 +4,7 @@ import { makeStyles } from 'tss-react/mui';
 import { useUrlState } from '../hooks/useUrlState';
 
 import { LinearProgress } from '@material-ui/core';
-import { Box, Toolbar, debounce } from '@mui/material';
+import { Box, Button, CircularProgress, Toolbar, debounce } from '@mui/material';
 import Truncate from 'react-truncate';
 import { DataGridContext, actions as dataGridActions } from '../DataGrid/DataGridContext';
 import { PortalCell } from '../DataGrid/PortalCell';
@@ -25,6 +25,7 @@ const VirtuosoDataGrid = ({
   rightAccessory,
   centerAccessory,
   onLoadMore = async () => { },
+  manualLoadMore = false,
   totalCount,
   resetScroll,
   onContextMenu = () => { },
@@ -161,23 +162,58 @@ const VirtuosoDataGrid = ({
   );
 
   //scroll events for loadmore
+
+  const doLoadMore = useCallback(
+    async () => {
+      setLoadMoreLoading(true)
+      await onLoadMore()
+      setShowManualLoadMore(false)
+      setLoadMoreLoading(false)
+    },
+    [onLoadMore],
+  );
+
+  const [showManualLoadMore, setShowManualLoadMore] = useState(false);
+  const [loadMoreLoading, setLoadMoreLoading] = useState(false);
   const fetchMoreOnBottomReached = useCallback(
     async (containerRefElement) => {
       if (containerRefElement) {
         const { scrollHeight, scrollTop, clientHeight } = containerRefElement;
         //once the user has scrolled within 400px of the bottom of the table, fetch more data if we can
         if (
-          scrollHeight - scrollTop - clientHeight < 200 
+          scrollHeight - scrollTop - clientHeight < 200
           && !dataGridState?.loading
           && totalCount > dataGridState?.rows?.length
         ) {
-          await onLoadMore()
+          if (!!manualLoadMore) {
+            setShowManualLoadMore(true)
+          } else {
+            doLoadMore()
+          }
         }
       }
     },
-    [dataGridState?.loading, dataGridState?.rows?.length, onLoadMore, totalCount],
+    [dataGridState?.loading, dataGridState?.rows?.length, doLoadMore, manualLoadMore, totalCount],
   );
 
+  
+  //render manual bottom toolbar if loadmore is manual (for erroneous loadmore
+  const renderBottomToolbar = useMemo(
+    () => {
+      if (showManualLoadMore && manualLoadMore) {
+        return <Box display={'flex'} flexDirection={'row'} justifyContent={'flex-end'}>
+          <Button
+            variant={'text'}
+            onClick={() => {
+              doLoadMore()
+            }}
+            startIcon={loadMoreLoading && <CircularProgress size={16} /> }
+          >Load more</Button>
+        </Box>
+      }
+    },
+    [doLoadMore, loadMoreLoading, manualLoadMore, showManualLoadMore],
+  );
   //check on mount if needs to load more to fill the table
   useEffect(
     () => {
@@ -456,6 +492,9 @@ const VirtuosoDataGrid = ({
           renderEmptyRowsFallback: () => {
             return gridProps?.emptyRowsRenderer()
           }
+        }}
+        renderBottomToolbar={() => {
+          return renderBottomToolbar
         }}
         {...gridProps}
       />
