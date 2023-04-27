@@ -75,6 +75,31 @@ Default.args = {
   useUrlAsState: true
 };
 
+const LoadingStory = ({ ...args }) => {
+  const [state, dispatch] = React.useContext(DataGridContext);
+  React.useEffect(() => {
+    dispatch({
+      type: actions.SET_LOADING,
+    });
+    dispatch({
+      payload: { rows: args.rows, columns: args.columns },
+      type: actions.LOAD_DATA,
+    });
+  }, [args.columns, args.rows, dispatch]);
+
+  return <Paper style={{ height: '80vh' }}>
+    {
+      state?.loading ? 'loading': 'finished'
+    }
+    <DataGrid2 {...args} />
+    </Paper>;
+};
+
+export const Loading = LoadingStory.bind({});
+Loading.args = {
+  ...Default.args,
+}
+
 export const Basic = DefaultStory.bind({});
 Basic.args = {
   rows: [

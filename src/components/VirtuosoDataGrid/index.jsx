@@ -375,6 +375,7 @@ const VirtuosoDataGrid = ({
         gridId={id}
         customColumnDisplay={customColumnDisplay}
       />
+      {dataGridState?.loading && <LinearProgress />}
       <MaterialReactTable
         tableInstanceRef={tableInstanceRef}
         columnResizeMode='onChange'
