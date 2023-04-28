@@ -41,11 +41,6 @@ const withDataGridContextProvider = (Story, context) => {
           <CheckboxProvider>
             <AgendaProvider>
               <DataGridProvider>
-                <AppBar position="static" color="primary">
-                  <Toolbar>
-                    <h1 style={{ color: "white" }}>Zennya Storybook</h1>
-                  </Toolbar>
-                </AppBar>
                 <Story />
               </DataGridProvider>
             </AgendaProvider>
