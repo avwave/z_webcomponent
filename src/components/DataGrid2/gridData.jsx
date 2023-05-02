@@ -224,7 +224,7 @@ let rows = [];
 for (let i = 0; i < 30; i++) {
   rows.push({
     id: `id-${i}`,
-    filter_text: faker.name.findName(),
+    filter_text: faker.name.fullName(),
     col_hidden: faker.datatype.number().toString(),
     col_customheader: faker.date.recent().toISOString(),
     col_truncate: faker.lorem.paragraphs(2),

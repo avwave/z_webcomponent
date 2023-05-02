@@ -35,7 +35,7 @@ const DataGridStory = {
   title: "DataGrid/DataGridV3",
   parameters: {
     chromatic: { disable: true },
-    storyshots: { disable: true },
+    // storyshots: { disable: true },
     docs: {
       // page: Usage
       source: {
