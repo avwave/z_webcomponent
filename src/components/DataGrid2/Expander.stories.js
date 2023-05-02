@@ -18,7 +18,7 @@ const DataGridStory = {
   title: "DataGrid/DataGrid2/ExpandingCell",
   parameters: {
     chromatic: { disable: true },
-    storyshots: { disable: true },
+    // storyshots: { disable: true },
   },
 };
 

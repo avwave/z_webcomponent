@@ -33,7 +33,7 @@ const AgendaStory = {
   },
   parameters: {
     chromatic: { disable: true },
-    storyshots: { disable: true },
+    // storyshots: { disable: true },
   },
 };
 

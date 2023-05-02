@@ -19,7 +19,7 @@ const DataGridStory = {
   title: "DataGrid/DataGrid2/ColumnTypes",
   parameters: {
     chromatic: { disable: true },
-    storyshots: { disable: true },
+    // storyshots: { disable: true },
   },
 };
 

@@ -129,7 +129,7 @@ faker.seed(123);
 for (let i = 0; i < 100; i++) {
   rows.push({
     id: `row${i}`,
-    title: faker.name.findName(),
+    title: faker.name.fullName(),
     col3Type: faker.datatype.number().toString(),
     col4Type: faker.date.recent().toISOString(),
     col5Type: faker.lorem.paragraphs(2),
