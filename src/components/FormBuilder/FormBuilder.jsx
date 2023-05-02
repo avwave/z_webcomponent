@@ -42,7 +42,7 @@ import React, {
   useMemo,
   useState
 } from "react";
-import DurationInputMask from "react-duration-input-mask";
+import DurationInputMask from "./DurationMask"
 
 import PhoneInput from "react-phone-number-input/input";
 import "react-phone-number-input/style.css";
@@ -238,21 +238,21 @@ const FormFieldSet = ({
                   title={fieldParams.toolTip}
                   placement="top-start">
                   <TextField
-                    {...props}
                     helperText=" "
                     variant={variant}
                     InputLabelProps={{
                       shrink: true,
                     }}
+                    {...props}
                   />
                 </Tooltip> :
                   <TextField
-                    {...props}
                     helperText=" "
                     variant={variant}
                     InputLabelProps={{
                       shrink: true,
                     }}
+                    {...props}
                   />
               )}
               openPickerIcon={<DateRange />}
