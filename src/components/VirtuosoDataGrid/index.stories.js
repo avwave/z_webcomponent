@@ -59,7 +59,7 @@ const DefaultStory = ({ ...args }) => {
     });
   }, [args.columns, args.rows, dispatch]);
 
-  return <Paper style={{ height: '80vh' }}><DataGrid2 {...args} /></Paper>;
+  return <Paper ><DataGrid2 {...args} /></Paper>;
 };
 
 export const Default = DefaultStory.bind({});
@@ -270,6 +270,14 @@ Blank.args = {
     ),
   }
 };
+
+export const NoHeaderElements = DefaultStory.bind({});
+NoHeaderElements.args = {
+  ...Default.args,
+  hasDateRangeFilter: false,
+  hasSearchFilter: false,
+  filterable: false
+}
 
 export const GridProps = DefaultStory.bind({});
 GridProps.args = {
@@ -641,7 +649,7 @@ const InfiniteLoaderStory = ({ ...args }) => {
   return (
     <Grid container>
       <Grid item xs={12}>
-        <Paper style={{ height: '300px' }}>
+        <Paper style={{ height: '70vh' }}>
           <DataGrid2 {...args}
           totalCount={Number.MAX_VALUE}
             onLoadMore={() => simulateLoading()}

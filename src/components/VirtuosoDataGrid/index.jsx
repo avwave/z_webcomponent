@@ -13,6 +13,20 @@ import ReactJson from 'react-json-view';
 import { useStateRef } from '../hooks/useStateRef';
 import {isEmpty} from 'lodash';
 const useStyles = makeStyles()(theme => ({
+  rootContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+    width: '100%',
+    flex:1
+  },
+  table:{
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+    width: '100%',
+    flex: 1
+  }
 }));
 const VirtuosoDataGrid = ({
   showSelector,
@@ -392,6 +406,7 @@ const VirtuosoDataGrid = ({
       />
       {dataGridState?.loading && <LinearProgress />}
       <MaterialReactTable
+        className={classes.table}
         tableInstanceRef={tableInstanceRef}
         columnResizeMode='onChange'
         manualFiltering
@@ -421,7 +436,8 @@ const VirtuosoDataGrid = ({
         muiTableContainerProps={{
           ref: tableContainerRef,
           sx: {
-            maxHeight: '70vh'
+            height: '100%',
+            flex:1
           },
           onScroll: (e) => {
             fetchMoreOnBottomReached(e.target, manualLoadMore)
@@ -438,6 +454,14 @@ const VirtuosoDataGrid = ({
             '& .Mui-TableHeadCell-Content-Actions': {
               alignSelf: 'flex-end',
             }
+          }
+        }}
+        muiTablePaperProps={{
+          sx: {
+            height: 'calc(100% - 96px)',
+            flex:1,
+            display: 'flex',
+            flexDirection: 'column',
           }
         }}
         state={{
@@ -457,9 +481,9 @@ const VirtuosoDataGrid = ({
           columnOrder: defaultColumnOrder,
           columnVisibility: defaultHideColumns,
           columnPinning: defaultPinnedColumns,
-          showGlobalFilter: true,
+          showGlobalFilter: hasSearchFilter && filterable,
         }}
-        enableGlobalFilter={hasSearchFilter}
+        enableGlobalFilter={true}
         onGlobalFilterChange={(f) => {
           debounceSearch(f)
         }}
