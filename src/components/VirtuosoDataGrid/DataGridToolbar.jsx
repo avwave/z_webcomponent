@@ -18,7 +18,7 @@ const POPUP_MODE = {
 
 const useStyles = makeStyles()(theme => ({
   actionBar: {
-    flex: 1,
+    flex: 0,
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
@@ -204,10 +204,11 @@ const DataGridToolbar = ({
   );
   return (
     <div className={classes.actionBar}>
-      {filterable && (
+      
         <>
           <Toolbar disableGutters variant="dense" className={classes.toolbar}>
             <div className={classes.filterBar}>
+              {filterable && (
               <CriteriaEditor
                 hasDateRangeFilter={hasDateRangeFilter}
                 columns={columns}
@@ -216,6 +217,7 @@ const DataGridToolbar = ({
                 }}
                 filters={filterValues}
               />
+              )}
             </div>
             {tableInstanceRef.current && (
               <Box sx={{ paddingLeft: 2, flexShrink: 0, display: 'flex', flexDirection: 'row' }}>
@@ -230,7 +232,6 @@ const DataGridToolbar = ({
             <Toolbar disableGutters variant="dense" className={classes.toolbar}>{renderChipFilters}</Toolbar>
           )}
         </>
-      )}
 
     </div>
 

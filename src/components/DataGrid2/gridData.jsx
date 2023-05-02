@@ -98,7 +98,7 @@ const columnData = [
   },
   {
     key: "col_filter_daterange",
-    name: "Daterange Filter",
+    name: "Custom Daterange Filter",
     sortable: false,
     resizable: true,
     filter: {
