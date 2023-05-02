@@ -1,37 +1,68 @@
-import { makeStyles, CircularProgress } from '@material-ui/core';
-import React, { useMemo } from 'react';
-import FilePreviewer, { FilePreviewerThumbnail } from 'react-file-previewer';
-import "react-file-previewer/src/styles.css";
-import "./styles.scss";
+import { makeStyles } from 'tss-react/mui';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import mime from 'mime-types';
-import * as base64Utils from 'base64-utils'
+import saveFile from 'file-saver';
 
-const useStyles = makeStyles((theme) => {
+import { useIntersectionObserver } from "@wojtekmaj/react-hooks";
+
+import clsx from 'clsx';
+import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
+import 'react-pdf/dist/esm/Page/TextLayer.css';
+
+import { Document, Page, pdfjs } from 'react-pdf';
+import { getMimeType } from './base64utils';
+import { Alert, LinearProgress } from '@mui/material';
+import { useElementSize } from 'usehooks-ts';
+import { DocumentOverlayControl, DocumentToolbar } from './DocumentToolbar';
+import { ImageLoader } from './ImageLoader';
+
+// pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
+
+
+
+const useStyles = makeStyles()((theme) => {
   return {
-    documentContainer: {
-      minHeight: "calc(100vh - 88px) !important",
-      width: '100%',
-      backgroundColor:'#68738a',
-      display: 'flex',
-      alignItems: "center",
-    justifyContent: "space-around",
+    root: {
+      backgroundColor: theme.palette.grey[700],
     },
-    center:{
-
+    documentContainer: {
+      overflow: 'scroll',
+      // height: 'calc(100vh - 66px)',
+    },
+    documentThumbnail: {
+      width: 80,
+      height: 80,
+    },
+    rootContainer: {
+      position: 'relative',
+      minHeight: '20vh',
+      maxHeight: '70vh',
+      display: 'flex',
+      flexDirection: 'column',
     }
   }
-})
+});
+
+
 const DocumentViewer = ({
   url,
   data,
   mimeType = "image/*",
   downloadName = "download",
   asThumbnail = false,
-  loading = false
+  loading: dataLoading = false
 }) => {
-  const classes = useStyles()
+  const { classes } = useStyles()
 
-  const file = useMemo(() => {
+  const [file, setFile] = useState([]);
+  const [pdfLoading, setPdfLoading] = useState(true);
+
+  const [pageWidth, setPageWidth] = useState(0);
+  const [pageHeight, setPageHeight] = useState(0);
+  const [ref, { width: wrapperWidth, height: wrapperHeight }] = useElementSize();
+
+  const fileCB = useCallback(async () => {
     let file = {
       mimeType,
       name: downloadName,
@@ -39,38 +70,179 @@ const DocumentViewer = ({
 
     if (data) {
       const magicNumberSlice = data.slice(0, 16)
-      const mimeType = base64Utils.getMimeType(magicNumberSlice)
-      file = { ...file, mimeType, data }
+      const mimeType = getMimeType(magicNumberSlice)
+
+      // const blob = await (await fetch(`data:${mimeType};base64,${data}`))?.blob()
+
+      file = { ...file, mimeType, data: `data:${mimeType};base64,${data}` }
     } else if (url) {
       const hrefparse = document.createElement('a')
       hrefparse.href = url
       const contentType = mime.lookup(hrefparse.pathname);
       file = { ...file, mimeType: contentType, url }
     }
-    return file
+    setFile(file)
   }, [data, downloadName, mimeType, url]);
 
+  useEffect(() => {
+    fileCB()
+  }, [data, url]
+  )
 
-  if (asThumbnail) {
+  const [pdfPages, setPdfPages] = useState(0);
+  const [scaleFactor, setScaleFactor] = useState(1);
+  const [reset, setReset] = useState(0);
+  const rootRef = useRef(null);
+
+  const [error, setError] = useState(null);
+  const [visiblePages, setVisiblePages] = useState({});
+  const setPageVisibility = useCallback((pageNumber, isIntersecting) => {
+    setVisiblePages((prevVisiblePages) => ({
+      ...prevVisiblePages,
+      [pageNumber]: isIntersecting
+    }));
+  }, []);
+
+  const loading = useMemo(
+    () => {
+      return pdfLoading && dataLoading
+
+    }, [pdfLoading, dataLoading]
+  );
+
+  if (loading) {
     return (
-      <FilePreviewerThumbnail
-        file={file}
-      />
+      <LinearProgress />
     )
   }
-  return (
-    <div className={classes.documentContainer}>
-      {loading ? (
-        <CircularProgress className={classes.center}/>
-      ) : (
-        <FilePreviewer
-          file={file}
-        />
-      )
-      }
-    </div>
+  if (error) {
+    return (
+      <Alert severity='error'>
+        {error}
+      </Alert>
+    )
+  }
 
+  return (
+    <div ref={rootRef} className={clsx(classes.root, asThumbnail && classes.documentThumbnail)}>
+      {!asThumbnail && (
+        <DocumentToolbar
+          onDownload={() => {
+            const uri = file?.url || file?.data
+            return saveFile(uri, file?.name)
+          }}
+          pageObject={visiblePages}
+          pageCount={pdfPages}
+          isPageCountVisible={file?.mimeType === 'application/pdf'}
+        />
+      )}
+      <div ref={ref} className={classes.rootContainer}>
+        {file?.mimeType === 'application/pdf' && !asThumbnail ? (
+          <>
+            <DocumentOverlayControl
+              onChangeScale={(value) => setScaleFactor(value)}
+              onReset={() => setReset(Math.random())}
+              scale={scaleFactor}
+            />
+            <Document
+              renderMode='canvas'
+
+              file={file?.data}
+              className={asThumbnail ? classes.documentThumbnail : classes.documentContainer}
+              onLoadError={(e) => {
+                console.log('onLoadError', e)
+                setError(e?.message)
+                setPdfLoading(false)
+              }}
+              onLoadProgress={(e) => {
+                console.log('onLoadProgress', e)
+              }}
+              onLoadSuccess={(e) => {
+                if (asThumbnail) {
+                  setPdfPages(1)
+                } else {
+                  setPdfPages(e?.numPages ?? 0)
+                }
+                setPdfLoading(false)
+              }}
+              onSourceError={(e) => {
+                console.log('onSourceError', e)
+                setError(e?.message)
+                setPdfLoading(false)
+              }}
+              onSourceSuccess={(e) => {
+                console.log('onSourceSuccess', e)
+                setPdfLoading(true)
+
+              }}
+            >
+              {Array.from(new Array(pdfPages), (el, index) => {
+                if (asThumbnail) {
+                  return <Page
+                    key={`page_${index + 1}`} pageNumber={index + 1}
+                    height={80}
+                    scale={1}
+                    renderAnnotationLayer={false}
+                    renderInteractiveForms={false}
+                    renderTextLayer={false}
+                  />
+                } else {
+                  return <PageWithObserver
+                    rootRef={rootRef}
+                    key={`page_${index + 1}`} pageNumber={index + 1}
+                    width={wrapperWidth}
+                    setPageVisibility={setPageVisibility}
+                    scale={scaleFactor}
+                    onLoadSuccess={page => {
+                      setPageHeight(page?.width)
+                      setPageWidth(page?.height)
+                    }}
+                    renderAnnotationLayer={false}
+                    renderInteractiveForms={false}
+
+                  />
+                }
+              }
+              )}
+
+            </Document>
+          </>
+        ) : (
+          <ImageLoader
+            asThumbnail={asThumbnail}
+            file={file}
+            scale={scaleFactor}
+            onReset={reset}
+          />
+        )}
+
+
+      </div>
+    </div>
   )
 }
 
+const PageWithObserver = ({ rootRef, pageNumber, setPageVisibility, ...otherProps }) => {
+  const [page, setPage] = useState();
+
+  const onIntersectionChange = useCallback(
+    ([entry]) => {
+      setPageVisibility(pageNumber, entry.isIntersecting);
+    },
+    [pageNumber, setPageVisibility]
+  );
+
+  const pageConfig = {
+    root: rootRef.current,
+    threshold: 0
+  }
+
+  useIntersectionObserver(page, pageConfig, onIntersectionChange);
+
+  return (
+    <div ref={setPage}>
+      <Page pageNumber={pageNumber} {...otherProps} />
+    </div>
+  );
+}
 export { DocumentViewer };

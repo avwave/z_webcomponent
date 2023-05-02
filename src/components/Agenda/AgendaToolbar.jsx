@@ -1,16 +1,14 @@
-import { Button, ButtonGroup, Grid, Toolbar, Typography } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import { DatePicker, LocalizationProvider, MobileDatePicker } from "@material-ui/pickers";
-import MomentUtils from '@material-ui/pickers/adapter/moment';
-import clsx from "clsx";
+import { Button, ButtonGroup, Grid, Toolbar, Typography } from "@mui/material";
+import { makeStyles } from 'tss-react/mui';
 import moment from "moment";
 import React, { useMemo } from "react";
 import { Navigate } from "react-big-calendar";
 import { views as calendarViews } from "react-big-calendar/lib/utils/constants";
 import { WeekPicker } from "../WeekPicker";
+import { LocalizationProvider, MobileDatePicker } from "@mui/x-date-pickers";
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment'
 
-
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
   leftGroup: {
     display: "flex",
     alignItems: "center",
@@ -72,7 +70,7 @@ const AgendaToolbar = ({
   filterComponent,
   ...props
 }) => {
-  const classes = useStyles();
+  const { classes, cx } = useStyles();
 
   const renderTitle = useMemo(
     () => {
@@ -153,7 +151,7 @@ const AgendaToolbar = ({
   const renderViewButtons = useMemo(
     () => {
       let viewArray = []
-      if(Array.isArray(views)) {
+      if (Array.isArray(views)) {
         viewArray = views
       } else {
         viewArray = Object.keys(views)
@@ -168,12 +166,12 @@ const AgendaToolbar = ({
           {localizer.messages[viewItem]}
         </Button>
       ))
-      
+
     }, [localizer.messages, onView, view, views]
   );
   return (
     <Toolbar className={classes.root}>
-      <Grid container spacing={16} justify="flex-start" className={classes.container}>
+      <Grid container spacing={1} justifyContent="flex-start" className={classes.container}>
         <Grid item xs={12} sm={6} md={defColWidth}>
           {!resources ?
             <ButtonGroup variant="text" size="small" className={classes.leftGroup}>
@@ -200,18 +198,19 @@ const AgendaToolbar = ({
         </Grid>
         <Grid item xs={12} sm={6} md={defColWidth} className={classes.item3}>
           <div className={classes.rightGroup}>
-            <ButtonGroup variant="text" size="small" className={clsx(filterComponent ? classes.padded : null, classes.rightGroup)}>
+            <ButtonGroup variant="text" size="small" className={cx(filterComponent ? classes.padded : null, classes.rightGroup)}>
               {renderViewButtons}
             </ButtonGroup>
 
           </div>
         </Grid>
-        <Grid item xs={12} sm={6} md={defColWidth} className={classes.item3}>
-          {filterComponent}
-        </Grid>
+        {filterComponent && (
+          <Grid item xs={12} sm={6} md={defColWidth} className={classes.item3}>
+            {filterComponent}
+          </Grid>
+        )}
       </Grid>
     </Toolbar>
-
   );
 }
 
@@ -219,7 +218,7 @@ const WrapPicker = props => {
   //NOTE: Use this pattern to set the filters beforehand to prevent unecessary rerendering
   // const [state, dispatch] = useReducer(dataGridReducer, { ...initState, filterColumn: { partner: '', statuses: '' } });
   return (
-    <LocalizationProvider dateAdapter={MomentUtils}>
+    <LocalizationProvider dateAdapter={AdapterMoment}>
       <AgendaToolbar {...props} />
     </LocalizationProvider>
   );

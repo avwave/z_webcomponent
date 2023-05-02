@@ -14,7 +14,7 @@ export function useUrlState({ queryKey, defaultValue, disable = false }) {
       window.location.pathname +
       qsValue;
     if (!disable) {
-      window.history.pushState({ path: newurl }, "", newurl);
+      window?.history?.replaceState({ path: newurl }, "", newurl);
     }
   }, [disable]);
 

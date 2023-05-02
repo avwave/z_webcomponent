@@ -6,14 +6,6 @@ import GridProvider, {actions, GridContext, gridReducer} from '../GridContext';
 const GridStory = {
   component: Grid,
   title: "Grid/Grid",
-  decorators: [
-    withReactContext(),
-    (Story) => (
-      <GridProvider>
-        <Story />
-      </GridProvider>
-    ),
-  ],
 };
 
 export default GridStory;

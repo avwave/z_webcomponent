@@ -1,8 +1,9 @@
-import { Grid, Typography } from "@material-ui/core";
+import { Grid, Typography } from "@mui/material";
 import React, { useCallback } from "react";
 import { DocumentGallery } from ".";
 import { pdfBase64Data, pngBase64Data } from "../DocumentViewer/data";
 import axios from "axios";
+import { base64ArrayBuffer } from "./b64util";
 
 const DocumentGalleryStory = {
   component: DocumentGallery,
@@ -45,7 +46,7 @@ Base64.args = {
 
 const fetchData = async (pdfName) => {
   const result = (await axios.get(`http://localhost:7001/pdfs/${pdfName}.pdf`, { responseType: "arraybuffer" }))?.data;
-  return Buffer.from(result, 'binary').toString('base64')
+  return base64ArrayBuffer(result)
 };
 
 const RemoteStory = ({ ...args }) => {

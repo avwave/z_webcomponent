@@ -48,7 +48,7 @@ export function unslugify(slug) {
   const result = slug.replace(/\_/g, " ")
   return result.replace(/\w\S*/g, function (txt) {
     return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
-  })
+  });
 }
 
 export function formatAddressObject(location) {

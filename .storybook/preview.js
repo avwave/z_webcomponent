@@ -1,15 +1,14 @@
 import "../src/reset.css";
 import "../src/index.css";
-import { withReactContext } from "storybook-react-context";
-import { muiTheme } from 'storybook-addon-material-ui'
+import DataGridProvider from "../src/components/DataGrid/DataGridContext";
+import AgendaProvider from "../src/components/Agenda/AgendaContext";
+import CheckboxProvider from "../src/components/CheckList/checklistContext";
+import GridProvider from "../src/components/Grid/GridContext";
+import { AnalyticsProvider } from "../src/components/SegmentIO";
+import { ThemeProvider } from "@mui/styles";
+import { AppBar, Toolbar, createTheme } from "@mui/material";
 
-import { addDecorator } from '@storybook/react';
-import { withKnobs } from '@storybook/addon-knobs';
-import { withConsole } from '@storybook/addon-console';
-import '@storybook/addon-console';
 
-addDecorator(withKnobs);
-addDecorator((storyFn, context) => withConsole()(storyFn)(context));
 
 const zennyaTheme = {
   themeName: 'Zennya Theme',
@@ -32,11 +31,35 @@ const zennyaTheme = {
   },
 };
 
-export const decorators = [
-  withReactContext,
-  muiTheme([zennyaTheme]),
-];
-export const parameters = {
+const theme = createTheme();
+
+const withDataGridContextProvider = (Story, context) => {
+  const Default = (
+    <ThemeProvider theme={theme}>
+      
+        <GridProvider>
+          <CheckboxProvider>
+            <AgendaProvider>
+              <DataGridProvider>
+                <Story />
+              </DataGridProvider>
+            </AgendaProvider>
+          </CheckboxProvider>
+        </GridProvider>
+      
+    </ThemeProvider>
+  );
+  if (context?.componentId === 'segmentio') {
+    return (
+      <AnalyticsProvider writeKey='kBESU3nop3e0nTVniD0rIKSvOGjvz64T' appIdentifier='STORYBOOK'>
+        {Default}
+      </AnalyticsProvider>
+    )
+  }
+  return Default
+};
+
+const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
   controls: {
     matchers: {
@@ -50,3 +73,10 @@ export const parameters = {
     }
   }
 };
+
+const preview = {
+  parameters,
+  decorators: [withDataGridContextProvider],
+}
+
+export default preview

@@ -6,7 +6,7 @@ import {
   ListItem,
   Paper,
   Typography,
-} from "@material-ui/core";
+} from "@mui/material";
 import { Row } from "react-data-grid";
 import React, { useState } from "react";
 import { withReactContext } from "storybook-react-context";
@@ -20,8 +20,6 @@ import DataGridProvider, {
   actions,
   initState,
 } from "./DataGridContext";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
 import { SelectColumn } from "react-data-grid";
 
 import { Menu as ContextMenu, Item as ContextItem } from "react-contexify";
@@ -30,16 +28,7 @@ import { action } from "@storybook/addon-actions";
 const DataGridStory = {
   component: DataGrid,
   title: "DataGrid/DataGrid",
-  decorators: [
-    withReactContext(),
-    (Story) => (
-      <DndProvider backend={HTML5Backend}>
-        <DataGridProvider>
-          <Story />
-        </DataGridProvider>
-      </DndProvider>
-    ),
-  ],
+
 };
 
 export default DataGridStory;

@@ -3,12 +3,12 @@ import {
   Box,
   Checkbox,
   Chip,
+  Divider,
   FormControl,
   IconButton,
   Input,
   InputAdornment,
   InputLabel,
-  makeStyles,
   MenuItem,
   MenuList,
   Select,
@@ -16,16 +16,16 @@ import {
   Tabs,
   TextField,
   Typography,
-} from "@material-ui/core";
-import { amber, red, teal, yellow } from "@material-ui/core/colors";
-import { Backspace, Close, Error } from "@material-ui/icons";
-import { Autocomplete } from "@material-ui/lab";
-import clsx from "clsx";
+} from "@mui/material";
+import { makeStyles } from 'tss-react/mui';
+import { amber, red, teal, yellow } from "@mui/material/colors";
+import { Backspace, Close, Error } from "@mui/icons-material";
+import { Autocomplete } from '@mui/material';
 import React, { Fragment, useEffect, useState } from "react";
 import { DateTimeRangePicker } from "../DateTimeRangePicker";
 import { LitePicker } from "../DateTimeRangePicker/wrapper";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
   formControl: {
     margin: theme.spacing(0),
   },
@@ -65,8 +65,7 @@ const useStyles = makeStyles((theme) => ({
     margin: 0,
   },
   chipTabRoot: {
-    paddingLeft: theme.spacing(0.5),
-    paddingRight: theme.spacing(0.5),
+    padding: theme.spacing(0.5),
   },
   chipTabIndicator: {
     display: 'flex',
@@ -75,7 +74,7 @@ const useStyles = makeStyles((theme) => ({
   },
   chipTabSelected: {
     border: `1px solid ${theme.palette.action.focus}`,
-    borderBottom: 0,
+
     borderRadius: theme.shape.borderRadius,
   },
   chip: {
@@ -98,6 +97,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '1em/50%',
     paddingLeft: '0.5rem',
     paddingRight: '0.5rem',
+
   },
   label: {
 
@@ -105,9 +105,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function TextFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
-  const classes = useStyles();
+  const { classes } = useStyles();
   return (
-    <FormControl fullWidth className={classes.formControl}>
+    <FormControl variant="standard" fullWidth className={classes.formControl}>
       <InputLabel>{filter?.label}</InputLabel>
       <Input
         onChange={(e) => {
@@ -138,19 +138,19 @@ function TextFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
 }
 
 function LegacyOptionFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
-  const classes = useStyles();
+  const { classes } = useStyles();
   return (
-    <FormControl fullWidth className={classes.formControl}>
+    <FormControl variant="standard" fullWidth className={classes.formControl}>
       <InputLabel>{filter?.label}</InputLabel>
       <Select
+        variant="standard"
         fullWidth
         value={value ?? ""}
         onChange={(e) => {
           onChange(e.target.value)
           const item = filter.options.find(v => v.value === e.target.value)
           onChangeDisplay(item?.label)
-        }}
-      >
+        }}>
         <MenuItem value="">
           <em>Any</em>
         </MenuItem>
@@ -164,14 +164,14 @@ function LegacyOptionFilterRenderer({ onChange, onChangeDisplay, value, filter }
   );
 }
 function OptionFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
-  const classes = useStyles();
+  const { classes } = useStyles();
   const onLocalChange = (value) => {
     onChange(value)
     const item = filter.options.find(v => v.value === value)
     onChangeDisplay(item?.label)
   }
   return (
-    <FormControl fullWidth className={classes.formControl}>
+    <FormControl variant="standard" fullWidth className={classes.formControl}>
       <MenuList
         fullWidth
       >
@@ -195,9 +195,9 @@ function OptionFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
 }
 
 function DateRangeFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
-  const classes = useStyles();
+  const { classes } = useStyles();
   return (
-    <FormControl fullWidth className={classes.formControl}>
+    <FormControl variant="standard" fullWidth className={classes.formControl}>
       <InputLabel>{filter?.label}</InputLabel>
       <LitePicker label="Date range"
         inline
@@ -212,16 +212,18 @@ function DateRangeFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
 }
 
 function ChipTabsFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
-  const classes = useStyles();
+  const { classes } = useStyles();
   return (
-    <Tabs indicatorColor="primary"
+    <Tabs
+      indicatorColor="primary"
       variant="scrollable"
+      scrollButtons="auto"
       value={value}
       onChange={(e, val) => {
         onChange(val)
       }}
       classes={{ indicator: classes.chipTabIndicator }}
-      scrollButtons="auto">
+    >
       {filter?.options.map((option, idx) => {
         let icon
         switch (option?.type) {
@@ -245,20 +247,29 @@ function ChipTabsFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
             wrapped
             classes={{ root: classes.chipTabRoot, selected: classes.chipTabSelected }}
             label={
-              <Chip
-                size="small"
-                variant="outlined"
-                color={value === option?.v ? "primary" : "default"}
-                label={icon}
-                className={classes.chip}
-                // onClick={() => onChange(option?.v)}
-                avatar={<Avatar>{option?.count}</Avatar>}
-                classes={{
-                  root: classes.chipRoot,
-                  avatar: classes.chipAvatar,
-                  label: classes.label,
-                }}
-              />
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <Box sx={{ pl: 1, pr: 1 }}>
+                  {icon}
+                </Box>
+                <Divider orientation="vertical" flexItem />
+                <Box sx={{ pl: 1, pr: 1 }}>
+                  {option?.count}
+                </Box>
+              </Box>
+              // <Chip
+              //   size="small"
+              //   variant="outlined"
+              //   color={value === option?.v ? "primary" : "default"}
+              //   label={icon}
+              //   className={classes.chip}
+              //   // onClick={() => onChange(option?.v)}
+              //   avatar={<Avatar>{option?.count}</Avatar>}
+              //   classes={{
+              //     root: classes.chipRoot,
+              //     avatar: classes.chipAvatar,
+              //     label: classes.label,
+              //   }}
+              // />
             }
           />)
       })}
@@ -267,7 +278,7 @@ function ChipTabsFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
 }
 
 function AuocompleteFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
-  const classes = useStyles();
+  const { classes, cx } = useStyles();
   const [internalValues, setInternalValues] = useState(value);
 
   useEffect(() => {
@@ -308,36 +319,41 @@ function AuocompleteFilterRenderer({ onChange, onChangeDisplay, value, filter })
       getOptionLabel={(option) => {
         return option[filter?.labelField] ?? ""
       }}
-      getOptionSelected={(option, t) => {
+      isOptionEqualToValue={(option, t) => {
         return option[filter?.valueField] === t[filter?.valueField]
       }}
-      renderOption={(option, { selected }) => {
+      renderOption={(props, option, { selected }) => {
         if (filter?.multiple) {
           return (
-            <div className={clsx(classes.option, selected && classes.selected)}>
-              <Checkbox color="primary" size="small" checked={selected} />
-              {option[filter?.renderLabel] ?? option[filter?.labelField]}
-            </div>
+            <li {...props}>
+              <div className={cx(classes.option, selected && classes.selected)}>
+                <Checkbox color="primary" size="small" checked={selected} />
+                {option[filter?.renderLabel] ?? option[filter?.labelField]}
+              </div>
+            </li>
           );
         }
-        return <div className={clsx(classes.option, selected && classes.selected)}>
-          {option[filter?.renderLabel] ?? option[filter?.labelField]}
-        </div>
+        return (
+          <li {...props}>
+            <div className={cx(classes.option, selected && classes.selected)}>
+              {option[filter?.renderLabel] ?? option[filter?.labelField]}
+            </div>
+          </li>
+        );
       }}
-      closeIcon={<Backspace fontSize="small" />}
+      clearIcon={<Backspace fontSize="small" />}
       renderInput={(iParams) => (
         <TextField
+          variant="standard"
           {...iParams}
           InputLabelProps={{
             shrink: true,
           }}
           label={filter?.label}
-          placeholder={"type to search"}
-        />
+          placeholder={"type to search"} />
       )}
     />
-
-  )
+  );
 }
 
 export { ChipTabsFilterRenderer, TextFilterRenderer, OptionFilterRenderer, AuocompleteFilterRenderer, DateRangeFilterRenderer };
