@@ -1,8 +1,9 @@
-import { makeStyles, Typography } from "@material-ui/core";
-import { Sort } from "@material-ui/icons";
+import { Typography } from "@mui/material";
+import { makeStyles } from 'tss-react/mui';
+import { Sort } from "@mui/icons-material";
 import React, { useCallback } from "react";
 import { SortableHeaderCell } from "react-data-grid";
-import { useDrag, useDrop } from "react-dnd";
+
 
 function useCombinedRefs(...refs) {
   return useCallback((handle) => {
@@ -16,7 +17,7 @@ function useCombinedRefs(...refs) {
   }, refs);
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles()((theme) => ({
   headerCell: {
     textTransform: "uppercase",
     display: "inline-flex",
@@ -38,33 +39,12 @@ export function DraggableHeaderRenderer({
   sortDirection,
   onSort,
 }) {
-  const classes = useStyles();
-  const [{ isDragging }, drag] = useDrag({
-    item: { key: column.key, type: "COLUMN_DRAG" },
-    collect: (monitor) => ({
-      isDragging: !!monitor.isDragging(),
-    }),
-  });
-
-  const [{ isOver }, drop] = useDrop({
-    accept: "COLUMN_DRAG",
-    drop({ key, type }) {
-      if (type === "COLUMN_DRAG") {
-        onColumnsReorder(key, column.key);
-      }
-    },
-    collect: (monitor) => ({
-      isOver: !!monitor.isOver(),
-      canDrop: !!monitor.canDrop(),
-    }),
-  });
-
+  const { classes } = useStyles();
+  
   return (
     <div
-      ref={useCombinedRefs(drag, drop)}
+    
       style={{
-        opacity: isDragging ? 0.5 : 1,
-        backgroundColor: isOver ? "#ececec" : "inherit",
         cursor: "move",
         display:'inline-block'
       }}

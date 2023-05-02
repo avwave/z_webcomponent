@@ -1,11 +1,11 @@
-import { Button, IconButton, makeStyles, Typography } from '@material-ui/core';
-import { ArrowBackIos, ArrowForwardIos } from '@material-ui/icons';
-import clsx from 'clsx';
+import { Button, IconButton, Typography } from '@mui/material';
+import { makeStyles } from 'tss-react/mui';
+import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material';
 import isEmpty from 'lodash.isempty';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { DocumentViewer } from '../DocumentViewer';
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     navigationContainer: {
       position: 'relative',
@@ -24,9 +24,9 @@ const useStyles = makeStyles((theme) => {
 
     }
   }
-})
+});
 const DocumentGallery = ({ docs = [], initialIndex=0 }) => {
-  const classes = useStyles()
+  const { classes, cx } = useStyles()
   const [currentFileIndex, setCurrentFileIndex] = useState(initialIndex);
   const [loading, setLoading] = useState(true);
   const [fileData, setFileData] = useState();
@@ -56,18 +56,34 @@ const DocumentGallery = ({ docs = [], initialIndex=0 }) => {
   }
 
   return (
-    <div className={clsx(classes.navigationContainer, 'pvx-container')}>
-      <div className={clsx(classes.galleryInfo, 'preview-bar')}>
-        <IconButton color="inherit" onClick={() => { setCurrentFileIndex(currentFileIndex === 0 ? 0 : currentFileIndex - 1) }} ><ArrowBackIos /></IconButton>
+    <div className={cx(classes.navigationContainer, 'pvx-container')}>
+      <div className={cx(classes.galleryInfo, 'preview-bar')}>
+        <IconButton
+          color="inherit"
+          onClick={() => { setCurrentFileIndex(currentFileIndex === 0 ? 0 : currentFileIndex - 1) }}
+          size="large"><ArrowBackIos /></IconButton>
         <Typography style={{ flex: 1 }} variant="caption">{docs[currentFileIndex]?.displayName ?? docs[currentFileIndex]?.name}</Typography>
         <Typography variant="caption">{currentFileIndex + 1} of {docs.length}</Typography>
-        <IconButton color="inherit" onClick={() => { setCurrentFileIndex(currentFileIndex === (docs.length - 1) ? docs.length - 1 : currentFileIndex + 1) }} ><ArrowForwardIos /></IconButton>
+        <IconButton
+          color="inherit"
+          onClick={() => { setCurrentFileIndex(currentFileIndex === (docs.length - 1) ? docs.length - 1 : currentFileIndex + 1) }}
+          size="large"><ArrowForwardIos /></IconButton>
       </div>
       <DocumentViewer loading={loading} downloadName={docs[currentFileIndex]?.name} data={fileData} mimeType={docs[currentFileIndex]?.mimeType} url={docs[currentFileIndex]?.url} />
-      <IconButton onClick={() => { setCurrentFileIndex(currentFileIndex === 0 ? 0 : currentFileIndex - 1) }} className={classes.previous}><ArrowBackIos /></IconButton>
-      <IconButton onClick={() => { setCurrentFileIndex(currentFileIndex === (docs.length - 1) ? docs.length - 1 : currentFileIndex + 1) }} className={classes.next}><ArrowForwardIos /></IconButton>
+      {!loading && (
+      <>
+      <IconButton
+        onClick={() => { setCurrentFileIndex(currentFileIndex === 0 ? 0 : currentFileIndex - 1) }}
+        className={classes.previous}
+        size="large"><ArrowBackIos /></IconButton>
+      <IconButton
+        onClick={() => { setCurrentFileIndex(currentFileIndex === (docs.length - 1) ? docs.length - 1 : currentFileIndex + 1) }}
+        className={classes.next}
+        size="large"><ArrowForwardIos /></IconButton>
+      </>
+      )}
     </div>
-  )
+  );
 }
 
 export { DocumentGallery }

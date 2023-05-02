@@ -4,12 +4,9 @@ import {
   ListItem,
   ListSubheader,
   Paper
-} from "@material-ui/core";
+} from "@mui/material";
 import { isEmpty } from "lodash";
 import React from "react";
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
-import { withReactContext } from "storybook-react-context";
 import DataGridProvider, {
   actions, DataGridContext
 } from "../DataGrid/DataGridContext";
@@ -21,18 +18,8 @@ const DataGridStory = {
   title: "DataGrid/DataGrid2/ExpandingCell",
   parameters: {
     chromatic: { disable: true },
-    storyshots: { disable: true },
+    // storyshots: { disable: true },
   },
-  decorators: [
-    withReactContext(),
-    (Story) => (
-      <DndProvider backend={HTML5Backend}>
-        <DataGridProvider>
-          <Story />
-        </DataGridProvider>
-      </DndProvider>
-    ),
-  ],
 };
 
 export default DataGridStory;

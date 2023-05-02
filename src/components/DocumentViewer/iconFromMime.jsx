@@ -1,5 +1,6 @@
 import { faFileImage , faFileAudio, faFileVideo, faFilePdf, faFileWord, faFileExcel, faFilePowerpoint, faFileAlt, faFileCode, faFileArchive, faFile} from "@fortawesome/free-solid-svg-icons"
-import mime from 'mime-types'
+
+import * as mime from '@alshdavid/mime-types'
 
 function getFontAwesomeIconFromMIME(mimeType) {
   // List of official MIME Types: http://www.iana.org/assignments/media-types/media-types.xhtml

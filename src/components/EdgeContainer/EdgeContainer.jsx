@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import { withTheme } from "@material-ui/core/styles";
+import withTheme from '@mui/styles/withTheme';
+import { useTheme } from "@mui/material";
 
 const Edge = styled.div`
   border-left: ${(props) => `${props.edgeWidth}px`} solid;
@@ -12,7 +13,6 @@ const Edge = styled.div`
 `;
 
 function EdgeContainer({
-  theme,
   variant = "primary",
   edgeWidth = 5,
   edgeColor,
@@ -21,6 +21,7 @@ function EdgeContainer({
   children,
   clear
 }) {
+  const theme = useTheme()
   return (
     <Edge
       background={!clear?(backgroundColor ?? theme.palette[variant].light):'transparent'}

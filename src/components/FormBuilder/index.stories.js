@@ -1,5 +1,5 @@
-import { Avatar, Button, ButtonGroup, IconButton } from "@material-ui/core";
-import { Close, MobileFriendly, PhoneAndroid } from "@material-ui/icons";
+import { Avatar, Button, ButtonGroup, IconButton } from "@mui/material";
+import { Close, MobileFriendly, PhoneAndroid } from "@mui/icons-material";
 import { useFormikContext } from "formik";
 import React, { useState } from "react";
 import * as Yup from "yup";
@@ -84,7 +84,7 @@ Default.args = {
   additionalActions: () => (
     <ButtonGroup variant="text">
       <Button>CloseAction</Button>
-      <IconButton>
+      <IconButton size="large">
         <Close />
       </IconButton>
     </ButtonGroup>
@@ -351,7 +351,8 @@ Dates.args = {
   ...Default.args,
   formLayout: [
     ["date", "time"],
-    ["datetime", "daterange"],
+    ["datetime"],
+    ["daterange"],
   ],
   form: {
     daterange: {

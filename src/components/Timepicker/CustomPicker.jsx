@@ -1,17 +1,18 @@
-import { ClickAwayListener, makeStyles, Paper, Popper } from '@material-ui/core';
+import { ClickAwayListener, Paper, Popper } from '@mui/material';
+import { makeStyles } from 'tss-react/mui';
 import React, { useEffect, useMemo, useState } from 'react';
 import { TimeSelect } from './TimeSelect';
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     overlay:{
       zIndex: theme.zIndex.tooltip + 1
     }
   }
-})
+});
 
 const CustomPicker = ({ value, onChange, open, anchorEl, onClose }) => {
-  const classes = useStyles()
+  const { classes } = useStyles()
   return open ? (
     <ClickAwayListener onClickAway={onClose}>
       <Popper open={open} anchorEl={anchorEl} placement="bottom-start"

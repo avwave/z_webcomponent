@@ -1,8 +1,8 @@
 import { faSignal, faSortAmountDown, faSortAmountUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { alpha, Checkbox, fade, IconButton, lighten, LinearProgress, makeStyles, Tooltip, useTheme } from '@material-ui/core';
-import { UnfoldLess, UnfoldMore } from '@material-ui/icons';
-import clsx from 'clsx';
+import { alpha, Checkbox, IconButton, lighten, LinearProgress, Tooltip, useTheme } from '@mui/material';
+import { makeStyles } from 'tss-react/mui';
+import { UnfoldLess, UnfoldMore } from '@mui/icons-material';
 import { kaReducer, Table } from "ka-table";
 import { deselectAllFilteredRows, deselectRow, hideDetailsRow, selectAllFilteredRows, selectRow, showDetailsRow, updateData } from "ka-table/actionCreators";
 import { DataType, SortDirection, SortingMode } from "ka-table/enums";
@@ -22,7 +22,7 @@ const CONTEXT_MENU_ACTIVATE = 'zwcl-DATAGRID-CONTEXT-ROW'
 
 const TABLE_LOAD_OFFSET = 200;
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     datagrid: {
       height: '100%'
@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => {
       // paddingRight: theme.spacing(1)
     }
   }
-})
+});
 
 const LOAD_MORE_DATA = "LOAD_MORE_DATA";
 const ROW_SELECT = 'ROW_SELECT';
@@ -71,7 +71,7 @@ const tablePropsInit = {
 const SelectionHeader = ({
   dispatch, areAllRowsSelected,
 }) => {
-  const classes = useStyles()
+  const { classes } = useStyles()
   return (
     <Checkbox
       className={classes.checkboxHeader}
@@ -110,9 +110,9 @@ const SelectionCell = ({
 
 const HeaderCell = ({ column, ...props }) => {
   const [onHover, setOnHover] = useState(false);
-  const classes = useStyles()
+  const { classes, cx } = useStyles()
   return (
-    <div className={clsx(classes.headerHover, column.sortDirection && classes.colHighlight)} onMouseEnter={() => setOnHover(true)}
+    <div className={cx(classes.headerHover, column.sortDirection && classes.colHighlight)} onMouseEnter={() => setOnHover(true)}
       onMouseLeave={() => setOnHover(false)}
       {...props}>
       <span>{column.title}</span>
@@ -123,14 +123,16 @@ const HeaderCell = ({ column, ...props }) => {
         <FontAwesomeIcon icon={column.sortDirection === SortDirection.Ascend ? faSortAmountUp : faSortAmountDown} />
       )}
     </div>
-  )
+  );
 }
 
 const RowExpanderButton = ({ dispatch, rowKeyValue, isDetailsRowShown }) => {
   return (
-    <IconButton onClick={() => {
-      dispatch(isDetailsRowShown ? hideDetailsRow(rowKeyValue) : showDetailsRow(rowKeyValue));
-    }}>
+    <IconButton
+      onClick={() => {
+        dispatch(isDetailsRowShown ? hideDetailsRow(rowKeyValue) : showDetailsRow(rowKeyValue));
+      }}
+      size="large">
       {isDetailsRowShown ? <UnfoldLess /> : <UnfoldMore />}
     </IconButton>
   );
@@ -189,7 +191,7 @@ const DataGrid2 = React.forwardRef(({
   id = "grid",
   customColumnDisplay
 }, ref) => {
-  const classes = useStyles()
+  const { classes, cx } = useStyles()
   const theme = useTheme()
 
   const [tableProps, setTableProps] = useState(tablePropsInit);
@@ -266,8 +268,8 @@ const DataGrid2 = React.forwardRef(({
         filterRenderer: getFilterRenderer(col),
         isResizable: col.resizable,
         style: { width: 200, minWidth: 200 },
-        ...col.key === 'select-row' ? { width: 50 } : {},
-        ...col.key === sortColumn ? { sortDirection: sortDirection === 'ASC' ? 'ascend' : 'descend' } : {}
+        ...(col.key === 'select-row' ? { width: 50 } : {}),
+        ...(col.key === sortColumn ? { sortDirection: sortDirection === 'ASC' ? 'ascend' : 'descend' } : {})
       }
       return column
     })
@@ -376,13 +378,15 @@ const DataGrid2 = React.forwardRef(({
         targetColumn?.cellRenderer(cellProps)
       ) : (
         isReactElem ? <span style={targetColumn.cellStyles}>{element}</span> :
-          <Truncate
+          <div>
+            <Truncate
             width={targetColumn?.width}
             lines={targetColumn?.truncateLines ?? 2} ellipsis={<span>(...)</span>}
             style={targetColumn.cellStyles}
           >
             {tooltip}
           </Truncate>
+            </div>
 
       );
       const renderedTooltip =
@@ -419,7 +423,7 @@ const DataGrid2 = React.forwardRef(({
 
   const [scrollYoffset, setScrollYoffset] = useState(0);
   return (
-    <div className={clsx('datagrid', classes.datagrid)} style={{ ...containerStyle }}>
+    <div className={cx('datagrid', classes.datagrid)} style={{ ...containerStyle }}>
       <Datagrid2Toolbar
         useUrlAsState={useUrlAsState}
         hasDateRangeFilter={hasDateRangeFilter}

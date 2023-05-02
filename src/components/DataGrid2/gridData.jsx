@@ -1,8 +1,8 @@
-import faker from "faker";
-import { FormControlLabel, IconButton, Chip, Select } from "@material-ui/core";
+import {faker} from '@faker-js/faker'
+import { FormControlLabel, IconButton, Chip, Select } from "@mui/material";
 import Checkbox from "../../shared/Checkbox";
 import { TriStateSelect } from "../TriStateSelect";
-import { Delete, HotTubSharp, LocalHospital } from "@material-ui/icons";
+import { Delete, HotTubSharp, LocalHospital } from "@mui/icons-material";
 import moment from "moment";
 faker.seed(123);
 
@@ -41,9 +41,23 @@ const columnData = [
     frozen: true,
   },
   {
-    key: "title",
+    key: "labarray",
+    name:'LabArray',
+    filter:{
+      type:'autocomplete',
+      label:'LabArray',
+      options: [{ "id": 6, "label": "Arc Hospital, Lapu Lapu City" }, { "id": 1, "label": "Exact Check" }, { "id": 8, "label": "New World Diagnostics" }, { "id": 4, "label": "Reliance" }, { "id": 7, "label": "Singapore Diagnostics, Cebu" }, { "id": 3, "label": "Singapore Diagnostics, Makati" }, { "id": 5, "label": "SMC" }],
+      labelField:'label',
+      valueField:'id',
+      multiple:true,
+    },
+    frozen: true,
+  },
+  {
+    key: "filter_text",
     name: "Filter: Text",
     sortable: true,
+    resizable: true,
     width: 300,
     filter: {
       label: "Contains",
@@ -56,9 +70,11 @@ const columnData = [
     },
   },
   {
-    key: "col6Type",
+    key: "col_filter_option",
     name: "Filter: Option",
     sortable: true,
+    resizable: true,
+    width: 100,
     filter: {
       type: "autocomplete",
       default: "",
@@ -81,9 +97,10 @@ const columnData = [
     },
   },
   {
-    key: "col9Type",
+    key: "col_filter_daterange",
     name: "Daterange Filter",
     sortable: false,
+    resizable: true,
     filter: {
       type: "dateRange",
       default: null,
@@ -105,8 +122,8 @@ const columnData = [
     },
   },
   {
-    key: "col3Type",
-    name: "Long column name should really be wrappable up until small screens.  ideally should not be this long",
+    key: "col_hidden",
+    name: "Hidden",
     cellStyles: {
       color: "green",
       fontWeight: "bold",
@@ -114,11 +131,11 @@ const columnData = [
     resizable: true,
     hidden: true,
     tooltip: (props) => {
-      return props?.row?.col4Type
+      return props?.row?.col_customheader
     },
   },
   {
-    key: "col4Type",
+    key: "col_customheader",
     name: "Custom Header",
     sortable: false,
     minWidth: 200,
@@ -129,11 +146,11 @@ const columnData = [
       return <div {...props}><LocalHospital style={{ color: '#6A99CA' }} />Custom Header</div>
     },
     cellRenderer: (props) => {
-      return <span>{moment(props.row.col4Type).format('LL LTS')}</span>
+      return <span>{moment(props.row.col_customheader).format('LL LTS')}</span>
     }
   },
   {
-    key: "col5Type",
+    key: "col_truncate",
     name: "Truncate",
     sortable: false,
     align: "flex-start",
@@ -159,29 +176,30 @@ const columnData = [
     key: "button",
     name: "Button",
     sortable: false,
-    // getCellValue: (row) => JSON.stringify(row.col7Type),
+    // getCellValue: (row) => JSON.stringify(row.col_json),
     cellRenderer({row, column}) {
       return (
         <IconButton
           onClick={() => {
-            alert(JSON.stringify({column, row}, null, 2))
-          }}>
+            alert(JSON.stringify(row, null, 2))
+          }}
+          size="large">
           <Delete color="secondary" />
         </IconButton>
-      )
+      );
     }
   },
   {
-    key: "col7Typer",
+    key: "col_jsonr",
     name: "Formatted JSON",
     sortable: false,
-    // getCellValue: (row) => JSON.stringify(row.col7Type),
+    // getCellValue: (row) => JSON.stringify(row.col_json),
     cellRenderer({row}) {
-      return <span>stringified{JSON.stringify(row?.col7Type)}</span>
+      return <span>stringified{JSON.stringify(row?.col_json)}</span>
     }
   },
   {
-    key: "col8Type",
+    key: "col_react",
     name: "React Component",
     sortable: false,
     width: 250,
@@ -203,17 +221,17 @@ const columnData = [
 ];
 
 let rows = [];
-for (let i = 0; i < 10; i++) {
+for (let i = 0; i < 30; i++) {
   rows.push({
-    id: i,
-    title: faker.name.findName(),
-    col3Type: faker.random.number().toString(),
-    col4Type: faker.date.recent().toISOString(),
-    col5Type: faker.lorem.paragraphs(2),
-    col6Type: faker.datatype.boolean() ? "Tip" : "Top",
-    col7Type: { obj: 1 },
-    col8Type: <h1>REACTNODE</h1>,
-    col9Type: faker.datatype.boolean() ? faker.random.word() : null,
+    id: `id-${i}`,
+    filter_text: faker.name.fullName(),
+    col_hidden: faker.datatype.number().toString(),
+    col_customheader: faker.date.recent().toISOString(),
+    col_truncate: faker.lorem.paragraphs(2),
+    col_filter_option: faker.datatype.boolean() ? "Tip" : "Top",
+    col_json: { obj: 1 },
+    col_react: <>{[...Array(faker.datatype.number({min:1, max:15}))]?.map(d=><h1>REACTNODE</h1>)}</>,
+    col_filter_daterange: faker.datatype.boolean() ? faker.random.word() : null,
     tests: [...Array(faker.datatype.number({
       min:1,
       max:5

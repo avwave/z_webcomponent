@@ -1,11 +1,12 @@
-import { Button, IconButton, makeStyles } from '@material-ui/core';
-import { LocalizationProvider, MobileDatePicker } from '@material-ui/pickers';
-import MomentUtils from '@material-ui/pickers/adapter/moment';
-import clsx from 'clsx';
+import { Button, IconButton, TextField, useTheme } from '@mui/material';
+import { makeStyles } from 'tss-react/mui';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
+import { LocalizationProvider, MobileDatePicker, PickersDay } from '@mui/x-date-pickers';
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 
-const useStyles = makeStyles((theme) => {
+
+const useStyles = makeStyles()((theme) => {
   return {
     inputRoot: {
       display: 'flex',
@@ -73,7 +74,7 @@ const useStyles = makeStyles((theme) => {
       // marginLeft: 15
     }
   }
-})
+});
 const WeekPicker = ({
   startAccessor = "start_date",
   endAccessor = "end_date",
@@ -84,16 +85,18 @@ const WeekPicker = ({
   asMonthPicker = false,
   onChange = () => { },
   ...props }) => {
-  const classes = useStyles()
+  const { classes, cx } = useStyles()
   const [selectedDate, setSelectedDate] = useState();
 
   useEffect(() => {
     setSelectedDate(moment(value));
   }, [value])
-
-  const renderWrappedWeekDay = (date, selectedDate, dayInCurrentMonth) => {
-
-    let selectedDateClone = selectedDate?.[0].clone();
+  
+  const theme = useTheme()
+  
+  const renderWrappedWeekDay = (date, selectedDate, pickerProps) => {
+    
+    let selectedDateClone = selectedDate?.[0]
 
     const start = selectedDateClone.startOf("week").toDate();
     const end = selectedDateClone.endOf("week").toDate();
@@ -103,37 +106,67 @@ const WeekPicker = ({
     const isLastDay = date.isSame(end, "day");
 
     const isFirstDayOfWeek = date.weekday() === 1;
-    
-    const wrapperClassName = clsx({
-      [classes.highlight]: dayIsBetween,
-      [classes.firstHighlight]: isFirstDay,
-      [classes.endHighlight]: isLastDay,
-      [classes.firstDayOfWeek]: isFirstDayOfWeek
+
+    const wrapperClassName = cx({
+      
+      [classes.firstHighlight]: isFirstDay && dayIsBetween,
+      [classes.endHighlight]: isLastDay && dayIsBetween,
+      [classes.firstDayOfWeek]: isFirstDayOfWeek && dayIsBetween
     });
 
-    const dayClassName = clsx(classes.day, {
-      [classes.nonCurrentMonthDay]: !dayInCurrentMonth,
-      [classes.highlightNonCurrentMonthDay]: !dayInCurrentMonth && dayIsBetween
-    });
+    const wrapperStyle = {
+      width: 40,
+      margin:0,
+      ...(dayIsBetween && {
+        borderRadius: 0,
+        backgroundColor: theme.palette.primary.main,
+        color: theme.palette.common.white,
+        '&:hover, &:focus': {
+          backgroundColor: theme.palette.primary.dark,
+        },
+      }),
+      ...(isFirstDay && {
+        borderTopLeftRadius: '50%',
+        borderBottomLeftRadius: '50%',
+      }),
+      ...(isLastDay && {
+        borderTopRightRadius: '50%',
+        borderBottomRightRadius: '50%',
+      }),
+    }
+    // const dayClassName = cx(classes.day, {
+    //   [classes.nonCurrentMonthDay]: !dayInCurrentMonth,
+    //   [classes.highlightNonCurrentMonthDay]: !dayInCurrentMonth && dayIsBetween
+    // });
 
-    
+
     return (
-      <div className={classes.dayWrapper}>
-        <div className={wrapperClassName}>
-          <IconButton className={dayClassName} onClick={()=> {
-            dayInCurrentMonth.onDaySelect(dayInCurrentMonth.day)
-          }}>
-            <span>{date.format("DD")} </span>
-          </IconButton>
-        </div>
-      </div>
-    );
+      <PickersDay
+      day={date}
+      today
+      style={wrapperStyle}
+      {...pickerProps}
+      />
+    )
+    // return (
+    //   <div className={classes.dayWrapper}>
+    //     <div className={wrapperClassName}>
+    //       <IconButton
+    //         className={dayClassName}
+    //         onClick={() => {
+    //           dayInCurrentMonth.onDaySelect(dayInCurrentMonth.day)
+    //         }}
+    //         size="large">
+    //         <span>{date.format("DD")} </span>
+    //       </IconButton>
+    //     </div>
+    //   </div>
+    // );
   };
-
 
   return (
     <MobileDatePicker
-      disableCloseOnSelect={false}
+      closeOnSelect
       disableMaskedInput
       showDaysOutsideCurrentMonth
       showToolbar={false}
@@ -165,13 +198,17 @@ const WeekPicker = ({
           });
         }
       }}
-      views={asMonthPicker ? ['year', 'month'] : ['year', 'month', 'date']}
+      views={asMonthPicker ? ['year', 'month'] : ['year', 'month', 'day']}
       value={selectedDate?.toDate()}
       onError={(reason, value) => {
         console.log('wrapper.jsx (204) # reason, value', reason, value);
       }}
-      renderDay={renderWrappedWeekDay}
+
+      components={{
+        ActionBar: () => null,
+      }}
       {...props}
+      renderDay={renderWrappedWeekDay}
     />
   )
 }
@@ -180,7 +217,7 @@ const WrapPicker = props => {
   //NOTE: Use this pattern to set the filters beforehand to prevent unecessary rerendering
   // const [state, dispatch] = useReducer(dataGridReducer, { ...initState, filterColumn: { partner: '', statuses: '' } });
   return (
-    <LocalizationProvider dateAdapter={MomentUtils}>
+    <LocalizationProvider dateAdapter={AdapterMoment}>
       <WeekPicker {...props} />
     </LocalizationProvider>
   );

@@ -1,4 +1,4 @@
-import { Button } from "@material-ui/core";
+import { Button } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
 import ReactJson from "react-json-view";
 import { useBranch } from "./BranchProvider";
