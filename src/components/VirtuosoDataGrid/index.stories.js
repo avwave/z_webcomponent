@@ -601,6 +601,16 @@ const InfiniteLoaderStory = ({ ...args }) => {
 
   const [allRows, setAllRows] = useState([]);
 
+  const waitLoading = React.useCallback(
+    (content, delay) => {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          resolve(content);
+        }, delay);
+      })
+    },
+    [],
+  );
 
   const simulateLoading = React.useCallback(
     async () => {
@@ -623,6 +633,7 @@ const InfiniteLoaderStory = ({ ...args }) => {
 
       const rows = [...currentRows, ...moreRows]
 
+      await waitLoading(rows, 2000)
       setAllRows(rows)
 
       dispatch({
@@ -633,7 +644,7 @@ const InfiniteLoaderStory = ({ ...args }) => {
         type: actions.SET_DONE_LOADING,
       });
     },
-    [allRows, args.rows, dispatch],
+    [allRows, args.rows, dispatch, waitLoading],
   );
 
 
@@ -649,6 +660,7 @@ const InfiniteLoaderStory = ({ ...args }) => {
   return (
     <Grid container>
       <Grid item xs={12}>
+        {state?.loading ? 'loading...':'loaded'}
         <Paper style={{ height: '70vh' }}>
           <DataGrid2 {...args}
           totalCount={Number.MAX_VALUE}

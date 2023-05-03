@@ -375,6 +375,7 @@ const VirtuosoDataGrid = ({
     }, [tableInstanceRef?.current]
   );
 
+
   if (defaultHideColumns === null && defaultColumnOrder === null)
     return <LinearProgress />
 
@@ -404,7 +405,6 @@ const VirtuosoDataGrid = ({
         gridId={id}
         customColumnDisplay={customColumnDisplay}
       />
-      {dataGridState?.loading && <LinearProgress />}
       <MaterialReactTable
         className={classes.table}
         tableInstanceRef={tableInstanceRef}

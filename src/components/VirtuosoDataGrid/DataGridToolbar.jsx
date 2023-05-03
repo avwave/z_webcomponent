@@ -1,6 +1,7 @@
 import {
   Box,
   debounce,
+  LinearProgress,
   Toolbar
 } from "@mui/material";
 import { MRT_FullScreenToggleButton, MRT_GlobalFilterTextField, MRT_ShowHideColumnsButton, MRT_ToggleDensePaddingButton, MRT_ToggleFiltersButton } from "material-react-table";
@@ -202,6 +203,16 @@ const DataGridToolbar = ({
     }, 500),
     [onFilterChange, setFilterValues],
   );
+  const loadingBar = useMemo(
+    () => {
+      return <LinearProgress 
+      variant={dataGridState?.loading ? 'query' : 'determinate'}
+      value={0}
+      color={dataGridState?.loading ? 'primary' : 'inherit'}
+      />
+    }, [dataGridState?.loading]
+  );
+
   return (
     <div className={classes.actionBar}>
       
@@ -231,6 +242,7 @@ const DataGridToolbar = ({
           {hasChipFilter && (
             <Toolbar disableGutters variant="dense" className={classes.toolbar}>{renderChipFilters}</Toolbar>
           )}
+          {loadingBar}
         </>
 
     </div>

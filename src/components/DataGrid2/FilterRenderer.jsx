@@ -66,16 +66,17 @@ const useStyles = makeStyles()((theme) => ({
   },
   chipTabRoot: {
     padding: theme.spacing(0.5),
+    borderRight: `1px solid ${theme.palette.action.focus}`,
+    
   },
   chipTabIndicator: {
     display: 'flex',
     justifyContent: 'center',
-    backgroundColor: 'transparent',
   },
   chipTabSelected: {
-    border: `1px solid ${theme.palette.action.focus}`,
-
+    // border: `1px solid ${theme.palette.action.focus}`,
     borderRadius: theme.shape.borderRadius,
+    backgroundColor: theme.palette.action.selected,
   },
   chip: {
 
@@ -251,10 +252,11 @@ function ChipTabsFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
                 <Box sx={{ pl: 1, pr: 1 }}>
                   {icon}
                 </Box>
-                <Divider orientation="vertical" flexItem />
-                <Box sx={{ pl: 1, pr: 1 }}>
-                  {option?.count}
-                </Box>
+                
+                <Chip sx={{ ml: .5, mr: .5 }}
+                  label={option?.count}
+                  size="small"
+                />
               </Box>
               // <Chip
               //   size="small"
