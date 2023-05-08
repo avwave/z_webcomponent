@@ -1,0 +1,65 @@
+{/* Usage.mdx */}
+
+import { Source, Story, Meta, Canvas } from "@storybook/addon-docs";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import pkg from '../package.json';
+
+<Meta title="Usage" />
+
+# Getting Started
+
+### Local authentication tokens
+in order to use the zennya web component library, we need to set up the `NPM_TOKEN` environment variable
+
+In windows, you can refer to this document to add your environment variables
+https://docs.oracle.com/en/database/oracle/machine-learning/oml4r/1.5.1/oread/creating-and-modifying-environment-variables-on-windows.html
+
+In osx and linux edit your `~/.bashrc` file
+
+In both cases set `NPM_TOKEN` = `68a667f0-7f63-452b-8be9-29191abb69f6`
+
+i.e: `export NPM_TOKEN=68a667f0-7f63-452b-8be9-29191abb69f6`
+
+
+* Create file `.npmrc` in root directory
+```
+//registry.npmjs.org/:_authToken=${NPM_TOKEN}
+```
+
+* install web component library
+```
+yarn add @zennya\web-component-library
+```
+* Note:
+  - Current library version is <b>{pkg.version}</b>
+
+* install dependencies
+```
+yarn add -D babel-plugin-import@1.13.6 @babel/plugin-proposal-class-properties@7.16.7 @babel/plugin-transform-react-jsx-source@7.16.7 react-app-rewired customize-cra 
+
+yarn add @mui/icons-material @mui/lab @mui/material @mui/styles @mui/x-date-pickers react-pdf react-dnd react-dnd-html5-backend tss-react yup
+
+```
+
+### Boilerplate
+* `index.js`
+Add after imports
+
+```
+import moment from 'moment-timezone'
+import { pdfjs } from 'react-pdf';
+moment.tz.setDefault('+0800')
+pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
+```
+
+### Component docs
+* [Datagrid](?path=/docs/datagrid-datagridv3-usage--docs)
+* [Custom hooks](?path=/docs/hooks-usage--docs)
+* [Date Range Time Picker](?path=/docs/datetimerangepicker--docs)
+
+* [Form Builder (Docs in progress)](?path=/docs/form-formbuilder--docs) 
+* [Agenda/Calendar (Docs in progress)](?path=/docs/agenda-agenda--docs)
+* [Zennya Log Display (Docs in progress)](/?path=/docs/logger--docs)
+* [Standalone/Single Document Viewer (Docs in progress)](?path=/docs/documentviewer--docs)
+* [Gallery Type Viewer (Docs in progress)](?path=/docs/documentgallery--docs)
+* [Browser/Device Fingerprinting](?path=/docs/deviceinfo--docs)
