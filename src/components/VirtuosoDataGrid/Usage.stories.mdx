@@ -10,10 +10,9 @@ import DataGridProvider, {
   initState,
 } from "../DataGrid/DataGridContext";
 
-<Meta title="Datagrid/Datagrid2/Usage(deprecated)" />
+<Meta title="Datagrid/DatagridV3/Usage" />
 
-# Datagrid2 Component
-!! deprecated, use Datagrid3 instead
+# Datagrid Component
 
 Infinite scroll/pagination, sortable, filterable Data grid component
 
@@ -32,33 +31,14 @@ Infinite scroll/pagination, sortable, filterable Data grid component
 - [Toolbar Accessories](#toolbar-accessories)
 - [URLParams as State](#urlparams-as-state)
 
-
 ### Setup
-
-- Add DndProvider to root index.js of project
-
-```jsx
-import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
-...
-ReactDOM.render(
-  <DndProvider backend={HTML5Backend}>
-    <App />
-  </DndProvider>,
-  document.getElementById("root")
-);
-```
 
 ### Usage
 
-Boilerplate code to get started with Datagrid2
+Boilerplate code to get started with Datagrid
 
 ```jsx
-import DataGridProvider, {
-  actions as gridActions,
-  DataGridContext,
-} from "@zennya/web-component-library/src/components/DataGrid/DataGridContext";
-import { DataGrid2 } from "@zennya/web-component-library/src/components/DataGrid2/DataGrid2";
+import { DataGrid2, DataGridContext, DataGridProvider, gridActions, useStateRef } from '@zennya/web-component-library/src';
 
 const ComponentWithDataGrid = (props) => {
   ...
@@ -117,8 +97,22 @@ const columnSource = [
 ];
 ```
 
-- `key` mapped to the field in the row object
-- `name` is the displayed name of the field
+Column Props
+
+| Parameters    | Type     | Default   | Description                                                                                                                                           |
+| ------------- | -------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| key           | string   | undefined | REQUIRED: unique identifier for column mapped to the field in the row object |
+| name          | string   | undefined | REQUIRED: displayed name of the field                                                                                                                 |
+| cellRenderer  | function | undefined | custom cell renderer function. see [Custom Cell Renderer](#custom-cell-renderer) for more details                                                     |
+| sortable      | boolean  | false     | enable/disable column header sort action. does not do clientside sorting instead triggers the `onSort(column, direction)` prop in `Datagrid`          |
+| hidden        | boolean  | false     | hide column by default. can be viewed again using the column selector in toolbar                                                                      |
+| frozen        | boolean  | true      | `true` if column is pinned to the right at start. columns can be manually pinned from the column selector/column actions button on a per column basis |
+| truncateLines | number   | 2         | number of lines to be displayed if column doesnt have a `cellRenderer` before truncated by ellipses                                                   |
+| noTooltip     | boolean  | false     | disable standard tooltip on cells                                                                                                                     |
+| tooltip       | function | undefined | custom tooltip function. see [Custom Tooltip](#custom-tooltip) for more details                                                                       |
+| width         | number   | undefined | width of column in pixels. if not specified, column will be auto sized/pinned to 150px                                                                |
+
+* note: if not using `cellRenderer` or `tooltip`, make sure the data of the row is strictly javascript primitive to prevent rendering errors
 
 Next, we will need to `dispatch` the contents of the row and columns to the Datagrid.
 
@@ -174,12 +168,19 @@ React.useEffect(() => {
 
 ### Pagination
 
-Datagrid2 uses infinite scrolling in lieu of pagination (you can still use pagination, but as an external component). To enable infinite scrolling, you'll need to pass in a callback function `onLoadMore` prop to the datagrid. This function will be called when the user scrolls to near the bottom of the datagrid. A quick example
+Datagrid2 uses infinite scrolling in lieu of pagination (you can still use pagination, but as an external component). To enable infinite scrolling, you'll need to pass in a callback function `onLoadMore` prop to the datagrid and the prop `totalCount`. This function will be called when the user scrolls to near the bottom of the datagrid. And `totalCount` specifies how many rows there are in total and serves as a stopper for the infinite scroll when the loaded data count reaches `totalCount`.
+
+For infinite/indeterminate count, set `totalCount` to `Number.MAX_SAFE_INTEGER`, but make sure to have failsafes in place to prevent the datagrid from loading when the end of the datastream is reached (usually we check the length of the list returned. if it is zerolength, it means the end of datascream is reached).
+
+````jsx
 
 <Canvas>
   <Story id="datagrid-datagrid2--infinite-loader" />
   <Source id="datagrid-datagrid2--infinite-loader" type="code" />
 </Canvas>
+
+
+the prop `manualLoadMore`  can be set to `true` to disable the automatic loading of more rows when the user scrolls to the bottom of the datagrid. The common use case is when there is a network failure and you want to retry loading more rows. without triggering the infiniteloading script
 
 ### Sorting
 
@@ -193,7 +194,7 @@ const columnSource = [
     sortable: true,
   },
 ];
-```
+````
 
 In addition add the `onSort` prop to the datagrid. `onSort` has two parameters `column` and `direction`.
 
@@ -297,7 +298,7 @@ Component example:
   <Source id="datagrid-datagrid2--server-filter" type="code" />
 </Canvas>
 
-#### Cell Rendering 
+#### Cell Rendering
 
 ### Basic Cell Renderer
 
@@ -355,11 +356,10 @@ const columnSource = [
 
 ### URLParams as State
 
-| Props  | Defaults   |  Options  | Description |
-| - | - | - | - |
-| id  | "grid"     | string     | id for the datagrid, used for url params |
-| useUrlAsState | false | boolean | if true, will use url params as the filter state, any changes to the grid state will propagate to the url params and vice versa |
-
+| Props         | Defaults | Options | Description                                                                                                                     |
+| ------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| id            | "grid"   | string  | id for the datagrid, used for url params                                                                                        |
+| useUrlAsState | false    | boolean | if true, will use url params as the filter state, any changes to the grid state will propagate to the url params and vice versa |
 
 ### Toolbar Accessories
 
@@ -382,6 +382,4 @@ You can place additional components on the left, center and right sides of the m
 >
 ```
 
-
-<Story id="datagrid-datagrid2--toolbar-accessory"/>
-
+<Story id="datagrid-datagrid2--toolbar-accessory" />
