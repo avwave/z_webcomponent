@@ -145,6 +145,7 @@ const VirtuosoDataGrid = ({
               }
             },
             Cell: ({ row, column, renderedCellValue, ...rest }) => {
+      
               let finalizedCell = <></>
               if (col?.cellRenderer) {
                 finalizedCell = <div>{col?.cellRenderer({ row: row?.original })}</div>
@@ -489,7 +490,6 @@ const VirtuosoDataGrid = ({
         }}
         muiSearchTextFieldProps={{
           placeholder: searchPlaceholder ?? 'Search',
-
           variant: 'outlined',
           size: 'small',
         }}

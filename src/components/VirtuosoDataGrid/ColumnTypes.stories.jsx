@@ -1,6 +1,7 @@
 import {
   Chip,
-  Paper
+  Paper,
+  Typography
 } from "@mui/material";
 import React from "react";
 import {
@@ -8,6 +9,7 @@ import {
   actions
 } from "../DataGrid/DataGridContext";
 import { VirtuosoDataGrid as DataGrid2 } from "./index";
+import ReactJson from "react-json-view";
 
 const DataGridStory = {
   component: DataGrid2,
@@ -63,7 +65,17 @@ Default.args = {
     {
       key: "age",
       name: "Age",
+      cellRenderer({ row }) {
+        return row.age
+      }
     },
+    {
+      key: 'unique',
+      name: "name+age",
+      cellRenderer({row}) {
+        return <Typography>{row.name} - {row.age}</Typography>
+      }
+    }
   ]
 }
 
@@ -90,3 +102,14 @@ CellRenderer.args = {
   ]
 }
 
+export const NullCell = DefaultStory.bind({});
+NullCell.args = {
+  ...Default.args,
+  rows: [
+    {
+      id: 1,
+      name: null,
+      age: undefined
+    }
+  ]
+}
