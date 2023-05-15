@@ -80,7 +80,7 @@ function Criteria (props) {
   }
 
   return (
-    <div className={classes.root}>
+    <>
       {
         isMobileViewport === true ? (
           <CriteriaMobile {...criteriaProps} />
@@ -88,7 +88,7 @@ function Criteria (props) {
           <CriteriaDesktop {...criteriaProps} />
         )
       }
-    </div>
+    </>
   )
 }
 
