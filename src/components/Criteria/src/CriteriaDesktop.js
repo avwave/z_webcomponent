@@ -15,11 +15,13 @@ const useStyles = makeStyles()(theme => ({
     flexDirection: 'row',
     flexGrow:0,
     flexShrink:0,
+    minWidth: '100px',
   },
   criterias: {
     display: 'flex',
     overflowY: 'scroll',
     paddingBottom: '8px',
+    
   
     '&::-webkit-scrollbar': {
       height: '7px',

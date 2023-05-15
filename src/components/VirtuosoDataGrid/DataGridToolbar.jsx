@@ -1,4 +1,5 @@
 import {
+  AppBar,
   Box,
   debounce,
   LinearProgress,
@@ -97,6 +98,7 @@ const useStyles = makeStyles()(theme => ({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    width: '100%'
   },
   root: {
     width: "100%",
@@ -205,47 +207,49 @@ const DataGridToolbar = ({
   );
   const loadingBar = useMemo(
     () => {
-      return <LinearProgress 
-      variant={dataGridState?.loading ? 'query' : 'determinate'}
-      value={0}
-      color={dataGridState?.loading ? 'primary' : 'inherit'}
+      return <LinearProgress
+        variant={dataGridState?.loading ? 'query' : 'determinate'}
+        value={0}
+        color={dataGridState?.loading ? 'primary' : 'inherit'}
       />
     }, [dataGridState?.loading]
   );
 
   return (
-    <div className={classes.actionBar}>
-      
-        <>
-          <Toolbar disableGutters variant="dense" className={classes.toolbar}>
-            <div className={classes.filterBar}>
-              {filterable && (
-              <CriteriaEditor
-                hasDateRangeFilter={hasDateRangeFilter}
-                columns={columns}
-                onCriteriaChange={(values) => {
-                  mapCriteriaToFilter(values)
-                }}
-                filters={filterValues}
-              />
-              )}
-            </div>
-            {tableInstanceRef.current && (
-              <Box sx={{ paddingLeft: 2, flexShrink: 0, display: 'flex', flexDirection: 'row' }}>
-                <MRT_GlobalFilterTextField table={tableInstanceRef.current} />
-                {/* <MRT_ToggleFiltersButton table={tableInstanceRef.current} /> */}
-                <MRT_ShowHideColumnsButton table={tableInstanceRef.current} />
-                {/* <MRT_FullScreenToggleButton table={tableInstanceRef.current} /> */}
-              </Box>
-            )}
-          </Toolbar>
-          {hasChipFilter && (
-            <Toolbar disableGutters variant="dense" className={classes.toolbar}>{renderChipFilters}</Toolbar>
+    <AppBar position="static" color="transparent" elevation={0}>
+      <Toolbar disableGutters
+      sx={{
+        alignItems: 'flex-start',
+      }} >
+        <Box
+          sx={{ flexGrow: 1, alignSelf: 'flex-start', overflow: 'auto' }}
+        >
+          {filterable && (
+            <CriteriaEditor
+              hasDateRangeFilter={hasDateRangeFilter}
+              columns={columns}
+              onCriteriaChange={(values) => {
+                mapCriteriaToFilter(values)
+              }}
+              filters={filterValues}
+            />
           )}
-          {loadingBar}
-        </>
+        </Box>
+        {tableInstanceRef.current && (
+          <Box sx={{ paddingLeft: 2, minWidth: '250px', width: '250px', display: 'flex', flexDirection: 'row' }}>
+            <MRT_GlobalFilterTextField table={tableInstanceRef.current} />
+            {/* <MRT_ToggleFiltersButton table={tableInstanceRef.current} /> */}
+            <MRT_ShowHideColumnsButton table={tableInstanceRef.current} />
+            {/* <MRT_FullScreenToggleButton table={tableInstanceRef.current} /> */}
+          </Box>
+        )}
+      </Toolbar>
+      {hasChipFilter && (
+        <Toolbar disableGutters variant="dense" className={classes.toolbar}>{renderChipFilters}</Toolbar>
+      )}
+      {loadingBar}
 
-    </div>
+    </AppBar>
 
   );
 }
