@@ -1,5 +1,6 @@
 import moment from "moment"
 import voca from "voca"
+import { isEmpty } from "lodash"
 
 const preposition = "at"
 moment.locale("en", {
@@ -95,7 +96,7 @@ export function formatRoleNames(role) {
 
 export function formatRoles(roles) {
   const roleFmt = roles?.filter(f => f !== 'ROLE_WHITE_LABEL_STAFF')?.map((x) => formatRoleNames(x)).join(", ")
-  if (voca.isEmpty(roleFmt)) {
+  if (isEmpty(roleFmt)) {
     return "-"
   }
   return roleFmt
