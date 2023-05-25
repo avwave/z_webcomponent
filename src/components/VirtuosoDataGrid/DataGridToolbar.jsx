@@ -236,7 +236,7 @@ const DataGridToolbar = ({
           )}
         </Box>
         {tableInstanceRef.current && (
-          <Box sx={{ paddingLeft: 2, minWidth: '250px', width: '250px', display: 'flex', flexDirection: 'row', justifyContent:'flex-end' }}>
+          <Box sx={{ paddingLeft: 2, minWidth: '250px', width: '250px', display: 'flex', flexDirection: 'row' }}>
             <MRT_GlobalFilterTextField table={tableInstanceRef.current} />
             {/* <MRT_ToggleFiltersButton table={tableInstanceRef.current} /> */}
             <MRT_ShowHideColumnsButton table={tableInstanceRef.current} />
