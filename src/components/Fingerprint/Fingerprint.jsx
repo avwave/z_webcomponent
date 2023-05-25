@@ -12,13 +12,13 @@ const useStyles = makeStyles()((theme) => {
 let fpPromise = null
 
 const registerFingerprint = async () => {
-  fpPromise = FingerprintJS.load({
-    monitoring: false,
-  })
   const fp = await localStorage.getItem('fingerprint')
   if (isEmpty(fp)) {
     await localStorage.setItem('fingerprint', uuidv4())
   }
+  fpPromise = FingerprintJS.load({
+    monitoring: false,
+  })
 }
 
 const useFingerprint = async () => {
@@ -40,6 +40,10 @@ const Fingerprint = ({ guid=false, onFingerprint = () => { } }) => {
   const { classes } = useStyles()
 
   useEffect(() => {
+    if (guid) {
+      onFingerprint(localStorage.getItem('fingerprint'))
+      return
+    }
     if (!fpPromise) throw new Error('FingerprintJS not loaded, add registerFingerprint() closest to root as possible (possibly index.js)')
     const fetchFP = async () => {
       const fp = await fpPromise
