@@ -192,11 +192,10 @@ const VirtuosoDataGrid = ({
 
   const doLoadMore = useCallback(
     async () => {
-      if (dataGridState?.loading) {
-        if (isEmpty(dataGridState?.rows)) {
-          console.log('grid currently loading')
-          return
-        }
+      
+      if (isEmpty(dataGridState?.rows)) {
+        console.log('grid currently loading')
+        return
       }
       setLoadMoreLoading(true)
       await onLoadMore()
