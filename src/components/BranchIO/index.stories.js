@@ -109,3 +109,11 @@ export const CustomDeeplinkPayload = () => {
 
   return <ReactJson src={{deepLink}} />;
 }
+
+export const JourneyVisibility = () => {
+  const {isJourneyVisible } = useBranch({
+    apiKey: BRANCH_API_KEY,
+  })
+
+  return <ReactJson src={{isJourneyVisible}} />;
+}

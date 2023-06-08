@@ -1,6 +1,6 @@
-import { makeStyles } from 'tss-react/mui';
 import branchSdk from 'branch-sdk';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { makeStyles } from 'tss-react/mui';
 
 const useStyles = makeStyles()((theme) => {
   return {}
@@ -13,6 +13,8 @@ const BranchProvider = ({ apiKey, children, ...props }) => {
   const [branchData, setBranchData] = useState(undefined);
   const [branchStatus, setBranchStatus] = useState(undefined);
   const [branchIdentity, _setBranchIdentity] = useState(undefined);
+
+  const [isJourneyVisible, setJourneyVisible] = useState(false);
 
   const branchInitCallback = useCallback(
     (evt, data) => {
@@ -86,8 +88,8 @@ const BranchProvider = ({ apiKey, children, ...props }) => {
         console.error(error);
         return false
       }
-      
-    } 
+
+    }
   }, [fetchBranchIdentity]);
 
   const getBranchIdentity = useMemo(() => {
@@ -103,7 +105,7 @@ const BranchProvider = ({ apiKey, children, ...props }) => {
   const branchLogout = useCallback(
     () => {
       branchSdk.logout(
-        (err)=>{
+        (err) => {
           if (err) {
             console.error(err);
             return;
@@ -116,8 +118,8 @@ const BranchProvider = ({ apiKey, children, ...props }) => {
 
   const [deepLink, setDeepLink] = useState(undefined);
   const generateDeeplink = useCallback(
-    (payload={}) => {
-      const {campaign='default campaign', channel='web', feature='', stage='', tags=[], data={}} = payload
+    (payload = {}) => {
+      const { campaign = 'default campaign', channel = 'web', feature = '', stage = '', tags = [], data = {} } = payload
       branchSdk.link({
         campaign,
         channel,
@@ -137,6 +139,18 @@ const BranchProvider = ({ apiKey, children, ...props }) => {
   useEffect(() => {
     branchSdk.init(apiKey, branchOptions, branchInitCallback);
     console.log('BranchProvider.jsx (22)', 'init branch')
+    branchSdk.addListener('didShowJourney', () => {
+      setJourneyVisible(true);
+    });
+    branchSdk.addListener('didCloseJourney', () => {
+      setJourneyVisible(false);
+    });
+
+    return () => {
+      branchSdk.removeListener('didShowJourney');
+      branchSdk.removeListener('didCloseJourney');
+    }
+
   }, [apiKey]);
 
   if (!apiKey) {
@@ -144,6 +158,7 @@ const BranchProvider = ({ apiKey, children, ...props }) => {
   }
 
   return {
+    isJourneyVisible,
     branchData,
     branchLogout,
     closeJourney,
