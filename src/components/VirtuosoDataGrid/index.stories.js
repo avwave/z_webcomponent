@@ -376,6 +376,13 @@ ServerFilter.args = {
   showSelector: true,
   filterable: true,
 };
+
+export const AlternateCriteriaEditor = ServerFilterStory.bind({});
+AlternateCriteriaEditor.args = {
+  ...ServerFilter.args,
+  alternateToolbarFilter: true,
+}
+
 const ServerSortStory = ({ ...args }) => {
   const [state, dispatch] = React.useContext(DataGridContext);
 

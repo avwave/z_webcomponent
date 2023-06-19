@@ -29,6 +29,7 @@ const useStyles = makeStyles()(theme => ({
   }
 }));
 const VirtuosoDataGrid = ({
+  alternateToolbarFilter = false,
   showSelector,
   filterable,
   style,
@@ -384,6 +385,7 @@ const VirtuosoDataGrid = ({
     <div className={classes.rootContainer}>
       {renderAccessories}
       <DataGridToolbar
+        alternateToolbarFilter={alternateToolbarFilter}
         tableInstanceRef={tableInstanceRef}
         useUrlAsState={useUrlAsState}
         hasDateRangeFilter={hasDateRangeFilter}
