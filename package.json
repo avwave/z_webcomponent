@@ -166,7 +166,7 @@
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@bitbucket.org/zennya/web-component-library.git"
+    "url": "git+ssh://git@bitbucket.org/zennya/web-component-library.git?sha=f4c76a6023c8f317fb0c329937c88c9981a5e09b"
   },
   "author": "",
   "license": "ISC",
