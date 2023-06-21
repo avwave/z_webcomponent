@@ -433,6 +433,11 @@ const VirtuosoDataGrid = ({
         enableMultiSort={false}
         data={data}
         columns={columns}
+        renderColumnActionsMenuItems={({ internalColumnMenuItems, ...menuProps }) => {
+          return [
+            ...internalColumnMenuItems,
+          ];
+        }}
         onRowSelectionChange={(sRows) => {
           setSelectedRows(sRows)
         }}

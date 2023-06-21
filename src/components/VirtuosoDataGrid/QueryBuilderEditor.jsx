@@ -21,6 +21,7 @@ import {
 } from '@mui/material';
 import "./QueryBuildeEditor.scss"
 import { isEmpty } from 'lodash';
+import { ControlElements, QueryBuilderEditorField } from './QueryBuilderEditorFields';
 
 const muiComponents = {
   Button,
@@ -38,36 +39,6 @@ const muiComponents = {
   TextareaAutosize,
 };
 
-const CustomValueEditor = (props) => {
-  if (props.type === 'text') {
-    return <OutlinedInput
-      {...props}
-      onChange={(e) => props.handleOnChange(e.target.value)}
-      size="small"
-    />;
-  }
-  return <MaterialValueEditor {...props}
-    variant="outlined"
-    size="small"
-  />;
-};
-const OutlinedSelectorElement = props => {
-  return <MaterialValueSelector {...props} variant="outlined" size="small" />
-}
-
-const NullOperatorSelector = props => {
-  return <></>
-}
-const controlElements = {
-  ...materialControlElements,
-  valueEditor: CustomValueEditor,
-  valueSourceSelector: CustomValueEditor,
-  fieldSelector: OutlinedSelectorElement,
-  combinatorSelector: NullOperatorSelector,
-  operatorSelector: OutlinedSelectorElement,
-  addGroupAction: NullOperatorSelector,
-}
-
 const useStyles = makeStyles()(theme => ({
 }));
 const QueryBuilderEditor = ({
@@ -77,21 +48,6 @@ const QueryBuilderEditor = ({
   filters
 }) => {
   const { classes } = useStyles()
-  const xfields = [
-    {
-      name: 'firstName',
-      label: 'First Name',
-      type: 'text',
-      operators: [
-        { name: '=', label: 'contains' },
-      ]
-    },
-    {
-      name: 'lastName',
-      label: 'Last Name',
-      type: 'text'
-    },
-  ];
 
   const fields = useMemo(
     () => {
@@ -104,6 +60,7 @@ const QueryBuilderEditor = ({
               label: column.name,
               name: column.key,
               id: column.key,
+              inputType: 'select',
               valueEditorType: column?.filter?.multiple ? 'multiselect' : 'select',
               values: column?.filter?.options?.map((option) => {
                   return {
@@ -111,7 +68,6 @@ const QueryBuilderEditor = ({
                     label: option?.[column?.filter?.labelField ?? 'label'],
                   }
                 }),
-              
               defaultValue: '',
               operators: [
                 {
@@ -120,12 +76,22 @@ const QueryBuilderEditor = ({
                 },
               ],
             }
-
+          case 'dateRange':
+            return {
+              label: column.name,
+              name: column.key,
+              id: column.key,
+              inputType: 'daterange',
+              operators: [
+                { name: 'between', label: 'between' },
+              ],
+            }
           default:
             return {
               label: column.name,
               name: column.key,
               id: column.key,
+              inputType: 'text',
               operators: [
                 { name: '=', label: 'is' },
               ],
@@ -163,7 +129,7 @@ const QueryBuilderEditor = ({
   return (
     <QueryBuilderMaterial
       muiComponents={muiComponents}
-      controlElements={controlElements}
+      controlElements={ControlElements}
     >
       <QueryBuilder
         fields={fields}
