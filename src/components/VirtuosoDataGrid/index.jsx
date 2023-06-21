@@ -6,7 +6,7 @@ import { useUrlState } from '../hooks/useUrlState';
 
 
 import { Clear, Search } from '@mui/icons-material';
-import { Box, Button, CircularProgress, IconButton, InputAdornment, LinearProgress, ThemeProvider, Toolbar, Tooltip, createTheme, debounce, styled, tooltipClasses, useTheme } from '@mui/material';
+import { Box, Button, CircularProgress, IconButton, InputAdornment, LinearProgress, ThemeProvider, Toolbar, Tooltip, Typography, createTheme, debounce, styled, tooltipClasses, useTheme } from '@mui/material';
 import { isEmpty } from 'lodash';
 import TruncateMarkup from 'react-truncate-markup';
 import { DataGridContext, actions as dataGridActions } from '../DataGrid/DataGridContext';
@@ -95,7 +95,7 @@ const VirtuosoDataGrid = ({
 
   const rerender = useReducer(() => ({}), {})[1];
   const [columnVisibility, setColumnVisibility] = useState({});
-  const [density, setDensity] = useState('compact');
+  const [density, setDensity] = useState('comfortable');
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 5 });
   const [rowSelection, setRowSelection] = useState({});
   const [showColumnFilters, setShowColumnFilters] = useState(false);
@@ -168,10 +168,18 @@ const VirtuosoDataGrid = ({
               }
             },
             Cell: ({ row, column, renderedCellValue, ...rest }) => {
-
+              let toolTipCell = renderedCellValue
               let finalizedCell = <></>
               if (col?.cellRenderer) {
-                finalizedCell = <div>{col?.cellRenderer({ row: row?.original, renderedCellValue })}</div>
+                finalizedCell = (
+                  <Typography
+                    variant='body2'
+                    noWrap={!col?.wrap}
+                  >
+                    {col?.cellRenderer({ row: row?.original, renderedCellValue })}
+                  </Typography>
+                )
+                toolTipCell = col?.cellRenderer({ row: row?.original, renderedCellValue })
               } else {
                 const v = rest?.cell?.renderValue()
                 if (isValidElement(renderedCellValue) || col?.key === 'select-row') {
@@ -194,7 +202,7 @@ const VirtuosoDataGrid = ({
               if (expanderContent) {
                 return <PortalCell expandCell={expanderContent} renderedCell={finalizedCell} />
               }
-              const renderedTooltip = typeof col?.tooltip === "function" ? col?.tooltip({ row: row?.original }) : renderedCellValue;
+              const renderedTooltip = typeof col?.tooltip === "function" ? col?.tooltip({ row: row?.original }) : toolTipCell;
 
               if (!(col?.noTooltip || isEmpty(renderedTooltip))) {
                 return <LightTooltip
@@ -567,7 +575,7 @@ const VirtuosoDataGrid = ({
           rowVirtualizerInstanceRef={rowVirtualizerInstanceRef}
           rowVirtualizerProps={{ overscan: 10 }}
           initialState={{
-            density: 'compact',
+            density: 'comfortable',
             columnOrder: defaultColumnOrder,
             columnVisibility: defaultHideColumns,
             columnPinning: defaultPinnedColumns,
