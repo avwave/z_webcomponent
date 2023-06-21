@@ -1,33 +1,53 @@
 import MaterialReactTable from 'material-react-table';
+
 import React, { isValidElement, useCallback, useContext, useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import { makeStyles } from 'tss-react/mui';
 import { useUrlState } from '../hooks/useUrlState';
 
 
-import { Box, Button, CircularProgress, LinearProgress, Toolbar, Tooltip, debounce } from '@mui/material';
-import Truncate from 'react-truncate';
+import { Clear, Search } from '@mui/icons-material';
+import { Box, Button, CircularProgress, IconButton, InputAdornment, LinearProgress, ThemeProvider, Toolbar, Tooltip, createTheme, debounce, styled, tooltipClasses, useTheme } from '@mui/material';
+import { isEmpty } from 'lodash';
+import TruncateMarkup from 'react-truncate-markup';
 import { DataGridContext, actions as dataGridActions } from '../DataGrid/DataGridContext';
 import { PortalCell } from '../DataGrid/PortalCell';
 import { DataGridToolbar } from './DataGridToolbar';
-import ReactJson from 'react-json-view';
-import { useStateRef } from '../hooks/useStateRef';
-import {isEmpty} from 'lodash';
+import { tableTranslation } from './localization';
+
 const useStyles = makeStyles()(theme => ({
   rootContainer: {
     display: 'flex',
     flexDirection: 'column',
     height: '100%',
     width: '100%',
-    flex:1
+    flex: 1
   },
-  table:{
+  table: {
     display: 'flex',
     flexDirection: 'column',
     height: '100%',
     width: '100%',
     flex: 1
-  }
+  },
+  truncate: {
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+  },
 }));
+
+const LightTooltip = styled(({ className, ...props }) => (
+  <Tooltip {...props} classes={{ popper: className }} />
+))(({ theme }) => ({
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: theme.palette.common.white,
+    color: 'rgba(0, 0, 0, 0.87)',
+    boxShadow: theme.shadows[1],
+    fontSize: 14,
+    ...theme.typography.body2,
+  },
+}));
+
+
 const VirtuosoDataGrid = ({
   alternateToolbarFilter = false,
   showSelector,
@@ -58,10 +78,12 @@ const VirtuosoDataGrid = ({
   customColumnDisplay
 }) => {
   const { classes } = useStyles()
-
+  const theme = useTheme()
   const tableContainerRef = useRef(null)
   const tableInstanceRef = useRef(null)
   const rowVirtualizerInstanceRef = useRef(null)
+
+  const [globalFilter, setGlobalFilter] = useState('');
 
   const [filters, setFilters, filtersRef] = useUrlState({
     queryKey: `${id}-filters`,
@@ -73,7 +95,7 @@ const VirtuosoDataGrid = ({
 
   const rerender = useReducer(() => ({}), {})[1];
   const [columnVisibility, setColumnVisibility] = useState({});
-  const [density, setDensity] = useState('comfortable');
+  const [density, setDensity] = useState('compact');
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 5 });
   const [rowSelection, setRowSelection] = useState({});
   const [showColumnFilters, setShowColumnFilters] = useState(false);
@@ -140,13 +162,13 @@ const VirtuosoDataGrid = ({
             minSize: col?.minWidth,
             Header: ({ column, ...rest }) => {
               if (col?.columnHeaderRenderer) {
-                return <div>{col?.columnHeaderRenderer()}</div>
+                return <div draggable className={classes.truncate}>{col?.columnHeaderRenderer()}</div>
               } else {
-                return <div>{col?.name}</div>
+                return <div draggable className={classes.truncate}>{col?.name}</div>
               }
             },
             Cell: ({ row, column, renderedCellValue, ...rest }) => {
-      
+
               let finalizedCell = <></>
               if (col?.cellRenderer) {
                 finalizedCell = <div>{col?.cellRenderer({ row: row?.original })}</div>
@@ -156,30 +178,32 @@ const VirtuosoDataGrid = ({
                   finalizedCell = <div>{renderedCellValue}</div>
                 } else {
                   finalizedCell = <div>
-                    <Truncate
-                      width={column?.getSize()}
-                      lines={col?.truncateLines ?? 2} ellipsis={<span>(...)</span>}
-                      style={col.cellStyles}
+                    <TruncateMarkup
+                      lines={col?.truncateLines ?? 1}
                     >
-                      {String(renderedCellValue)}
-                    </Truncate>
+                      <div style={col?.cellStyles}>
+                        {String(renderedCellValue)}
+                      </div>
+                    </TruncateMarkup>
                   </div>
+
                 }
+
               }
               const expanderContent = col?.expandRenderer && col?.expandRenderer({ row: row?.original })
               if (expanderContent) {
                 return <PortalCell expandCell={expanderContent} renderedCell={finalizedCell} />
               }
-              const renderedTooltip = typeof col?.tooltip === "function" ? col?.tooltip({row:row?.original}) : renderedCellValue;
+              const renderedTooltip = typeof col?.tooltip === "function" ? col?.tooltip({ row: row?.original }) : renderedCellValue;
 
               if (!(col?.noTooltip || isEmpty(renderedTooltip))) {
-                return <Tooltip
+                return <LightTooltip
                   title={renderedTooltip}
                   placement="bottom-start"
                   className={classes.tooltip}
                 >
                   {finalizedCell}
-                </Tooltip>
+                </LightTooltip>
               }
               return finalizedCell
             }
@@ -377,6 +401,22 @@ const VirtuosoDataGrid = ({
     }, [tableInstanceRef?.current]
   );
 
+  const reorderColumn = useCallback(
+    (draggedColumn, targetColumn, columnOrder) => {
+      if (draggedColumn.getCanPin()) {
+        draggedColumn.pin(targetColumn.getIsPinned());
+      }
+      const newColumnOrder = [...columnOrder];
+      newColumnOrder.splice(
+        newColumnOrder.indexOf(targetColumn.id),
+        0,
+        newColumnOrder.splice(newColumnOrder.indexOf(draggedColumn.id), 1)[0],
+      );
+      return newColumnOrder;
+    },
+    [],
+  );
+
 
   if (defaultHideColumns === null && defaultColumnOrder === null)
     return <LinearProgress />
@@ -408,149 +448,215 @@ const VirtuosoDataGrid = ({
         gridId={id}
         customColumnDisplay={customColumnDisplay}
       />
-      <MaterialReactTable
-        className={classes.table}
-        tableInstanceRef={tableInstanceRef}
-        columnResizeMode='onChange'
-        manualFiltering
-        manualSorting
-        memoMode="cells"
-        enableDensityToggle={false}
-        enableColumnOrdering
-        enableColumnResizing
-        enableExpandAll={false}
-        enablePagination={false}
-        enableRowVirtualization
-        // enableColumnVirtualization
-        enableRowSelection={enableTableSelection ? row => enableRowSelection(row) : false}
-        enableHiding
-        enableGrouping={false}
-        // enableColumnDragging
-        enablePinning
-        enableSorting
-        enableSortingRemoval
-        enableColumnFilters={false}
-        enableMultiSort={false}
-        data={data}
-        columns={columns}
-        renderColumnActionsMenuItems={({ internalColumnMenuItems, ...menuProps }) => {
-          return [
-            ...internalColumnMenuItems,
-          ];
-        }}
-        onRowSelectionChange={(sRows) => {
-          setSelectedRows(sRows)
-        }}
-        muiTableContainerProps={{
-          ref: tableContainerRef,
-          sx: {
-            height: '100%',
-            flex:1
-          },
-          onScroll: (e) => {
-            fetchMoreOnBottomReached(e.target, manualLoadMore)
-          },
-          ...gridProps?.tableContainerProps
-        }}
-
-        muiTableHeadCellProps={{
-          sx: {
-            '& .Mui-TableHeadCell-Content': {
-              display: 'flex',
-              flexDirection: 'column',
-            },
-            '& .Mui-TableHeadCell-Content-Actions': {
-              alignSelf: 'flex-end',
+      <ThemeProvider theme={createTheme({
+        components: {
+          MuiTableSortLabel: {
+            styleOverrides: {
+              icon: {
+                opacity: .20,
+              },
             }
           }
-        }}
-        muiTablePaperProps={{
-          sx: {
-            height: 'calc(100% - 96px)',
-            flex:1,
-            display: 'flex',
-            flexDirection: 'column',
-          }
-        }}
-        state={{
-          showProgressBars: dataGridState.loading,
-          rowSelection: selectedRows,
-          sorting: sortState,
-          columnVisibility,
-          pagination,
-          showColumnFilters,
-          columnPinning: pinnedColumns,
-          ...gridProps?.gridState
-        }}
-        onSortingChange={setSortState}
-        rowVirtualizerInstanceRef={rowVirtualizerInstanceRef}
-        rowVirtualizerProps={{ overscan: 10 }}
-        initialState={{
-          columnOrder: defaultColumnOrder,
-          columnVisibility: defaultHideColumns,
-          columnPinning: defaultPinnedColumns,
-          showGlobalFilter: hasSearchFilter && filterable,
-        }}
-        enableGlobalFilter={true}
-        onGlobalFilterChange={(f) => {
-          debounceSearch(f)
-        }}
-        muiSearchTextFieldProps={{
-          placeholder: searchPlaceholder ?? 'Search',
-          variant: 'outlined',
-          size: 'small',
-        }}
-        enableTopToolbar={false}
-        onColumnPinningChange={(updater) => {
-          setPinnedColumns((prev) =>
-            updater instanceof Function ? updater(prev) : updater,
-          );
-          queueMicrotask(rerender); //hack to rerender after state update
-        }}
-        onColumnVisibilityChange={(updater) => {
-          setColumnVisibility((prev) =>
-            updater instanceof Function ? updater(prev) : updater,
-          );
-          queueMicrotask(rerender); //hack to rerender after state update
-        }}
-        onDensityChange={(updater) => {
-          setDensity((prev) =>
-            updater instanceof Function ? updater(prev) : updater,
-          );
-          queueMicrotask(rerender); //hack to rerender after state update
-        }}
-        onPaginationChange={(updater) => {
-          setPagination((prev) =>
-            updater instanceof Function ? updater(prev) : updater,
-          );
-          queueMicrotask(rerender); //hack to rerender after state update
-        }}
-        onShowColumnFiltersChange={(updater) => {
-          setShowColumnFilters((prev) =>
-            updater instanceof Function ? updater(prev) : updater,
-          );
-          queueMicrotask(rerender); //hack to rerender after state update
-        }}
-        renderDetailPanel={({ row }) => {
-          return renderDetailPanel({ row })
-        }}
-        getRowId={(orow) => orow?.id}
-        {...gridProps?.emptyRowsRenderer && {
-          renderEmptyRowsFallback: () => {
-            return gridProps?.emptyRowsRenderer()
-          }
-        }}
-        renderBottomToolbar={() => {
-          return renderBottomToolbar
-        }}
-        muiTableBodyRowProps={({ row }) => {
-          const attribs = extendedRowAttributes(row?.original)
-          return { ...attribs,
-            title:null
-          }
-        }}
-        {...gridProps}
-      />
+        }
+      })}
+      >
+        <MaterialReactTable
+          enableFilterMatchHighlighting
+          localization={tableTranslation}
+          className={classes.table}
+          tableInstanceRef={tableInstanceRef}
+          columnResizeMode='onChange'
+          manualFiltering
+          manualSorting
+          memoMode="cells"
+          enableDensityToggle
+          enableColumnOrdering
+          enableColumnResizing
+          enableExpandAll={false}
+          enablePagination={false}
+          enableRowVirtualization
+          // enableColumnVirtualization
+          enableRowSelection={enableTableSelection ? row => enableRowSelection(row) : false}
+          enableHiding
+          enableGrouping={false}
+          enableColumnDragging={false}
+          enablePinning
+          enableSorting
+          enableSortingRemoval
+          enableColumnFilters={false}
+          enableMultiSort={false}
+          data={data}
+          columns={columns}
+          onRowSelectionChange={(sRows) => {
+            setSelectedRows(sRows)
+          }}
+          muiTableContainerProps={{
+            ref: tableContainerRef,
+            sx: {
+              height: '100%',
+              flex: 1
+            },
+            onScroll: (e) => {
+              fetchMoreOnBottomReached(e.target, manualLoadMore)
+            },
+            ...gridProps?.tableContainerProps
+          }}
+
+          muiTableHeadCellProps={({ column, table }) => {
+            return {
+              onDragStart: e => {
+                table?.setDraggingColumn(column)
+              },
+              onDragEnter: e => {
+                table.setHoveredColumn(column);
+              },
+              onDragEnd: e => {
+                const { hoveredColumn, columnOrder, draggingColumn } = table.getState()
+                if (hoveredColumn?.id === 'drop-zone') {
+                  column.toggleGrouping();
+                } else if (
+                  hoveredColumn &&
+                  hoveredColumn?.id !== draggingColumn?.id
+                ) {
+                  table.setColumnOrder(
+                    reorderColumn(column, hoveredColumn, columnOrder),
+                  );
+                }
+                table.setDraggingColumn(null);
+                table.setHoveredColumn(null);
+
+              },
+              sx: {
+                userSelect: 'none',
+                '& .Mui-TableHeadCell-Content': {
+                  display: 'flex',
+                  flexDirection: 'row',
+                },
+                '& .Mui-TableHeadCell-Content-Actions': {
+                  alignSelf: 'flex-end',
+                },
+                '& .Mui-TableHeadCell-Content-Wrapper': {
+                  whiteSpace: 'nowrap',
+                },
+                backgroundColor: theme.palette.grey[100]
+
+              }
+            }
+          }}
+          muiTablePaperProps={{
+            sx: {
+              height: 'calc(100% - 96px)',
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'column',
+            }
+          }}
+          state={{
+            showProgressBars: dataGridState.loading,
+            rowSelection: selectedRows,
+            sorting: sortState,
+            columnVisibility,
+            pagination,
+            showColumnFilters,
+            columnPinning: pinnedColumns,
+            density: density,
+            globalFilter,
+            ...gridProps?.gridState
+          }}
+          onSortingChange={setSortState}
+          rowVirtualizerInstanceRef={rowVirtualizerInstanceRef}
+          rowVirtualizerProps={{ overscan: 10 }}
+          initialState={{
+            density: 'compact',
+            columnOrder: defaultColumnOrder,
+            columnVisibility: defaultHideColumns,
+            columnPinning: defaultPinnedColumns,
+            showGlobalFilter: hasSearchFilter && filterable,
+          }}
+          enableGlobalFilter={true}
+          onGlobalFilterChange={(f) => {
+            setGlobalFilter(f)
+            debounceSearch(f)
+          }}
+          muiSearchTextFieldProps={(props) => {
+            return {
+              placeholder: searchPlaceholder ?? 'Search',
+              variant: 'outlined',
+              size: 'small',
+              InputProps: {
+                startAdornment:
+                  <InputAdornment position="start">
+                    <Search />
+                  </InputAdornment>,
+                endAdornment: <InputAdornment position="end">
+                  {globalFilter && (
+                    <IconButton
+                      aria-label="clear search"
+                      onClick={() => {
+                        setGlobalFilter('')
+                        debounceSearch('')
+                      }}
+                    >
+                      <Clear />
+                    </IconButton>
+                  )}
+                </InputAdornment>
+              }
+            }
+          }}
+          enableTopToolbar={false}
+          onColumnPinningChange={(updater) => {
+            setPinnedColumns((prev) =>
+              updater instanceof Function ? updater(prev) : updater,
+            );
+            queueMicrotask(rerender); //hack to rerender after state update
+          }}
+          onColumnVisibilityChange={(updater) => {
+            setColumnVisibility((prev) =>
+              updater instanceof Function ? updater(prev) : updater,
+            );
+            queueMicrotask(rerender); //hack to rerender after state update
+          }}
+          onDensityChange={(updater) => {
+            setDensity((prev) =>
+              updater instanceof Function ? updater(prev) : updater,
+            );
+            queueMicrotask(rerender); //hack to rerender after state update
+          }}
+          onPaginationChange={(updater) => {
+            setPagination((prev) =>
+              updater instanceof Function ? updater(prev) : updater,
+            );
+            queueMicrotask(rerender); //hack to rerender after state update
+          }}
+          onShowColumnFiltersChange={(updater) => {
+            setShowColumnFilters((prev) =>
+              updater instanceof Function ? updater(prev) : updater,
+            );
+            queueMicrotask(rerender); //hack to rerender after state update
+          }}
+          renderDetailPanel={({ row }) => {
+            return renderDetailPanel({ row })
+          }}
+          getRowId={(orow) => orow?.id}
+          {...gridProps?.emptyRowsRenderer && {
+            renderEmptyRowsFallback: () => {
+              return gridProps?.emptyRowsRenderer()
+            }
+          }}
+          renderBottomToolbar={() => {
+            return renderBottomToolbar
+          }}
+          muiTableBodyRowProps={({ row }) => {
+            const attribs = extendedRowAttributes(row?.original)
+            return {
+              ...attribs,
+              title: null
+            }
+          }}
+          {...gridProps}
+        />
+      </ThemeProvider>
     </div>
   )
 }
