@@ -95,7 +95,7 @@ const VirtuosoDataGrid = ({
 
   const rerender = useReducer(() => ({}), {})[1];
   const [columnVisibility, setColumnVisibility] = useState({});
-  const [density, setDensity] = useState('comfortable');
+  const [density, setDensity] = useState('compact');
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 5 });
   const [rowSelection, setRowSelection] = useState({});
   const [showColumnFilters, setShowColumnFilters] = useState(false);
@@ -174,7 +174,7 @@ const VirtuosoDataGrid = ({
                 finalizedCell = (
                   <Typography
                     variant='body2'
-                    noWrap={!col?.wrap}
+                    noWrap={false}
                   >
                     {col?.cellRenderer({ row: row?.original, renderedCellValue })}
                   </Typography>
@@ -182,21 +182,22 @@ const VirtuosoDataGrid = ({
                 toolTipCell = col?.cellRenderer({ row: row?.original, renderedCellValue })
               } else {
                 const v = rest?.cell?.renderValue()
-                if (isValidElement(renderedCellValue) || col?.key === 'select-row') {
-                  finalizedCell = <div>{renderedCellValue}</div>
-                } else {
-                  finalizedCell = <div>
-                    <TruncateMarkup
+                // if (isValidElement(renderedCellValue) || col?.key === 'select-row') {
+                //   finalizedCell = <div>{renderedCellValue}</div>
+                // } else {
+                  finalizedCell = <div style={{width:'100%'}}>
+                    {/* <TruncateMarkup
                       lines={col?.truncateLines ?? 1}
-                    >
-                      <div style={col?.cellStyles}>
-                        {String(renderedCellValue)}
-                      </div>
-                    </TruncateMarkup>
+                    > */}
+                      <Typography 
+                      variant='body2'
+                      noWrap
+                       style={col?.cellStyles}>
+                        {renderedCellValue}
+                      </Typography>
+                    {/* </TruncateMarkup> */}
                   </div>
-
-                }
-
+                // }
               }
               const expanderContent = col?.expandRenderer && col?.expandRenderer({ row: row?.original })
               if (expanderContent) {
@@ -575,7 +576,6 @@ const VirtuosoDataGrid = ({
           rowVirtualizerInstanceRef={rowVirtualizerInstanceRef}
           rowVirtualizerProps={{ overscan: 10 }}
           initialState={{
-            density: 'comfortable',
             columnOrder: defaultColumnOrder,
             columnVisibility: defaultHideColumns,
             columnPinning: defaultPinnedColumns,

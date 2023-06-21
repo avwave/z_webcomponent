@@ -337,10 +337,15 @@ const ServerFilterStory = ({ ...args }) => {
     let filteredRows = args.rows;
     searchKeys.forEach((searchKey) => {
       filteredRows = filteredRows.filter((row) => {
+        let searchItem = row[searchKey]
         if (searchKey === 'search') {
-          return true
+          const searchItem1 = row['col_truncate']
+          const searchItem2 = row['filter_text']
+          const ret1 = searchItem1.toLowerCase().includes(state.filterColumn[searchKey])
+          const ret2 = searchItem2.toLowerCase().includes(state.filterColumn[searchKey])
+          return ret1 || ret2
         }
-        const searchItem = row[searchKey]
+        console.log('index.stories.js (342) # searchItem', searchItem);
 
         switch (typeof state.filterColumn[searchKey]) {
           case "boolean":
@@ -352,12 +357,13 @@ const ServerFilterStory = ({ ...args }) => {
               return true
             }
             // const ret = searchItem.toLowerCase().includes(state.filterColumn[searchKey].toString().toLowerCase());
-            return true
+            // return ret
           default:
             return true
 
         }
       });
+      
     });
     dispatch({
       payload: { rows: filteredRows },
