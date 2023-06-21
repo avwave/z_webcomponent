@@ -3,6 +3,7 @@ import {
   ButtonGroup,
   Chip,
   Grid,
+  Link,
   ListItem,
   Paper,
   Typography,
@@ -10,6 +11,8 @@ import {
 import { Row } from "react-data-grid";
 import React, { useState } from "react";
 import { withReactContext } from "storybook-react-context";
+
+import { ZennyaLogFormat } from '../../index';
 
 import isEmpty from "lodash.isempty";
 
@@ -29,6 +32,8 @@ import ReactJson from "react-json-view";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faColumns } from "@fortawesome/free-solid-svg-icons";
 import { Box } from "@mui/material";
+import { auditLogs } from "../Logger/index.stories";
+import moment from "moment";
 
 const DataGridStory = {
   component: DataGrid2,
@@ -236,7 +241,7 @@ const CellFormatting = ({ value }) => {
 const applyDateColumn = [
   {
     key: "col_customheader",
-    colId: "col4",
+    
     name: "Column4",
     align: "flex-start",
     cellRenderer(props) {
@@ -376,6 +381,13 @@ ServerFilter.args = {
   showSelector: true,
   filterable: true,
 };
+
+export const AlternateCriteriaEditor = ServerFilterStory.bind({});
+AlternateCriteriaEditor.args = {
+  ...ServerFilter.args,
+  alternateToolbarFilter: true,
+}
+
 const ServerSortStory = ({ ...args }) => {
   const [state, dispatch] = React.useContext(DataGridContext);
 
@@ -701,3 +713,178 @@ ExtendedRowAttributes.args = {
     }
   }
 };
+
+export const ZennyaLogger = DefaultStory.bind({});
+ZennyaLogger.args = {
+  ...Default.args,
+  columns: [
+    {
+      
+      key: 'date_created',
+      name: 'Date Created',
+      resizable: false,
+      width: 200,
+
+      cellRenderer({ row }) {
+        return <Typography variant="overline">{moment(row?.date_created).format('L LTS')}</Typography>
+      }
+    },
+    {
+      
+      key: 'log_type',
+      name: 'Log Type',
+      resizable: true,
+      width: 60,
+      cellRenderer({ row }) {
+        return <Typography variant="caption">{row?.log_type}</Typography>
+      }
+    },
+    {
+      
+      key: 'resource',
+      name: 'Customer Link',
+      resizable: true,
+      width: 100,
+      cellRenderer({ row }) {
+        if (row?.resource_type === 'CUSTOMER') {
+          return (
+            <Link
+              to={`/client-profile/${row?.resource_id}`}
+              underline="hover">Customer: {row?.resource_id}</Link>
+          );
+        }
+        return <></>
+      }
+    },
+    {
+      
+      key: 'log_message',
+      name: 'Log',
+      resizable: true,
+      wrap:true,
+      cellRenderer({ row }) {
+        const x = <ZennyaLogFormat
+          log={row}
+          linkComponent={Link}
+          routeMap={
+            [
+              {
+                resourceName: 'booking',
+                pattern: '/scheduled-bookings/:id'
+              },
+              {
+                resourceName: 'wlpCustomer',
+                pattern: '/client-profile/:id'
+              },
+              {
+                resourceName: 'resource_id',
+                pattern: '/client-profile/:id'
+              },
+              {
+                resourceName: 'user_id',
+                pattern: '/staff/edit/:id'
+              },
+              {
+                resourceName: 'client_id',
+                pattern: '/client-profile/:id'
+              },
+              {
+                resourceName: 'wlpPartner',
+                pattern: '/'
+              }
+            ]
+          }
+        />
+        return x
+      }
+    },
+  ],
+  rows: auditLogs
+}
+
+export const TruncatedZennyaLogs = DefaultStory.bind({});
+TruncatedZennyaLogs.args = {
+  ...ZennyaLogger.args,
+  columns: [
+    {
+
+      key: 'date_created',
+      name: 'Date Created',
+      resizable: false,
+      width: 200,
+
+      cellRenderer({ row }) {
+        return <Typography variant="overline">{moment(row?.date_created).format('L LTS')}</Typography>
+      }
+    },
+    {
+
+      key: 'log_type',
+      name: 'Log Type',
+      resizable: true,
+      width: 60,
+      cellRenderer({ row }) {
+        return <Typography variant="caption">{row?.log_type}</Typography>
+      }
+    },
+    {
+
+      key: 'resource',
+      name: 'Customer Link',
+      resizable: true,
+      width: 100,
+      cellRenderer({ row }) {
+        if (row?.resource_type === 'CUSTOMER') {
+          return (
+            <Link
+              to={`/client-profile/${row?.resource_id}`}
+              underline="hover">Customer: {row?.resource_id}</Link>
+          );
+        }
+        return <></>
+      }
+    },
+    {
+
+      key: 'log_message',
+      name: 'Log',
+      resizable: true,
+      wrap: false,
+      cellRenderer({ row }) {
+        const x = <ZennyaLogFormat
+          log={row}
+          linkComponent={Link}
+          routeMap={
+            [
+              {
+                resourceName: 'booking',
+                pattern: '/scheduled-bookings/:id'
+              },
+              {
+                resourceName: 'wlpCustomer',
+                pattern: '/client-profile/:id'
+              },
+              {
+                resourceName: 'resource_id',
+                pattern: '/client-profile/:id'
+              },
+              {
+                resourceName: 'user_id',
+                pattern: '/staff/edit/:id'
+              },
+              {
+                resourceName: 'client_id',
+                pattern: '/client-profile/:id'
+              },
+              {
+                resourceName: 'wlpPartner',
+                pattern: '/'
+              }
+            ]
+          }
+        />
+        return x
+      }
+    },
+  ],
+}

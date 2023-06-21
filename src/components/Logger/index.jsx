@@ -4,6 +4,7 @@ import { id } from 'date-fns/locale';
 import PropTypes from "prop-types";
 import React, { useCallback, useMemo, useState } from 'react';
 import ReactJson from 'react-json-view';
+import TruncateMarkup from 'react-truncate-markup';
 
 const useStyles = makeStyles()((theme) => {
   return {}

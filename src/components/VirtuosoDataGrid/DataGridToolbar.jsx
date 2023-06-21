@@ -12,6 +12,7 @@ import { DataGridContext } from "../DataGrid/DataGridContext";
 import { ChipTabsFilterRenderer } from "../DataGrid2/FilterRenderer";
 import { useUrlState } from "../hooks/useUrlState";
 import { CriteriaEditor } from "./CriteriaEditor";
+import { QueryBuilderEditor } from "./QueryBuilderEditor";
 
 const POPUP_MODE = {
   FILTER: "FILTER",
@@ -124,6 +125,7 @@ const useStyles = makeStyles()(theme => ({
 }))
 
 const DataGridToolbar = ({
+  alternateToolbarFilter,
   columns,
   showSelector,
   filterable,
@@ -215,30 +217,47 @@ const DataGridToolbar = ({
     }, [dataGridState?.loading]
   );
 
+  const renderFilterBox = useMemo(
+    () => {
+      if (!filterable) return <></>
+      if (alternateToolbarFilter) {
+        return <QueryBuilderEditor
+          hasDateRangeFilter={hasDateRangeFilter}
+          columns={columns}
+          onCriteriaChange={(values) => {
+            mapCriteriaToFilter(values)
+          }}
+          filters={filterValues}
+        />
+      } else {
+        return <CriteriaEditor
+          hasDateRangeFilter={hasDateRangeFilter}
+          columns={columns}
+          onCriteriaChange={(values) => {
+            mapCriteriaToFilter(values)
+          }}
+          filters={filterValues}
+        />
+      }
+    }, [filterable, alternateToolbarFilter, columns, filterValues, hasDateRangeFilter, mapCriteriaToFilter]
+  );
+
   return (
     <AppBar position="static" color="transparent" elevation={0}>
       <Toolbar disableGutters
-      sx={{
-        alignItems: 'flex-start',
-      }} >
+        sx={{
+          alignItems: 'flex-start',
+        }} >
         <Box
           sx={{ flexGrow: 1, alignSelf: 'flex-start', overflow: 'auto' }}
         >
-          {filterable && (
-            <CriteriaEditor
-              hasDateRangeFilter={hasDateRangeFilter}
-              columns={columns}
-              onCriteriaChange={(values) => {
-                mapCriteriaToFilter(values)
-              }}
-              filters={filterValues}
-            />
-          )}
+          {renderFilterBox}
         </Box>
         {tableInstanceRef.current && (
-          <Box sx={{ paddingLeft: 2, minWidth: '250px', width: '250px', display: 'flex', flexDirection: 'row' }}>
+          <Box sx={{ paddingLeft: 2, minWidth: '250px', width: '250px', display: 'flex', flexDirection: 'row', justifyContent:'flex-end' }}>
             <MRT_GlobalFilterTextField table={tableInstanceRef.current} />
             {/* <MRT_ToggleFiltersButton table={tableInstanceRef.current} /> */}
+            <MRT_ToggleDensePaddingButton table={tableInstanceRef.current} />
             <MRT_ShowHideColumnsButton table={tableInstanceRef.current} />
             {/* <MRT_FullScreenToggleButton table={tableInstanceRef.current} /> */}
           </Box>
