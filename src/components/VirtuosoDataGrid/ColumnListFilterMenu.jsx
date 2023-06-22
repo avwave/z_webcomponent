@@ -64,6 +64,7 @@ const ColumnListFilterMenu = ({ table }) => {
   };
 
   const [visibleColumns, setVisibleColumns] = useState(new Set());
+  const [activeEnabledColumns, setActiveEnabledColumns] = useState([]);
 
   useEffect(
     () => {
@@ -95,9 +96,9 @@ const ColumnListFilterMenu = ({ table }) => {
   const applyFilteredColumns = useCallback(
     () => {
       const arrCols = Array.from(visibleColumns)
-      getAllLeafColumns()
+      const filteredLeaves = getAllLeafColumns()
         .filter((col) => col.columnDef.enableHiding !== false)
-        .forEach((col) => {
+        filteredLeaves.forEach((col) => {
           const hasCol = !!arrCols.find(c => c.id === col.id)
           col.toggleVisibility(hasCol)
         });
@@ -155,11 +156,12 @@ const ColumnListFilterMenu = ({ table }) => {
             table={table}
             onChange={({ col, isVisible }) => {
               if (isVisible) {
-                visibleColumns.add(col)
+                setVisibleColumns(new Set([...visibleColumns, col]))
               } else {
-                visibleColumns.delete(col)
+                const arr = Array.from(visibleColumns)
+                const filtered = arr.filter(c => c.columnDef.id !== col.columnDef.id)
+                setVisibleColumns(new Set([...filtered]))
               }
-              setVisibleColumns(new Set(visibleColumns))
             }}
           />
         ))}

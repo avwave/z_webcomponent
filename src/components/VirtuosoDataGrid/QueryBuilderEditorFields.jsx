@@ -10,7 +10,7 @@ const useStyles = makeStyles()(theme => ({
 
 
 const OutlinedSelectorElement = props => {
-  return <MaterialValueSelector {...props} variant="outlined" size="small" />
+  return <MaterialValueSelector {...props} autoFocus={false} variant="outlined" size="small" />
 }
 
 const NullOperatorSelector = props => {
@@ -23,6 +23,7 @@ const QueryBuilderEditorField = ({ inputType, title, handleOnChange, value, oper
   if (fieldData?.inputType === 'text') {
     return <OutlinedInput
       {...props}
+      autoFocus
       onChange={(e) => handleOnChange(e.target.value)}
       size="small"
     />;
@@ -43,6 +44,7 @@ const QueryBuilderEditorField = ({ inputType, title, handleOnChange, value, oper
     operator={operator}
     fieldData={fieldData}
     {...props}
+    autoFocus
     variant="outlined"
     size="small"
   />;
