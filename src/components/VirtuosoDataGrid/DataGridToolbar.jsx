@@ -13,6 +13,7 @@ import { ChipTabsFilterRenderer } from "../DataGrid2/FilterRenderer";
 import { useUrlState } from "../hooks/useUrlState";
 import { CriteriaEditor } from "./CriteriaEditor";
 import { QueryBuilderEditor } from "./QueryBuilderEditor";
+import { ColumnListFilterMenu } from "./ColumnListFilterMenu";
 
 const POPUP_MODE = {
   FILTER: "FILTER",
@@ -258,7 +259,8 @@ const DataGridToolbar = ({
             <MRT_GlobalFilterTextField table={tableInstanceRef.current} />
             {/* <MRT_ToggleFiltersButton table={tableInstanceRef.current} /> */}
             {/* <MRT_ToggleDensePaddingButton table={tableInstanceRef.current} /> */}
-            <MRT_ShowHideColumnsButton table={tableInstanceRef.current} />
+            {/* <MRT_ShowHideColumnsButton table={tableInstanceRef.current} /> */}
+            <ColumnListFilterMenu table={tableInstanceRef.current} />
             {/* <MRT_FullScreenToggleButton table={tableInstanceRef.current} /> */}
           </Box>
         )}

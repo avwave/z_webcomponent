@@ -95,7 +95,7 @@ const VirtuosoDataGrid = ({
 
   const rerender = useReducer(() => ({}), {})[1];
   const [columnVisibility, setColumnVisibility] = useState({});
-  const [density, setDensity] = useState('compact');
+  const [density, setDensity] = useState('comfortable');
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 5 });
   const [rowSelection, setRowSelection] = useState({});
   const [showColumnFilters, setShowColumnFilters] = useState(false);
@@ -174,7 +174,7 @@ const VirtuosoDataGrid = ({
                 finalizedCell = (
                   <Typography
                     variant='body2'
-                    noWrap={false}
+                    noWrap
                   >
                     {col?.cellRenderer({ row: row?.original, renderedCellValue })}
                   </Typography>
