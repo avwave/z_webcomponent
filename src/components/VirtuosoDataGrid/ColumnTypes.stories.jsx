@@ -1,16 +1,14 @@
 import {
   Chip,
-  Paper,
-  Typography
+  Paper
 } from "@mui/material";
 import React from "react";
 import {
   DataGridContext,
   actions
 } from "../DataGrid/DataGridContext";
-import { VirtuosoDataGrid as DataGrid2 } from "./index";
-import ReactJson from "react-json-view";
 import { generateRows } from "./gridData";
+import { VirtuosoDataGrid as DataGrid2 } from "./index";
 
 const DataGridStory = {
   component: DataGrid2,
@@ -54,7 +52,7 @@ Default.args = {
 export const NumberCell = DefaultStory.bind({});
 NumberCell.args = {
   ...Default.args,
-  columns:[
+  columns: [
     {
       key: "number",
       name: "number",
@@ -81,12 +79,12 @@ NumberCell.args = {
 export const StandardDateCell = DefaultStory.bind({});
 StandardDateCell.args = {
   ...Default.args,
-  columns:[
+  columns: [
     {
       key: "date",
       name: "date",
       dataType: "date",
-      dateOptions:{
+      dateOptions: {
         format: "LL LTS"
       }
     },
@@ -143,7 +141,7 @@ ReactAsRenderedCell.args = {
       key: "string",
       name: "string",
       dataType: "text",
-      cellRenderer ({row}) {
+      cellRenderer({ row }) {
         return <Chip label={row.string} />
       }
     }

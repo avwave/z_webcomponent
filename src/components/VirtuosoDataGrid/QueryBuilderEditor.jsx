@@ -57,17 +57,16 @@ const QueryBuilderEditor = ({
           case 'autocomplete':
           case 'option':
             return {
+              renderLabel: column?.filter?.renderLabel,
+              multiple: column?.filter?.multiple,
+              valueField: column?.filter?.valueField ?? 'value',
+              labelField: column?.filter?.labelField ?? 'label',
               label: column.name,
               name: column.key,
               id: column.key,
               inputType: 'select',
               valueEditorType: column?.filter?.multiple ? 'multiselect' : 'select',
-              values: column?.filter?.options?.map((option) => {
-                  return {
-                    name: option?.[column?.filter?.valueField ?? 'value'],
-                    label: option?.[column?.filter?.labelField ?? 'label'],
-                  }
-                }),
+              values: column?.filter?.options,
               defaultValue: '',
               operators: [
                 {

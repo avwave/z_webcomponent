@@ -72,7 +72,7 @@ const defaultColumns = [
     sortable: true,
     dataType: "date",
     filter: {
-      type: "daterange",
+      type: "dateRange",
     },
   },
   {
