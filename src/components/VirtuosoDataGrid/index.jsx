@@ -13,6 +13,7 @@ import { DataGridContext, actions as dataGridActions } from '../DataGrid/DataGri
 import { PortalCell } from '../DataGrid/PortalCell';
 import { DataGridToolbar } from './DataGridToolbar';
 import { tableTranslation } from './localization';
+import { localizeCurrency, localizePercent } from '../utils/format';
 
 const useStyles = makeStyles()(theme => ({
   rootContainer: {
@@ -158,8 +159,8 @@ const VirtuosoDataGrid = ({
             enableSorting: !!col.sortable,
             enablePinning: !col.hidden,
             // enableHiding: !col?.hidden,
-            size: col?.width,
-            minSize: col?.minWidth,
+            size: col?.width ?? 200,
+            minSize: col?.minWidth ?? 50,
             Header: ({ column, ...rest }) => {
               if (col?.columnHeaderRenderer) {
                 return <div draggable className={classes.truncate}>{col?.columnHeaderRenderer()}</div>
@@ -167,7 +168,25 @@ const VirtuosoDataGrid = ({
                 return <div draggable className={classes.truncate}>{col?.name}</div>
               }
             },
-            Cell: ({ row, column, renderedCellValue, ...rest }) => {
+            Cell: ({ row, column, renderedCellValue, cell, ...rest }) => {
+              let align = 'left'
+              let content = renderedCellValue
+              switch (col?.dataType) {
+                case 'number':
+                case 'float':
+                  align = 'right'
+                  break
+                case 'currency':
+                  align = 'right'
+                  content = localizeCurrency(cell?.getValue())
+                  break;
+                case 'percent':
+                  align = 'right'
+                  content = localizePercent(cell?.getValue())
+                  break;
+                default:
+                  break;
+              }
               let toolTipCell = renderedCellValue
               let finalizedCell = <></>
               if (col?.cellRenderer) {
@@ -175,28 +194,22 @@ const VirtuosoDataGrid = ({
                   <Typography
                     variant='body2'
                     noWrap
+                    textAlign={align}
                   >
                     {col?.cellRenderer({ row: row?.original, renderedCellValue })}
                   </Typography>
                 )
                 toolTipCell = col?.cellRenderer({ row: row?.original, renderedCellValue })
               } else {
-                const v = rest?.cell?.renderValue()
-                // if (isValidElement(renderedCellValue) || col?.key === 'select-row') {
-                //   finalizedCell = <div>{renderedCellValue}</div>
-                // } else {
-                  finalizedCell = <div style={{width:'100%'}}>
-                    {/* <TruncateMarkup
-                      lines={col?.truncateLines ?? 1}
-                    > */}
-                      <Typography 
-                      variant='body2'
-                      noWrap
-                       style={col?.cellStyles}>
-                        {renderedCellValue}
-                      </Typography>
-                    {/* </TruncateMarkup> */}
-                  </div>
+                finalizedCell = <div style={{ width: '100%' }}>
+                  <Typography
+                    variant='body2'
+                    noWrap
+                    textAlign={align}
+                    style={col?.cellStyles}>
+                    {content}
+                  </Typography>
+                </div>
                 // }
               }
               const expanderContent = col?.expandRenderer && col?.expandRenderer({ row: row?.original })
@@ -207,6 +220,8 @@ const VirtuosoDataGrid = ({
 
               if (!(col?.noTooltip || isEmpty(renderedTooltip))) {
                 return <LightTooltip
+                  enterDelay={500}
+                  leaveDelay={200}
                   title={renderedTooltip}
                   placement="bottom-start"
                   className={classes.tooltip}
@@ -484,7 +499,7 @@ const VirtuosoDataGrid = ({
           enableExpandAll={false}
           enablePagination={false}
           enableRowVirtualization
-          // enableColumnVirtualization
+          enableStickyHeader={false}
           enableRowSelection={enableTableSelection ? row => enableRowSelection(row) : false}
           enableHiding
           enableGrouping={false}
@@ -503,7 +518,8 @@ const VirtuosoDataGrid = ({
             ref: tableContainerRef,
             sx: {
               height: '100%',
-              flex: 1
+              maxHeight: '100vh',
+
             },
             onScroll: (e) => {
               fetchMoreOnBottomReached(e.target, manualLoadMore)

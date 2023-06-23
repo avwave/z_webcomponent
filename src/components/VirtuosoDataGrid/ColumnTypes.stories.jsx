@@ -10,12 +10,13 @@ import {
 } from "../DataGrid/DataGridContext";
 import { VirtuosoDataGrid as DataGrid2 } from "./index";
 import ReactJson from "react-json-view";
+import { generateRows } from "./gridData";
 
 const DataGridStory = {
   component: DataGrid2,
-  title: "DataGrid/DataGridV3/ColumnTypes",
+  title: "DataGrid/DataGridV3/ColumnProps",
   parameters: {
-    chromatic: { disable: true },
+    // chromatic: { disable: true },
     // storyshots: { disable: true },
   },
 };
@@ -40,64 +41,39 @@ const DefaultStory = ({ ...args }) => {
 
 export const Default = DefaultStory.bind({});
 Default.args = {
-  rows: [
-    {
-      id: 1,
-      name: 'Alice',
-      age: 20
-    },
-    {
-      id: 2,
-      name: 'Bob',
-      age: 21
-    },
-    {
-      id: 3,
-      name: 'Charlie',
-      age: 22
-    }
-  ],
+  rows: generateRows(1),
   columns: [
     {
-      key: "name",
-      name: "Name",
-    },
-    {
-      key: "age",
-      name: "Age",
-      cellRenderer({ row }) {
-        return row.age
-      }
-    },
-    {
-      key: 'unique',
-      name: "name+age",
-      cellRenderer({row}) {
-        return <Typography>{row.name} - {row.age}</Typography>
-      }
+      key: "string",
+      name: "String",
+      dataType: "text",
     }
   ]
 }
 
-export const Basic = DefaultStory.bind({});
-Basic.args = {
+export const NumberCell = DefaultStory.bind({});
+NumberCell.args = {
   ...Default.args,
-  columns: [
+  columns:[
     {
-      key: "name",
-      name: "Basic name",
-    }
-  ]
-}
-
-export const CellRenderer = DefaultStory.bind({});
-CellRenderer.args = {
-  ...Default.args,
-  columns: [
+      key: "number",
+      name: "number",
+      dataType: "number",
+    },
     {
-      key: "name",
-      name: "Custom name",
-      cellRenderer: ({ row }) => <Chip label={`${row.name} ;${row.age}`} />,
+      key: "float",
+      name: "float",
+      dataType: "float",
+    },
+    {
+      key: "float",
+      name: "currency",
+      dataType: "currency",
+    },
+    {
+      key: "percent",
+      name: "percent",
+      dataType: "percent",
     }
   ]
 }

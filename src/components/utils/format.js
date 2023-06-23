@@ -100,3 +100,33 @@ export function formatRoles(roles) {
   }
   return roleFmt
 }
+
+export function localizeCurrency(value) {
+  if (value === null || value === undefined) {
+    return ''
+  }
+  return new Intl.NumberFormat('en-PH', {
+    style: 'currency',
+    currency: 'PHP',
+  }).format(value);
+}
+
+export function localizePercent(value) {
+  if (value === null || value === undefined) {
+    return ''
+  }
+  return new Intl.NumberFormat('en-US', {
+    style: 'percent',
+  }).format(value);
+}
+
+
+export function localizeNumber(value, frac = false) {
+  if (value === null || value === undefined) {
+    return ''
+  }
+  return new Intl.NumberFormat('en-US', {
+    useGrouping: 'always',
+    maximumFractionDigits: frac ? 2 : 0,
+  }).format(value);
+}
