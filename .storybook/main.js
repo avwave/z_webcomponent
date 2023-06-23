@@ -1,5 +1,3 @@
-import path from "path-browserify";
-
 const config = {
   "core": {
     options: {
@@ -8,22 +6,14 @@ const config = {
   },
   "stories": ["../src/**/*.stories.mdx", "../src/**/*.stories.@(js|jsx|ts|tsx)", "../src/components/**/*.stories.mdx", "../src/components/**/*.stories.@(js|jsx|ts|tsx)"],
   "addons": [
-    {
-      name: '@storybook/addon-storysource',
-      options: {
-        rule: {
-          // test: [/\.stories\.jsx?$/], This is default
-          include: [path.resolve(__dirname, '../src')], // You can specify directories
-        },
-        loaderOptions: {
-          prettierConfig: { printWidth: 80, singleQuote: false },
-          parser: 'javascript',
-          injectDecorator: false,
-          injectStoryParameters: false,
-        },
-      },
-    },
-    '@storybook/addon-links', '@storybook/addon-essentials', '@storybook/addon-interactions', '@storybook/preset-create-react-app', "@storybook/addon-mdx-gfm"],
+    '@storybook/addon-docs',
+    '@storybook/addon-links',
+    '@storybook/addon-essentials', 
+    '@storybook/addon-interactions', 
+    '@storybook/preset-create-react-app', 
+    '@storybook/addon-viewport'
+    // "@storybook/addon-mdx-gfm"
+  ],
   framework: {
     name: "@storybook/react-webpack5",
     options: {

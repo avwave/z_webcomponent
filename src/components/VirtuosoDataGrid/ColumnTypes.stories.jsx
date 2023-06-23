@@ -78,6 +78,78 @@ NumberCell.args = {
   ]
 }
 
+export const StandardDateCell = DefaultStory.bind({});
+StandardDateCell.args = {
+  ...Default.args,
+  columns:[
+    {
+      key: "date",
+      name: "date",
+      dataType: "date",
+      dateOptions:{
+        format: "LL LTS"
+      }
+    },
+  ]
+}
+
+export const ShortDateCell = DefaultStory.bind({});
+ShortDateCell.args = {
+  ...Default.args,
+  columns: [
+    {
+      key: "date",
+      name: "date",
+      dataType: "date",
+      dateOptions: {
+        format: "MM/DD/YYYY"
+      }
+    },
+  ]
+}
+
+export const RelativeDateCell = DefaultStory.bind({});
+RelativeDateCell.args = {
+  ...Default.args,
+  columns: [
+    {
+      key: "date",
+      name: "date",
+      dataType: "date",
+      dateOptions: {
+        relative: true
+      }
+    },
+  ]
+}
+
+export const ReactAsRowCell = DefaultStory.bind({});
+ReactAsRowCell.args = {
+  ...Default.args,
+  columns: [
+    {
+      key: "react",
+      name: "react",
+      dataType: "react",
+    },
+  ]
+}
+
+export const ReactAsRenderedCell = DefaultStory.bind({});
+ReactAsRenderedCell.args = {
+  ...Default.args,
+  columns: [
+    {
+      key: "string",
+      name: "string",
+      dataType: "text",
+      cellRenderer ({row}) {
+        return <Chip label={row.string} />
+      }
+    }
+  ]
+}
+
 export const NullCell = DefaultStory.bind({});
 NullCell.args = {
   ...Default.args,

@@ -13,7 +13,8 @@ import { DataGridContext, actions as dataGridActions } from '../DataGrid/DataGri
 import { PortalCell } from '../DataGrid/PortalCell';
 import { DataGridToolbar } from './DataGridToolbar';
 import { tableTranslation } from './localization';
-import { localizeCurrency, localizePercent } from '../utils/format';
+import { fuzzyDate, localizeCurrency, localizePercent } from '../utils/format';
+import moment from 'moment';
 
 const useStyles = makeStyles()(theme => ({
   rootContainer: {
@@ -183,6 +184,13 @@ const VirtuosoDataGrid = ({
                 case 'percent':
                   align = 'right'
                   content = localizePercent(cell?.getValue())
+                  break;
+                case 'date':
+                  if (col.dateOptions?.relative) {
+                    content = fuzzyDate(cell?.getValue())
+                  } else {
+                    content = moment(cell?.getValue()).format(col.dateOptions?.format ?? 'LL LTS')
+                  }
                   break;
                 default:
                   break;
