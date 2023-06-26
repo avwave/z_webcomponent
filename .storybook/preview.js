@@ -70,7 +70,7 @@ const parameters = {
   },
   docs: {
     source: {
-      type: 'code'
+      type: 'code' 
     }
   }
 };
