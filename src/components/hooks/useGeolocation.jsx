@@ -19,6 +19,34 @@ const useGeolocation = ({ highAccuracy = true, enabled = true }) => {
     }, [navigator.geolocation]
   );
 
+  const setIfDisplayDialog = useCallback(
+    (result) => {
+      if (result?.state === 'granted') {
+        setIsGeolocationPermissionDismissed(true)
+      } else if (result?.state === 'prompt') {
+        setIsGeolocationPermissionDismissed(false)
+      } else if (result?.state === 'denied') {
+        setIsGeolocationPermissionDismissed(false)
+      }
+    },
+    [],
+  );
+
+  useEffect(
+    () => {
+      if (navigator?.permissions?.query) {
+        navigator.permissions.query({ name: 'geolocation' }).then((result) => {
+          setIfDisplayDialog(result)
+          result.onchange = (result) => {
+            setIfDisplayDialog(result?.target)
+          }
+        })
+      } else {
+        setIsGeolocationPermissionDismissed(false)
+      }
+    }, []
+  );
+
   const dialog = useMemo(
     () => {
       if (enabled && !isGeolocationPermissionDismissed) {
