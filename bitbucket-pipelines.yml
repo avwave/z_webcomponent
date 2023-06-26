@@ -15,7 +15,7 @@ pipelines:
             script:
               - yarn install
               - yarn test -- -u
-              - yarn chromatic --project-token=5715d8611200 --auto-accept-changes
+              - yarn chromatic --ci --project-token=5715d8611200 --auto-accept-changes
     '{master}':
         - step:
             name: Build, Test and Chromatic Publish
@@ -24,4 +24,4 @@ pipelines:
             script:
               - yarn install
               - yarn test -- -u
-              - yarn chromatic --project-token=5715d8611200 --auto-accept-changes
+              - yarn chromatic --ci --project-token=5715d8611200 --auto-accept-changes
