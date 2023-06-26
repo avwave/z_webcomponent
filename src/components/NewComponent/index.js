@@ -1,2 +1,2 @@
-import {NewComponent} from "./NewComponent"
+import NewComponent from "./NewComponent"
 export {NewComponent}; 
