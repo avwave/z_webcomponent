@@ -5,10 +5,9 @@
 
 image: node:16.19.1
 
-definitions:
-  services:
-    docker:
-      memory: 2048
+options:
+  size: 2x
+
       
 pipelines:
   branches:
