@@ -16,13 +16,77 @@ export const Default = DefaultStory.bind({});
 Default.args = {
     hasSearch:true,
     columns: [ 
-        {field: 'id',headerName:"ID", sortable:true ,width:120,flex:0,filter:true},
-        {field: 'title', sortable:true,filter:true},
-        {field: 'reviews',sortable:true,filter:true},
-        {field: 'comments',resizable:false,sortable:true},
-        {field: 'filler',sortable:true},
-        {field: 'enabled',sortable:true
-            ,filter:{type:"autocomplete",label:"Enabled"}
+        {
+            field: 'id', headerName:"ID", sortable:true , width:120, flex:0,
+        },
+        {
+            field: 'title', sortable:true},
+        {
+            field: 'reviews',sortable:true,
+            filter:{
+                type:'autocomplete',
+                options:[
+                    {
+                        label:'Low',
+                        value:6
+                    },
+                    {
+                        label: 'High',
+                        value: 5
+                    },
+                    {
+                        label: 'Mid',
+                        value: 4
+                    },
+                    {
+                        label: 'Good',
+                        value: 3
+                    },
+                    {
+                        label: 'Bad',
+                        value: 2
+                    }
+                ]
+            }
+        },
+        {
+            field: 'comments',sortable:true},
+        {
+            field: 'filler',sortable:true,
+            filter:{
+                type:'multiple',
+                options:[
+                    {
+                        label: 'True',
+                        value: true
+                    },
+                    {
+                        label: 'False',
+                        value: false
+                    },
+                    {
+                        label: 'Null',
+                        value: null
+                    }
+                ]
+            }
+        },
+        {
+            field: 'enabled',sortable:true
+            ,filter:{
+                label:"Enabled",
+                options:[
+                {
+                    label: 'Enabled',
+                    value: 0,
+                    key:'key1'
+                },
+                {
+                    label: 'Disabled',
+                    value: 1,
+                    key:'key2'
+                }
+            ]}
         },
     ],
     rows: [

@@ -4,7 +4,7 @@ import { faSort , faSortUp, faSortDown, faPlus, faBars, faFilter, faThumbtack,fa
 import SearchIcon from '@mui/icons-material/Search';
 import { render } from 'react-dom';
 import { AgGridColumn, AgGridReact } from 'ag-grid-react';
-import {Button, Divider, FormControl, Grid, IconButton, InputLabel, InputAdornment, MenuItem, OutlinedInput, Popover, Select, TextField, Typography, useTheme} from '@mui/material'
+import {Autocomplete, Button, Checkbox, Chip, Divider, FormControl, Grid, IconButton, InputLabel, InputAdornment, ListItemText , MenuItem, MenuList, OutlinedInput, Popover, Select, TextField, Typography, useTheme} from '@mui/material'
 import { makeStyles } from 'tss-react/mui';
 import './GridStyles.scss'
 
@@ -18,8 +18,12 @@ function NewComponent({columns,rows,hasSearch}) {
     const [headerCustomFilters, setHeaderCustomFilters] = useState([])
     const [activeFilters, setActiveFilters] = useState([])
     const [isRowsLoaded, setIsRowsLoaded] = useState(false)
+    // Filters
     const [anchorElFilter, setAnchorElFilter] = useState(null)
     const [selectedFilter, setSelectedFilter] = useState('')
+    const [selectedFilterOption, setSelectedFilterOption] = useState('')
+    const [selectedFilterOptionMultiple, setSelectedFilterOptionMultiple] = useState([])
+    // Search
     const [searchValue, setSearchValue] = useState('')
     // useRefs
     const tableRef = useRef(null)
@@ -78,7 +82,7 @@ function NewComponent({columns,rows,hasSearch}) {
     }
 
     const CustomizedHeader = (col) => {
-        console.log("Col: ",col)
+        // console.log("Col: ",col)
         const [anchorEl, setAnchorEl] = useState(null)
         const [isHovered, setIsHovered] = useState(false)
         const [currentSort, setCurrentSort] = useState(false)
@@ -245,6 +249,7 @@ function NewComponent({columns,rows,hasSearch}) {
             return false
         }
     }
+
     const constructFilter = (element) => {
         // Sort input type = autocomplete, default, checkbox, nested, ...
         let filterObject = {
@@ -264,10 +269,17 @@ function NewComponent({columns,rows,hasSearch}) {
                 type: element.filter.type
             }
         }
+        if(element.filter.options){
+            filterObject={
+                ...filterObject,
+                options: element.filter.options
+            }
+        }
         console.log(filterObject)
         return filterObject
     }
-    // update when component mounts
+
+    // Update when props change
     useEffect(() => {
         if(columns){
             if(columns.length >= 0){
@@ -281,7 +293,6 @@ function NewComponent({columns,rows,hasSearch}) {
                     newColumns[i] = newElement
                     // Filters
                     if(element.filter){
-                        console.log('hit')
                         let filterObject = constructFilter(element)
                         // default value
                         updatedArray = [...updatedArray,filterObject]
@@ -296,14 +307,7 @@ function NewComponent({columns,rows,hasSearch}) {
         }
         
     }, [columns])
-    useEffect(() => {
-        console.log("Custom Filters: ",headerCustomFilters)
-    }, [headerCustomFilters])
-    useEffect(() => {
-        console.log("selectedFilter: ",selectedFilter)
-    }, [selectedFilter])
     
-
     useEffect(() => {
         if(rows){
             if(rows.length === 0){
@@ -317,6 +321,20 @@ function NewComponent({columns,rows,hasSearch}) {
         }
     }, [rows])
 
+    const handlePopoverFilterClick = (e) => {
+        setAnchorElFilter(e.currentTarget)
+    }
+    const handlePopoverFilterClose = () => {
+        setSelectedFilter('')
+        setSelectedFilterOption('')
+        setSelectedFilterOptionMultiple([])
+        setAnchorElFilter(null)
+    }
+    const sampleClick = () => {
+        console.log('click')
+    
+    }
+    // SEARCH
     const handleSearchChange = (e) => {
         setSearchValue(e.target.value)
         // Insert Search
@@ -325,19 +343,76 @@ function NewComponent({columns,rows,hasSearch}) {
         console.log("Search Value: ",searchValue)
     }
     
-    const handlePopoverFilterClick = (e) => {
-        setAnchorElFilter(e.currentTarget)
-    }
-    const handlePopoverFilterClose = () => {
-        setAnchorElFilter(null)
-    }
-    const sampleClick = () => {
-        console.log('click')
-    }
-    // filter
+    // FILTERS
     const handleSelectedFilter = (e) => {
+        setSelectedFilterOption('')
+        setSelectedFilterOptionMultiple([])
         setSelectedFilter(e.target.value)
     }
+    const handleSelectedFilterOption = (e) => {
+        setSelectedFilterOption(e.target.value)
+    }
+    const handleSelectedFilterAutocomplete = (e,v) => {
+        if(v){
+            setSelectedFilterOption(v.value)
+        }else{
+            setSelectedFilterOption('')
+        }
+    }
+    const handleSelectedFilterOptionMultiple = (e) => {
+        console.log("mult options")
+        console.log(e.target.value)
+        const currArray = e.target.value
+        let newArray = []
+        currArray.forEach(element => {
+            newArray = [...newArray,element.value]
+        });
+        
+        setSelectedFilterOptionMultiple(e.target.value)
+        setSelectedFilterOption(newArray)
+    }
+    const handleApplyFilter = (e) =>{
+        // Find the target filter in the headerCustomFilters array
+        const targetFilter = headerCustomFilters.find(obj => obj.label === selectedFilter.label);
+        console.log("Target Filter: ", targetFilter);
+        
+        // Update the target filter's isActive property
+        if (targetFilter) {
+            targetFilter.isActive = true;
+        
+            // Create a new array with the updated filter
+            const updatedFilters = headerCustomFilters.map(obj => obj.label === selectedFilter.label ? targetFilter : obj);
+        
+            // Update the state with the updated filters
+            setHeaderCustomFilters(updatedFilters);
+        }
+
+        handlePopoverFilterClose()
+
+    }
+    const handleChipDelete = (deletedElement) => {
+        const updatedFilters = headerCustomFilters.map(element => {
+            if (element === deletedElement) {
+                return { ...element, isActive: false };
+            }
+            return element;
+            });
+        
+            setHeaderCustomFilters(updatedFilters);
+            console.log(headerCustomFilters);
+
+    }
+    // Debug
+    useEffect(() => {
+        console.log("Custom Filters: ",headerCustomFilters)
+    }, [headerCustomFilters])
+    useEffect(() => {
+        console.log("selectedFilter: ",selectedFilter)
+    }, [selectedFilter])
+    useEffect(() => {
+        console.log("Selected Filter Option: ",selectedFilterOption)
+    }, [selectedFilterOption])
+    
     return (
         <Grid container direction='column' justifyContent='center' style={{ height: '90vh', width: '90vw'}}>
             <Grid item xs style={{flex:0}}>
@@ -345,40 +420,50 @@ function NewComponent({columns,rows,hasSearch}) {
                     <Grid item xs={9} >
                     {/* If filter: */}
                     { headerCustomFilters.length > 0 && (
-                        <Grid container alignItems="center" direction='row' style={{ marginBottom: hasSearch ? '0': '-1rem'}}>
+                        <Grid container alignItems="center" direction='row' style={{ marginBottom: hasSearch ? '-0.3rem': '-1.3rem'}}>
+                            <div style={{display:'flex', 
+                            marginBottom: hasSearch ? '-3px': '0', 
+                            justifyContent:'center', alignItems:'center'}}>
                             <FontAwesomeIcon 
                                 icon={faFilter} 
                                 style={{
                                     color:'#4D4C53',
-                                    fontSize:'20px'
+                                    fontSize:'12px',
+                                    marginTop:'-2px'
                                 }}
                             />
-                            <Typography style={{ fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif', 
-                                paddingLeft: '0.5rem',
-                                textTransform:'none', 
+                            <Typography style={{ 
+                                fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif', 
+                                paddingLeft: '0.3rem',
+                                // textTransform:'none', 
                                 // color:'black', 
-                                fontSize:'17px'}}
+                                fontSize:'18px'}}
                             >
                                 Filter by: 
                             </Typography>
-                            { //only display button if headerCustomFilter.length < activeFilters.length
-
+                            </div>
+                            { //Display chips here
+                                headerCustomFilters.filter(obj => obj.isActive === true).map(element => (
+                                    <Chip size='small' label={element.label} onDelete={()=>handleChipDelete(element)} style={{marginLeft:'0.5rem'}} />
+                                ))
                             }
-                            <Button 
-                                variant="contained" 
+                            { //only display add filter button if headerCustomFilter.length < activeFilters.length
+                                (headerCustomFilters.filter(obj => obj.isActive === false).length > 0 )&& (
+                                <>
+                                <IconButton 
                                 onClick={handlePopoverFilterClick} 
                                 style={{
                                     backgroundColor:'#F1F0F3',
                                     color:'#4D4C53',
-                                    marginLeft:'0.8rem', 
-                                    maxWidth:'0.5rem', 
-                                    minWidth:'0.5rem',
+                                    marginLeft:'0.6rem', 
+                                    height:'20px',
+                                    width:'20px',
                                     borderRadius:'8px',
-                                    boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.2)',
+                                    boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.4)',
                                 }}
                             >
-                                <FontAwesomeIcon icon={faPlus} style={{width:'1rem'}}/>
-                            </Button>
+                                <FontAwesomeIcon icon={faPlus} style={{width:'0.7rem'}}/>
+                            </IconButton>
                             <Popover
                                 open={Boolean(anchorElFilter)}
                                 anchorEl={anchorElFilter}
@@ -398,42 +483,107 @@ function NewComponent({columns,rows,hasSearch}) {
                                         marginTop:'0.5rem'
                                     }
                                 }}
-                                
                             >
-                                <div style={{padding:'0.5rem 0 1rem 0',width:'15rem'}}>
-                                    <div size="small" fullWidth style={{padding: '0.5rem 1rem 0.5rem 1rem', paddingLeft:'1.5rem', textTransform: "none", justifyContent:'flex-start',color:'black'}} >
-                                        <Typography sx={{paddingBottom: '0.5rem',fontSize: '15px', fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif', fontWeight: 400}}>
-                                            Filters:
+                                <div style={{padding:'0.8rem 0 1rem 0',minWidth:'20rem'}}>
+                                    <div size="small" style={{padding: '0.5rem 1rem 0.5rem 1rem', paddingLeft:'1.5rem', textTransform: "none", justifyContent:'flex-start',color:'black'}} >
+                                        <Typography sx={{paddingBottom: '0.3rem',fontSize: '19px', fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif', fontWeight: 300}}>
+                                            {/* Filters: */}
                                         </Typography>
-                                            <FormControl variant="outlined" fullWidth>
+                                            <FormControl variant="outlined" fullWidth >
                                                 <Select
                                                     labelId="filter-select"
                                                     id="filter-select"
-                                                    fullWidth
-                                                    size="small"
+                                                    style={{height:'30px'}}
                                                     value={selectedFilter}
                                                     onChange={handleSelectedFilter}
                                                 >
-                                                    <MenuItem value={''} disabled>
+                                                    <MenuItem value={''} disabled >
                                                         <em>Filter</em>
                                                     </MenuItem>
                                                     { //loop for every active filter
                                                         headerCustomFilters.filter(obj => obj.isActive === false).map(element => (
-                                                            <MenuItem value={element.label}>
+                                                            <MenuItem value={element} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                                                                 {element.label}
                                                             </MenuItem>
                                                     )
                                                     )}
                                                 </Select>
                                             </FormControl>
-                                            {/* { !selectedFilter === '' ? //insert here filter type
-                                                selectedFilter
+                                            { selectedFilter === '' ? //insert here filter type
+                                                <></>
                                             :
-                                            <></>
-                                            } */}
+                                            selectedFilter.type === 'default' ?                                             
+                                                <MenuList dense value={selectedFilterOption} onMouseUp={handleSelectedFilterOption} style={{paddingTop:'1rem'}}>
+                                                    { //loop for every active filter
+                                                        selectedFilter?.options &&(
+                                                            selectedFilter.options.map(element => (
+                                                                <MenuItem value={element.value} selected={selectedFilterOption === element.value}>
+                                                                    <Typography >{element.label}</Typography>
+                                                                </MenuItem>
+                                                            ))
+                                                        )
+                                                    }
+                                                </MenuList>
+                                            :
+                                            selectedFilter.type === 'autocomplete' ?
+                                            <Autocomplete
+                                                id="autocomplete-filter"
+                                                options={selectedFilter.options}
+                                                style={{paddingTop:'0.5rem'}}
+                                                onChange={handleSelectedFilterAutocomplete || ''}
+                                                renderInput={(params)=><TextField {...params} size='small'  />}
+                                            />
+                                            :
+                                            selectedFilter.type === 'multiple' ?
+                                            <FormControl  fullWidth style={{paddingTop:'0.5rem'}}>
+                                                <Select
+                                                    labelId="multiple-filter"
+                                                    id="multiple-filter"
+                                                    multiple
+                                                    style={{height:'30px'}}
+                                                    value={selectedFilterOptionMultiple}
+                                                    onChange={handleSelectedFilterOptionMultiple}
+                                                    renderValue ={(selected) => {
+                                                            if(selected){
+                                                                let displayStr= selected.map(obj => obj.label)
+                                                                const joinedStr = displayStr.join(', ')
+                                                                return joinedStr
+                                                            }
+                                                            return ''
+                                                        }
+                                                    }
+                                                >
+                                                    <MenuItem value={''} disabled >
+                                                        <em>Filter</em>
+                                                    </MenuItem>
+                                                    { //loop for every active filter
+                                                        selectedFilter.options.map(element => (
+                                                            <MenuItem value={element} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                                                <Checkbox checked={selectedFilterOptionMultiple.some(obj => obj.value === element.value)}/>
+                                                                {element.label}
+                                                            </MenuItem>
+                                                    )
+                                                    )}
+                                                </Select>
+                                            </FormControl>
+                                            :
+                                            <>
+                                            {/* Apply nested filter here */}
+                                            </> 
+                                            }
+                                            <Grid container spacing={1} justifyContent='flex-end' style={{marginTop:'0.5rem'}}>
+                                                <Grid item>
+                                                    <Button variant='outlined' onClick={handlePopoverFilterClose} color='error' size='small' style={{textTransform:'none'}}>Cancel</Button>
+                                                </Grid>
+                                                <Grid item>
+                                                    <Button variant='outlined' onClick={handleApplyFilter} disabled={selectedFilterOption === ''} size='small' style={{textTransform:'none'}}>Apply</Button>
+                                                </Grid>
+                                            </Grid>
                                     </div >
                                 </div>
                             </Popover>
+                            </>)
+                            }
                         </Grid>
                     )}
                     </Grid>
