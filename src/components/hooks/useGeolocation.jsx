@@ -5,7 +5,7 @@ import mapAnimation from './mapanim.json'
 import { Button, Dialog, DialogActions, DialogContent, Typography } from '@mui/material';
 const useStyles = makeStyles()(theme => ({
 }));
-const useGeolocation = ({ highAccuracy = true, enabled = true }) => {
+const useGeolocation = ({ highAccuracy = true, enabled = true, watchLocation = true }) => {
   const { classes } = useStyles()
   const [error, setError] = useState(null);
   const [isGeolocationEnabled, setIsGeolocationEnabled] = useState(false);
@@ -51,7 +51,7 @@ const useGeolocation = ({ highAccuracy = true, enabled = true }) => {
     () => {
       if (enabled && !isGeolocationPermissionDismissed) {
         return <Dialog open={!isGeolocationPermissionDismissed} onClose={() => setIsGeolocationPermissionDismissed(true)}>
-          <DialogContent sx={{display:'flex', flexDirection:'column', textAlign:'center', alignItems:'center'}}>
+          <DialogContent sx={{ display: 'flex', flexDirection: 'column', textAlign: 'center', alignItems: 'center' }}>
             <Lottie
               loop
               animationData={mapAnimation}
@@ -60,7 +60,7 @@ const useGeolocation = ({ highAccuracy = true, enabled = true }) => {
             />
             <Typography variant="h6">Please enable location services so we can roughly estimate your address</Typography>
           </DialogContent>
-          <DialogActions sx={{justifyContent:'center'}}>
+          <DialogActions sx={{ justifyContent: 'center' }}>
             <Button variant="contained" color="primary" onClick={() => setIsGeolocationPermissionDismissed(true)}>OK</Button>
           </DialogActions>
         </Dialog>
@@ -71,6 +71,7 @@ const useGeolocation = ({ highAccuracy = true, enabled = true }) => {
   const updateCoordinates = useCallback(
     ({ coords, timestamp }) => {
       setLatLng({ lat: coords.latitude, lng: coords.longitude })
+      return { lat: coords.latitude, lng: coords.longitude }
     },
     [],
   );
@@ -83,20 +84,41 @@ const useGeolocation = ({ highAccuracy = true, enabled = true }) => {
     [],
   );
 
+  const fetchNewLocation = useCallback(
+    async () => {
+      try {
+        const pos = await new Promise((resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(resolve, reject);
+        });
+  
+        return {
+          lng: pos.coords.longitude,
+          lat: pos.coords.latitude,
+        };
+      } catch(e) {
+        setError(e?.message)
+        setIsGeolocationPermissionDismissed(false)
+      }
+      
+    },
+    [],
+  );
 
   useEffect(
     () => {
       let watchID
       if (enabled) {
         navigator?.geolocation?.getCurrentPosition(updateCoordinates, setErrorCallback)
-        watchID = navigator?.geolocation?.watchPosition(
-          updateCoordinates,
-          setErrorCallback,
-          {
-            enableHighAccuracy: highAccuracy,
-            maximumAge: 15000,
-          }
-        )
+        if (watchLocation) {
+          watchID = navigator?.geolocation?.watchPosition(
+            updateCoordinates,
+            setErrorCallback,
+            {
+              enableHighAccuracy: highAccuracy,
+              maximumAge: 15000,
+            }
+          )
+        }
       }
       return () => {
         if (watchID) {
@@ -111,6 +133,7 @@ const useGeolocation = ({ highAccuracy = true, enabled = true }) => {
     error,
     isGeolocationEnabled,
     latLng,
+    fetchNewLocation
   }
 }
 
