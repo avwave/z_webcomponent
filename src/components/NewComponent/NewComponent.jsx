@@ -4,6 +4,7 @@ import { faSort , faSortUp, faSortDown, faPlus, faBars, faFilter, faThumbtack,fa
 import SearchIcon from '@mui/icons-material/Search';
 import { render } from 'react-dom';
 import { AgGridColumn, AgGridReact } from 'ag-grid-react';
+import {actions as DataGridContext } from './GridContext'
 import {Autocomplete, Button, Checkbox, Chip, Divider, FormControl, Grid, IconButton, InputLabel, InputAdornment, ListItemText , MenuItem, MenuList, OutlinedInput, Popover, Select, TextField, Typography, useTheme} from '@mui/material'
 import { makeStyles } from 'tss-react/mui';
 import './GridStyles.scss'
@@ -16,13 +17,13 @@ function NewComponent({columns,rows,hasSearch}) {
     const [headerCustomSortDirection, setHeaderCustomSortDirection] = useState(null)
     const [headerCustomSortColumn, setHeaderCustomSortColumn] = useState(null)
     const [headerCustomFilters, setHeaderCustomFilters] = useState([])
-    const [activeFilters, setActiveFilters] = useState([])
     const [isRowsLoaded, setIsRowsLoaded] = useState(false)
     // Filters
     const [anchorElFilter, setAnchorElFilter] = useState(null)
     const [selectedFilter, setSelectedFilter] = useState('')
     const [selectedFilterOption, setSelectedFilterOption] = useState('')
     const [selectedFilterOptionMultiple, setSelectedFilterOptionMultiple] = useState([])
+    const [selectedNestedFilter, setSelectedNestedFilter] = useState('')
     // Search
     const [searchValue, setSearchValue] = useState('')
     // useRefs
@@ -77,12 +78,9 @@ function NewComponent({columns,rows,hasSearch}) {
             col.updateSortDirection('asc')
             return col.updateSortColumn(col.column.colId)
         }
-        
-        // return true
     }
 
     const CustomizedHeader = (col) => {
-        // console.log("Col: ",col)
         const [anchorEl, setAnchorEl] = useState(null)
         const [isHovered, setIsHovered] = useState(false)
         const [currentSort, setCurrentSort] = useState(false)
@@ -252,6 +250,7 @@ function NewComponent({columns,rows,hasSearch}) {
 
     const constructFilter = (element) => {
         // Sort input type = autocomplete, default, checkbox, nested, ...
+        console.log("Filter: ",element)
         let filterObject = {
             label:element.field.charAt(0).toUpperCase() + element.field.slice(1), 
             isActive:false,
@@ -327,6 +326,7 @@ function NewComponent({columns,rows,hasSearch}) {
     const handlePopoverFilterClose = () => {
         setSelectedFilter('')
         setSelectedFilterOption('')
+        setSelectedNestedFilter('')
         setSelectedFilterOptionMultiple([])
         setAnchorElFilter(null)
     }
@@ -346,6 +346,7 @@ function NewComponent({columns,rows,hasSearch}) {
     // FILTERS
     const handleSelectedFilter = (e) => {
         setSelectedFilterOption('')
+        setSelectedNestedFilter('')
         setSelectedFilterOptionMultiple([])
         setSelectedFilter(e.target.value)
     }
@@ -371,11 +372,24 @@ function NewComponent({columns,rows,hasSearch}) {
         setSelectedFilterOptionMultiple(e.target.value)
         setSelectedFilterOption(newArray)
     }
+    const handleSelectedNestedFilter = (e) => {
+        console.log("Selected Nested Filter: ",e.target.value)
+        if(e.target.value.nestedOptions){
+            setSelectedNestedFilter(e.target.value)
+        }else{
+            setSelectedNestedFilter(e.target.value)
+            setSelectedFilterOption(e.target.vlue)
+        }
+    }
     const handleApplyFilter = (e) =>{
         // Find the target filter in the headerCustomFilters array
-        const targetFilter = headerCustomFilters.find(obj => obj.label === selectedFilter.label);
+        let targetFilter = headerCustomFilters.find(obj => obj.label === selectedFilter.label);
         console.log("Target Filter: ", targetFilter);
-        
+        // consider nested property
+        if(targetFilter.type==='nestedAutocomplete'){
+            // newFilter = selectedFilterOption
+            console.log("Nested: ", selectedFilterOption)
+        }
         // Update the target filter's isActive property
         if (targetFilter) {
             targetFilter.isActive = true;
@@ -417,50 +431,56 @@ function NewComponent({columns,rows,hasSearch}) {
         <Grid container direction='column' justifyContent='center' style={{ height: '90vh', width: '90vw'}}>
             <Grid item xs style={{flex:0}}>
                 <Grid container sx={{px:'1rem', py:'0.5rem'}}>
-                    <Grid item xs={9} >
+                    <Grid item xs={9} style={{paddingTop:'0.5rem'}}>
                     {/* If filter: */}
                     { headerCustomFilters.length > 0 && (
-                        <Grid container alignItems="center" direction='row' style={{ marginBottom: hasSearch ? '-0.3rem': '-1.3rem'}}>
+                        <Grid container alignItems="center" direction='row'>
                             <div style={{display:'flex', 
-                            marginBottom: hasSearch ? '-3px': '0', 
+                            marginBottom: hasSearch ? '-3px': '-6px', 
                             justifyContent:'center', alignItems:'center'}}>
                             <FontAwesomeIcon 
                                 icon={faFilter} 
                                 style={{
                                     color:'#4D4C53',
                                     fontSize:'12px',
-                                    marginTop:'-2px'
+                                    marginTop:'0px'
                                 }}
                             />
-                            <Typography style={{ 
-                                fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif', 
-                                paddingLeft: '0.3rem',
-                                // textTransform:'none', 
-                                // color:'black', 
-                                fontSize:'18px'}}
+                            <Typography 
+                                variant="subtitle2"
+                                style={{ 
+                                    paddingLeft: '0.3rem',
+                                    // textTransform:'none', 
+                                    // color:'black', 
+                                    fontWeight:'400',
+                                    fontSize:'18px'
+                                }}
                             >
-                                Filter by: 
+                                Filters: 
                             </Typography>
-                            </div>
                             { //Display chips here
                                 headerCustomFilters.filter(obj => obj.isActive === true).map(element => (
-                                    <Chip size='small' label={element.label} onDelete={()=>handleChipDelete(element)} style={{marginLeft:'0.5rem'}} />
-                                ))
+                                    <Chip size='small' label={element.label} onDelete={()=>handleChipDelete(element)} style={{marginLeft:'0.5rem',paddingTop:'2px'}} />
+                                    ))
                             }
+                            </div>
                             { //only display add filter button if headerCustomFilter.length < activeFilters.length
                                 (headerCustomFilters.filter(obj => obj.isActive === false).length > 0 )&& (
                                 <>
                                 <IconButton 
-                                onClick={handlePopoverFilterClick} 
-                                style={{
-                                    backgroundColor:'#F1F0F3',
-                                    color:'#4D4C53',
-                                    marginLeft:'0.6rem', 
-                                    height:'20px',
-                                    width:'20px',
-                                    borderRadius:'8px',
-                                    boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.4)',
-                                }}
+                                    onClick={handlePopoverFilterClick}
+                                    // color='secondary' 
+                                    sx={{
+                                        backgroundColor:'#eceef1',
+                                        // color:'#4D4C53',
+                                        marginTop:'0.2rem',
+                                        marginLeft:'0.6rem', 
+                                        height:'20px',
+                                        width:'20px',
+                                        borderRadius:'8px',
+                                        boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.3)',
+                                        
+                                    }}
                             >
                                 <FontAwesomeIcon icon={faPlus} style={{width:'0.7rem'}}/>
                             </IconButton>
@@ -568,8 +588,41 @@ function NewComponent({columns,rows,hasSearch}) {
                                             </FormControl>
                                             :
                                             <>
-                                            {/* Apply nested filter here */}
-                                            </> 
+                                            <FormControl  fullWidth style={{paddingTop:'0.5rem'}}>
+                                                <Select
+                                                    labelId="nested-filter" //nested filter options availabe else nest
+                                                    id="nested-filter"
+                                                    style={{height:'30px'}}
+                                                    value={selectedNestedFilter}
+                                                    onChange={handleSelectedNestedFilter}
+                                                >
+                                                    <MenuItem value={''} disabled >
+                                                        <em>Filter</em>
+                                                    </MenuItem>
+                                                    { //loop for every active filter
+                                                        selectedFilter.options.map(element => (
+                                                            <MenuItem value={element} style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                                                {element.label}
+                                                            </MenuItem>
+                                                    )
+                                                    )}
+                                                    
+                                                </Select>
+                                            </FormControl>
+                                            
+                                            { selectedNestedFilter.nestedOptions && (
+                                                    <>
+                                                        <Autocomplete
+                                                            id="autocomplete-filter"
+                                                            options={selectedNestedFilter.nestedOptions} //find selected filter option == nest filter
+                                                            style={{paddingTop:'0.5rem'}}
+                                                            onChange={handleSelectedFilterAutocomplete || ''}
+                                                            renderInput={(params)=><TextField {...params} size='small'  />}
+                                                        />
+                                                    </>
+                                                )   
+                                            }
+                                            </>
                                             }
                                             <Grid container spacing={1} justifyContent='flex-end' style={{marginTop:'0.5rem'}}>
                                                 <Grid item>
