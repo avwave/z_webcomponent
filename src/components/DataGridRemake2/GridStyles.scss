@@ -1,0 +1,16 @@
+@import "ag-grid-community/src/styles/ag-grid.scss";
+@import "ag-grid-community/src/styles/ag-theme-alpine/sass/ag-theme-alpine-mixin.scss";
+
+
+.grid-wrapper{
+    .ag-theme-alpine{
+        @include ag-theme-alpine((
+            theme: alpine,
+            // header-background-color:#86cac7,
+            // header-foreground-color:red
+        ));
+    }
+}
+.ag-root-wrapper { 
+    border-radius: 20px 
+}

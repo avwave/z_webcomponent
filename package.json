@@ -21,8 +21,8 @@
     "@testing-library/react": "^12.1.5",
     "@testing-library/user-event": "^14.4.3",
     "@wojtekmaj/react-hooks": "^1.17.2",
-    "ag-grid-community": "^25.1.0",
-    "ag-grid-react": "^25.1.0",
+    "ag-grid-community": "^27.0.1",
+    "ag-grid-react": "^27.0.1",
     "axios": "^1.2.1",
     "branch-sdk": "^2.59.0",
     "clsx": "^1.1.1",
@@ -172,7 +172,7 @@
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@bitbucket.org/zennya/web-component-library.git"
+    "url": "git+ssh://git@bitbucket.org/zennya/web-component-library.git?sha=f4c76a6023c8f317fb0c329937c88c9981a5e09b"
   },
   "author": "",
   "license": "ISC",
