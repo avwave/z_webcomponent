@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import { AgGridColumn, AgGridReact } from "ag-grid-react";
 import LogoCellRender from "./logoCellRender";
 import TagCellRender from "./tagCellRender";
-import "ag-grid-community/dist/styles/ag-grid.css";
-import "ag-grid-community/dist/styles/ag-theme-alpine.css";
+// import "ag-grid-community/dist/styles/ag-grid.css";
+// import "ag-grid-community/dist/styles/ag-theme-alpine.css";
+import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
+import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
 import "./table.css";
 
 export const Table = () => {
