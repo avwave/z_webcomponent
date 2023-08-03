@@ -1,0 +1,24 @@
+@use "~ag-grid-community/styles" as ag;
+
+@include ag.grid-styles((
+    themes: (alpine, alpine-dark, belham ,belham-dark, material),
+
+));
+
+.ag-theme-alpine {
+    &.custom-colors{
+        --ag-header-background-color: hsl(177, 88%, 90%);
+        --ag-background-color: hsl(177, 88%, 97%);
+        --ag-odd-row-background-color: hsl(177, 88%, 95%);
+        --ag-alpine-active-color: hsl(0, 100%, 50%);
+    }   
+}
+
+.ag-theme-alpine-dark {
+    &.custom-border{
+        --ag-borders: 1px;
+    }
+}
+// .ag-root-wrapper { 
+//     // border: none
+// }

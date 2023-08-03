@@ -1,5 +1,6 @@
 import {createContext, useReducer} from 'react'
 
+
 export const initialState = {
     columns: [],
     rows:[],
@@ -13,6 +14,7 @@ export const initialState = {
 export const actions ={
     RESET_GRID:'RESET_GRID',
     SORT_COLUMN: 'SORT_COLUMN',
+    SORT_DIRECTION:'SORT_DIRECTION',
     FILTER_COLUMN: 'FILTER_COLUMN',
     CLEAR_FILTER_COLUMN:'CLEAR_FILTER_COLUMN',
     LOAD_COLUMNS: 'LOAD_COLUMNS',
@@ -79,4 +81,13 @@ export function gridReducer(state,action){
     }
 }
 
+export function DataGridProvider({ children }){
+    const [state, dispatch] = useReducer(gridReducer, initialState);
+    return (
+        <GridContext.Provider value={[state,dispatch]}>
+            {children}
+        </GridContext.Provider>
+    );
+};
 
+export default GridContext
