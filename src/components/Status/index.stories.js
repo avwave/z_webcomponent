@@ -9,60 +9,60 @@ export default StatusStory
 
 export const DefaultStory = ({...args}) => {
     return (
-        <Grid container style={{padding:'1rem', display:'flex', alignItems:'center', justifyContent:'center'}}>
-            <Grid item xs={2}>
+        <div container style={{padding:'1rem', display:'flex', alignItems:'center', justifyContent:'center'}}>
+            <div style={{marginRight:'1rem'}}>
                 <Status 
                     content='NEGATIVE'
                     color='negative'
                     isHoverable={true}
                 />
-            </Grid>
-            <Grid item xs={2}>
+            </div>
+            <div style={{marginRight:'1rem'}}>
                 <Status 
                     content='PENDING'
                     color='pending'
                 />
-            </Grid>
-            <Grid item xs={2}>
+            </div>
+            <div style={{marginRight:'1rem'}}>
                 <Status 
                     content='MATCHED'
                     color="matched"
                 />
-            </Grid>
-            <Grid item xs={2}>
+            </div>
+            <div style={{marginRight:'1rem'}}>
                 <Status 
                     content='LIVE'
                     color='live'
                 />
-            </Grid>
-            <Grid item xs={2}>
+            </div>
+            <div style={{marginRight:'1rem'}}>
                 <Status 
                     content='CANCELLED'
                     color="cancelled"
                 />
-            </Grid>
-            <Grid item xs={2}>
+            </div>
+            <div>
                 <Status 
                     content='FINISHED'
                     color="finished"
                 />
-            </Grid>
-        </Grid>
+            </div>
+        </div>
     )
 }
 
 export const Sizes = ({...args}) => {
     return (
         <Grid container style={{padding:'1rem', display:'flex', alignItems:'center', justifyContent:'center', backgroundColor:'white'}}>
-            <Grid item xs={3}>
+            <div style={{marginRight:'1rem'}}>
                 <Status content='Small' size='small' color='finished' />
-            </Grid>
-            <Grid item xs={3}>
+            </div>
+            <div style={{marginRight:'1rem'}}>
                 <Status content='Medium' color='live'/>
-            </Grid>
-            <Grid item xs={3}>
+            </div>
+            <div>
                 <Status content='Large' size='large' color="pending" />
-            </Grid>
+            </div>
         </Grid>
     )
 }
