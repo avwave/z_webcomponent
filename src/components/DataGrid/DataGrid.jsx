@@ -95,6 +95,10 @@ function DataGrid({
   );
 
   useEffect(() => {
+      console.log("Grid Context: ",DataGridContext)
+  }, [DataGridContext])
+  
+  useEffect(() => {
     const c = domRef.current.element;
     if (onLoadMore) {
       if (domRef.current && !canvas) {
