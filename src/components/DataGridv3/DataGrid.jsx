@@ -69,7 +69,6 @@ function DataGrid(props) {
     
 
     useEffect(() => {
-        console.log("props passed")
         dispatch({
             type: actions.LOAD_ROWS,
             payload:{

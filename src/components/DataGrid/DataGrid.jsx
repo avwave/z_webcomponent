@@ -93,10 +93,6 @@ function DataGrid({
       prevScrollY.current = newScrollTop
     }, [onLoadMore]
   );
-
-  useEffect(() => {
-      console.log("Grid Context: ",DataGridContext)
-  }, [DataGridContext])
   
   useEffect(() => {
     const c = domRef.current.element;
