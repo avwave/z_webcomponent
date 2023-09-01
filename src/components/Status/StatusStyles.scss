@@ -26,6 +26,7 @@ $color-default: #7c7c84;
     display: inline-flex;
     justify-content: center;
     align-items: center;
+    align-self: flex-start;
 }
 
 // Size Section
@@ -38,7 +39,7 @@ $color-default: #7c7c84;
 
 .small{
     height: 0.5rem;
-    font-size: small;
+    font-size: 12px;
 }
 
 .large{
