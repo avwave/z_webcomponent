@@ -5,7 +5,6 @@ import LinearProgress from '@mui/material/LinearProgress';
 function TabMenu({tabs, isLoading:isLoadingProp, fullWidth:fullWidthProp, defaultTab:defaultTabProp , style}) {
     const [selectedTab, setSelectedTab] = useState(0)
     const [selectedComponent, setSelectedComponent] = useState(null)
-    const [fullWidth,setFullWidth] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
 
     useEffect(() => {
