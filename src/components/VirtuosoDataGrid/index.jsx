@@ -170,7 +170,7 @@ const VirtuosoDataGrid = ({
               }
             },
             Cell: ({ row, column, renderedCellValue, cell, ...rest }) => {
-              let align = 'left'
+              let align = col?.align ?? 'left'
               let content = renderedCellValue
               switch (col?.dataType) {
                 case 'number':
