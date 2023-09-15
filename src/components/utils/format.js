@@ -101,13 +101,13 @@ export function formatRoles(roles) {
   return roleFmt
 }
 
-export function localizeCurrency(value) {
+export function localizeCurrency(value, currency = 'PHP') {
   if (value === null || value === undefined) {
     return ''
   }
   return new Intl.NumberFormat('en-PH', {
     style: 'currency',
-    currency: 'PHP',
+    currency,
   }).format(value);
 }
 
