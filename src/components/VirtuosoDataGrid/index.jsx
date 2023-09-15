@@ -179,7 +179,7 @@ const VirtuosoDataGrid = ({
                   break
                 case 'currency':
                   align = 'right'
-                  content = localizeCurrency(cell?.getValue())
+                  content = localizeCurrency(cell?.getValue(), col?.currencyCode ?? 'PHP')
                   break;
                 case 'percent':
                   align = 'right'
@@ -199,13 +199,15 @@ const VirtuosoDataGrid = ({
               let finalizedCell = <></>
               if (col?.cellRenderer) {
                 finalizedCell = (
-                  <Typography
-                    variant='body2'
-                    noWrap
-                    textAlign={align}
-                  >
-                    {col?.cellRenderer({ row: row?.original, renderedCellValue })}
-                  </Typography>
+                  <div style={{ width: '100%' }}>
+                    <Typography
+                      variant='body2'
+                      noWrap
+                      textAlign={align}
+                    >
+                      {col?.cellRenderer({ row: row?.original, renderedCellValue })}
+                    </Typography>
+                  </div>
                 )
                 toolTipCell = col?.cellRenderer({ row: row?.original, renderedCellValue })
               } else {
