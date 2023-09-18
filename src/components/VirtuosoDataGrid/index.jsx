@@ -531,7 +531,7 @@ const VirtuosoDataGrid = ({
             const hidden = isRowExpandableCallback ? isRowExpandableCallback(row?.original) : true
             return {
               sx:{
-                visibility: hidden ? 'hidden' : 'visible'
+                visibility: hidden ? 'visible' : 'hidden'
               }
             }
           }}
