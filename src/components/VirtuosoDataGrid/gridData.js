@@ -9,6 +9,7 @@ const generateRows = (count = 1) => {
   return rows.map((row, index) => {
     return {
       id: faker.datatype.uuid(),
+      index: index,
       string: faker.lorem.word(),
       name: faker.name.fullName(),
       number: faker.datatype.number(),

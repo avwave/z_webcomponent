@@ -77,7 +77,8 @@ const VirtuosoDataGrid = ({
   deferLoading = false,
   useUrlAsState = false,
   id = "grid",
-  customColumnDisplay
+  customColumnDisplay,
+  isRowExpandableCallback,
 }) => {
   const { classes } = useStyles()
   const theme = useTheme()
@@ -519,10 +520,20 @@ const VirtuosoDataGrid = ({
           enableSortingRemoval
           enableColumnFilters={false}
           enableMultiSort={false}
+          enableExpanding={!!tableComponents?.detailsRow?.content}
+          getRowCanExpand={row => isRowExpandableCallback?isRowExpandableCallback(row?.original):true}
           data={data}
           columns={columns}
           onRowSelectionChange={(sRows) => {
             setSelectedRows(sRows)
+          }}
+          muiExpandButtonProps={({row}) => {
+            const hidden = isRowExpandableCallback ? isRowExpandableCallback(row?.original) : true
+            return {
+              sx:{
+                visibility: hidden ? 'hidden' : 'visible'
+              }
+            }
           }}
           muiTableContainerProps={{
             ref: tableContainerRef,

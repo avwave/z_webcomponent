@@ -9,7 +9,7 @@ import {
   actions,
 } from "../DataGrid/DataGridContext";
 import { VirtuosoDataGrid as DataGrid2 } from "./index";
-import { columnData, rows } from "../DataGrid2/gridData";
+import { defaultColumns, defaultRows, generateRows } from "./gridData";
 
 import { faker } from '@faker-js/faker';
 import ReactJson from "react-json-view";
@@ -66,16 +66,20 @@ export const Default = ExpanderRow.bind({});
 Default.args = {
   filterable: true,
   showSelector: true,
-  rows: rows,
+  rows: defaultRows,
+  isRowExpandableCallback: (row) => {
+    const canExpand = row.index % 2 === 0
+    return canExpand;
+  },
   columns: [
-    {
-      colId: "expander",
-      key: "expander",
-      name: "",
-      expanderControl: true,
-      width: 70,
-    },
-    ...columnData,
+    // {
+    //   colId: "expander",
+    //   key: "expander",
+    //   name: "",
+    //   expanderControl: true,
+    //   width: 70,
+    // },
+    ...defaultColumns,
   ],
 
   gridProps: {},
