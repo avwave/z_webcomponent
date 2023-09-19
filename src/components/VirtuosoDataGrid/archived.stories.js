@@ -164,7 +164,7 @@ const SelectableStory = ({ ...args }) => {
         gridProps={{
           selectedRows: selectedRowIds,
           onSelectedRowsChange: (rows) => {
-            console.log("📢[index.stories.js:231]: ", rows);
+            console.log("📢[onSelectedRowsChange]: ", rows);
             setSelectedRowIds(rows);
           },
           rowKeyGetter: (row) => {
