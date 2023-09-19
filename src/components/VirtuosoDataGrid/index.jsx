@@ -15,6 +15,7 @@ import { DataGridToolbar } from './DataGridToolbar';
 import { tableTranslation } from './localization';
 import { fuzzyDate, localizeCurrency, localizePercent } from '../utils/format';
 import moment from 'moment';
+import { useUpdateEffect } from 'usehooks-ts';
 
 const useStyles = makeStyles()(theme => ({
   rootContainer: {
@@ -123,13 +124,12 @@ const VirtuosoDataGrid = ({
     });
   }, [filters]);
 
-  const [selectedRows, setSelectedRows] = useState({});
-
-  useEffect(
+  const selectedRows = useMemo(
     () => {
-      setSelectedRows(gridProps?.selectedRows ?? {})
+      return Object.fromEntries(gridProps?.selectedRows?.map((row) => [`${row}`, true]))
     }, [gridProps?.selectedRows]
   );
+
   //per row selection enable
 
   const enableTableSelection = useMemo(
@@ -372,16 +372,7 @@ const VirtuosoDataGrid = ({
     }, [dataGridState?.columns]
   );
 
-  useEffect(
-    () => {
-      const mapToArray = Object.keys(selectedRows).map((key) => key)
-      const tsrows = tableInstanceRef?.current?.getState()?.rowSelection;
-
-      gridProps?.onSelectedRowsChange?.(mapToArray)
-    }, [selectedRows]
-  );
-
-  useEffect(
+  useUpdateEffect(
     () => {
       if (sortState?.[0]?.id) {
         onSort(sortState?.[0]?.id, sortState?.[0]?.desc ? 'DESC' : 'ASC')
@@ -530,7 +521,12 @@ const VirtuosoDataGrid = ({
           data={data}
           columns={columns}
           onRowSelectionChange={(sRows) => {
-            setSelectedRows(sRows)
+            const selRows = sRows()
+            const existingRows = Object.fromEntries(gridProps?.selectedRows?.map((row) => [`${row}`, true]))
+            const mergedRows = { ...existingRows, ...selRows }
+            
+            const mapToArray = Object.keys(mergedRows).map((key) => key)
+            gridProps?.onSelectedRowsChange?.(mapToArray)
           }}
           muiExpandButtonProps={({row}) => {
             const hidden = isRowExpandableCallback ? isRowExpandableCallback(row?.original) : true
