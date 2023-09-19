@@ -125,6 +125,11 @@ const VirtuosoDataGrid = ({
 
   const [selectedRows, setSelectedRows] = useState({});
 
+  useEffect(
+    () => {
+      setSelectedRows(gridProps?.selectedRows ?? {})
+    }, [gridProps?.selectedRows]
+  );
   //per row selection enable
 
   const enableTableSelection = useMemo(
