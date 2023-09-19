@@ -1,6 +1,6 @@
 {
   "name": "@zennya/web-component-library",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "private": false,
   "dependencies": {
     "@alshdavid/mime-types": "^2.2.3",
