@@ -126,7 +126,7 @@ const VirtuosoDataGrid = ({
 
   const selectedRows = useMemo(
     () => {
-      return Object.fromEntries(gridProps?.selectedRows?.map((row) => [`${row}`, true]))
+      return Object.fromEntries((gridProps?.selectedRows??[])?.map((row) => [`${row}`, true]))
     }, [gridProps?.selectedRows]
   );
 
