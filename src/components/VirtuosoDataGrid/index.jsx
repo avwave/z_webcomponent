@@ -16,6 +16,7 @@ import { tableTranslation } from './localization';
 import { fuzzyDate, localizeCurrency, localizePercent } from '../utils/format';
 import moment from 'moment';
 import { useUpdateEffect } from 'usehooks-ts';
+import { useStateRef } from '../hooks/useStateRef';
 
 const useStyles = makeStyles()(theme => ({
   rootContainer: {
@@ -124,16 +125,29 @@ const VirtuosoDataGrid = ({
     });
   }, [filters]);
 
-  const selectedRows = useMemo(
+  const [internalRowSelection, setInternalRowSelection] = useState({});
+  const [externalLoaded, setExternalLoaded, exref] = useStateRef();
+  useEffect(
     () => {
-      const rows = gridProps?.selectedRows ?? null
-      if (isEmpty(rows)) return []
-      return Object.fromEntries(rows.map((row) => [`${row}`, true]))
+      if (!tableInstanceRef?.current) return
+      const objrows = Object.fromEntries(gridProps?.selectedRows?.map((v) => [v, true]))
+      setExternalLoaded(true)
+      setInternalRowSelection(objrows)
+      
     }, [gridProps?.selectedRows]
   );
 
-  //per row selection enable
+  useEffect(
+    () => {
+      if (exref?.current) return
+      if (gridProps?.onSelectedRowsChange) {
+        gridProps?.onSelectedRowsChange(Object.keys(internalRowSelection))
+      }
+    }, [internalRowSelection]
+  );
 
+
+  //per row selection enable
   const enableTableSelection = useMemo(
     () => {
       const selectableFilter = dataGridState?.columns?.filter(col => col?.selectable)
@@ -510,6 +524,7 @@ const VirtuosoDataGrid = ({
           enableRowVirtualization
           enableStickyHeader={false}
           enableRowSelection={enableTableSelection ? row => enableRowSelection(row) : false}
+          enableMultiRowSelection={true}
           enableHiding
           enableGrouping={false}
           enableColumnDragging={false}
@@ -522,13 +537,9 @@ const VirtuosoDataGrid = ({
           getRowCanExpand={row => isRowExpandableCallback?isRowExpandableCallback(row?.original):true}
           data={data}
           columns={columns}
-          onRowSelectionChange={(sRows) => {
-            const selRows = sRows()
-            const existingRows = Object.fromEntries(gridProps?.selectedRows?.map((row) => [`${row}`, true]))
-            const mergedRows = { ...existingRows, ...selRows }
-            
-            const mapToArray = Object.keys(mergedRows)?.map((key) => key)
-            gridProps?.onSelectedRowsChange?.(mapToArray)
+          onRowSelectionChange={rows=>{
+            setExternalLoaded(false)
+            setInternalRowSelection(rows)
           }}
           muiExpandButtonProps={({row}) => {
             const hidden = isRowExpandableCallback ? isRowExpandableCallback(row?.original) : true
@@ -602,7 +613,7 @@ const VirtuosoDataGrid = ({
           }}
           state={{
             showProgressBars: dataGridState.loading,
-            rowSelection: selectedRows,
+            rowSelection: internalRowSelection,
             sorting: sortState,
             columnVisibility,
             pagination,
