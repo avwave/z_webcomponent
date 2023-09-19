@@ -525,7 +525,7 @@ const VirtuosoDataGrid = ({
             const existingRows = Object.fromEntries(gridProps?.selectedRows?.map((row) => [`${row}`, true]))
             const mergedRows = { ...existingRows, ...selRows }
             
-            const mapToArray = Object.keys(mergedRows).map((key) => key)
+            const mapToArray = Object.keys(mergedRows)?.map((key) => key)
             gridProps?.onSelectedRowsChange?.(mapToArray)
           }}
           muiExpandButtonProps={({row}) => {
