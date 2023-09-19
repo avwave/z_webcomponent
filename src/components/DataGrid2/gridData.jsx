@@ -1,5 +1,5 @@
 import {faker} from '@faker-js/faker'
-import { FormControlLabel, IconButton, Chip, Select } from "@mui/material";
+import { FormControlLabel, IconButton, Chip, Select, Button, ButtonGroup } from "@mui/material";
 import Checkbox from "../../shared/Checkbox";
 import { TriStateSelect } from "../TriStateSelect";
 import { Delete, HotTubSharp, LocalHospital } from "@mui/icons-material";
@@ -183,7 +183,7 @@ const columnData = [
           onClick={() => {
             alert(JSON.stringify(row, null, 2))
           }}
-          size="large">
+          size="small">
           <Delete color="secondary" />
         </IconButton>
       );
@@ -230,7 +230,7 @@ for (let i = 0; i < 30; i++) {
     col_truncate: faker.lorem.paragraphs(2),
     col_filter_option: faker.datatype.boolean() ? "Tip" : "Top",
     col_json: { obj: 1 },
-    col_react: <>{[...Array(faker.datatype.number({min:1, max:15}))]?.map(d=><h1>REACTNODE</h1>)}</>,
+    col_react: <ButtonGroup>{[...Array(faker.datatype.number({min:1, max:15}))]?.map(d=><Button>Butten</Button>)}</ButtonGroup>,
     col_filter_daterange: faker.datatype.boolean() ? faker.random.word() : null,
     tests: [...Array(faker.datatype.number({
       min:1,
