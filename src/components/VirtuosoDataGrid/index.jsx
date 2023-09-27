@@ -5,7 +5,7 @@ import { makeStyles } from 'tss-react/mui';
 import { useUrlState } from '../hooks/useUrlState';
 
 
-import { Clear, Search } from '@mui/icons-material';
+import { Clear, DoubleArrow, Search, UnfoldMore } from '@mui/icons-material';
 import { Box, Button, CircularProgress, IconButton, InputAdornment, LinearProgress, ThemeProvider, Toolbar, Tooltip, Typography, createTheme, debounce, styled, tooltipClasses, useTheme } from '@mui/material';
 import { isEmpty } from 'lodash';
 import TruncateMarkup from 'react-truncate-markup';
@@ -535,6 +535,15 @@ const VirtuosoDataGrid = ({
           enableMultiSort={false}
           enableExpanding={!!tableComponents?.detailsRow?.content}
           getRowCanExpand={row => isRowExpandableCallback?isRowExpandableCallback(row?.original):true}
+          displayColumnDefOptions={{
+            'mrt-row-select': {
+              size: 30,
+            },
+            'mrt-row-expand': {
+              size: 30,
+              header: <UnfoldMore/>
+            }
+          }}
           data={data}
           columns={columns}
           onRowSelectionChange={rows=>{

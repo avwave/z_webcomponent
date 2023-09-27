@@ -196,18 +196,13 @@ ConditionalSelector.args = {
     }
   ],
   columns: [
-    {
-      key: "select-row",
-      name: "",
-      sortable: false,
-      hidden: true,
-      selectable({ row }) {
-        return row.id !== '2'
-      }
-    },
+    
     {
       key: "name",
       name: "Name",
+      selectable({ row }) {
+        return row.id !== 2
+      }
     },
     {
       key: "age",
