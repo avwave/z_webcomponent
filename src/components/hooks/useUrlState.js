@@ -1,11 +1,12 @@
 import React, { useCallback, useMemo, useRef, useState } from "react";
-import JSONCrush from "jsoncrush";
+import _JSONUrl from "json-url";
 import moment from "moment";
 
 export function useUrlState({ queryKey, defaultValue, disable = false }) {
+  const JSONUrl = _JSONUrl('lzma');
   const [state, setState] = useState(defaultValue);
   const ref = useRef(state);
-
+  const [url, setUrl] = useState('');
   const setQueryString = useCallback((qsValue) => {
     const newurl =
       window.location.protocol +
@@ -13,19 +14,22 @@ export function useUrlState({ queryKey, defaultValue, disable = false }) {
       window.location.host +
       window.location.pathname +
       qsValue;
+    setUrl(newurl)
     if (!disable) {
       window?.history?.replaceState({ path: newurl }, "", newurl);
     }
   }, [disable]);
 
-  const getQueryStringValue = useMemo(() => {
+  const getQueryStringValue = useMemo(
+    async () => {
     const qs = new URLSearchParams(window.location.search);
     const pValue = qs.get(queryKey) || state || null
-    const uncrush = JSONCrush.uncrush(decodeURIComponent(window.location.search))?.substring(1);
-
+    // const uncrush = JSONCrush.uncrush(decodeURIComponent(window.location.search))?.substring(1);
+    
     let convertedValue = pValue;
     if (pValue) {
       try {
+        const uncrush = await JSONUrl.decompress(window.location.search.substring(1))
         const getParam = uncrush ? JSON.parse(uncrush) : {};    
         convertedValue = JSON.parse(getParam?.[queryKey]);
         const calltype = Object.prototype.toString.call(convertedValue)
@@ -45,7 +49,7 @@ export function useUrlState({ queryKey, defaultValue, disable = false }) {
   }, [queryKey, state]);
 
   const dispatchFromUrl = useCallback(
-    function (val) {
+    async function (val) {
       const returnValue = typeof val === "function" ? val(ref.current) : val;
       const parsedValue = typeof returnValue === "object" ? JSON.stringify(returnValue) : returnValue;
 
@@ -61,7 +65,8 @@ export function useUrlState({ queryKey, defaultValue, disable = false }) {
       const newQs = new URLSearchParams(mergedValues);
       const newQsValue = newQs.toString()
 
-      const crushValue = JSONCrush.crush(JSON.stringify(mergedValues));
+      // const crushValue = JSONCrush.crush(JSON.stringify(mergedValues));
+      const crushValue = await JSONUrl.compress(JSON.stringify(mergedValues));
 
       setQueryString(`?${crushValue}`);
       setState(returnValue);
@@ -78,6 +83,6 @@ export function useUrlState({ queryKey, defaultValue, disable = false }) {
   if (disable) {
     return [state, dispatch, ref]
   } else {
-    return [getQueryStringValue, dispatchFromUrl, ref];
+    return [getQueryStringValue, dispatchFromUrl, ref, url];
   }
 }
