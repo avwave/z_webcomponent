@@ -54,23 +54,43 @@ export function useUrlState({ queryKey, defaultValue, disable = false, encode = 
             default:
               break;
           }
-          getParam = uncrush ? JSON.parse(uncrush) : {};
-          convertedValue = JSON.parse(getParam);
-          const calltype = Object.prototype.toString.call(convertedValue)
-          if (calltype === '[object String]') {
+          try {
+            getParam = uncrush ? JSON.parse(uncrush) : {};
+          } catch (error) {
+            convertedValue = uncrush;
+
             try {
               const isDate = moment(new Date(convertedValue)).isValid();
               convertedValue = isDate ? moment(convertedValue).toDate() : convertedValue;
             } catch (dateparseError) {
             }
+
+            ref.current = convertedValue;
+            setQsValue(convertedValue);
+            return
           }
+
+          try {
+            convertedValue = JSON.parse(getParam);            
+          } catch (error) {
+            convertedValue = getParam;
+            try {
+              const isDate = moment(new Date(convertedValue)).isValid();
+              convertedValue = isDate ? moment(convertedValue).toDate() : convertedValue;
+            } catch (dateparseError) {
+            }
+            ref.current = convertedValue
+            setQsValue(convertedValue);
+            return
+          }
+          
         } catch (error) {
           convertedValue = getParam;
         }
         ref.current = convertedValue;
       }
       setQsValue(convertedValue);
-    }, [JSONUrl, queryKey, state]);
+    }, [JSONUrl, encode, queryKey, state]);
 
   useEffect(
     () => {
