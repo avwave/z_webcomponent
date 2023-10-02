@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useRef, useState } from "react";
-
+import JSONCrush from "jsoncrush";
 import moment from "moment";
 
 export function useUrlState({ queryKey, defaultValue, disable = false }) {
@@ -21,10 +21,13 @@ export function useUrlState({ queryKey, defaultValue, disable = false }) {
   const getQueryStringValue = useMemo(() => {
     const qs = new URLSearchParams(window.location.search);
     const pValue = qs.get(queryKey) || state || null
+    const uncrush = JSONCrush.uncrush(decodeURIComponent(window.location.search))?.substring(1);
+
     let convertedValue = pValue;
     if (pValue) {
       try {
-        convertedValue = JSON.parse(pValue);
+        const getParam = uncrush ? JSON.parse(uncrush) : {};    
+        convertedValue = JSON.parse(getParam?.[queryKey]);
         const calltype = Object.prototype.toString.call(convertedValue)
         if (calltype === '[object String]') {
           try {
@@ -57,7 +60,10 @@ export function useUrlState({ queryKey, defaultValue, disable = false }) {
       }
       const newQs = new URLSearchParams(mergedValues);
       const newQsValue = newQs.toString()
-      setQueryString(`?${newQsValue}`);
+
+      const crushValue = JSONCrush.crush(JSON.stringify(mergedValues));
+
+      setQueryString(`?${crushValue}`);
       setState(returnValue);
     },
     [queryKey, setQueryString]
