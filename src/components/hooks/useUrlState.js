@@ -4,6 +4,7 @@ import JSONCrush from "jsoncrush";
 import moment from "moment";
 import { base64ArrayBuffer } from "../DocumentGallery/b64util";
 import { Base64 } from "js-base64";
+import isEmpty from "lodash.isempty";
 
 const ENCODE_TYPES = {
   crush: 'crush',
@@ -114,16 +115,26 @@ export function useUrlState({ queryKey, defaultValue, disable = false, encode = 
       const qs = new URLSearchParams(window?.location?.search);
       let values = {};
       for (var value of qs.keys()) {
+        if (value === queryKey) continue; // skip the queryKey parameter
         values[value] = qs.get(value);
       }
       const mergedValues = {
         ...values,
         [queryKey]: crushValue
       }
-      const newQs = new URLSearchParams(mergedValues);
-      const newQsValue = newQs.toString()
-      // setQueryString(`?${newQsValue}`);
-      setQueryString(JSON.stringify(mergedValues))
+
+      let qsString = ''
+      if (isEmpty(values)) {
+        qsString = `?${queryKey}=${crushValue}`
+      } else {
+        const preQs = new URLSearchParams(values);
+        const preQsValue = preQs.toString()
+        qsString = `?${preQsValue}&${queryKey}=${crushValue}`
+      }
+
+      // const newQs = new URLSearchParams(mergedValues);
+      // const newQsValue = newQs.toString()
+      setQueryString(qsString)
       setState(returnValue);
     },
     [queryKey, setQueryString]
