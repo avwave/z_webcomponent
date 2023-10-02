@@ -3,9 +3,14 @@ import _JSONUrl from "json-url";
 import JSONCrush from "jsoncrush";
 import moment from "moment";
 import { base64ArrayBuffer } from "../DocumentGallery/b64util";
-import { encode } from "js-base64";
+import { Base64 } from "js-base64";
 
-export function useUrlState({ queryKey, defaultValue, disable = false }) {
+const ENCODE_TYPES = {
+  crush: 'crush',
+  b64: 'b64',
+  lzma: 'lzma',
+}
+export function useUrlState({ queryKey, defaultValue, disable = false, encode=ENCODE_TYPES.crush }) {
   const JSONUrl = _JSONUrl('lzma');
   const [state, setState] = useState(defaultValue);
   const ref = useRef(state);
@@ -32,9 +37,22 @@ export function useUrlState({ queryKey, defaultValue, disable = false }) {
     
     let convertedValue = '';
     let getParam = ''
+    let uncrush = '';
     if (pValue) {
       try {
-        const uncrush = await JSONUrl.decompress(pValue)
+        switch (encode) {
+          case ENCODE_TYPES.crush:
+            uncrush = JSONCrush.uncrush(decodeURIComponent(pValue))
+            break;
+          case ENCODE_TYPES.b64:
+            uncrush = Base64.decode(pValue)
+            break;
+          case ENCODE_TYPES.lzma:
+            uncrush = await JSONUrl.decompress(pValue)
+            break;
+          default:
+            break;
+        }
         getParam = uncrush ? JSON.parse(uncrush) : {};    
         convertedValue = JSON.parse(getParam);
         const calltype = Object.prototype.toString.call(convertedValue)
@@ -61,14 +79,28 @@ export function useUrlState({ queryKey, defaultValue, disable = false }) {
 
   const dispatchFromUrl = useCallback(
     async function (val) {
+      const JSONUrl = _JSONUrl('lzma');
       const returnValue = typeof val === "function" ? val(ref.current) : val;
       const parsedValue = typeof returnValue === "object" ? JSON.stringify(returnValue) : returnValue;
-      const crushValue = await JSONUrl.compress(JSON.stringify(parsedValue));
-
+      let crushValue = '';
+      switch (encode) {
+        case ENCODE_TYPES.crush:
+          crushValue = JSONCrush.crush(parsedValue)
+          break;
+        case ENCODE_TYPES.b64:
+          crushValue = Base64.encode(JSON.stringify(parsedValue))
+          break;
+        case ENCODE_TYPES.lzma:
+          crushValue = await JSONUrl.compress(JSON.stringify(parsedValue))
+          break;
+        default:
+          break;
+      }
+      
       setUrl({
         LZMA_compression: await JSONUrl.compress(JSON.stringify(parsedValue)),
         JS_Crush: JSONCrush.crush(JSON.stringify(parsedValue)),
-        B64: encode(JSON.stringify(parsedValue)),
+        B64: Base64.encode(JSON.stringify(parsedValue)),
       })
       const qs = new URLSearchParams(window?.location?.search);
       let values = {};
