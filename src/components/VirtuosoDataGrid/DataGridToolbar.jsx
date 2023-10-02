@@ -151,21 +151,15 @@ const DataGridToolbar = ({
 
   const [dataGridState, dataGridDispatch] = useContext(DataGridContext);
 
-  const [filterValues, setFilterValues] = useUrlState({ queryKey: `${gridId}-filters`, disable: !useUrlAsState });
   const [filterDisplay, setFilterDisplay] = useState({});
-
-  const [searchField, setSearchField] = useState("");
-
-  useEffect(() => {
-    setSearchField(filterValues?.search);
-  }, [filterValues?.search]);
-
+  
+  
+  const [filterValues, setFilterValues] = useUrlState({ queryKey: `${gridId}-filters`, disable: !useUrlAsState });
 
   const changeFilter = useCallback(
     debounce((filterKey, filterValue) => {
       const filterV = { ...filterValues, [filterKey]: filterValue }
       setFilterValues(filterV);
-      // setSearchField(filterV?.search ?? "")
       onFilterChange(filterV)
     }, 500),
     [filterValues],

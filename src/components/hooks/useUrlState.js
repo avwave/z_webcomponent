@@ -1,10 +1,22 @@
-import React, { useCallback, useMemo, useRef, useState } from "react";
-
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import _JSONUrl from "json-url";
+import JSONCrush from "jsoncrush";
 import moment from "moment";
+import { base64ArrayBuffer } from "../DocumentGallery/b64util";
+import { Base64 } from "js-base64";
+import isEmpty from "lodash.isempty";
 
-export function useUrlState({ queryKey, defaultValue, disable = false }) {
+const ENCODE_TYPES = {
+  crush: 'crush',
+  b64: 'b64',
+  lzma: 'lzma',
+}
+export function useUrlState({ queryKey, defaultValue, disable = false, encode = ENCODE_TYPES.crush }) {
+  const JSONUrl = _JSONUrl('lzma');
   const [state, setState] = useState(defaultValue);
   const ref = useRef(state);
+  const [url, setUrl] = useState('');
+  const [qsValue, setQsValue] = useState();
 
   const setQueryString = useCallback((qsValue) => {
     const newurl =
@@ -18,46 +30,131 @@ export function useUrlState({ queryKey, defaultValue, disable = false }) {
     }
   }, [disable]);
 
-  const getQueryStringValue = useMemo(() => {
-    const qs = new URLSearchParams(window.location.search);
-    const pValue = qs.get(queryKey) || state || null
-    let convertedValue = pValue;
-    if (pValue) {
-      try {
-        convertedValue = JSON.parse(pValue);
-        const calltype = Object.prototype.toString.call(convertedValue)
-        if (calltype === '[object String]') {
-          try {
-            const isDate = moment(new Date(convertedValue)).isValid();
-            convertedValue = isDate ? moment(convertedValue).toDate() : convertedValue;
-          } catch (dateparseError) {
+  const getQueryStringValue = useCallback(
+    async () => {
+      const qs = new URLSearchParams(window?.location?.search);
+      const pValue = qs.get(queryKey) || state || null
+      // const uncrush = JSONCrush.uncrush(decodeURIComponent(window?.location?.search))?.substring(1);
+
+      let convertedValue = '';
+      let getParam = ''
+      let uncrush = '';
+      if (pValue) {
+        try {
+          switch (encode) {
+            case ENCODE_TYPES.crush:
+              uncrush = JSONCrush.uncrush(decodeURIComponent(pValue))
+              break;
+            case ENCODE_TYPES.b64:
+              uncrush = Base64.decode(pValue)
+              break;
+            case ENCODE_TYPES.lzma:
+              uncrush = await JSONUrl.decompress(pValue)
+              break;
+            default:
+              break;
           }
+          try {
+            getParam = uncrush ? JSON.parse(uncrush) : {};
+          } catch (error) {
+            convertedValue = uncrush;
+
+            try {
+              const isDate = moment(new Date(convertedValue)).isValid();
+              convertedValue = isDate ? moment(convertedValue).toDate() : convertedValue;
+            } catch (dateparseError) {
+            }
+
+            ref.current = convertedValue;
+            setQsValue(convertedValue);
+            return
+          }
+
+          try {
+            convertedValue = JSON.parse(getParam);            
+          } catch (error) {
+            convertedValue = getParam;
+            try {
+              const isDate = moment(new Date(convertedValue)).isValid();
+              convertedValue = isDate ? moment(convertedValue).toDate() : convertedValue;
+            } catch (dateparseError) {
+            }
+            ref.current = convertedValue
+            setQsValue(convertedValue);
+            return
+          }
+          
+        } catch (error) {
+          convertedValue = getParam;
         }
-      } catch (error) {
-        convertedValue = pValue;
+        ref.current = convertedValue;
       }
-      ref.current = convertedValue;
-    }
-    return ref.current;
-  }, [queryKey, state]);
+      setQsValue(convertedValue);
+    }, [JSONUrl, encode, queryKey, state]);
+
+  useEffect(
+    () => {
+      getQueryStringValue()
+    }, [window?.location?.search]
+  );
 
   const dispatchFromUrl = useCallback(
-    function (val) {
+    async function (val) {
+      const JSONUrl = _JSONUrl('lzma');
       const returnValue = typeof val === "function" ? val(ref.current) : val;
       const parsedValue = typeof returnValue === "object" ? JSON.stringify(returnValue) : returnValue;
+      let crushValue = '';
+      switch (encode) {
+        case ENCODE_TYPES.crush:
+          crushValue = JSONCrush.crush(parsedValue)
+          break;
+        case ENCODE_TYPES.b64:
+          crushValue = Base64.encode(JSON.stringify(parsedValue))
+          break;
+        case ENCODE_TYPES.lzma:
+          crushValue = await JSONUrl.compress(JSON.stringify(parsedValue))
+          break;
+        default:
+          break;
+      }
 
-      const qs = new URLSearchParams(window.location.search);
+      setUrl({
+        LZMA_compression: {
+          raw: await JSONUrl.compress(JSON.stringify(parsedValue)),
+          urlencoded: new URLSearchParams(await JSONUrl.compress(JSON.stringify(parsedValue)))?.toString(),
+        },
+        JS_Crush: {
+          raw: JSONCrush.crush(JSON.stringify(parsedValue)),
+          urlencoded: new URLSearchParams(JSONCrush.crush(JSON.stringify(parsedValue)))?.toString(),
+        },
+        B64: {
+          raw: Base64.encode(JSON.stringify(parsedValue)),
+          urlencoded: new URLSearchParams(Base64.encode(JSON.stringify(parsedValue)))?.toString(),
+        },
+      })
+      const qs = new URLSearchParams(window?.location?.search);
       let values = {};
       for (var value of qs.keys()) {
+        if (value === queryKey) continue; // skip the queryKey parameter
         values[value] = qs.get(value);
       }
       const mergedValues = {
         ...values,
-        [queryKey]: parsedValue
+        [queryKey]: crushValue
       }
-      const newQs = new URLSearchParams(mergedValues);
-      const newQsValue = newQs.toString()
-      setQueryString(`?${newQsValue}`);
+
+      let qsString = ''
+      if (isEmpty(values)) {
+        qsString = `?${queryKey}=${crushValue}`
+      } else {
+        const preQs = new URLSearchParams(values);
+        const preQsValue = preQs.toString()
+        qsString = `?${preQsValue}&${queryKey}=${crushValue}`
+      }
+
+      // const newQs = new URLSearchParams(mergedValues);
+      // const newQsValue = newQs.toString()
+      setQueryString(qsString)
       setState(returnValue);
     },
     [queryKey, setQueryString]
@@ -72,6 +169,6 @@ export function useUrlState({ queryKey, defaultValue, disable = false }) {
   if (disable) {
     return [state, dispatch, ref]
   } else {
-    return [getQueryStringValue, dispatchFromUrl, ref];
+    return [qsValue, dispatchFromUrl, ref, url];
   }
 }
