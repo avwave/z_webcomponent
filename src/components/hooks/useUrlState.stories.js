@@ -97,3 +97,25 @@ export const Date = ({ ...args }) => {
     </div>
   )
 }
+
+export const MedicalGridFilterExample = ({...args}) => {
+  const [queryTerm, setQueryTerm, queryTermRef, url] = useUrlState({queryKey:'medicalGridFilter'});
+  useEffect(
+    () => {
+      setQueryTerm({
+        laboratory: [
+          9,
+          1,
+        ],
+        startDate: "2023-08-01T08:51:52.000Z",
+        endDate: "2023-09-30T08:51:52.000Z",
+      })
+    }, []
+  );
+  return (
+    <div>
+      <ReactJsonView src={{ parameters: queryTerm }} name="Internal Query Parameters"/>
+      <ReactJsonView src={{ rendered_url_params: url }} name="External Parameters in URL"/>
+    </div>
+  );
+}
