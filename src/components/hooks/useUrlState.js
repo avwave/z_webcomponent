@@ -10,7 +10,7 @@ const ENCODE_TYPES = {
   b64: 'b64',
   lzma: 'lzma',
 }
-export function useUrlState({ queryKey, defaultValue, disable = false, encode=ENCODE_TYPES.crush }) {
+export function useUrlState({ queryKey, defaultValue, disable = false, encode = ENCODE_TYPES.crush }) {
   const JSONUrl = _JSONUrl('lzma');
   const [state, setState] = useState(defaultValue);
   const ref = useRef(state);
@@ -31,46 +31,46 @@ export function useUrlState({ queryKey, defaultValue, disable = false, encode=EN
 
   const getQueryStringValue = useCallback(
     async () => {
-    const qs = new URLSearchParams(window?.location?.search);
-    const pValue = qs.get(queryKey) || state || null
-    // const uncrush = JSONCrush.uncrush(decodeURIComponent(window?.location?.search))?.substring(1);
-    
-    let convertedValue = '';
-    let getParam = ''
-    let uncrush = '';
-    if (pValue) {
-      try {
-        switch (encode) {
-          case ENCODE_TYPES.crush:
-            uncrush = JSONCrush.uncrush(decodeURIComponent(pValue))
-            break;
-          case ENCODE_TYPES.b64:
-            uncrush = Base64.decode(pValue)
-            break;
-          case ENCODE_TYPES.lzma:
-            uncrush = await JSONUrl.decompress(pValue)
-            break;
-          default:
-            break;
-        }
-        getParam = uncrush ? JSON.parse(uncrush) : {};    
-        convertedValue = JSON.parse(getParam);
-        const calltype = Object.prototype.toString.call(convertedValue)
-        if (calltype === '[object String]') {
-          try {
-            const isDate = moment(new Date(convertedValue)).isValid();
-            convertedValue = isDate ? moment(convertedValue).toDate() : convertedValue;
-          } catch (dateparseError) {
+      const qs = new URLSearchParams(window?.location?.search);
+      const pValue = qs.get(queryKey) || state || null
+      // const uncrush = JSONCrush.uncrush(decodeURIComponent(window?.location?.search))?.substring(1);
+
+      let convertedValue = '';
+      let getParam = ''
+      let uncrush = '';
+      if (pValue) {
+        try {
+          switch (encode) {
+            case ENCODE_TYPES.crush:
+              uncrush = JSONCrush.uncrush(decodeURIComponent(pValue))
+              break;
+            case ENCODE_TYPES.b64:
+              uncrush = Base64.decode(pValue)
+              break;
+            case ENCODE_TYPES.lzma:
+              uncrush = await JSONUrl.decompress(pValue)
+              break;
+            default:
+              break;
           }
+          getParam = uncrush ? JSON.parse(uncrush) : {};
+          convertedValue = JSON.parse(getParam);
+          const calltype = Object.prototype.toString.call(convertedValue)
+          if (calltype === '[object String]') {
+            try {
+              const isDate = moment(new Date(convertedValue)).isValid();
+              convertedValue = isDate ? moment(convertedValue).toDate() : convertedValue;
+            } catch (dateparseError) {
+            }
+          }
+        } catch (error) {
+          convertedValue = getParam;
         }
-      } catch (error) {
-        convertedValue = getParam;
+        ref.current = convertedValue;
       }
-      ref.current = convertedValue;
-    }
-    setQsValue(convertedValue);
-  }, [JSONUrl, queryKey, state]);
-  
+      setQsValue(convertedValue);
+    }, [JSONUrl, queryKey, state]);
+
   useEffect(
     () => {
       getQueryStringValue()
@@ -96,11 +96,20 @@ export function useUrlState({ queryKey, defaultValue, disable = false, encode=EN
         default:
           break;
       }
-      
+
       setUrl({
-        LZMA_compression: await JSONUrl.compress(JSON.stringify(parsedValue)),
-        JS_Crush: JSONCrush.crush(JSON.stringify(parsedValue)),
-        B64: Base64.encode(JSON.stringify(parsedValue)),
+        LZMA_compression: {
+          raw: await JSONUrl.compress(JSON.stringify(parsedValue)),
+          urlencoded: new URLSearchParams(await JSONUrl.compress(JSON.stringify(parsedValue)))?.toString(),
+        },
+        JS_Crush: {
+          raw: JSONCrush.crush(JSON.stringify(parsedValue)),
+          urlencoded: new URLSearchParams(JSONCrush.crush(JSON.stringify(parsedValue)))?.toString(),
+        },
+        B64: {
+          raw: Base64.encode(JSON.stringify(parsedValue)),
+          urlencoded: new URLSearchParams(Base64.encode(JSON.stringify(parsedValue)))?.toString(),
+        },
       })
       const qs = new URLSearchParams(window?.location?.search);
       let values = {};
@@ -113,7 +122,8 @@ export function useUrlState({ queryKey, defaultValue, disable = false, encode=EN
       }
       const newQs = new URLSearchParams(mergedValues);
       const newQsValue = newQs.toString()
-      setQueryString(`?${newQsValue}`);
+      // setQueryString(`?${newQsValue}`);
+      setQueryString(JSON.stringify(mergedValues))
       setState(returnValue);
     },
     [queryKey, setQueryString]

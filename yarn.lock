@@ -11201,7 +11201,7 @@ json-stable-stringify-without-jsonify@^1.0.1:
   resolved "https://registry.yarnpkg.com/json-stable-stringify-without-jsonify/-/json-stable-stringify-without-jsonify-1.0.1.tgz#9db7b59496ad3f3cfef30a75142d2d930ad72651"
   integrity sha512-Bdboy+l7tA3OGW6FjyFHWkP5LuByj1Tk33Ljyq0axyzdk9//JSi2u3fP1QSmd1KNwq6VOKYGlAu87CisVir6Pw==
 
-json-url@^3.1.0:
+json-url@^3.1.:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/json-url/-/json-url-3.1.0.tgz#dcd70a19eb098d88bd00917b3253e414f434f0dc"
   integrity sha512-fhmtxBOQYJCshMV/omtzjBLv0ruLBz4dt+28y2+959fM45Oc8s+uL1jdLu/4yGeKATylgV022gAPfxCwQ5KgFA==
@@ -11226,10 +11226,10 @@ json5@^2.1.2, json5@^2.2.0, json5@^2.2.2:
   resolved "https://registry.yarnpkg.com/json5/-/json5-2.2.3.tgz#78cd6f1a19bdc12b73db5ad0c61efd66c1e29283"
   integrity sha512-XmOWe7eyHYH14cLdVPoyg+GOH3rYX++KpzrylJwSW98t3Nk+U8XOl8FWKOgwtzdb8lXGf6zYwDUzeHMWfxasyg==
 
-jsoncrush@^1.1.8:
-  version "1.1.8"
-  resolved "https://registry.yarnpkg.com/jsoncrush/-/jsoncrush-1.1.8.tgz#5dd9389df1979592df8c89ab99ba69b029a030be"
-  integrity sha512-lvIMGzMUA0fjuqwNcxlTNRq2bibPZ9auqT/LyGdlR5hvydJtA/BasSgkx4qclqTKVeTidrJvsS/oVjlTCPQ4Nw==
+jsoncrush@1.1.6:
+  version "1.1.6"
+  resolved "https://registry.yarnpkg.com/jsoncrush/-/jsoncrush-1.1.6.tgz#37efda77124746fd6e1e0a0e8692dbd0b79272a6"
+  integrity sha512-oLNi8zgT872yK7BBNM9r2Q3BAUf8Uuq+fbP0KZU5GISA87thlzHRqWkk3FcetUmMeW7MrPNLPtpZ0h/AZFFrNw==
 
 jsonfile@^6.0.1:
   version "6.1.0"
