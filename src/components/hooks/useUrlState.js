@@ -24,9 +24,9 @@ export function useUrlState({ queryKey, defaultValue, disable = false }) {
 
   const getQueryStringValue = useCallback(
     async () => {
-    const qs = new URLSearchParams(window.location.search);
+    const qs = new URLSearchParams(window?.location?.search);
     const pValue = qs.get(queryKey) || state || null
-    // const uncrush = JSONCrush.uncrush(decodeURIComponent(window.location.search))?.substring(1);
+    // const uncrush = JSONCrush.uncrush(decodeURIComponent(window?.location?.search))?.substring(1);
     
     let convertedValue = '';
     let getParam = ''
@@ -63,7 +63,7 @@ export function useUrlState({ queryKey, defaultValue, disable = false }) {
       const parsedValue = typeof returnValue === "object" ? JSON.stringify(returnValue) : returnValue;
       const crushValue = await JSONUrl.compress(JSON.stringify(parsedValue));
 
-      const qs = new URLSearchParams(window.location.search);
+      const qs = new URLSearchParams(window?.location?.search);
       let values = {};
       for (var value of qs.keys()) {
         values[value] = qs.get(value);
