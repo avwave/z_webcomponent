@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import _JSONUrl from "json-url";
 import moment from "moment";
 
@@ -7,6 +7,8 @@ export function useUrlState({ queryKey, defaultValue, disable = false }) {
   const [state, setState] = useState(defaultValue);
   const ref = useRef(state);
   const [url, setUrl] = useState('');
+  const [qsValue, setQsValue] = useState();
+
   const setQueryString = useCallback((qsValue) => {
     const newurl =
       window.location.protocol +
@@ -20,18 +22,19 @@ export function useUrlState({ queryKey, defaultValue, disable = false }) {
     }
   }, [disable]);
 
-  const getQueryStringValue = useMemo(
+  const getQueryStringValue = useCallback(
     async () => {
     const qs = new URLSearchParams(window.location.search);
     const pValue = qs.get(queryKey) || state || null
     // const uncrush = JSONCrush.uncrush(decodeURIComponent(window.location.search))?.substring(1);
     
-    let convertedValue = pValue;
+    let convertedValue = '';
+    let getParam = ''
     if (pValue) {
       try {
-        const uncrush = await JSONUrl.decompress(window.location.search.substring(1))
-        const getParam = uncrush ? JSON.parse(uncrush) : {};    
-        convertedValue = JSON.parse(getParam?.[queryKey]);
+        const uncrush = await JSONUrl.decompress(pValue)
+        getParam = uncrush ? JSON.parse(uncrush) : {};    
+        convertedValue = JSON.parse(getParam);
         const calltype = Object.prototype.toString.call(convertedValue)
         if (calltype === '[object String]') {
           try {
@@ -41,17 +44,24 @@ export function useUrlState({ queryKey, defaultValue, disable = false }) {
           }
         }
       } catch (error) {
-        convertedValue = pValue;
+        convertedValue = getParam;
       }
       ref.current = convertedValue;
     }
-    return ref.current;
-  }, [queryKey, state]);
+    setQsValue(convertedValue);
+  }, [JSONUrl, queryKey, state]);
+  
+  useEffect(
+    () => {
+      getQueryStringValue()
+    }, [window?.location?.search]
+  );
 
   const dispatchFromUrl = useCallback(
     async function (val) {
       const returnValue = typeof val === "function" ? val(ref.current) : val;
       const parsedValue = typeof returnValue === "object" ? JSON.stringify(returnValue) : returnValue;
+      const crushValue = await JSONUrl.compress(JSON.stringify(parsedValue));
 
       const qs = new URLSearchParams(window.location.search);
       let values = {};
@@ -60,15 +70,11 @@ export function useUrlState({ queryKey, defaultValue, disable = false }) {
       }
       const mergedValues = {
         ...values,
-        [queryKey]: parsedValue
+        [queryKey]: crushValue
       }
       const newQs = new URLSearchParams(mergedValues);
       const newQsValue = newQs.toString()
-
-      // const crushValue = JSONCrush.crush(JSON.stringify(mergedValues));
-      const crushValue = await JSONUrl.compress(JSON.stringify(mergedValues));
-
-      setQueryString(`?${crushValue}`);
+      setQueryString(`?${newQsValue}`);
       setState(returnValue);
     },
     [queryKey, setQueryString]
@@ -83,6 +89,6 @@ export function useUrlState({ queryKey, defaultValue, disable = false }) {
   if (disable) {
     return [state, dispatch, ref]
   } else {
-    return [getQueryStringValue, dispatchFromUrl, ref, url];
+    return [qsValue, dispatchFromUrl, ref, url];
   }
 }
