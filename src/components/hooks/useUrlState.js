@@ -1,6 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import _JSONUrl from "json-url";
+import JSONCrush from "jsoncrush";
 import moment from "moment";
+import { base64ArrayBuffer } from "../DocumentGallery/b64util";
+import { encode } from "js-base64";
 
 export function useUrlState({ queryKey, defaultValue, disable = false }) {
   const JSONUrl = _JSONUrl('lzma');
@@ -16,7 +19,6 @@ export function useUrlState({ queryKey, defaultValue, disable = false }) {
       window.location.host +
       window.location.pathname +
       qsValue;
-    setUrl(newurl)
     if (!disable) {
       window?.history?.replaceState({ path: newurl }, "", newurl);
     }
@@ -63,6 +65,11 @@ export function useUrlState({ queryKey, defaultValue, disable = false }) {
       const parsedValue = typeof returnValue === "object" ? JSON.stringify(returnValue) : returnValue;
       const crushValue = await JSONUrl.compress(JSON.stringify(parsedValue));
 
+      setUrl({
+        LZMA_compression: await JSONUrl.compress(JSON.stringify(parsedValue)),
+        JS_Crush: JSONCrush.crush(JSON.stringify(parsedValue)),
+        B64: encode(JSON.stringify(parsedValue)),
+      })
       const qs = new URLSearchParams(window?.location?.search);
       let values = {};
       for (var value of qs.keys()) {

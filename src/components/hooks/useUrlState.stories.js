@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { action, actions } from "@storybook/addon-actions";
 
 import ReactJsonView from 'react-json-view';
-import { TextField, Typography } from "@mui/material";
+import { TextField } from "@mui/material";
 import { DateTimeRangePicker } from "../DateTimeRangePicker";
 import { useUrlState } from "./useUrlState";
 
@@ -22,7 +22,6 @@ export const Default = ({ ...args }) => {
         value={queryTerm}
         onChange={(e) => setQueryTerm(e.target.value)} />
       {queryTerm}
-      <Typography variant='subtitle2'>{url}</Typography>
     </div>
   );
 };
@@ -37,7 +36,6 @@ export const Disable = ({ ...args }) => {
         value={queryTerm}
         onChange={(e) => setQueryTerm(e.target.value)} />
       {queryTerm}
-      <Typography variant='subtitle2'>{url}</Typography>
     </div>
   );
 };
@@ -60,9 +58,7 @@ export const Multiple = ({ ...args }) => {
         label="Query Term 2"
         value={queryTerm2}
         onChange={(e) => setQueryTerm2(e.target.value)} />
-      <ReactJsonView src={{queryTerm, queryTerm2}}/>
-      <Typography variant='subtitle2'>{url}</Typography>
-      <Typography variant='subtitle2'>{url2}</Typography>
+      <ReactJsonView src={{queryTerm, queryTerm2, url}}/>
     </div>
   );
 };
@@ -76,8 +72,7 @@ export const JSON = ({ ...args }) => {
         label="Query Term"
         value={queryTerm?.wrap?.value}
         onChange={(e) => setQueryTerm({ wrap: { value: e.target.value } })} />
-      <ReactJsonView src={{ queryTerm }} />
-      <Typography variant='subtitle2'>{url}</Typography>
+      <ReactJsonView src={{ queryTerm, url }} />
     </div>
   );
 }
@@ -87,8 +82,7 @@ export const DateRange = ({ ...args }) => {
   return (
     <div>
       <DateTimeRangePicker value={queryTerm} onChange={v => setQueryTerm(v)} />
-      <ReactJsonView src={{ queryTerm }} />
-      <Typography variant='subtitle2'>{url}</Typography>
+      <ReactJsonView src={{ queryTerm, url }} />
     </div>
   )
 }
@@ -99,8 +93,7 @@ export const Date = ({ ...args }) => {
       <input type={"date"} value={queryTerm} onChange={v => {
         setQueryTerm(v.target.value)
       }} />
-      <ReactJsonView src={{ queryTerm }} />
-      <Typography variant='subtitle2'>{url}</Typography>
+      <ReactJsonView src={{ queryTerm, url }} />
     </div>
   )
 }
