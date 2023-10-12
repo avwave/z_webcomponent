@@ -133,7 +133,7 @@ const VirtuosoDataGrid = ({
       const objrows = Object.fromEntries(gridProps?.selectedRows?.map((v) => [v, true]))
       setExternalLoaded(true)
       setInternalRowSelection(objrows)
-      
+
     }, [gridProps?.selectedRows]
   );
 
@@ -495,17 +495,21 @@ const VirtuosoDataGrid = ({
         gridId={id}
         customColumnDisplay={customColumnDisplay}
       />
-      <ThemeProvider theme={createTheme({
-        components: {
-          MuiTableSortLabel: {
-            styleOverrides: {
-              icon: {
-                opacity: .20,
-              },
+      <ThemeProvider theme={(theme) => {
+        return createTheme({
+          ...theme,
+          components: {
+            ...theme?.components,
+            MuiTableSortLabel: {
+              styleOverrides: {
+                icon: {
+                  opacity: .20,
+                },
+              }
             }
           }
-        }
-      })}
+        })
+      }}
       >
         <MaterialReactTable
           enableFilterMatchHighlighting
@@ -534,17 +538,17 @@ const VirtuosoDataGrid = ({
           enableColumnFilters={false}
           enableMultiSort={false}
           enableExpanding={!!tableComponents?.detailsRow?.content}
-          getRowCanExpand={row => isRowExpandableCallback?isRowExpandableCallback(row?.original):true}
+          getRowCanExpand={row => isRowExpandableCallback ? isRowExpandableCallback(row?.original) : true}
           data={data}
           columns={columns}
-          onRowSelectionChange={rows=>{
+          onRowSelectionChange={rows => {
             setExternalLoaded(false)
             setInternalRowSelection(rows)
           }}
-          muiExpandButtonProps={({row}) => {
+          muiExpandButtonProps={({ row }) => {
             const hidden = isRowExpandableCallback ? isRowExpandableCallback(row?.original) : true
             return {
-              sx:{
+              sx: {
                 visibility: hidden ? 'visible' : 'hidden'
               }
             }
