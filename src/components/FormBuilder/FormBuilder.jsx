@@ -28,6 +28,9 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
+
+
+import CurrencyTextField from '@lupus-ai/mui-currency-textfield'
 import { makeStyles } from 'tss-react/mui';
 import { Add, Backspace, Close, DateRange, Schedule } from "@mui/icons-material";
 import { Autocomplete } from '@mui/material';
@@ -53,6 +56,8 @@ import { FormikPersist } from "./FormikPersist";
 import { WizardFieldArray } from "./WizardFieldArray";
 import { DatePicker, DateTimePicker, LocalizationProvider, TimePicker } from "@mui/x-date-pickers";
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment'
+import { Currency } from "./Currency";
+import CurrencyInput from "react-currency-input-field";
 
 const useStyles = makeStyles()((theme) => ({
   controlContainer: {
@@ -536,6 +541,58 @@ const FormFieldSet = ({
               {...fieldParams?.fieldProps}
             />
           );
+        case "currency":
+          const currencySymbol = new Intl.NumberFormat(fieldParams?.locale ?? 'en-PH', {
+            style: 'currency',
+            currency: fieldParams?.currency ?? 'PHP',
+          }).formatToParts(1)
+            .find(part => part.type === 'currency').value
+
+          return (
+            <TextField
+              name={fieldName}
+              type="tel"
+              label={formInline ? "" : `${fieldParams.label} ${isRequired ? '*' : ''}`}
+              value={formValue}
+              disabled={fieldParams.readOnly || formReadOnly}
+              error={hasError}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              InputProps={{
+                startAdornment: 
+                  <InputAdornment position="start">
+                    {currencySymbol}
+                  </InputAdornment>
+                ,
+                inputComponent: CurrencyInput,
+                inputProps: {
+                  decimalsLimit:2,
+                  decimalScale: 2,
+                  disableAbbreviations: true,
+                  onValueChange:(value, name, fmt) => {
+                    switch (fieldParams?.output) {
+                      case 'float':
+                        onChangeOverride(fmt.float)
+                        break;
+                      case 'string':
+                        onChangeOverride(fmt.value)
+                        break
+                      case 'formatted':
+                        onChangeOverride(fmt.formatted)
+                        break
+                      default:
+                        onChangeOverride(value)
+                        break;
+                    }
+                  },
+                  ...(fieldParams.inputProps ?? {})
+                }
+              }}
+              variant={variant}
+              {...fieldParams?.fieldProps}
+            />
+          );
         case "dateRange":
           return (
             <DateTimeRangePicker
@@ -878,6 +935,18 @@ const FormFieldSet = ({
               wizardProps={fieldParams?.wizardProps}
             />
           );
+        case "currencya":
+          return <Currency
+            fieldName={fieldName}
+            formValue={formValue}
+            onChangeOverride={onChangeOverride}
+            fieldParams={fieldParams}
+            formReadOnly={formReadOnly}
+            formInline={formInline}
+            isRequired={isRequired}
+            hasError={hasError}
+            variant={variant}
+          />
         default:
           return <></>;
       }
