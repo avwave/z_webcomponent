@@ -507,6 +507,45 @@ DateRange.args = {
   formId: "daterange",
 };
 
+export const CurrencyField = DefaultStory.bind({});
+CurrencyField.args = {
+  ...Default.args,
+  formLayout: [
+    "currencyRaw", 
+    "currencyFormatted", 
+    "currencyFormattedDE"
+  ],
+  variant: "outlined",
+  form: {
+    currencyRaw: {
+      type: "currency",
+      label: "Currency as Raw Value",
+      validator: () => Yup.string().nullable(),
+      initialValues: "",
+      currency:"PHP",
+      output:'float'
+    },
+    currencyFormatted: {
+      type: "currency",
+      label: "Currency as Formatted",
+      validator: () => Yup.string().nullable(),
+      initialValues: "",
+      currency:"PHP",
+      output:'string'
+    },
+    currencyFormattedDE: {
+      type: "currency",
+      label: "Currency as Formatted (locale: de-DE, currency USD)",
+      validator: () => Yup.string().nullable(),
+      initialValues: "",
+      currency: "PHP",
+      locale: 'de-DE',
+      output:'string'
+    },
+  }
+}
+
+
 export const Duration = DefaultStory.bind({});
 Duration.args = {
   ...Default.args,

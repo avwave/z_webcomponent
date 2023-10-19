@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { status } from "../Checkbox/Checkbox";
 import Checklist from "./Checklist";
 
-import { withReactContext } from "storybook-react-context";
+
 import CheckboxProvider, {
   actions,
   CheckboxContext,
