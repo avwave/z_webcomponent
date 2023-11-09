@@ -18,7 +18,7 @@ const useStyles = makeStyles()(theme => ({
     zIndex: theme.zIndex.appBar + 1
   }
 }));
-const ColumnListFilterMenu = ({ table }) => {
+const ColumnListFilterMenu = ({ table, columns }) => {
   const { classes } = useStyles()
   const [toggleListOpen, setToggleListOpen] = useState(false);
 
@@ -47,7 +47,6 @@ const ColumnListFilterMenu = ({ table }) => {
       localization,
     },
   } = table;
-
 
   const { density, columnOrder, columnPinning } = getState();
 
@@ -91,7 +90,7 @@ const ColumnListFilterMenu = ({ table }) => {
     }
     return returnColumns;
 
-  }, [columnOrder, getAllColumns, getCenterLeafColumns, getLeftLeafColumns, getRightLeafColumns, searchText])
+  }, [coluimns, columnOrder, getAllColumns, getCenterLeafColumns, getLeftLeafColumns, getRightLeafColumns, searchText])
 
   const applyFilteredColumns = useCallback(
     () => {
