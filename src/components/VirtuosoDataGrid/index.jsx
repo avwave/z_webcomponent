@@ -356,13 +356,15 @@ const VirtuosoDataGrid = ({
     }, [enableTableSelection, tableComponents?.detailsRow?.content]
   );
 
+  const [columnOrder, setColumnOrder] = useState([]);
+
   const defaultColumnOrder = useMemo(
     () => {
       if (dataGridState?.columns?.length <= 0) {
         return null
       }
       const cols = dataGridState?.columns?.map((col) => col.key)
-
+      setColumnOrder([...defaultCols, ...cols])
       return [...defaultCols, ...cols]
     }, [dataGridState?.columns, defaultCols]
   );
@@ -634,6 +636,7 @@ const VirtuosoDataGrid = ({
             columnPinning: pinnedColumns,
             density: density,
             globalFilter,
+            columnOrder,
             ...gridProps?.gridState
           }}
           onSortingChange={setSortState}
@@ -677,6 +680,12 @@ const VirtuosoDataGrid = ({
             }
           }}
           enableTopToolbar={false}
+          onColumnOrderChange={(updater) => {
+            setColumnOrder((prev) =>
+              updater instanceof Function ? updater(prev) : updater,
+            );
+            queueMicrotask(rerender); //hack to rerender after state update
+          }}
           onColumnPinningChange={(updater) => {
             setPinnedColumns((prev) =>
               updater instanceof Function ? updater(prev) : updater,
