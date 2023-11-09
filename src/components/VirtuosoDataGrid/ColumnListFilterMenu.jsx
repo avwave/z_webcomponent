@@ -73,7 +73,6 @@ const ColumnListFilterMenu = ({ table, columns }) => {
   );
   const allColumns = useMemo(() => {
     let returnColumns = allStateColumns;
-    console.log(tableState, columnOrder)
     if (
       columnOrder.length > 0 &&
       !returnColumns.some((col) => col.columnDef.columnDefType === 'group')
