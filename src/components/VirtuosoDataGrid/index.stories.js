@@ -1,7 +1,8 @@
 import {
+  Button,
   Paper
 } from "@mui/material";
-import React from "react";
+import React, { useCallback, useState } from "react";
 
 import {
   DataGridContext,
@@ -58,4 +59,60 @@ export const LargeDataSetVirtualization = DefaultStory.bind({});
 LargeDataSetVirtualization.args = {
   ...Default.args,
   rows: generateRows(500),
+}
+
+const AddDynamicColumnsStory = ({ ...args }) => {
+  const [state, dispatch] = React.useContext(DataGridContext);
+  React.useEffect(() => {
+    dispatch({
+      payload: { rows: args.rows, columns: args.columns },
+      type: actions.LOAD_DATA,
+    });
+    dispatch({
+      type: actions.SET_DONE_LOADING,
+    });
+  }, [args.columns, args.rows, dispatch]);
+
+  const [dynColId, setDynColId] = useState(0);
+  const addDynColumn = useCallback(
+    async () => {
+      const newCol = {
+        key: `dynCol${dynColId}`,
+        name: `DynCol${dynColId}`,
+        cellRenderer(props) {
+          <>dyncol</>
+        }
+      }
+      dispatch({
+        payload: { columns: [...state.columns, newCol] },
+        type: actions.LOAD_DATA,
+      });
+      dispatch({
+        type: actions.SET_DONE_LOADING,
+      });
+      setDynColId(dynColId + 1)
+      return null
+    }, [dispatch, dynColId, state.columns]
+  );
+
+  return (
+    <Paper style={{height: '90vh'}}>
+      <Button onClick={() => {
+        addDynColumn()
+      }
+      }>Add Column</Button>
+      <DataGrid2 {...args} />
+    </Paper>
+  );
+}
+
+export const AddDynamicColumns = AddDynamicColumnsStory.bind({});
+AddDynamicColumns.args = {
+  ...Default.args,
+  columns: [
+    {
+      key: "id",
+      name: "ID",
+    }
+  ]
 }

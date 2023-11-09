@@ -48,7 +48,8 @@ const ColumnListFilterMenu = ({ table, columns }) => {
     },
   } = table;
 
-  const { density, columnOrder, columnPinning } = getState();
+  let allStateColumns = getAllColumns();
+  const { density, columnOrder, ...tableState } = getState();
 
   const [searchText, setSearchText] = useState('');
 
@@ -71,7 +72,8 @@ const ColumnListFilterMenu = ({ table, columns }) => {
     }, [getAllLeafColumns]
   );
   const allColumns = useMemo(() => {
-    let returnColumns = getAllColumns();
+    let returnColumns = allStateColumns;
+    console.log(tableState, columnOrder)
     if (
       columnOrder.length > 0 &&
       !returnColumns.some((col) => col.columnDef.columnDefType === 'group')
@@ -90,7 +92,7 @@ const ColumnListFilterMenu = ({ table, columns }) => {
     }
     return returnColumns;
 
-  }, [columns, columnOrder, getAllColumns, getCenterLeafColumns, getLeftLeafColumns, getRightLeafColumns, searchText])
+  }, [allStateColumns, columnOrder, getCenterLeafColumns, getLeftLeafColumns, getRightLeafColumns, searchText, tableState])
 
   const applyFilteredColumns = useCallback(
     () => {
