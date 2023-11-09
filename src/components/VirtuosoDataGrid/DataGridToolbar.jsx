@@ -260,7 +260,7 @@ const DataGridToolbar = ({
             {/* <MRT_ToggleFiltersButton table={tableInstanceRef.current} /> */}
             <MRT_ToggleDensePaddingButton table={tableInstanceRef.current} />
             {/* <MRT_ShowHideColumnsButton table={tableInstanceRef.current} /> */}
-            <ColumnListFilterMenu table={tableInstanceRef.current} />
+            <ColumnListFilterMenu table={tableInstanceRef.current} columns={columns}/>
             {/* <MRT_FullScreenToggleButton table={tableInstanceRef.current} /> */}
           </Box>
         )}
