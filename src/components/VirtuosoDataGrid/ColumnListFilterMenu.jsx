@@ -90,7 +90,7 @@ const ColumnListFilterMenu = ({ table, columns }) => {
     }
     return returnColumns;
 
-  }, [coluimns, columnOrder, getAllColumns, getCenterLeafColumns, getLeftLeafColumns, getRightLeafColumns, searchText])
+  }, [columns, columnOrder, getAllColumns, getCenterLeafColumns, getLeftLeafColumns, getRightLeafColumns, searchText])
 
   const applyFilteredColumns = useCallback(
     () => {
