@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import useI18nLabel from './hooks/useI18nLabel'
 import useCriterionComponent from './hooks/useCriterionComponent'
 import { Box, Button, Divider, FormControl, InputLabel, MenuItem, Select } from '@mui/material'
+import { useTheme } from "@mui/material";
 
 AddCriterion.propTypes = {
   onSubmit: PropTypes.func,
@@ -13,7 +14,7 @@ AddCriterion.propTypes = {
 function AddCriterion(props) {
   const {
     criteria = {},
-    onSubmit: onSubmitProp
+    onSubmit: onSubmitProp,
   } = props
 
   const [value, setValue] = React.useState('')
@@ -24,6 +25,7 @@ function AddCriterion(props) {
   const i18nSubmit = useI18nLabel('add-criterion.submit')
   const i18nTypePlaceholder = useI18nLabel('add-criterion.type-placeholder')
 
+  const theme = useTheme()
   const onSubmit = React.useCallback(() => {
     if (typeof onSubmitProp !== 'function') return
 
@@ -68,9 +70,16 @@ function AddCriterion(props) {
   }, [value, selectedCriterion])
 
   return (
-    <>
+    <Box
+      sx={{
+        pt:2,
+        pb: 2,
+        maxHeight: '50vh',
+        overflowY: 'auto',
+      }}
+    >
       <FormControl fullWidth sx={{
-        pb: 2
+        pb: 2,
       }}>
         <InputLabel>{i18nType}</InputLabel>
         <Select
@@ -100,7 +109,7 @@ function AddCriterion(props) {
       >
         {i18nSubmit}
       </Button>
-    </>
+    </Box>
   )
 }
 

@@ -6,7 +6,9 @@ import useCriterionSummaryValue from './hooks/useCriterionSummaryValue'
 
 
 import { makeStyles } from 'tss-react/mui';
-import { Button, ButtonGroup, Card, CardContent, Divider, Popover } from '@mui/material'
+import { Button, ButtonGroup, Card, CardContent, Divider, Popover, Popper } from '@mui/material'
+import { ClickAwayListener } from "@mui/material";
+import { useTheme } from '@mui/material'
 
 const useStyles = makeStyles()(theme => ({
   root: {
@@ -119,15 +121,18 @@ function CriterionDesktop(props) {
   const onDelete = React.useCallback(() => {
     if (typeof onDeleteProp === 'function') onDeleteProp()
     onActiveChange(false)
+    handleClose()
   }, [onDeleteProp, onActiveChange])
 
   const onChange = React.useCallback(updatedCriterion => {
     if (typeof onChangeProp === 'function') onChangeProp(updatedCriterion)
     onActiveChange(false)
+    handleClose()
   }, [onChangeProp, onActiveChange])
 
   const onPopoverClose = React.useCallback(() => {
     onActiveChange(false)
+    handleClose()
   }, [onActiveChange])
 
   const onKeyDown = React.useCallback(ev => {
@@ -158,9 +163,12 @@ function CriterionDesktop(props) {
     setAnchorEl(null);
   };
 
+  const id = open ? 'ZWCfilter-popper-select' : undefined;
+  const theme = useTheme()
+
   return (
     <>
-      <ButtonGroup sx={{ pr: 2, minWidth: 'max-content'}}>
+      <ButtonGroup sx={{ pr: 2, minWidth: 'max-content' }}>
         <Button
           size="small"
           variant="contained"
@@ -178,36 +186,56 @@ function CriterionDesktop(props) {
         </Button>
       </ButtonGroup>
 
-      <Popover
-      // disablePortal
+      <Popper
+        id={id}
+        disablePortal
         open={open}
+
         anchorEl={anchorEl}
         onClose={handleClose}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
-        }}
-        PaperProps={{
-          sx: {
-            width: '100%',
+        popperOptions={
+          {
+            placement: 'bottom-start',
+            strategy: 'absolute',
+            modifiers: [
+              {
+                name: 'flip',
+                enabled: true,
+                options: {
+                  altBoundary: true,
+                  rootBoundary: 'viewport',
+                  padding: 8,
+                },
+              },
+
+            ]
           }
+        }
+        sx={{
+          zIndex: theme.zIndex.modal,
+          width: theme.breakpoints.values.sm,
+
         }}
       >
-        <Card>
-          <CardContent>
-            <Criterion
-              value={value}
-              updatable={updatable}
-              deletable={deletable}
-              criterionInfo={criterionInfo}
-              onChange={onChange}
-              onDelete={onDelete}
-              onCancel={onPopoverClose}
-            />
-          </CardContent>
-        </Card>
-      </Popover>
+        <ClickAwayListener
+          mouseEvent="onMouseUp"
+          onClickAway={handleClose}>
+          <Card>
+            <CardContent>
+              <Criterion
+                value={value}
+                updatable={updatable}
+                deletable={deletable}
+                criterionInfo={criterionInfo}
+                onChange={onChange}
+                onDelete={onDelete}
+                onCancel={onPopoverClose}
+              />
+            </CardContent>
+          </Card>
+        </ClickAwayListener>
 
+      </Popper>
     </>
   )
 }
