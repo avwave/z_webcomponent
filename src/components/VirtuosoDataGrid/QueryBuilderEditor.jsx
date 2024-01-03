@@ -98,9 +98,20 @@ const QueryBuilderEditor = ({
 
         }
       })
+      if (hasDateRangeFilter) {
+        fieldDefs.push({
+          label: 'Date Range',
+          name: 'ZWC_defaultdaterange',
+          id: 'ZWC_defaultdaterange',
+          inputType: 'daterange',
+          operators: [
+            { name: 'between', label: 'between' },
+          ],
+        })
+      }
       return fieldDefs
 
-    }, [columns]
+    }, [columns, hasDateRangeFilter]
   );
 
   const handleFilterChange = useCallback(

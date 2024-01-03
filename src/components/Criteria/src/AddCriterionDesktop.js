@@ -3,8 +3,9 @@ import PropTypes from 'prop-types'
 import AddCriterion from './AddCriterion'
 import useI18nLabel from './hooks/useI18nLabel'
 import useCriterionAddableChecker from './hooks/useCriterionAddableChecker'
-import { Button, Card, CardContent, CardHeader, Container, Popover, Typography, useTheme } from '@mui/material'
-
+import { Button, Card, CardContent, CardHeader, Container, Popover, Popper, Typography, useTheme } from '@mui/material'
+import { Box } from "@mui/material";
+import { ClickAwayListener } from "@mui/material";
 AddCriterionDesktop.propTypes = {
   onAdd: PropTypes.func,
   active: PropTypes.bool,
@@ -36,7 +37,9 @@ function AddCriterionDesktop(props) {
   };
   const open = Boolean(anchorEl);
 
-  const handleClose = () => {
+  const id = open ? 'ZWCfilter-popper' : undefined;
+
+  const handleClose = (evt) => {
     setAnchorEl(null);
   };
 
@@ -76,40 +79,61 @@ function AddCriterionDesktop(props) {
           disabled={disabled}
           aria-expanded={active}
           onClick={handleClick}
+          aria-describedby={id}
         >
           {i18nAdd}
         </Button>
         {children}
 
-        <Popover
-          // disablePortal
+        <Popper
+          id={id}
+          disablePortal
           open={open}
+
           anchorEl={anchorEl}
           onClose={handleClose}
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'left',
-          }}
-          PaperProps={{
-            sx: {
-              width: theme.breakpoints.values.sm,
-              
+          popperOptions={
+            {
+              placement: 'bottom-start',
+              strategy: 'absolute',
+              modifiers: [
+                {
+                  name: 'flip',
+                  enabled: true,
+                  options: {
+                    altBoundary: true,
+                    rootBoundary: 'viewport',
+                    padding: 8,
+                  },
+                },
+
+              ]
             }
+          }
+          sx={{
+            zIndex: theme.zIndex.modal,
+            width: theme.breakpoints.values.sm,
+
           }}
         >
-          <Card>
-            <CardHeader
-              subheader={i18nAddPopoverDesc}
-            />
-            <CardContent>
-              <AddCriterion
-                criteria={criteria}
-                onSubmit={onAdd}
+          <ClickAwayListener
+          mouseEvent="onMouseUp"
+            onClickAway={handleClose}>
+            <Card>
+              <CardHeader
+                subheader={i18nAddPopoverDesc}
               />
+              <CardContent>
+                <AddCriterion
+                  criteria={criteria}
+                  onSubmit={onAdd}
+                />
 
-            </CardContent>
-          </Card>
-        </Popover>
+              </CardContent>
+            </Card>
+          </ClickAwayListener>
+
+        </Popper>
       </div>
     )
   )
