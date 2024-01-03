@@ -1,6 +1,7 @@
 import {
   Chip,
-  Paper
+  Paper,
+  Box
 } from "@mui/material";
 import React, { useState } from "react";
 import {
@@ -72,6 +73,57 @@ LegacyCriteriaEditorFilter.args = {
   ...Default.args,
   alternateToolbarFilter: false,
 }
+
+
+const HeightBugStory = ({ ...args }) => {
+  const [state, dispatch] = React.useContext(DataGridContext);
+  const [filters, setFilters] = useState({});
+  React.useEffect(() => {
+    dispatch({
+      payload: { rows: args.rows, columns: args.columns },
+      type: actions.LOAD_DATA,
+    });
+    dispatch({
+      type: actions.SET_DONE_LOADING,
+    });
+  }, [args.columns, args.rows, dispatch]);
+
+  React.useEffect(() => {
+    setFilters(state.filterColumn);
+  }, [state.filterColumn]);
+
+  return <>
+    <ReactJson name="Filter Object can be sent to server" src={{ filters }} />
+    <Box sx={{ height: '70vh' }}/>
+    <Paper style={{ height: '100' }}>
+      <DataGrid2 {...args} />
+    </Paper>
+    <Box sx={{ height: '70vh' }} />
+
+  </>
+
+};
+
+
+export const HeightBug = HeightBugStory.bind({});
+HeightBug.args = {
+  filterable: true,
+  alternateToolbarFilter: false,
+  rows: generateRows(1),
+  columns: [
+    {
+      key: "string",
+      name: "String",
+      dataType: "text",
+      filter: {
+        type: "text",
+      }
+    }
+  ]
+}
+
+
+
 
 export const SingleAutocompleteFilter = DefaultStory.bind({});
 SingleAutocompleteFilter.args = {

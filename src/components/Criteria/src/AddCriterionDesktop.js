@@ -89,27 +89,22 @@ function AddCriterionDesktop(props) {
           id={id}
           disablePortal
           open={open}
-
+          placement='auto-start'
           anchorEl={anchorEl}
           onClose={handleClose}
-          popperOptions={
+          modifiers={[
             {
-              placement: 'bottom-start',
-              strategy: 'absolute',
-              modifiers: [
-                {
-                  name: 'flip',
-                  enabled: true,
-                  options: {
-                    altBoundary: true,
-                    rootBoundary: 'viewport',
-                    padding: 8,
-                  },
-                },
+              name: 'flip',
+              enabled: true,
+              options: {
+                fallbackPlacements: ['top-start', 'bottom-start'],
+                altBoundary: true,
+                allowedAutoPlacements: ['top-start', 'bottom-start'],
+              },
+              flipVariations: true,
 
-              ]
             }
-          }
+          ]}
           sx={{
             zIndex: theme.zIndex.modal,
             width: theme.breakpoints.values.sm,
@@ -117,7 +112,7 @@ function AddCriterionDesktop(props) {
           }}
         >
           <ClickAwayListener
-          mouseEvent="onMouseUp"
+            mouseEvent="onMouseUp"
             onClickAway={handleClose}>
             <Card>
               <CardHeader
