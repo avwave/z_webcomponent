@@ -87,7 +87,7 @@ function AddCriterionDesktop(props) {
 
         <Popper
           id={id}
-          disablePortal
+          // disablePortal
           open={open}
           placement='auto-start'
           anchorEl={anchorEl}
