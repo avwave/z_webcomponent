@@ -19,8 +19,6 @@ import {
   OptionFilterRenderer,
   TextFilterRenderer,
 } from "./FilterRenderer";
-import { Tooltip as Tippy } from "react-tippy";
-import "react-tippy/dist/tippy.css";
 import { isEmpty } from "lodash";
 
 import BlockUi from "react-loader-advanced";

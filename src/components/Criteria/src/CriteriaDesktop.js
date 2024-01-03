@@ -150,7 +150,7 @@ function CriteriaDesktop (props) {
       >{children}
       </AddCriterionDesktop>
     )
-  }, [activeItem, criteria, onActiveItemChange, onNewCriterion])
+  }, [activeItem, criteria, onActiveItemChange, onNewCriterion, children])
 
   return (
     <div className={classes.root}>
