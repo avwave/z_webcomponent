@@ -5,6 +5,7 @@ import useCriterionComponent from './hooks/useCriterionComponent'
 
 import { makeStyles } from 'tss-react/mui';
 import { Button, Divider } from '@mui/material'
+import { Box } from "@mui/material";
 const useStyles = makeStyles()(theme => ({
   actions: {
     display: 'flex'
@@ -83,7 +84,10 @@ function Criterion(props) {
   }, [value, valueProp, criterionInfo])
 
   return (
-    <div>
+    <Box sx={{
+      maxHeight: '50vh',
+      overflowY: 'auto',
+    }}>
       {selectedCriterionDOM}
 
       <Divider />
@@ -118,7 +122,7 @@ function Criterion(props) {
           )
         }
       </div>
-    </div>
+    </Box>
   )
 }
 
