@@ -17,7 +17,13 @@ const CriteriaTextField = ({
   return (
     <TextField
       {...otherProps}
-      autoComplete='off'
+      autoComplete='default-search-field'
+      inputProps={
+        {
+          autoComplete: 'default-search-field',
+          type: 'search',
+        }
+      }
       variant='outlined'
       InputLabelProps={{
         shrink: true,
