@@ -658,7 +658,11 @@ const VirtuosoDataGrid = ({
               placeholder: searchPlaceholder ?? 'Search',
               variant: 'outlined',
               size: 'small',
+              inputProps: {
+                autocomplete: 'off',
+              },
               InputProps: {
+                autoComplete: 'off',
                 startAdornment:
                   <InputAdornment position="start">
                     <Search />
