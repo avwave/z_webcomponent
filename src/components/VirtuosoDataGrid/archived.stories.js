@@ -217,6 +217,8 @@ ConditionalSelector.args = {
     {
       key: "name",
       name: "Name",
+        grow: true
+      
     },
     {
       key: "age",

@@ -82,12 +82,13 @@ const VirtuosoDataGrid = ({
   id = "grid",
   customColumnDisplay,
   isRowExpandableCallback,
-  density ="compact"
+  density = "compact",
+  replaceFilterWithComponent=false,
 }) => {
   const { classes } = useStyles()
   const theme = useTheme()
   const tableContainerRef = useRef(null)
-  
+
   const rowVirtualizerInstanceRef = useRef(null)
 
   const [globalFilter, setGlobalFilter] = useState('');
@@ -132,7 +133,7 @@ const VirtuosoDataGrid = ({
   useEffect(
     () => {
       if (!table) return
-      const objrows = Object.fromEntries((gridProps?.selectedRows??[])?.map((v) => [v, true]))
+      const objrows = Object.fromEntries((gridProps?.selectedRows ?? [])?.map((v) => [v, true]))
       setExternalLoaded(true)
       setInternalRowSelection(objrows)
 
@@ -183,7 +184,7 @@ const VirtuosoDataGrid = ({
             accessorKey: col.key,
             enableSorting: !!col.sortable,
             enablePinning: !col.hidden,
-            // enableHiding: !col?.hidden,
+            grow: !!col.grow,
             size: col?.width ?? 200,
             minSize: col?.minWidth ?? 50,
             Header: ({ column, ...rest }) => {
@@ -264,7 +265,8 @@ const VirtuosoDataGrid = ({
                 </LightTooltip>
               }
               return finalizedCell
-            }
+            },
+            ...col?.columnProps
           }
         })
       return cols
@@ -443,7 +445,7 @@ const VirtuosoDataGrid = ({
     [tableComponents?.detailsRow?.content],
   );
 
-  
+
   const reorderColumn = useCallback(
     (draggedColumn, targetColumn, columnOrder) => {
       if (draggedColumn.getCanPin()) {
@@ -472,7 +474,6 @@ const VirtuosoDataGrid = ({
     enableDensityToggle: true,
     enableColumnOrdering: true,
     enableColumnResizing: true,
-    enableExpandAll: false,
     enablePagination: false,
     enableRowVirtualization: true,
     enableStickyHeader: false,
@@ -486,21 +487,11 @@ const VirtuosoDataGrid = ({
     enableSortingRemoval: true,
     enableColumnFilters: false,
     enableMultiSort: false,
-    enableExpanding: !!tableComponents?.detailsRow?.content,
-    getRowCanExpand: row => isRowExpandableCallback ? isRowExpandableCallback(row?.original) : true,
     data: data,
     columns: columns,
     onRowSelectionChange: rows => {
       setExternalLoaded(false)
       setInternalRowSelection(rows)
-    },
-    muiExpandButtonProps: ({ row }) => {
-      const hidden = isRowExpandableCallback ? isRowExpandableCallback(row?.original) : true
-      return {
-        sx: {
-          visibility: hidden ? 'visible' : 'hidden'
-        }
-      }
     },
     muiTableContainerProps: {
       ref: tableContainerRef,
@@ -514,7 +505,7 @@ const VirtuosoDataGrid = ({
       },
       ...gridProps?.tableContainerProps
     },
-    layoutMode: 'semantic',
+    layoutMode: 'grid',
     muiTableHeadCellProps: ({ column, table }) => {
       return {
         onDragStart: e => {
@@ -539,20 +530,7 @@ const VirtuosoDataGrid = ({
           table.setHoveredColumn(null);
 
         },
-        sx: {
-          userSelect: 'none',
-          '& .Mui-TableHeadCell-Content': {
-            display: 'flex',
-            flexDirection: 'row',
-          },
-          '& .Mui-TableHeadCell-Content-Actions': {
-            alignSelf: 'flex-end',
-          },
-          '& .Mui-TableHeadCell-Content-Wrapper': {
-            whiteSpace: 'nowrap',
-          },
-          backgroundColor: theme.palette.grey[100]
-        }
+        
       }
     },
     muiTablePaperProps: {
@@ -622,6 +600,18 @@ const VirtuosoDataGrid = ({
         }
       }
     },
+    //row expansion
+    enableExpanding: !!tableComponents?.detailsRow?.content,
+    enableExpandAll: false,
+    getRowCanExpand: row => isRowExpandableCallback ? isRowExpandableCallback(row?.original) : true,
+    muiExpandButtonProps: ({ row }) => {
+      const hidden = isRowExpandableCallback ? isRowExpandableCallback(row?.original) : true
+      return {
+        sx: {
+          visibility: hidden ? 'visible' : 'hidden'
+        }
+      }
+    },
     displayColumnDefOptions: {
       'mrt-row-select': {
         size: 50, //adjust the size of the row select column
@@ -632,6 +622,10 @@ const VirtuosoDataGrid = ({
         grow: false, //new in v2.8 (allow this column to grow to fill in remaining space)
       },
     },
+    renderDetailPanel: tableComponents?.detailsRow?.content ? ({ row }) => {
+      return renderDetailPanel({ row })
+    } : false,
+
     enableTopToolbar: false,
     onColumnOrderChange: (updater) => {
       setColumnOrder((prev) =>
@@ -669,9 +663,6 @@ const VirtuosoDataGrid = ({
       );
       queueMicrotask(rerender); //hack to rerender after state update
     },
-    renderDetailPanel: ({ row }) => {
-      return renderDetailPanel({ row })
-    },
     getRowId: (orow) => orow?.id,
     renderEmptyRowsFallback: () => {
       if (gridProps?.emptyRowsRenderer) {
@@ -705,7 +696,7 @@ const VirtuosoDataGrid = ({
   );
 
 
-  
+
 
   if (defaultHideColumns === null && defaultColumnOrder === null)
     return <LinearProgress />
@@ -736,6 +727,7 @@ const VirtuosoDataGrid = ({
         onClearFilters={() => onClearFilters()}
         gridId={id}
         customColumnDisplay={customColumnDisplay}
+        replaceFilterWithComponent={replaceFilterWithComponent}
       />
       <ThemeProvider theme={(theme) => {
         return createTheme({
