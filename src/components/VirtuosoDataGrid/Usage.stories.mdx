@@ -111,6 +111,8 @@ Column Props
 | noTooltip     | boolean  | false     | disable standard tooltip on cells                                                                                                                     |
 | tooltip       | function | undefined | custom tooltip function. see [Custom Tooltip](#custom-tooltip) for more details                                                                       |
 | width         | number   | undefined | width of column in pixels. if not specified, column will be auto sized/pinned to 150px                                                                |
+| grow          | boolean  | false     | column will attempt to fill table remaining space                                                                                                     |
+
 
 * note: if not using `cellRenderer` or `tooltip`, make sure the data of the row is strictly javascript primitive to prevent rendering errors
 
@@ -383,3 +385,13 @@ You can place additional components on the left, center and right sides of the m
 ```
 
 <Story id="datagrid-datagrid2--toolbar-accessory" />
+
+You can also replace the default filters with a custom component (only when filterable is false)
+
+```jsx
+<Datagrid2
+  filterable={false}
+  replaceFilterWithComponent={<Typography variant="h6">Heading</Typography>}
+>
+```
+<Story id="datagrid-datagridv3--toolbar-accessory" />

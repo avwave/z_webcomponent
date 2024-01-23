@@ -1,6 +1,7 @@
 import {
   Button,
-  Paper
+  Paper,
+  Typography
 } from "@mui/material";
 import React, { useCallback, useState } from "react";
 
@@ -116,3 +117,12 @@ AddDynamicColumns.args = {
     }
   ]
 }
+
+export const ToolbarAccessory = DefaultStory.bind({});
+ToolbarAccessory.args = {
+  ...Default.args,
+  filterable: false,
+  showSelector: true,
+  replaceFilterWithComponent: <Typography variant="h6">Heading</Typography>,
+
+};
