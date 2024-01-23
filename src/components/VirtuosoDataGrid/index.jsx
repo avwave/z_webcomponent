@@ -65,6 +65,7 @@ const VirtuosoDataGrid = ({
   rightAccessory,
   centerAccessory,
   onLoadMore = async () => { },
+  hideFooter = false,
   manualLoadMore = false,
   totalCount,
   resetScroll,
@@ -312,6 +313,7 @@ const VirtuosoDataGrid = ({
   //render manual bottom toolbar if loadmore is manual (for erroneous loadmore
   const renderBottomToolbar = useMemo(
     () => {
+      if (hideFooter) return null
       if (showManualLoadMore && manualLoadMore) {
         return <Box display={'flex'} flexDirection={'row'} justifyContent={'flex-end'}>
           <Button
@@ -324,7 +326,7 @@ const VirtuosoDataGrid = ({
         </Box>
       }
     },
-    [doLoadMore, loadMoreLoading, manualLoadMore, showManualLoadMore],
+    [doLoadMore, hideFooter, loadMoreLoading, manualLoadMore, showManualLoadMore],
   );
   //check on mount if needs to load more to fill the table
   useEffect(
