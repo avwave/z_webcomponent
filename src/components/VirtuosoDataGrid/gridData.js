@@ -100,6 +100,9 @@ const defaultColumns = [
     name: 'Large Text',
     sortable: true,
     dataType: 'text',
+    columnProps: {
+      grow:true,
+    },
     filter: {
       type: 'text',
       default: '',

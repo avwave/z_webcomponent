@@ -10,9 +10,11 @@ import moment from 'moment';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Timepicker } from '../Timepicker';
 import './style.scss';
-import { DatePicker, LocalizationProvider} from '@mui/x-date-pickers';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment'
+import isEmpty from 'lodash.isempty';
+import dayjs from 'dayjs';
 
 const useStyles = makeStyles()((theme) => {
   return {
@@ -50,7 +52,7 @@ const RANGE_CONST = {
   LAST_MONTH: "Last Month",
 }
 
-const LitePicker = ({ 
+const LitePicker = ({
   immediate = false,
   onCancel = () => { }, onValueChange = () => { }, containerProps, variant = "outlined", ...props }) => {
   const { classes } = useStyles()
@@ -59,10 +61,10 @@ const LitePicker = ({
   const parentElement = useRef(null)
   const picker = useRef()
 
-  const [startTime, setStartTime, startTimeRef] = useStateRef(props?.value?.startDate);
-  const [endTime, setEndTime, endTimeRef] = useStateRef(props?.value?.endDate);
-  const [startDate, setStartDate, startDateRef] = useStateRef(props?.value?.startDate || new Date());
-  const [endDate, setEndDate, endDateRef] = useStateRef(props?.value?.endDate || new Date());
+  const [startTime, setStartTime, startTimeRef] = useStateRef(moment(props?.value?.startDate || new Date()));
+  const [endTime, setEndTime, endTimeRef] = useStateRef(moment(props?.value?.endDate || new Date()));
+  const [startDate, setStartDate, startDateRef] = useStateRef(moment(props?.value?.startDate || new Date()));
+  const [endDate, setEndDate, endDateRef] = useStateRef(moment(props?.value?.endDate || new Date()));
 
   const [dateRange, setDateRange] = useState([null, null]);
   const [date1, setDate1] = useState(new Date());
@@ -103,8 +105,8 @@ const LitePicker = ({
         ...props
       })
       pickerElem.on('selected', (date1, date2) => {
-        setStartDate(date1.dateInstance)
-        setEndDate(date2.dateInstance)
+        setStartDate(moment(date1.dateInstance))
+        setEndDate(moment(date2.dateInstance))
         immediate && sendParsedDates()
       })
 
@@ -185,6 +187,11 @@ const LitePicker = ({
     <Grid container spacing={2} className={classes.pickerContainer} {...containerProps} >
       <Grid item xs={6}>
         <DatePicker
+          slotProps={{
+            textField: {
+              variant
+            }
+          }}
           ref={startElement}
           label="Start Date"
           renderInput={
@@ -221,7 +228,7 @@ const LitePicker = ({
             immediate && sendParsedDates()
           }}
           label="Start Time"
-          value={moment(startTime)}
+          value={startTime}
           inputProps={{
             fullWidth: true,
             InputLabelProps: {
@@ -229,12 +236,22 @@ const LitePicker = ({
             },
             variant: variant,
             size: "small",
-            helperText: ''
+            helperText: '',
+            slotProps: {
+              textField: {
+                variant
+              }
+            }
           }}
         />
       </Grid>
       <Grid item xs={6}>
         <DatePicker
+          slotProps={{
+            textField: {
+              variant
+            }
+          }}
           label="End Date"
           ref={endElement}
           renderInput={
@@ -269,7 +286,7 @@ const LitePicker = ({
             immediate && sendParsedDates()
           }}
           label="End Time"
-          value={moment(endTime)}
+          value={endTime}
           inputProps={{
             fullWidth: true,
             InputLabelProps: {
@@ -277,11 +294,16 @@ const LitePicker = ({
             },
             variant: variant,
             size: "small",
-            helperText: ''
+            helperText: '',
+            slotProps: {
+              textField: {
+                variant
+              }
+            }
           }}
         />
       </Grid>
-      <Grid container item xs={12} spacing={2} sx={{pb: 2}}>
+      <Grid container item xs={12} spacing={2} sx={{ pb: 2 }}>
         <Grid item xs={12} className={classes.calendarHolder} ref={parentElement} />
         <Grid item xs={12} className={classes.rangeSelectContainer} >
           <ButtonGroup disableElevation variant="text" size="small" >
@@ -291,23 +313,23 @@ const LitePicker = ({
           </ButtonGroup>
         </Grid>
         {!immediate && (
-        <Grid item xs={12} className={classes.bottomBar}>
-          <Button variant="text" color="inherit"
-            onClick={() => onCancel()
-            }>Close</Button>
-          <div className={classes.spacer} />
-          <Button variant="text" color="primary"
-            onClick={() => {
-              sendParsedDates()
-              onCancel()
+          <Grid item xs={12} className={classes.bottomBar}>
+            <Button variant="text" color="inherit"
+              onClick={() => onCancel()
+              }>Close</Button>
+            <div className={classes.spacer} />
+            <Button variant="text" color="primary"
+              onClick={() => {
+                sendParsedDates()
+                onCancel()
 
-            }}>Apply</Button>
-          <Button variant="text" color="secondary"
-            onClick={() => clearDates()
-            }>Clear</Button>
+              }}>Apply</Button>
+            <Button variant="text" color="secondary"
+              onClick={() => clearDates()
+              }>Clear</Button>
 
 
-        </Grid>
+          </Grid>
         )}
       </Grid>
     </Grid>
@@ -317,9 +339,19 @@ const LitePicker = ({
 const WrapPicker = props => {
   //NOTE: Use this pattern to set the filters beforehand to prevent unecessary rerendering
   // const [state, dispatch] = useReducer(dataGridReducer, { ...initState, filterColumn: { partner: '', statuses: '' } });
+  let nProps = { ...props };
+  if (isEmpty(props.value)) {
+    nProps = {
+      ...props,
+      value: {
+        startDate: null,
+        endDate: null,
+      }
+    }
+  }
   return (
     <LocalizationProvider dateAdapter={AdapterMoment}>
-      <LitePicker {...props} />
+      <LitePicker {...nProps} />
     </LocalizationProvider>
   );
 };

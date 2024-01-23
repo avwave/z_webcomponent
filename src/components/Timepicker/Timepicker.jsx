@@ -40,6 +40,7 @@ const Timepicker = ({ value, onChange, label, inputProps }) => {
             {...inputProps}
           />
         )}
+        {...inputProps}
       />
     </LocalizationProvider>
   </>;

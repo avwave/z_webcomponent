@@ -145,7 +145,8 @@ const DataGridToolbar = ({
   useUrlAsState = false,
   gridId,
   customColumnDisplay: CustomColumnDisplay,
-  tableInstanceRef
+  tableInstanceRef,
+  replaceFilterWithComponent = false
 }) => {
   const { classes } = useStyles()
 
@@ -220,6 +221,9 @@ const DataGridToolbar = ({
 
   const renderFilterBox = useMemo(
     () => {
+      if (!filterable && replaceFilterWithComponent) {
+        return replaceFilterWithComponent
+      }
       if (!filterable) return <></>
       if (alternateToolbarFilter) {
         return <QueryBuilderEditor
@@ -247,20 +251,23 @@ const DataGridToolbar = ({
     <AppBar position="static" color="transparent" elevation={0}>
       <Toolbar disableGutters
         sx={{
-          alignItems: 'flex-start',
+          alignItems:'center'
         }} >
         <Box
-          sx={{ flexGrow: 1, alignSelf: 'flex-start', overflow: 'auto' }}
+          sx={{ 
+            display: 'flex', flexDirection: 'row',
+            flexGrow: 1, overflow: 'auto'
+          }}
         >
           {renderFilterBox}
         </Box>
-        {tableInstanceRef.current && (
-          <Box sx={{ paddingLeft: 2, minWidth: '250px', width: '250px', display: 'flex', flexDirection: 'row', justifyContent:'flex-end' }}>
-            <MRT_GlobalFilterTextField table={tableInstanceRef.current} />
-            {/* <MRT_ToggleFiltersButton table={tableInstanceRef.current} /> */}
-            <MRT_ToggleDensePaddingButton table={tableInstanceRef.current} />
-            {/* <MRT_ShowHideColumnsButton table={tableInstanceRef.current} /> */}
-            <ColumnListFilterMenu table={tableInstanceRef.current} columns={columns}/>
+        {tableInstanceRef && (
+          <Box sx={{ paddingLeft: 2, minWidth: '250px', width: '250px', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end' }}>
+            <MRT_GlobalFilterTextField table={tableInstanceRef} />
+            {/* <MRT_ToggleFiltersButton table={tableInstanceRef} /> */}
+            <MRT_ToggleDensePaddingButton table={tableInstanceRef} />
+            {/* <MRT_ShowHideColumnsButton table={tableInstanceRef} /> */}
+            <ColumnListFilterMenu table={tableInstanceRef} columns={columns} />
             {/* <MRT_FullScreenToggleButton table={tableInstanceRef.current} /> */}
           </Box>
         )}

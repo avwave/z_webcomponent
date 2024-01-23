@@ -86,7 +86,8 @@ StandardDateCell.args = {
       dataType: "date",
       dateOptions: {
         format: "LL LTS"
-      }
+      },
+      grow: true
     },
   ]
 }
