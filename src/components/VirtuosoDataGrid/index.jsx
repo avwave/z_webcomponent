@@ -325,6 +325,7 @@ const VirtuosoDataGrid = ({
           >Load more</Button>
         </Box>
       }
+      return <></>
     },
     [doLoadMore, hideFooter, loadMoreLoading, manualLoadMore, showManualLoadMore],
   );
