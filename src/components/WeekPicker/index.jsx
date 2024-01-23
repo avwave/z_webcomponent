@@ -164,24 +164,36 @@ const WeekPicker = ({
     // );
   };
 
+  const [open, setOpen] = useState(false);
+
   return (
     <MobileDatePicker
       closeOnSelect
       disableMaskedInput
       showDaysOutsideCurrentMonth
       showToolbar={false}
-      renderInput={({ inputRef, inputProps, InputProps, ...props }) => {
-        const date = moment(inputProps?.value)
-        let dateweek = `${date.startOf('week').format('ll')} - ${date.endOf('week').format('ll')}`
-        dateweek = asMonthPicker ? date.format('MMMM YYYY') : dateweek
-        return (
-          <div className={classes.inputRoot}>
-            <input {...inputProps} readOnly hidden />
-            <Button {...inputProps} ref={inputRef} className={labelClass} style={labelStyle}>{dateweek}</Button>
-            {InputProps?.endAdornment}
-          </div>
-        )
+      // renderInput={({ inputRef, inputProps, InputProps, ...props }) => {
+      //   const date = moment(inputProps?.value)
+      //   let dateweek = `${date.startOf('week').format('ll')} - ${date.endOf('week').format('ll')}`
+      //   dateweek = asMonthPicker ? date.format('MMMM YYYY') : dateweek
+      //   return (
+      //     <div className={classes.inputRoot}>
+      //       <input {...inputProps} readOnly hidden />
+      //       <Button {...inputProps} ref={inputRef} className={labelClass} style={labelStyle}>{dateweek}</Button>
+      //       {InputProps?.endAdornment}
+      //     </div>
+      //   )
+      // }}
+      slots={{field: ButtonField}}
+      slotProps={{
+        field:{
+          setOpen,
+          label: asMonthPicker ? moment(selectedDate).format('MMMM YYYY') : `${moment(selectedDate).startOf('week').format('ll')} - ${moment(selectedDate).endOf('week').format('ll')}`
+        }
       }}
+      open={open}
+      onClose={() => setOpen(false)}
+      onOpen={() => setOpen(true)}
       onChange={evt => setSelectedDate(evt)}
       onAccept={evt => {
         if (asMonthPicker) {
@@ -199,7 +211,7 @@ const WeekPicker = ({
         }
       }}
       views={asMonthPicker ? ['year', 'month'] : ['year', 'month', 'day']}
-      value={selectedDate?.toDate()}
+      value={selectedDate}
       onError={(reason, value) => {
         console.log('wrapper.jsx (204) # reason, value', reason, value);
       }}
@@ -213,6 +225,30 @@ const WeekPicker = ({
   )
 }
 
+const ButtonField = (props) => {
+  const {
+    setOpen,
+    label,
+    id,
+    disabled,
+    InputProps: { ref } = {},
+    inputProps: { 'aria-label': ariaLabel } = {},
+  } = props;
+
+  return (
+    <Button
+      variant="outlined"
+      id={id}
+      disabled={disabled}
+      ref={ref}
+      aria-label={ariaLabel}
+      onClick={() => setOpen?.((prev) => !prev)}
+    >
+      {label ? `${label}` : 'Pick a date'}
+    </Button>
+  );
+}
+
 const WrapPicker = props => {
   //NOTE: Use this pattern to set the filters beforehand to prevent unecessary rerendering
   // const [state, dispatch] = useReducer(dataGridReducer, { ...initState, filterColumn: { partner: '', statuses: '' } });
@@ -223,4 +259,4 @@ const WrapPicker = props => {
   );
 };
 
-export { WrapPicker as WeekPicker };
+export { WrapPicker as WeekPicker, ButtonField as WeekPickerButtonField };

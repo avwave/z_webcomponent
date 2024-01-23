@@ -225,6 +225,11 @@ const FormFieldSet = ({
         case "date":
           return (
             <DatePicker
+              slotProps={{
+                textField: {
+                  variant
+                }
+              }}
               allowSameDateSelection
               clearable
 
@@ -275,7 +280,7 @@ const FormFieldSet = ({
                   fieldParams.useLocalTime ? moment(evt).toDate() : moment.utc(evt).toDate()
                 );
               }}
-              value={formValue}
+              value={moment(formValue)}
               disabled={fieldParams.readOnly || formReadOnly}
               autoOk
               variant="inline"
@@ -288,6 +293,11 @@ const FormFieldSet = ({
         case "datetime-local":
           return (
             <DateTimePicker
+              slotProps={{
+                textField: {
+                  variant
+                }
+              }}
               allowSameDateSelection
               clearable
               disablePast={fieldParams.disablePast}
@@ -335,7 +345,7 @@ const FormFieldSet = ({
                   fieldParams.useLocalTime ? moment(evt).toDate() : moment.utc(evt).toDate()
                 );
               }}
-              value={formValue}
+              value={moment(formValue)}
               disabled={fieldParams.readOnly || formReadOnly}
               autoOk
               variant="inline"
@@ -347,6 +357,11 @@ const FormFieldSet = ({
         case "time":
           return (
             <TimePicker
+              slotProps={{
+                textField: {
+                  variant
+                }
+              }}
               disablePast={fieldParams.disablePast}
               disableFuture={fieldParams.disableFuture}
               label={formInline ? "" : `${fieldParams.label} ${isRequired ? '*' : ''}`}
@@ -394,7 +409,7 @@ const FormFieldSet = ({
                   fieldParams.useLocalTime ? moment(evtTime).toDate() : moment.utc(evtTime).toDate()
                 );
               }}
-              value={formValue}
+              value={moment(formValue)}
               disabled={fieldParams.readOnly || formReadOnly}
               autoOk
               variant="inline"
