@@ -81,6 +81,7 @@ const VirtuosoDataGrid = ({
   id = "grid",
   customColumnDisplay,
   isRowExpandableCallback,
+  density ="compact"
 }) => {
   const { classes } = useStyles()
   const theme = useTheme()
@@ -100,7 +101,7 @@ const VirtuosoDataGrid = ({
 
   const rerender = useReducer(() => ({}), {})[1];
   const [columnVisibility, setColumnVisibility] = useState({});
-  const [density, setDensity] = useState('comfortable');
+  const [tableDensity, setDensity] = useState(density);
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 5 });
   const [rowSelection, setRowSelection] = useState({});
   const [showColumnFilters, setShowColumnFilters] = useState(false);
@@ -567,7 +568,7 @@ const VirtuosoDataGrid = ({
       pagination,
       showColumnFilters,
       columnPinning: pinnedColumns,
-      density: density,
+      density: tableDensity,
       globalFilter,
       columnOrder,
       ...gridProps?.gridState
