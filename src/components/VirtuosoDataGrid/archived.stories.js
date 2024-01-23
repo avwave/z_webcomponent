@@ -182,17 +182,26 @@ ConditionalSelector.args = {
     {
       id: 1,
       name: 'Alice',
-      age: 20
+      age: 20,
+      age1: 20
     },
     {
       id: 2,
       name: 'Bob',
-      age: 21
+      age: 21,
+      age1: 21
     },
     {
       id: 3,
       name: 'Charlie',
-      age: 22
+      age: 22,
+      age1: 22
+    },
+    {
+      id: 3,
+      name: 'Pants Aruba Pizza schemas navigating Rustic Facilitator',
+      age: 'innovate Colorado',
+      age1: 'innovate Colorado'
     }
   ],
   columns: [
@@ -212,6 +221,37 @@ ConditionalSelector.args = {
     {
       key: "age",
       name: "Age",
+      
+    },
+    {
+      key: "age1",
+      name: "Age",
+      width: 10
+    },
+    {
+      key: "age2",
+      name: "Age",
+      width: 200
+    },
+    {
+      key: "age3",
+      name: "Age",
+      width: 50
+    },
+    {
+      key: "age4",
+      name: "Age",
+      width: 50
+    },
+    {
+      key: "age5",
+      name: "Age",
+      width: 50
+    },
+    {
+      key: "age6",
+      name: "Age",
+      width: 50
     },
   ]
 }
