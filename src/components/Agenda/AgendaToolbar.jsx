@@ -1,10 +1,10 @@
 import { Button, ButtonGroup, Grid, Toolbar, Typography } from "@mui/material";
 import { makeStyles } from 'tss-react/mui';
 import moment from "moment";
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { Navigate } from "react-big-calendar";
 import { views as calendarViews } from "react-big-calendar/lib/utils/constants";
-import { WeekPicker } from "../WeekPicker";
+import { WeekPicker, WeekPickerButtonField } from "../WeekPicker";
 import { LocalizationProvider, MobileDatePicker } from "@mui/x-date-pickers";
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment'
 
@@ -72,6 +72,8 @@ const AgendaToolbar = ({
 }) => {
   const { classes, cx } = useStyles();
 
+  const [open, setOpen] = useState(false);
+
   const renderTitle = useMemo(
     () => {
       if (!picker) {
@@ -105,11 +107,21 @@ const AgendaToolbar = ({
           return (
             <div className={classes.title}>
               <MobileDatePicker
+                slots={{ field: WeekPickerButtonField }}
+                slotProps={{
+                  field: {
+                    setOpen, 
+                    label: `${moment(date).format('ll')}`
+                  }
+                }}
+                open={open}
+                onClose={() => setOpen(false)}
+                onOpen={() => setOpen(true)}
                 disableCloseOnSelect={false}
                 disableMaskedInput
                 showDaysOutsideCurrentMonth
                 showToolbar={false}
-                value={date}
+                value={moment(date)}
                 onChange={range => {
                   onNavigate(Navigate.DATE, range?.toDate())
                 }}
@@ -144,7 +156,7 @@ const AgendaToolbar = ({
           </Typography>)
       }
 
-    }, [classes.title, label, onNavigate, picker]
+    }, [classes.title, label, onNavigate, picker, view, open, date]
   );
   const defColWidth = filterComponent ? 3 : 4
 
