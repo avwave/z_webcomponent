@@ -313,7 +313,7 @@ const VirtuosoDataGrid = ({
   //render manual bottom toolbar if loadmore is manual (for erroneous loadmore
   const renderBottomToolbar = useMemo(
     () => {
-      if (hideFooter) return null
+      if (hideFooter) return <></>
       if (showManualLoadMore && manualLoadMore) {
         return <Box display={'flex'} flexDirection={'row'} justifyContent={'flex-end'}>
           <Button
