@@ -211,6 +211,9 @@ const VirtuosoDataGrid = ({
                   content = localizePercent(cell?.getValue())
                   break;
                 case 'date':
+                  if (cell?.getValue() === null || cell?.getValue() === undefined) {
+                    return '-'
+                  }
                   if (col.dateOptions?.relative) {
                     content = fuzzyDate(cell?.getValue())
                   } else {

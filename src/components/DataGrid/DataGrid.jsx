@@ -15,7 +15,6 @@ import { actions as dataGridActions, DataGridContext } from "./DataGridContext";
 import DataGridToolbar from "./DataGridToolbar";
 import { DraggableHeaderRenderer } from "./DraggableHeaderRenderer";
 import {
-  FilterRendererWrapper,
   OptionFilterRenderer,
   TextFilterRenderer,
 } from "./FilterRenderer";

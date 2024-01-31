@@ -5,7 +5,7 @@ import {
   LinearProgress,
   Toolbar
 } from "@mui/material";
-import { MRT_FullScreenToggleButton, MRT_GlobalFilterTextField, MRT_ShowHideColumnsButton, MRT_ToggleDensePaddingButton, MRT_ToggleFiltersButton } from "material-react-table";
+import { MRT_GlobalFilterTextField, MRT_ToggleDensePaddingButton } from "material-react-table";
 import React, { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { makeStyles } from "tss-react/mui";
 import { DataGridContext } from "../DataGrid/DataGridContext";
@@ -258,11 +258,9 @@ const DataGridToolbar = ({
         {tableInstanceRef && (
           <Box sx={{ paddingLeft: 2, minWidth: '250px', width: '250px', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end' }}>
             <MRT_GlobalFilterTextField table={tableInstanceRef} />
-            {/* <MRT_ToggleFiltersButton table={tableInstanceRef} /> */}
             <MRT_ToggleDensePaddingButton table={tableInstanceRef} />
-            {/* <MRT_ShowHideColumnsButton table={tableInstanceRef} /> */}
             <ColumnListFilterMenu table={tableInstanceRef} columns={columns} />
-            {/* <MRT_FullScreenToggleButton table={tableInstanceRef.current} /> */}
+            
           </Box>
         )}
       </Toolbar>
