@@ -21,7 +21,7 @@ import {
 } from '@mui/material';
 import "./QueryBuildeEditor.scss"
 import { isEmpty } from 'lodash';
-import { ControlElements, QueryBuilderEditorField } from './QueryBuilderEditorFields';
+import { ControlElements } from './QueryBuilderEditorFields';
 
 const muiComponents = {
   Button,
