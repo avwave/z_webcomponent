@@ -67,7 +67,7 @@ const useStyles = makeStyles()((theme) => ({
   chipTabRoot: {
     padding: theme.spacing(0.5),
     borderRight: `1px solid ${theme.palette.action.focus}`,
-    
+
   },
   chipTabIndicator: {
     display: 'flex',
@@ -212,7 +212,7 @@ function DateRangeFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
   );
 }
 
-function ChipTabsFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
+function ChipTabsFilterRenderer({ onChange, onChangeDisplay, value, filter, fullWidth = false }) {
   const { classes } = useStyles();
   return (
     <Tabs
@@ -246,17 +246,26 @@ function ChipTabsFilterRenderer({ onChange, onChangeDisplay, value, filter }) {
             disableFocusRipple
             disableRipple
             wrapped
+            sx={!fullWidth ? {} :
+              {
+                minWidth: "fit-content",
+                flex: 1
+              }}
             classes={{ root: classes.chipTabRoot, selected: classes.chipTabSelected }}
             label={
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <Box sx={{ pl: 1, pr: 1 }}>
                   {icon}
                 </Box>
-                
-                <Chip sx={{ ml: .5, mr: .5 }}
-                  label={option?.count}
-                  size="small"
-                />
+                {
+                  (option?.count || option?.count === 0) && (
+
+                    <Chip sx={{ ml: .5, mr: .5 }}
+                      label={option?.count}
+                      size="small"
+                    />
+                  )
+                }
               </Box>
               // <Chip
               //   size="small"
