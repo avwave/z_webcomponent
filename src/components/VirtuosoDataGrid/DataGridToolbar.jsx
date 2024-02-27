@@ -171,6 +171,7 @@ const DataGridToolbar = ({
       return f?.filter?.type === 'chiptabs'
     }).map((col, idx) => {
       return <ChipTabsFilterRenderer
+        fullWidth={col?.filter?.fullWidth}
         filter={col?.filter}
         value={dataGridState.filterColumn[col.key]}
         onChange={(v) => {
@@ -265,7 +266,9 @@ const DataGridToolbar = ({
         )}
       </Toolbar>
       {hasChipFilter && (
-        <Toolbar disableGutters variant="dense" className={classes.toolbar}>{renderChipFilters}</Toolbar>
+        <>
+        {renderChipFilters}
+        </>
       )}
       {loadingBar}
 
