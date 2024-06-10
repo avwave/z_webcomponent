@@ -1,18 +1,36 @@
+import remarkGFM from 'remark-gfm';
+
 const config = {
   "core": {
     options: {
       fsCache: true
     }
   },
-  "stories": ["../src/**/*.stories.mdx", "../src/**/*.stories.@(js|jsx|ts|tsx)", "../src/components/**/*.stories.mdx", "../src/components/**/*.stories.@(js|jsx|ts|tsx)"],
+  "stories": [
+    "../src/**/*.mdx",
+    "../src/**/*.stories.@(js|jsx|ts|tsx)",
+    "../src/components/**/*.mdx",
+    "../src/components/**/*.stories.@(js|jsx|ts|tsx)"
+  ],
+  "staticDirs": ['../public'],
   "addons": [
-    '@storybook/addon-docs',
+    {
+      name: "@storybook/addon-docs",
+      options: {
+        mdxPluginOptions: {
+          mdxCompileOptions: {
+            remarkPlugins: [remarkGFM]
+          }
+        }
+      }
+    }
+    ,
     '@storybook/addon-links',
-    '@storybook/addon-essentials', 
-    '@storybook/addon-interactions', 
-    '@storybook/preset-create-react-app', 
-    '@storybook/addon-viewport'
-    // "@storybook/addon-mdx-gfm"
+    '@storybook/addon-essentials',
+    '@storybook/addon-interactions',
+    '@storybook/preset-create-react-app',
+    '@storybook/addon-viewport',
+    "@chromatic-com/storybook"
   ],
   framework: {
     name: "@storybook/react-webpack5",
@@ -21,7 +39,6 @@ const config = {
     }
   },
   docs: {
-    autodocs: true,
     defaultName: 'Docs'
   },
   typescript: {

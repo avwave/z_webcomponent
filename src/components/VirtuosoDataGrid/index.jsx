@@ -290,10 +290,17 @@ const VirtuosoDataGrid = ({
 
   const [showManualLoadMore, setShowManualLoadMore] = useState(false);
   const [loadMoreLoading, setLoadMoreLoading] = useState(false);
+  const [lastScrollTop, setLastScrollTop] = useState(0);
+
   const fetchMoreOnBottomReached = useCallback(
     async (containerRefElement, manual) => {
       if (containerRefElement) {
         const { scrollHeight, scrollTop, clientHeight } = containerRefElement;
+        // Check if the scroll direction is down
+        if (scrollTop <= lastScrollTop) {
+          return;
+        }
+        setLastScrollTop(scrollTop);
         //once the user has scrolled within 400px of the bottom of the table, fetch more data if we can
         if (!!manual) {
           setShowManualLoadMore(true)
@@ -311,7 +318,7 @@ const VirtuosoDataGrid = ({
         }
       }
     },
-    [dataGridState?.loading, dataGridState?.rows?.length, doLoadMore, totalCount],
+    [dataGridState?.loading, dataGridState?.rows?.length, doLoadMore, totalCount, lastScrollTop],
   );
 
 
@@ -345,6 +352,7 @@ const VirtuosoDataGrid = ({
   useEffect(() => {
     try {
       rowVirtualizerInstanceRef.current?.scrollToIndex?.(0);
+      setLastScrollTop(0);
     } catch (error) {
       console.error(error);
     }

@@ -1,0 +1,427 @@
+{/* Usage.mdx */}
+
+import { Source, Story, Meta, Canvas } from "@storybook/blocks";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+
+
+import DataGridProvider, {
+  dataGridReducer,
+  DataGridContext,
+  actions,
+  initState,
+} from "../DataGrid/DataGridContext";
+
+import * as ColumnTypesStories  from '../VirtuosoDataGrid/ColumnTypes.stories'
+import * as DatagridStories from '../VirtuosoDataGrid/index.stories'
+import * as ArchivedStories from '../VirtuosoDataGrid/archived.stories'
+
+<Meta of={DatagridStories}/>
+
+# Datagrid Component
+
+Infinite scroll/pagination, sortable, filterable Data grid component
+
+* [Setup project/component](#setup)
+
+* [Usage](#usage)
+
+* [Datasources](#setup-datasources)
+
+* [pagination](#pagination)
+
+* [sorting](#sorting)
+
+* [Filtering](#filtering)
+
+* [Cell Rendering](#cell-rendering)
+
+* [Basic Cell Renderer](#basic-cell-renderer)
+
+* [Custom Cell Renderer](#custom-cell-renderer)
+
+* [Disable Cell Tooltip](#disable-cell-tooltip)
+
+* [Custom Tooltip](#custom-tooltip)
+
+* [Toolbar Accessories](#toolbar-accessories)
+
+* [URLParams as State](#urlparams-as-state)
+
+### Setup
+
+### Usage
+
+Boilerplate code to get started with Datagrid
+
+```jsx
+import { DataGrid2, DataGridContext, DataGridProvider, gridActions, useStateRef } from '@zennya/web-component-library/src';
+
+const ComponentWithDataGrid = (props) => {
+  ...
+  return (
+    <DataGrid2
+      ...
+    />
+}
+
+const WrapView = (props) => {
+  return (
+    <DataGridProvider>
+      <ComponentWithDatagrid {...props} />
+    </DataGridProvider>
+  );
+}
+export { WrapView as ComponentWithDataGrid }
+```
+
+### Setup Datasources
+
+We'll need to setup two datasources for the datagrid to use. One for the rows and one for the columns. For example rows, we'll have an array of objects with three properties, `name`, `age`, and a UNIQUE identifier, `id`
+
+```js
+const rowSource = [
+  {
+    id: 0,
+    name: "Alice",
+    age: 20,
+  },
+  {
+    id: 1,
+    name: "Bob",
+    age: 21,
+  },
+  {
+    id: 2,
+    name: "Charlie",
+    age: 22,
+  },
+];
+```
+
+The columns object maps to the properties of an item in the row array, for example
+
+```js
+const columnSource = [
+  {
+    key: "name",
+    name: "Name",
+  },
+  {
+    key: "age",
+    name: "Age",
+  },
+];
+```
+
+Column Props
+
+| Parameters    | Type     | Default   | Description                                                                                                                                           |
+| ------------- | -------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| key           | string   | undefined | REQUIRED: unique identifier for column mapped to the field in the row object |
+| name          | string   | undefined | REQUIRED: displayed name of the field                                                                                                                 |
+| cellRenderer  | function | undefined | custom cell renderer function. see [Custom Cell Renderer](#custom-cell-renderer) for more details                                                     |
+| sortable      | boolean  | false     | enable/disable column header sort action. does not do clientside sorting instead triggers the `onSort(column, direction)` prop in `Datagrid`          |
+| hidden        | boolean  | false     | hide column by default. can be viewed again using the column selector in toolbar                                                                      |
+| frozen        | boolean  | true      | `true` if column is pinned to the right at start. columns can be manually pinned from the column selector/column actions button on a per column basis |
+| truncateLines | number   | 2         | number of lines to be displayed if column doesnt have a `cellRenderer` before truncated by ellipses                                                   |
+| noTooltip     | boolean  | false     | disable standard tooltip on cells                                                                                                                     |
+| tooltip       | function | undefined | custom tooltip function. see [Custom Tooltip](#custom-tooltip) for more details                                                                       |
+| width         | number   | undefined | width of column in pixels. if not specified, column will be auto sized/pinned to 150px                                                                |
+| grow          | boolean  | false     | column will attempt to fill table remaining space                                                                                                     |
+
+* note: if not using `cellRenderer` or `tooltip`, make sure the data of the row is strictly javascript primitive to prevent rendering errors
+
+Next, we will need to `dispatch` the contents of the row and columns to the Datagrid.
+
+1. Get the dispatch and state properties from the datagrid context
+
+```diff
+const ComponentWithDataGrid = (props) => {
++ const [state, dispatch] = React.useContext(DataGridContext);
+...
+
+}
+```
+
+2. Add `useEffect` watcher on `columnSource`
+
+```jsx
+React.useEffect(() => {
+  dispatch({
+    payload: {
+      columns: columnSource,
+    },
+    type: gridActions.LOAD_COLUMNS,
+  });
+}, [columnSource]);
+```
+
+3. Add `useEffect` wacher for `rowSource`
+
+```jsx
+React.useEffect(() => {
+  dispatch({
+    payload: {
+      rows: rowSource,
+    },
+    type: gridActions.LOAD_ROWS,
+  });
+}, [rowSource]);
+```
+
+4.x. Optionally add a `useEffect` watcher for when your component is loading data
+
+```jsx
+React.useEffect(() => {
+  dispatch({
+    type: isDataLoading
+      ? gridActions.SET_LOADING
+      : gridActions.SET_DONE_LOADING,
+  });
+}, [isDataLoading]);
+```
+
+{/* <Story id="datagrid-datagrid2-columntypes--default" /> is deprecated, please migrate it to <Story of={referenceToStory} /> see: https://storybook.js.org/migration-guides/7.0 */}
+
+<Story of={ColumnTypesStories.Default}/>
+
+### Pagination
+
+Datagrid2 uses infinite scrolling in lieu of pagination (you can still use pagination, but as an external component). To enable infinite scrolling, you'll need to pass in a callback function `onLoadMore` prop to the datagrid and the prop `totalCount`. This function will be called when the user scrolls to near the bottom of the datagrid. And `totalCount` specifies how many rows there are in total and serves as a stopper for the infinite scroll when the loaded data count reaches `totalCount`.
+
+For infinite/indeterminate count, set `totalCount` to `Number.MAX_SAFE_INTEGER`, but make sure to have failsafes in place to prevent the datagrid from loading when the end of the datastream is reached (usually we check the length of the list returned. if it is zerolength, it means the end of datascream is reached).
+
+````jsx
+
+<Canvas>
+  <Story of={ArchivedStories.InfiniteLoader}/>
+  <Source of={ArchivedStories.InfiniteLoader} type="code"/>
+</Canvas>
+
+
+the prop `manualLoadMore`  can be set to `true` to disable the automatic loading of more rows when the user scrolls to the bottom of the datagrid. The common use case is when there is a network failure and you want to retry loading more rows. without triggering the infiniteloading script
+
+### Sorting
+
+To add sorting to a column, add parameter `sortable: true`
+
+```jsx
+const columnSource = [
+  ...{
+    key: "age",
+    name: "Age",
+    sortable: true,
+  },
+];
+````
+
+In addition add the `onSort` prop to the datagrid. `onSort` has two parameters `column` and `direction`.
+
+`column` is the `key` of the column header that was sorted, `direction` is either `ASC` or `DESC`
+
+```jsx
+<Datagrid2
+  ...
+  onSort={(column, direction) => handleSort(column, direction)}
+>
+```
+
+Component example:
+
+<Canvas>
+  {/* <Story id="datagrid-datagrid2--server-sort" type="code" /> is deprecated, please migrate it to <Story of={referenceToStory} /> see: https://storybook.js.org/migration-guides/7.0 */}
+  <Story of={ArchivedStories.ServerSort}/>
+  <Source of={ArchivedStories.ServerSort} type='code'/>
+</Canvas>
+
+### Filtering
+
+To add filtering by a column, add the `filter` object to the column definition.
+
+There are (three) types of filters commonly used, `option`, `autocomplete` and `dateRange`
+
+* Filter type: `option`
+
+```jsx
+const columnSource = [
+  ...{
+    key: "age",
+    name: "Age",
+    filter: {
+      type: "option",
+      default: "", // default value for filter
+      label: "Is type of", // label in filter button
+      labelField: "label", // field in option object to display as option label
+      multiple: false, // allow multiple selections if true, filter value will be an array if true
+      options: [
+        {
+          label: "Tip",
+          value: "tip",
+        },
+        {
+          label: "Top",
+          value: "top",
+        },
+      ],
+    },
+  },
+];
+```
+
+* Filter type: `autocomplete`
+
+```jsx
+const columnSource = [
+  ...
+  {
+    key: "age",
+    name: "Age",
+    filter: {
+      type: "autocomplete",
+      default: "",
+      label: "Is type of",  // label in filter button
+      labelField: 'label',  // field in option object to display as option label
+      renderLabel: 'renderLabel', // if set, will use this field in option object to render the label
+      valueField: 'v',  // field in option object to use as value
+      multiple: true, // allow multiple selections if true, filter value will be an array if true
+      options: [
+        {
+          renderLabel: <h2>label as component</h2>,
+          label: 'label as string',
+          v: 'value'
+        },
+        ...
+      ],
+    },
+  },
+];
+```
+
+To check if filters have been applied to the datagrid, you can add a `useEffect` watcher on the `state.filterColumn`.
+`state.filterColumn` is an object with key value pairs; the key being the column name, the value being a primitive or an array depending on whether `multiple` was set to true for thr filter coumn
+
+```js
+{
+  "columnKeyWithFilter": primitive|array,
+  "anotherColumnKeyWithFilter": primitive|array
+}
+```
+
+In addition, by default Datagrid2 has three automatic filters, `search`, `startDate` and `endDate`.
+
+* `hasDateRangeFilter={false}` will disable the date range filter.
+* `hasSearchFilter={false}` will disable the search filter.
+
+Component example:
+
+<Canvas>
+  {/* <Story id="datagrid-datagrid2--server-filter" type="code" /> is deprecated, please migrate it to <Story of={referenceToStory} /> see: https://storybook.js.org/migration-guides/7.0 */}
+
+  <Story of={ArchivedStories.ServerFilter}/>
+  <Source of={ArchivedStories.ServerFilter} type='code'/>
+</Canvas>
+
+#### Cell Rendering
+
+### Basic Cell Renderer
+
+No formatting, as is from the row object. Will not accept objects or other non-primitive types.
+
+{/* <Story id="datagrid-datagrid2-columntypes--basic" /> is deprecated, please migrate it to <Story of={referenceToStory} /> see: https://storybook.js.org/migration-guides/7.0 */}
+
+<Story of={ColumnTypesStories.Default}/>
+
+### Custom Cell Renderer
+
+To render non-primitive types/custom rendering for a column, you can pass a `cellRenderer` function to the column object
+The `cellRenderer` function has an object property `row` which is the current row object. The `cellRenderer` function should return a react component.
+Example:
+
+```jsx
+const columnSource = [
+  {
+    key: "name",
+    name: "Custom name",
+    cellRenderer: ({ row }) => <Chip label={`${row.name} ;${row.age}`} />,
+  },
+];
+```
+
+{/* <Story id="datagrid-datagrid2-columntypes--cell-renderer" /> is deprecated, please migrate it to <Story of={referenceToStory} /> see: https://storybook.js.org/migration-guides/7.0 */}
+
+<Story of={ColumnTypesStories.ReactAsRenderedCell}/>
+
+### Disable Cell Tooltip
+
+To disable the tooltip on a column, add the `noTooltip: true` property to the column object
+
+```jsx
+const columnSource = [
+  {
+    key: "name",
+    name: "Name",
+    noTooltip: true,
+  },
+];
+```
+
+### Custom Tooltip
+
+To add a custom tooltip to a column, add the `tooltip` function property to the column object. The `tooltipRenderer` function has an object property `row` which is the current row object. The `tooltip` function can return plaintext or a react component
+
+```jsx
+const columnSource = [
+  {
+    key: "name",
+    name: "Name",
+    tooltip: ({ row }) => {
+      return <h2>{row?.name}</h2>;
+    },
+  },
+];
+```
+
+### URLParams as State
+
+| Props         | Defaults | Options | Description                                                                                                                     |
+| ------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| id            | "grid"   | string  | id for the datagrid, used for url params                                                                                        |
+| useUrlAsState | false    | boolean | if true, will use url params as the filter state, any changes to the grid state will propagate to the url params and vice versa |
+
+### Toolbar Accessories
+
+You can place additional components on the left, center and right sides of the main toolbar area by passing in the `leftAccessory`, `centerAccessory` and `rightAccessory` function props respectively. These should return react components
+
+```jsx
+<Datagrid2
+  rightAccessory={() => (
+    <ButtonGroup>
+      <Button onClick={()=>{}}>Right</Button>
+    </ButtonGroup>
+  )}
+  leftAccessory={() => (
+    <ButtonGroup>
+      <Button onClick={()=>{}}>Left</Button>
+    </ButtonGroup>
+  )}
+  centerAccessory={() => <Typography variant="h6">Heading</Typography>
+  }
+>
+```
+
+{/* <Story id="datagrid-datagrid2--toolbar-accessory" /> is deprecated, please migrate it to <Story of={referenceToStory} /> see: https://storybook.js.org/migration-guides/7.0 */}
+
+<Story of={DatagridStories.ToolbarAccessory} />
+
+You can also replace the default filters with a custom component (only when filterable is false)
+
+```jsx
+<Datagrid2
+  filterable={false}
+  replaceFilterWithComponent={<Typography variant="h6">Heading</Typography>}
+>
+```
+
+{/* <Story id="datagrid-datagridv3--toolbar-accessory" /> is deprecated, please migrate it to <Story of={referenceToStory} /> see: https://storybook.js.org/migration-guides/7.0 */}
+
+<Story of={DatagridStories.ToolbarAccessory} />
