@@ -296,11 +296,13 @@ const VirtuosoDataGrid = ({
     async (containerRefElement, manual) => {
       if (containerRefElement) {
         const { scrollHeight, scrollTop, clientHeight } = containerRefElement;
+        
         // Check if the scroll direction is down
+        setLastScrollTop(scrollTop);
         if (scrollTop <= lastScrollTop) {
           return;
         }
-        setLastScrollTop(scrollTop);
+        
         //once the user has scrolled within 400px of the bottom of the table, fetch more data if we can
         if (!!manual) {
           setShowManualLoadMore(true)
