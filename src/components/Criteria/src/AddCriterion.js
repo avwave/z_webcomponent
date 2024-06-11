@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 
 import useI18nLabel from './hooks/useI18nLabel'
@@ -26,6 +26,7 @@ function AddCriterion(props) {
   const i18nTypePlaceholder = useI18nLabel('add-criterion.type-placeholder')
 
   const theme = useTheme()
+  
   const onSubmit = React.useCallback(() => {
     if (typeof onSubmitProp !== 'function') return
 

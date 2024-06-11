@@ -297,8 +297,6 @@ const VirtuosoDataGrid = ({
       if (containerRefElement) {
         const { scrollHeight, scrollTop, clientHeight } = containerRefElement;
         
-        // Check if the scroll direction is down
-        console.log('SCROLLDIRECTION', scrollTop, lastScrollTop, scrollTop < lastScrollTop ? 'UP' : 'DOWN')
         setLastScrollTop(scrollTop);
         if (scrollTop < lastScrollTop) {
           return;
@@ -313,7 +311,6 @@ const VirtuosoDataGrid = ({
           && !dataGridState?.loading
           && totalCount > dataGridState?.rows?.length
         ) {
-          console.log('FETCHING MORE DATA' , scrollTop < lastScrollTop ? 'UP' : 'DOWN')
           if (!!manual) {
             setShowManualLoadMore(true)
           } else {
@@ -348,7 +345,6 @@ const VirtuosoDataGrid = ({
   //check on mount if needs to load more to fill the table
   useEffect(
     () => {
-      console.log('ONSCROLL ON MOUNT')
       fetchMoreOnBottomReached(tableContainerRef.current, manualLoadMore)
     }, [manualLoadMore]
   );
@@ -517,7 +513,6 @@ const VirtuosoDataGrid = ({
 
       },
       onScroll: (e) => {
-        console.log('SCROLLING:tablescroll', e.target.scrollTop)
         fetchMoreOnBottomReached(e.target, manualLoadMore)
       },
       ...gridProps?.tableContainerProps

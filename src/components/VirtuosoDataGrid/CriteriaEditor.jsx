@@ -12,6 +12,7 @@ import { CriteriaDateRange } from './Criteria/Fields/DateRange';
 import moment from 'moment';
 import ReactJson from 'react-json-view';
 import isEmpty from 'lodash.isempty';
+import { APIAutoComplete } from './Criteria/Fields/APIAutoComplete';
 
 const useStyles = makeStyles()(theme => ({
 }));
@@ -59,6 +60,27 @@ const CriteriaEditor = ({
       }
       let criteriaOptions = {}
       switch (col?.filter?.type) {
+        case 'apiAutocomplete':
+          criteriaOptions = {
+            value: (value) => {
+              if (Array.isArray(value)) {
+                return value?.map(opt => opt?.[col?.filter?.labelField])?.join(',')
+              }
+              return value
+            },
+            component: {
+              component: APIAutoComplete,
+              props: {
+                apiCallback: col?.filter?.apiCallback,
+                apiOptions: col?.filter?.apiOptions,
+                multiple: col?.filter?.multiple,
+                labelField: col?.filter?.labelField,
+                valueField: col?.filter?.valueField,
+                renderLabel: col?.filter?.renderLabel,
+              }
+            }
+          }
+          break;
         case 'option':
           criteriaOptions = {
             value: (value) => {

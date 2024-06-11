@@ -3,7 +3,7 @@ import {
   Paper,
   Box
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
   DataGridContext,
   actions
@@ -94,7 +94,7 @@ const HeightBugStory = ({ ...args }) => {
 
   return <>
     <ReactJson name="Filter Object can be sent to server" src={{ filters }} />
-    <Box sx={{ height: '70vh' }}/>
+    <Box sx={{ height: '70vh' }} />
     <Paper style={{ height: '100' }}>
       <DataGrid2 {...args} />
     </Paper>
@@ -199,7 +199,7 @@ RenderLabelOptionFilter.args = {
         })).fill(0).map(d => {
           const v = faker.random.word()
           return {
-            renderLabel: <Chip label={v}/>,
+            renderLabel: <Chip label={v} />,
             label: v,
             v: v
           }
@@ -207,4 +207,113 @@ RenderLabelOptionFilter.args = {
       },
     }
   ]
+}
+
+function numberToEnglishText(number) {
+  switch (number) {
+    case 1:
+      return "One";
+    case 2:
+      return "Two";
+    case 3:
+      return "Three";
+    case 4:
+      return "Four";
+    case 5:
+      return "Five";
+    case 6:
+      return "Six";
+    case 7:
+      return "Seven";
+    case 8:
+      return "Eight";
+    case 9:
+      return "Nine";
+    case 10:
+      return "Ten";
+    default:
+      return "";
+  }
+}
+
+const apiFilters = Array.from({ length: 10 }, (_, index) => ({
+  value: (index + 1).toString(),
+  label: numberToEnglishText(index + 1)
+}));
+
+
+const fetchApiFilters = async ({
+  model
+}) => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      const filtered = apiFilters.filter(f => f.label.toLowerCase().includes(model.toLowerCase()))
+      console.log('fetchApiFilters (217) # filtered', filtered, model, apiFilters);
+      resolve(filtered)
+    }, 1000)
+  })
+}
+
+const APIStory = ({ ...args }) => {
+  const [state, dispatch] = React.useContext(DataGridContext);
+  const [filters, setFilters] = useState({});
+
+  const columns = useMemo(
+    () => {
+      const cols = [
+        {
+          key: "autocomplete",
+          name: "Autocomplete",
+          filter: {
+            type: "apiAutocomplete",
+            default: "",
+            label: "Autocomplete API",
+            labelField: 'label',
+            valueField: 'value',
+            multiple: true,
+            apiCallback: fetchApiFilters,
+            apiOptions: {
+              parameterName: 'model'
+            }
+          },
+        }
+      ]
+      return cols
+    }, []
+  );
+
+  React.useEffect(() => {
+    dispatch({
+      payload: { rows: [], columns: columns },
+      type: actions.LOAD_DATA,
+    });
+    dispatch({
+      type: actions.SET_DONE_LOADING,
+    });
+  }, [columns, dispatch]);
+
+  React.useEffect(() => {
+    setFilters(state.filterColumn);
+  }, [state.filterColumn]);
+
+
+  
+  return <>
+    <ReactJson name="Filter Object can be sent to server" src={{ filters }} />
+    <Paper style={{ height: '100' }}>
+      <DataGrid2
+        {...args}
+        columns={columns}
+      />
+    </Paper>
+  </>
+
+};
+
+
+
+export const APIAutocompleteFilter = APIStory.bind({});
+APIAutocompleteFilter.args = {
+  ...Default.args,
+  alternateToolbarFilter: false,
 }
