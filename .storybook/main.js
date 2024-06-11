@@ -1,4 +1,4 @@
-import path from "path-browserify";
+import remarkGFM from 'remark-gfm';
 
 const config = {
   "core": {
@@ -6,24 +6,32 @@ const config = {
       fsCache: true
     }
   },
-  "stories": ["../src/**/*.stories.mdx", "../src/**/*.stories.@(js|jsx|ts|tsx)", "../src/components/**/*.stories.mdx", "../src/components/**/*.stories.@(js|jsx|ts|tsx)"],
+  "stories": [
+    "../src/**/*.mdx",
+    "../src/**/*.stories.@(js|jsx|ts|tsx)",
+    "../src/components/**/*.mdx",
+    "../src/components/**/*.stories.@(js|jsx|ts|tsx)"
+  ],
+  "staticDirs": ['../public'],
   "addons": [
     {
-      name: '@storybook/addon-storysource',
+      name: "@storybook/addon-docs",
       options: {
-        rule: {
-          // test: [/\.stories\.jsx?$/], This is default
-          include: [path.resolve(__dirname, '../src')], // You can specify directories
-        },
-        loaderOptions: {
-          prettierConfig: { printWidth: 80, singleQuote: false },
-          parser: 'javascript',
-          injectDecorator: false,
-          injectStoryParameters: false,
-        },
-      },
-    },
-    '@storybook/addon-links', '@storybook/addon-essentials', '@storybook/addon-interactions', '@storybook/preset-create-react-app', "@storybook/addon-mdx-gfm"],
+        mdxPluginOptions: {
+          mdxCompileOptions: {
+            remarkPlugins: [remarkGFM]
+          }
+        }
+      }
+    }
+    ,
+    '@storybook/addon-links',
+    '@storybook/addon-essentials',
+    '@storybook/addon-interactions',
+    '@storybook/preset-create-react-app',
+    '@storybook/addon-viewport',
+    "@chromatic-com/storybook"
+  ],
   framework: {
     name: "@storybook/react-webpack5",
     options: {
@@ -31,7 +39,6 @@ const config = {
     }
   },
   docs: {
-    autodocs: true,
     defaultName: 'Docs'
   },
   typescript: {

@@ -1,18 +1,22 @@
 {/* Usage.mdx */}
 
-import { Source, Story, Meta, Canvas } from "@storybook/addon-docs";
+import { Source, Story, Meta, Canvas } from "@storybook/blocks";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 
+import * as IntervalStories from '../hooks/useInterval.stories'
+import * as StateRefStories from '../hooks/useStateRef.stories'
+import * as URLStateStories from '../hooks/useUrlState.stories'
 
-<Meta title="Hooks/Usage" />
-
+<Meta title="Custom hooks"
+  of={StateRefStories}
+/>
 # Hooks
 
 Custom Hooks
 
-- [useInterval](#useinterval)
-- [useStateRef](#usestateref)
-- [useUrlState](#useurlstate)
+* [useInterval](#useinterval)
+* [useStateRef](#usestateref)
+* [useUrlState](#useurlstate)
 
 ### useInterval
 
@@ -25,8 +29,11 @@ React hook used to start/stop/resume a function to be called at a specified inte
 | autoStart  | boolean  | true    | whether to start the interval immediately             |
 
 <Canvas>
-  <Story id="hooks-useinterval--mdx-example" />
-  <Source id="hooks-useinterval--mdx-example" type="code" />
+  {/* <Story id="hooks-useinterval--mdx-example" /> is deprecated, please migrate it to <Story of={referenceToStory} /> see: https://storybook.js.org/migration-guides/7.0 */}
+
+  <Story of={IntervalStories.MDXExample}/>
+  <Source of={IntervalStories.MDXExample} type="code"/>
+  
 </Canvas>
 
 | Return Props  | type     | Description                                                                                      |
@@ -46,7 +53,8 @@ Uses `useRef` internally to store the state value
 
 <Canvas>
   {/* <Story id="hooks-usestateref--default" /> */}
-  <Source id="hooks-usestateref--default" type="code" />
+  <Source of={StateRefStories.Default} type="code"/>
+  
 </Canvas>
 
 | Return Props | type        | Description                                                                                                 |
@@ -65,17 +73,18 @@ DOCUMENTATION NOTE: Storybook is rendered in an internal iFrame and hence the ur
 
 NOTE: JSON/JSON-like objects/nonprimitive values are stringified AND urlencoded before being set as query params
 
-
 | Parameters   | Type | Default | Description                |
 | ------------ | ---- | ------- | -------------------------- |
 | queryKey | string  |     | url query param mapped to this value ie: `&queryKeyValue=` |
 | disable | boolean | false | if true, treat `useUrlState` as a normal `useState`, ie: no urlparams are synced to and from state |
 | defaultValue | any  | null    | initial value of the state |
 
-
 <Canvas>
-  <Story id="hooks-useurlstate--default" />
-  <Source id="hooks-useurlstate--default" type="code" />
+  {/* <Story id="hooks-useurlstate--default" /> is deprecated, please migrate it to <Story of={referenceToStory} /> see: https://storybook.js.org/migration-guides/7.0 */}
+
+  <Story of={URLStateStories.Default}/>
+  <Story of={URLStateStories.Default} type="code"/>
+  
 </Canvas>
 
 | Return Props | type        | Description                                                                                                 |

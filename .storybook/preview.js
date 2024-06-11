@@ -60,7 +60,6 @@ const withDataGridContextProvider = (Story, context) => {
 };
 
 const parameters = {
-  actions: { argTypesRegex: "^on[A-Z].*" },
   controls: {
     expanded: true,
     matchers: {
@@ -78,6 +77,7 @@ const parameters = {
 const preview = {
   parameters,
   decorators: [withDataGridContextProvider],
+  tags: ["autodocs", "autodocs", "autodocs"]
 }
 
 export default preview
