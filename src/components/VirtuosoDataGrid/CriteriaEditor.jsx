@@ -66,7 +66,7 @@ const CriteriaEditor = ({
               if (Array.isArray(value)) {
                 return value?.map(opt => opt?.[col?.filter?.labelField])?.join(',')
               }
-              return value
+              return value?.[col?.filter?.labelField]
             },
             component: {
               component: APIAutoComplete,

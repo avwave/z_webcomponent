@@ -5,6 +5,7 @@ import debounce from 'lodash/debounce';
 import React, { useCallback, useEffect, useState } from 'react';
 import { makeStyles } from 'tss-react/mui';
 import { useStateRef } from '../../../hooks/useStateRef';
+import  isEmpty  from "lodash.isempty";
 
 
 const useStyles = makeStyles()(theme => ({
@@ -33,7 +34,7 @@ const useStyles = makeStyles()(theme => ({
 const APIAutoComplete = ({
   value,
   label,
-  apiCallback = async(params)=>{},
+  apiCallback = async (params) => { },
   apiOptions = {},
   multiple = false,
   labelField,
@@ -43,7 +44,7 @@ const APIAutoComplete = ({
   ...otherProps
 }) => {
   const { classes } = useStyles()
-  const [_internalValues, setInternalValues, internalValues ] = useStateRef([]);
+  const [_internalValues, setInternalValues, internalValues] = useStateRef([]);
   const [inputValue, setInputValue] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -52,6 +53,13 @@ const APIAutoComplete = ({
   useEffect(
     () => {
       setInternalValues(value);
+      if (Array.isArray(value)) {
+        setOptions(value)
+      }
+      if (options.length === 0 && !isEmpty(value)) {
+        setOptions([value])
+        setInputValue(value?.[labelField])
+      }
     }, [value]
   );
 
@@ -67,11 +75,10 @@ const APIAutoComplete = ({
         }
         return false
       });
-    } else {
-      filtered = options?.find(v => value === v?.[valueField]);
+      const arr = Array.from(new Set([...internalValues.current, ...filtered]));
+      setInternalValues(arr);
     }
-    const arr = Array.from(new Set([...internalValues.current, ...filtered]));
-    setInternalValues(arr);
+
   }, [multiple, options, valueField, value]);
 
 
@@ -79,6 +86,15 @@ const APIAutoComplete = ({
   const fetchOptions = useCallback(
     debounce(async (_inputValue) => {
       setLoading(true);
+      if (!_inputValue) {
+        if (multiple) {
+          setOptions(internalValues.current);
+        } else {
+          setOptions([internalValues.current]);
+        }
+        setLoading(false);
+        return
+      }
       console.log("dbce", _inputValue)
       try {
         // Make your API request here to fetch the options based on the inputValue
@@ -87,31 +103,43 @@ const APIAutoComplete = ({
         }
         const response = await apiCallback(params);
 
-        const arr = Array.from(new Set([...internalValues.current, ...response]));
+        let arr
+        if (multiple) {
+          arr = Array.from(new Set([...internalValues.current, ...response]));
+        } else {
+          arr = Array.from(new Set([internalValues.current, ...response]));
+        }
         setOptions(arr);
       } catch (error) {
         console.error('Error fetching options:', error);
       } finally {
         setLoading(false);
-      }    
+      }
     }, 500),
-    
-    [apiCallback, apiOptions.parameterName, internalValues]
-  )  
 
-  
+    [apiCallback, apiOptions.parameterName, internalValues]
+  )
+
   return (
     <>
       <Autocomplete
-        selectOnFocus
+
         loading={loading}
-        freeSolo
+
         fullWidth
-        value={internalValues.current ?? (multiple ? [] : '')}
+        value={internalValues.current ? internalValues.current : (multiple ? [] : '')}
         inputValue={inputValue}
-        onInputChange={(e, input) => {
-          setInputValue(input);
-          fetchOptions(input);
+        onInputChange={(e, input, reason) => {
+          if (reason === 'reset' && !e) {
+
+          } else if (reason==='input') {
+            setInputValue(input);
+            fetchOptions(input);
+          }
+          else {
+            setInputValue(input);
+          }
+
         }}
         onChange={(e, val) => {
           setInternalValues(val);
@@ -120,7 +148,7 @@ const APIAutoComplete = ({
         multiple={multiple}
         options={options}
         getOptionLabel={(option) => {
-          return option[labelField] ?? ""
+          return option?.[labelField] ?? ""
         }}
         isOptionEqualToValue={(option, t) => {
           return option?.[valueField] === t?.[valueField]
@@ -128,18 +156,18 @@ const APIAutoComplete = ({
         renderOption={(props, option, { selected }) => {
           if (multiple) {
             return (
-              <li {...props} key={option[valueField]}>
+              <li {...props} key={option?.[valueField]}>
                 <div className={clsx(classes.option, selected && classes.selected)}>
                   <Checkbox color="primary" size="small" checked={selected} />
-                  {option[renderLabel] ?? option[labelField]}
+                  {option?.[renderLabel] ?? option?.[labelField]}
                 </div>
               </li>
             );
           }
           return (
-            <li {...props} key={option[valueField]}>
+            <li {...props} key={option?.[valueField]}>
               <div className={clsx(classes.option, selected && classes.selected)}>
-                {option[renderLabel] ?? option[labelField]}
+                {option?.[renderLabel] ?? option?.[labelField]}
               </div>
             </li>
           );

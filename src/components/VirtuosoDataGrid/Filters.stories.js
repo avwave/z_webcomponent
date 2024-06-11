@@ -262,15 +262,31 @@ const APIStory = ({ ...args }) => {
     () => {
       const cols = [
         {
-          key: "autocomplete",
-          name: "Autocomplete",
+          key: "autocompletemultiple",
+          name: "Autocomplete Multiple",
+          filter: {
+            type: "apiAutocomplete",
+            default: [],
+            label: "Autocomplete API",
+            labelField: 'label',
+            valueField: 'value',
+            multiple: true,
+            apiCallback: fetchApiFilters,
+            apiOptions: {
+              parameterName: 'model'
+            }
+          },
+        },
+        {
+          key: "autocompletesingle",
+          name: "Autocomplete Single",
           filter: {
             type: "apiAutocomplete",
             default: "",
             label: "Autocomplete API",
             labelField: 'label',
             valueField: 'value',
-            multiple: true,
+            multiple: false,
             apiCallback: fetchApiFilters,
             apiOptions: {
               parameterName: 'model'
