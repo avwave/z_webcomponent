@@ -1,9 +1,11 @@
 import { Backspace } from '@mui/icons-material';
 import { Autocomplete, Checkbox, TextField } from '@mui/material';
 import clsx from 'clsx';
-import React, { useEffect, useState } from 'react';
+import debounce from 'lodash/debounce';
+import React, { useCallback, useEffect, useState } from 'react';
 import { makeStyles } from 'tss-react/mui';
 import { useStateRef } from '../../../hooks/useStateRef';
+
 
 const useStyles = makeStyles()(theme => ({
   selectEmpty: {
@@ -52,6 +54,7 @@ const APIAutoComplete = ({
       setInternalValues(value);
     }, [value]
   );
+
   useEffect(() => {
     let filtered;
 
@@ -71,30 +74,32 @@ const APIAutoComplete = ({
     setInternalValues(arr);
   }, [multiple, options, valueField, value]);
 
-  useEffect(() => {
-    const fetchOptions = async () => {
+
+
+  const fetchOptions = useCallback(
+    debounce(async (_inputValue) => {
       setLoading(true);
+      console.log("dbce", _inputValue)
       try {
         // Make your API request here to fetch the options based on the inputValue
         const params = {
-          [apiOptions.parameterName]: inputValue,
+          [apiOptions.parameterName]: _inputValue,
         }
         const response = await apiCallback(params);
-        
+
         const arr = Array.from(new Set([...internalValues.current, ...response]));
         setOptions(arr);
       } catch (error) {
         console.error('Error fetching options:', error);
       } finally {
         setLoading(false);
-      }
-    };
+      }    
+    }, 500),
+    
+    [apiCallback, apiOptions.parameterName, internalValues]
+  )  
 
-    if (inputValue) {
-      fetchOptions();
-    }
-  }, [inputValue]);
-
+  
   return (
     <>
       <Autocomplete
@@ -104,17 +109,13 @@ const APIAutoComplete = ({
         fullWidth
         value={internalValues.current ?? (multiple ? [] : '')}
         inputValue={inputValue}
-        onInputChange={(event, newInputValue) => {
-          setInputValue(newInputValue);
+        onInputChange={(e, input) => {
+          setInputValue(input);
+          fetchOptions(input);
         }}
         onChange={(e, val) => {
           setInternalValues(val);
-          // if (multiple) {
-          //   onChangeProp(val.map(v => v?.[valueField]))
-          // } else {
-          //   onChangeProp(val?.[valueField])
-          // }
-          onChangeProp(val)
+          onChangeProp(val);
         }}
         multiple={multiple}
         options={options}
