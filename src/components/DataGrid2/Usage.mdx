@@ -1,7 +1,8 @@
 {/* Usage.mdx */}
 
-import { Source, Story, Meta, Canvas } from "@storybook/addon-docs";
+import { Source, Story, Meta, Canvas } from "@storybook/blocks";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+
 
 import DataGridProvider, {
   dataGridReducer,
@@ -10,35 +11,69 @@ import DataGridProvider, {
   initState,
 } from "../DataGrid/DataGridContext";
 
-<Meta title="Datagrid/DatagridV3/Usage" />
+import * as ColumnTypesDatagridStories from '../DataGrid2/ColumnTypes.stories'
+import * as DatagridStories from '../DataGrid2/index.stories'
 
-# Datagrid Component
+<Meta of={DatagridStories}/>
+
+# Datagrid2 Component
+
+!! deprecated, use Datagrid3 instead
 
 Infinite scroll/pagination, sortable, filterable Data grid component
 
-- [Setup project/component](#setup)
-- [Usage](#usage)
-- [Datasources](#setup-datasources)
+* [Setup project/component](#setup)
 
-- [pagination](#pagination)
-- [sorting](#sorting)
-- [Filtering](#filtering)
-- [Cell Rendering](#cell-rendering)
-- [Basic Cell Renderer](#basic-cell-renderer)
-- [Custom Cell Renderer](#custom-cell-renderer)
-- [Disable Cell Tooltip](#disable-cell-tooltip)
-- [Custom Tooltip](#custom-tooltip)
-- [Toolbar Accessories](#toolbar-accessories)
-- [URLParams as State](#urlparams-as-state)
+* [Usage](#usage)
+
+* [Datasources](#setup-datasources)
+
+* [pagination](#pagination)
+
+* [sorting](#sorting)
+
+* [Filtering](#filtering)
+
+* [Cell Rendering](#cell-rendering)
+
+* [Basic Cell Renderer](#basic-cell-renderer)
+
+* [Custom Cell Renderer](#custom-cell-renderer)
+
+* [Disable Cell Tooltip](#disable-cell-tooltip)
+
+* [Custom Tooltip](#custom-tooltip)
+
+* [Toolbar Accessories](#toolbar-accessories)
+
+* [URLParams as State](#urlparams-as-state)
 
 ### Setup
 
-### Usage
-
-Boilerplate code to get started with Datagrid
+* Add DndProvider to root index.js of project
 
 ```jsx
-import { DataGrid2, DataGridContext, DataGridProvider, gridActions, useStateRef } from '@zennya/web-component-library/src';
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+...
+ReactDOM.render(
+  <DndProvider backend={HTML5Backend}>
+    <App />
+  </DndProvider>,
+  document.getElementById("root")
+);
+```
+
+### Usage
+
+Boilerplate code to get started with Datagrid2
+
+```jsx
+import DataGridProvider, {
+  actions as gridActions,
+  DataGridContext,
+} from "@zennya/web-component-library/src/components/DataGrid/DataGridContext";
+import { DataGrid2 } from "@zennya/web-component-library/src/components/DataGrid2/DataGrid2";
 
 const ComponentWithDataGrid = (props) => {
   ...
@@ -97,24 +132,8 @@ const columnSource = [
 ];
 ```
 
-Column Props
-
-| Parameters    | Type     | Default   | Description                                                                                                                                           |
-| ------------- | -------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| key           | string   | undefined | REQUIRED: unique identifier for column mapped to the field in the row object |
-| name          | string   | undefined | REQUIRED: displayed name of the field                                                                                                                 |
-| cellRenderer  | function | undefined | custom cell renderer function. see [Custom Cell Renderer](#custom-cell-renderer) for more details                                                     |
-| sortable      | boolean  | false     | enable/disable column header sort action. does not do clientside sorting instead triggers the `onSort(column, direction)` prop in `Datagrid`          |
-| hidden        | boolean  | false     | hide column by default. can be viewed again using the column selector in toolbar                                                                      |
-| frozen        | boolean  | true      | `true` if column is pinned to the right at start. columns can be manually pinned from the column selector/column actions button on a per column basis |
-| truncateLines | number   | 2         | number of lines to be displayed if column doesnt have a `cellRenderer` before truncated by ellipses                                                   |
-| noTooltip     | boolean  | false     | disable standard tooltip on cells                                                                                                                     |
-| tooltip       | function | undefined | custom tooltip function. see [Custom Tooltip](#custom-tooltip) for more details                                                                       |
-| width         | number   | undefined | width of column in pixels. if not specified, column will be auto sized/pinned to 150px                                                                |
-| grow          | boolean  | false     | column will attempt to fill table remaining space                                                                                                     |
-
-
-* note: if not using `cellRenderer` or `tooltip`, make sure the data of the row is strictly javascript primitive to prevent rendering errors
+* `key` mapped to the field in the row object
+* `name` is the displayed name of the field
 
 Next, we will need to `dispatch` the contents of the row and columns to the Datagrid.
 
@@ -166,23 +185,20 @@ React.useEffect(() => {
 }, [isDataLoading]);
 ```
 
-<Story id="datagrid-datagrid2-columntypes--default" />
+<Story of={ColumnTypesDatagridStories.Default}/>
+
 
 ### Pagination
 
-Datagrid2 uses infinite scrolling in lieu of pagination (you can still use pagination, but as an external component). To enable infinite scrolling, you'll need to pass in a callback function `onLoadMore` prop to the datagrid and the prop `totalCount`. This function will be called when the user scrolls to near the bottom of the datagrid. And `totalCount` specifies how many rows there are in total and serves as a stopper for the infinite scroll when the loaded data count reaches `totalCount`.
-
-For infinite/indeterminate count, set `totalCount` to `Number.MAX_SAFE_INTEGER`, but make sure to have failsafes in place to prevent the datagrid from loading when the end of the datastream is reached (usually we check the length of the list returned. if it is zerolength, it means the end of datascream is reached).
-
-````jsx
+Datagrid2 uses infinite scrolling in lieu of pagination (you can still use pagination, but as an external component). To enable infinite scrolling, you'll need to pass in a callback function `onLoadMore` prop to the datagrid. This function will be called when the user scrolls to near the bottom of the datagrid. A quick example
 
 <Canvas>
-  <Story id="datagrid-datagrid2--infinite-loader" />
-  <Source id="datagrid-datagrid2--infinite-loader" type="code" />
+  {/* <Story id="datagrid-datagrid2--infinite-loader" /> is deprecated, please migrate it to <Story of={referenceToStory} /> see: https://storybook.js.org/migration-guides/7.0 */}
+  <Story of={DatagridStories.InfiniteLoader}/>
+  
+  <Source of={DatagridStories.InfiniteLoader} type="code"/>
+  
 </Canvas>
-
-
-the prop `manualLoadMore`  can be set to `true` to disable the automatic loading of more rows when the user scrolls to the bottom of the datagrid. The common use case is when there is a network failure and you want to retry loading more rows. without triggering the infiniteloading script
 
 ### Sorting
 
@@ -196,7 +212,7 @@ const columnSource = [
     sortable: true,
   },
 ];
-````
+```
 
 In addition add the `onSort` prop to the datagrid. `onSort` has two parameters `column` and `direction`.
 
@@ -212,7 +228,9 @@ In addition add the `onSort` prop to the datagrid. `onSort` has two parameters `
 Component example:
 
 <Canvas>
-  <Story id="datagrid-datagrid2--server-sort" type="code" />
+  {/* <Story id="datagrid-datagrid2--server-sort" type="code" /> is deprecated, please migrate it to <Story of={referenceToStory} /> see: https://storybook.js.org/migration-guides/7.0 */}
+  <Story of={DatagridStories.ServerSort}/>
+  <Source of={DatagridStories.ServerSort} type="code"/>
 </Canvas>
 
 ### Filtering
@@ -221,7 +239,7 @@ To add filtering by a column, add the `filter` object to the column definition.
 
 There are (three) types of filters commonly used, `option`, `autocomplete` and `dateRange`
 
-- Filter type: `option`
+* Filter type: `option`
 
 ```jsx
 const columnSource = [
@@ -249,7 +267,7 @@ const columnSource = [
 ];
 ```
 
-- Filter type: `autocomplete`
+* Filter type: `autocomplete`
 
 ```jsx
 const columnSource = [
@@ -290,14 +308,17 @@ To check if filters have been applied to the datagrid, you can add a `useEffect`
 
 In addition, by default Datagrid2 has three automatic filters, `search`, `startDate` and `endDate`.
 
-- `hasDateRangeFilter={false}` will disable the date range filter.
-- `hasSearchFilter={false}` will disable the search filter.
+* `hasDateRangeFilter={false}` will disable the date range filter.
+* `hasSearchFilter={false}` will disable the search filter.
 
 Component example:
 
 <Canvas>
-  <Story id="datagrid-datagrid2--server-filter" type="code" />
-  <Source id="datagrid-datagrid2--server-filter" type="code" />
+  {/* <Story id="datagrid-datagrid2--server-filter" type="code" /> is deprecated, please migrate it to <Story of={referenceToStory} /> see: https://storybook.js.org/migration-guides/7.0 */}
+
+  <Story of={DatagridStories.ServerFilter}/>
+  <Source type="code" of={DatagridStories.ServerFilter}/>
+  
 </Canvas>
 
 #### Cell Rendering
@@ -306,7 +327,10 @@ Component example:
 
 No formatting, as is from the row object. Will not accept objects or other non-primitive types.
 
-<Story id="datagrid-datagrid2-columntypes--basic" />
+{/* <Story id="datagrid-datagrid2-columntypes--basic" /> is deprecated, please migrate it to <Story of={referenceToStory} /> see: https://storybook.js.org/migration-guides/7.0 */}
+
+<Story of={ColumnTypesDatagridStories.Basic}/>
+
 
 ### Custom Cell Renderer
 
@@ -324,7 +348,10 @@ const columnSource = [
 ];
 ```
 
-<Story id="datagrid-datagrid2-columntypes--cell-renderer" />
+{/* <Story id="datagrid-datagrid2-columntypes--cell-renderer" /> is deprecated, please migrate it to <Story of={referenceToStory} /> see: https://storybook.js.org/migration-guides/7.0 */}
+
+<Story of={ColumnTypesDatagridStories.CellRenderer}/>
+
 
 ### Disable Cell Tooltip
 
@@ -358,10 +385,10 @@ const columnSource = [
 
 ### URLParams as State
 
-| Props         | Defaults | Options | Description                                                                                                                     |
-| ------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| id            | "grid"   | string  | id for the datagrid, used for url params                                                                                        |
-| useUrlAsState | false    | boolean | if true, will use url params as the filter state, any changes to the grid state will propagate to the url params and vice versa |
+| Props  | Defaults   |  Options  | Description |
+| - | - | - | - |
+| id  | "grid"     | string     | id for the datagrid, used for url params |
+| useUrlAsState | false | boolean | if true, will use url params as the filter state, any changes to the grid state will propagate to the url params and vice versa |
 
 ### Toolbar Accessories
 
@@ -384,14 +411,6 @@ You can place additional components on the left, center and right sides of the m
 >
 ```
 
-<Story id="datagrid-datagrid2--toolbar-accessory" />
+{/* <Story id="datagrid-datagrid2--toolbar-accessory" /> is deprecated, please migrate it to <Story of={referenceToStory} /> see: https://storybook.js.org/migration-guides/7.0 */}
 
-You can also replace the default filters with a custom component (only when filterable is false)
-
-```jsx
-<Datagrid2
-  filterable={false}
-  replaceFilterWithComponent={<Typography variant="h6">Heading</Typography>}
->
-```
-<Story id="datagrid-datagridv3--toolbar-accessory" />
+<Story of={DatagridStories.ToolbarAccessory}/>

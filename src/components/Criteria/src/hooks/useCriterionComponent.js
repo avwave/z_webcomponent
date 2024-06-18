@@ -1,3 +1,4 @@
+import isEmpty from 'lodash.isempty'
 import React from 'react'
 
 export default function useCriterionComponent (props) {
@@ -21,9 +22,14 @@ export default function useCriterionComponent (props) {
       ...criterionProps
     } = criterionInfo.component.props
 
+    let multipleValue = criterionProps.multiple ? [] : ''
+    if (!isEmpty(value)) {
+      multipleValue = value
+    }
+
     return (
       <CriterionComponent
-        value={value}
+        value={multipleValue}
         disabled={disabled}
         label={criterionInfo.label}
         onChange={(v)=>{
