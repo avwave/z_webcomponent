@@ -74,7 +74,6 @@ function AddCriterion(props) {
     <Box
       sx={{
         pt:2,
-        pb: 2,
         maxHeight: '50vh',
         overflowY: 'auto',
       }}
@@ -82,8 +81,9 @@ function AddCriterion(props) {
       <FormControl fullWidth sx={{
         pb: 2,
       }}>
-        <InputLabel>{i18nType}</InputLabel>
+        <InputLabel size='small'>{i18nType}</InputLabel>
         <Select
+          size="small"
           value={selectedCriterionName}
           label={i18nType}
           onChange={(evt) => {
@@ -100,7 +100,7 @@ function AddCriterion(props) {
 
       {selectedCriterionDOM}
 
-      <Box sx={{ p: 2 }} />
+      <Box sx={{ p: 1 }} />
       <Button
         size="small"
         variant="contained"

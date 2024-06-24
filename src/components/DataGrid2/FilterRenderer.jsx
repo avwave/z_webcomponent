@@ -218,6 +218,7 @@ function ChipTabsFilterRenderer({ onChange, onChangeDisplay, value, filter, full
     <Tabs
       indicatorColor="primary"
       variant="scrollable"
+      size="small"
       scrollButtons="auto"
       value={value}
       onChange={(e, val) => {
