@@ -124,10 +124,10 @@ const VirtuosoDataGrid = ({
     dataGridDispatch({
       type: dataGridActions.FILTER_COLUMN,
       payload: {
-        filterColumn: filters.current,
+        filterColumn: filtersRef?.current,
       },
     });
-  }, [filtersRef.current]);
+  }, [filtersRef?.current]);
 
   const [internalRowSelection, setInternalRowSelection] = useState({});
   const [externalLoaded, setExternalLoaded, exref] = useStateRef();
@@ -358,7 +358,7 @@ const VirtuosoDataGrid = ({
     } catch (error) {
       console.error(error);
     }
-  }, [sortColumn, sortDirection, filters]);
+  }, [sortColumn, sortDirection, filtersRef?.current]);
 
 
   const defaultCols = useMemo(
