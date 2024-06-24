@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import AddCriterion from './AddCriterion'
 import useI18nLabel from './hooks/useI18nLabel'
 import useCriterionAddableChecker from './hooks/useCriterionAddableChecker'
-import { Button, Card, CardContent, CardHeader, Container, Popover, Popper, Typography, useTheme } from '@mui/material'
+import { Button, Card, CardContent, CardHeader, Container, Paper, Popover, Popper, Typography, useTheme } from '@mui/material'
 import { Box } from "@mui/material";
 import { ClickAwayListener } from "@mui/material";
 AddCriterionDesktop.propTypes = {
@@ -114,18 +114,22 @@ function AddCriterionDesktop(props) {
           <ClickAwayListener
             mouseEvent="onMouseUp"
             onClickAway={handleClose}>
-            <Card>
-              <CardHeader
-                subheader={i18nAddPopoverDesc}
-              />
-              <CardContent>
+            <Paper variant="outlined">
+              <Box p={1}>
+                <Typography variant="body2"
+                  sx={{
+                    fontWeight: 'bold',
+                    color: theme.palette.text.secondary
+                  }}
+                >
+                  {i18nAddPopoverTitle}
+                </Typography>
                 <AddCriterion
                   criteria={criteria}
                   onSubmit={onAdd}
                 />
-
-              </CardContent>
-            </Card>
+              </Box>
+            </Paper>
           </ClickAwayListener>
 
         </Popper>

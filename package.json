@@ -1,6 +1,6 @@
 {
   "name": "@zennya/web-component-library",
-  "version": "1.0.17",
+  "version": "1.0.18",
   "private": false,
   "dependencies": {
     "@alshdavid/mime-types": "2.2.3",
@@ -124,7 +124,6 @@
   "resolutions": {
     "@storybook/react/webpack": "5",
     "@babel/runtime": "^7.24.6"
-    
   },
   "devDependencies": {
     "@babel/cli": "7.13.14",
@@ -148,7 +147,6 @@
     "@storybook/addon-interactions": "^8.1.6",
     "@storybook/addon-knobs": "^8.0.0",
     "@storybook/addon-links": "^8.1.6",
-    
     "@storybook/addon-toolbars": "^8.1.6",
     "@storybook/node-logger": "^8.1.6",
     "@storybook/preset-create-react-app": "^8.1.6",

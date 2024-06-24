@@ -16,6 +16,11 @@ const useStyles = makeStyles()(theme => ({
     position: "sticky",
     bottom: 0,
     zIndex: theme.zIndex.appBar + 1
+  },
+  nopadding: {
+    padding: 0,
+    paddingTop: 0,
+    paddingBottom: 0,
   }
 }));
 const ColumnListFilterMenu = ({ table, columns }) => {
@@ -120,16 +125,26 @@ const ColumnListFilterMenu = ({ table, columns }) => {
         MenuListProps={{
           dense: density === 'compact',
         }}
-        PaperProps={{
-          style: {
-            maxHeight: '50vh',
-            width: '300px',
+        classes={{
+          list: classes.nopadding,
+        }}
+        slotProps={{
+          
+          paper: {
+            sx: {
+              maxHeight: '50vh',
+              width: '300px',
+            }
           },
+
         }}
       >
         <MenuItem
           onKeyDown={(e) => e.stopPropagation()}
-          className={classes.header} >
+          className={classes.header} 
+          disableRipple
+          disableTouchRipple
+        >
           <TextField
             placeholder='Find columns by name'
             label={localization.searchPlaceholder}
@@ -147,8 +162,7 @@ const ColumnListFilterMenu = ({ table, columns }) => {
             }}
           />
         </MenuItem>
-        <Divider />
-
+        
         {allColumns.map((column, index) => (
           <ColumnListRow
             column={column}

@@ -19,6 +19,7 @@ import dayjs from 'dayjs';
 const useStyles = makeStyles()((theme) => {
   return {
     pickerContainer: {
+      paddingTop: theme.spacing(1),
       width: "100%",
     },
     calendarHolder: {
@@ -83,7 +84,7 @@ const LitePicker = ({
         firstDay: 0,
         numberOfColumns: 2,
         autoRefresh: true,
-        resetButton: true,
+        resetButton: false,
         allowRepick: false,
         dropdowns: {
           months: true,
@@ -184,12 +185,14 @@ const LitePicker = ({
     [],
   );
   return (
+    <>
     <Grid container spacing={2} className={classes.pickerContainer} {...containerProps} >
       <Grid item xs={6}>
         <DatePicker
           slotProps={{
             textField: {
-              variant
+              variant,
+              size: "small"
             }
           }}
           ref={startElement}
@@ -239,7 +242,8 @@ const LitePicker = ({
             helperText: '',
             slotProps: {
               textField: {
-                variant
+                variant,
+                size: "small"
               }
             }
           }}
@@ -249,7 +253,8 @@ const LitePicker = ({
         <DatePicker
           slotProps={{
             textField: {
-              variant
+              variant,
+              size: "small"
             }
           }}
           label="End Date"
@@ -297,13 +302,16 @@ const LitePicker = ({
             helperText: '',
             slotProps: {
               textField: {
-                variant
+                variant,
+                size:"small"
               }
             }
           }}
         />
       </Grid>
-      <Grid container item xs={12} spacing={2} sx={{ pb: 2 }}>
+      </Grid>
+    
+      <Grid container item xs={12}>
         <Grid item xs={12} className={classes.calendarHolder} ref={parentElement} />
         <Grid item xs={12} className={classes.rangeSelectContainer} >
           <ButtonGroup disableElevation variant="text" size="small" >
@@ -327,12 +335,10 @@ const LitePicker = ({
             <Button variant="text" color="secondary"
               onClick={() => clearDates()
               }>Clear</Button>
-
-
           </Grid>
         )}
       </Grid>
-    </Grid>
+    </>
   )
 }
 
