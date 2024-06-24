@@ -79,11 +79,13 @@ const VirtuosoDataGrid = ({
   extendedRowAttributes = () => { },
   deferLoading = false,
   useUrlAsState = false,
+  awaitUrlState = (filters) => { },
   id = "grid",
   customColumnDisplay,
   isRowExpandableCallback,
   density = "compact",
   replaceFilterWithComponent=false,
+  loadMoreTriggerOffset = 500
 }) => {
   const { classes } = useStyles()
   const theme = useTheme()
@@ -126,6 +128,7 @@ const VirtuosoDataGrid = ({
         filterColumn: filters,
       },
     });
+    awaitUrlState(filtersRef.current)
   }, [filters]);
 
   const [internalRowSelection, setInternalRowSelection] = useState({});
@@ -185,8 +188,8 @@ const VirtuosoDataGrid = ({
             enableSorting: !!col.sortable,
             enablePinning: !col.hidden,
             grow: !!col.grow,
-            size: col?.width ?? 200,
-            minSize: col?.minWidth ?? 50,
+            size: col?.width,
+            
             Header: ({ column, ...rest }) => {
               if (col?.columnHeaderRenderer) {
                 return <div draggable className={classes.truncate}>{col?.columnHeaderRenderer()}</div>
@@ -273,7 +276,7 @@ const VirtuosoDataGrid = ({
           }
         })
       return cols
-    }, [dataGridState?.columns]
+    }, [classes.tooltip, classes.truncate, dataGridState?.columns]
   );
 
   //scroll events for loadmore
@@ -307,7 +310,7 @@ const VirtuosoDataGrid = ({
           setShowManualLoadMore(true)
         }
         if (
-          scrollHeight - scrollTop - clientHeight < 200
+          scrollHeight - scrollTop - clientHeight < loadMoreTriggerOffset
           && !dataGridState?.loading
           && totalCount > dataGridState?.rows?.length
         ) {
@@ -319,7 +322,7 @@ const VirtuosoDataGrid = ({
         }
       }
     },
-    [dataGridState?.loading, dataGridState?.rows?.length, doLoadMore, totalCount, lastScrollTop],
+    [dataGridState?.loading, dataGridState?.rows?.length, doLoadMore, totalCount, lastScrollTop, loadMoreTriggerOffset],
   );
 
 
@@ -482,11 +485,11 @@ const VirtuosoDataGrid = ({
     columnResizeMode: 'onChange',
     manualFiltering: true,
     manualSorting: true,
-    memoMode: "cells",
     enableDensityToggle: true,
     enableColumnOrdering: true,
     enableColumnResizing: true,
     enablePagination: false,
+    enableColumnVirtualization: true,
     enableRowVirtualization: true,
     enableStickyHeader: false,
     enableRowSelection: enableTableSelection ? row => enableRowSelection(row) : false,
@@ -517,7 +520,7 @@ const VirtuosoDataGrid = ({
       },
       ...gridProps?.tableContainerProps
     },
-    layoutMode: 'grid',
+    layoutMode: 'grid-no-grow',
     muiTableHeadCellProps: ({ column, table }) => {
       return {
         onDragStart: e => {
@@ -568,7 +571,7 @@ const VirtuosoDataGrid = ({
     },
     onSortingChange: setSortState,
     rowVirtualizerInstanceRef: rowVirtualizerInstanceRef,
-    rowVirtualizerProps: { overscan: 10 },
+    rowVirtualizerProps: { overscan: 4 },
     initialState: {
       columnOrder: defaultColumnOrder,
       columnVisibility: defaultHideColumns,
@@ -643,37 +646,37 @@ const VirtuosoDataGrid = ({
       setColumnOrder((prev) =>
         updater instanceof Function ? updater(prev) : updater,
       );
-      queueMicrotask(rerender); //hack to rerender after state update
+      // queueMicrotask(rerender); //hack to rerender after state update
     },
     onColumnPinningChange: (updater) => {
       setPinnedColumns((prev) =>
         updater instanceof Function ? updater(prev) : updater,
       );
-      queueMicrotask(rerender); //hack to rerender after state update
+      // queueMicrotask(rerender); //hack to rerender after state update
     },
     onColumnVisibilityChange: (updater) => {
       setColumnVisibility((prev) =>
         updater instanceof Function ? updater(prev) : updater,
       );
-      queueMicrotask(rerender); //hack to rerender after state update
+      // queueMicrotask(rerender); //hack to rerender after state update
     },
     onDensityChange: (updater) => {
       setDensity((prev) =>
         updater instanceof Function ? updater(prev) : updater,
       );
-      queueMicrotask(rerender); //hack to rerender after state update
+      // queueMicrotask(rerender); //hack to rerender after state update
     },
     onPaginationChange: (updater) => {
       setPagination((prev) =>
         updater instanceof Function ? updater(prev) : updater,
       );
-      queueMicrotask(rerender); //hack to rerender after state update
+      // queueMicrotask(rerender); //hack to rerender after state update
     },
     onShowColumnFiltersChange: (updater) => {
       setShowColumnFilters((prev) =>
         updater instanceof Function ? updater(prev) : updater,
       );
-      queueMicrotask(rerender); //hack to rerender after state update
+      // queueMicrotask(rerender); //hack to rerender after state update
     },
     getRowId: (orow) => orow?.id,
     renderEmptyRowsFallback: () => {
@@ -703,7 +706,7 @@ const VirtuosoDataGrid = ({
       const r = table
       if (oneShot && r) return;
       setOneShot(true)
-      queueMicrotask(rerender);
+      // queueMicrotask(rerender);
     }, [table]
   );
 

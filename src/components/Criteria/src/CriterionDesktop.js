@@ -6,7 +6,7 @@ import useCriterionSummaryValue from './hooks/useCriterionSummaryValue'
 
 
 import { makeStyles } from 'tss-react/mui';
-import { Button, ButtonGroup, Card, CardContent, Divider, Popover, Popper } from '@mui/material'
+import { Box, Button, ButtonGroup, Card, CardContent, Divider, Paper, Popover, Popper } from '@mui/material'
 import { ClickAwayListener } from "@mui/material";
 import { useTheme } from '@mui/material'
 
@@ -220,8 +220,8 @@ function CriterionDesktop(props) {
         <ClickAwayListener
           mouseEvent="onMouseUp"
           onClickAway={handleClose}>
-          <Card>
-            <CardContent>
+          <Paper variant="outlined">
+            <Box p={1}>
               <Criterion
                 value={value}
                 updatable={updatable}
@@ -231,8 +231,8 @@ function CriterionDesktop(props) {
                 onDelete={onDelete}
                 onCancel={onPopoverClose}
               />
-            </CardContent>
-          </Card>
+            </Box>
+          </Paper>
         </ClickAwayListener>
 
       </Popper>

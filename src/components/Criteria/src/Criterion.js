@@ -85,12 +85,13 @@ function Criterion(props) {
 
   return (
     <Box sx={{
-      maxHeight: '50vh',
+      maxHeight: '80vh',
       overflowY: 'auto',
+      paddingTop: 1
     }}>
       {selectedCriterionDOM}
 
-      <Divider />
+      <Box sx={{ mt: 2 }}/>
 
       <div className={classes.actions}>
         {
