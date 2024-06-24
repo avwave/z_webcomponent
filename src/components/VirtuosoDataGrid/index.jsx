@@ -79,6 +79,7 @@ const VirtuosoDataGrid = ({
   extendedRowAttributes = () => { },
   deferLoading = false,
   useUrlAsState = false,
+  awaitUrlState = (filters) => { },
   id = "grid",
   customColumnDisplay,
   isRowExpandableCallback,
@@ -127,6 +128,7 @@ const VirtuosoDataGrid = ({
         filterColumn: filters,
       },
     });
+    awaitUrlState(filtersRef.current)
   }, [filters]);
 
   const [internalRowSelection, setInternalRowSelection] = useState({});
