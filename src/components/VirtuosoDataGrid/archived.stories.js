@@ -716,7 +716,7 @@ const InfiniteLoaderStory = ({ ...args }) => {
     <Grid container>
       <Grid item xs={12}>
         {state?.loading ? 'loading...' : 'loaded'}
-        <Paper style={{ height: '70vh' }}>
+        <Paper style={{ height: '90vh' }}>
           <DataGrid2 {...args}
             totalCount={Number.MAX_VALUE}
             onLoadMore={() => simulateLoading()}
@@ -736,6 +736,7 @@ InfiniteLoader.args = {
   showSelector: true,
   centerAccessory: () => <Typography variant="h6">Heading</Typography>,
   columns: [...columnData],
+  loadMoreTriggerOffset: 1000
 };
 
 export const InfiniteLoaderManualOverride = InfiniteLoaderStory.bind({});
