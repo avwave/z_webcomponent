@@ -38,6 +38,7 @@ const defaultColumns = [
     key: "name",
     name: "Name",
     sortable: true,
+    resizable: true,
     dataType: "text",
     filter: {
       type: "text",
@@ -49,6 +50,7 @@ const defaultColumns = [
     key: "number",
     name: "Number",
     sortable: true,
+    resizable: true,
     dataType: "number",
     filter: {
       type: "number",
@@ -60,6 +62,7 @@ const defaultColumns = [
     key: "float",
     name: "Float",
     sortable: true,
+    resizable: true,
     dataType: "float",
     filter: {
       type: "float",
@@ -71,6 +74,7 @@ const defaultColumns = [
     key: "date",
     name: "Date",
     sortable: true,
+    resizable: true,
     dataType: "date",
     filter: {
       type: "dateRange",
@@ -80,6 +84,7 @@ const defaultColumns = [
     key: "autocomplete",
     name: "Autocomplete",
     sortable: true,
+    resizable: true,
     dataType: "text",
     filter: {
       type: "autocomplete",
@@ -99,10 +104,9 @@ const defaultColumns = [
     key: 'largeText',
     name: 'Large Text',
     sortable: true,
+    resizable: true,
     dataType: 'text',
-    columnProps: {
-      grow:true,
-    },
+    grow: 1,
     filter: {
       type: 'text',
       default: '',
@@ -113,6 +117,7 @@ const defaultColumns = [
     key: "react",
     name: "React",
     sortable: false,
+    resizable: true,
     dataType: "react",
   },
 

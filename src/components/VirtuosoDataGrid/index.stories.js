@@ -42,6 +42,7 @@ const DefaultStory = ({ ...args }) => {
 
 export const Default = DefaultStory.bind({});
 Default.args = {
+  id: 'index-default',
   hasDateRangeFilter: true,
   hasSearchFilter: true,
   rows: defaultRows,
@@ -50,15 +51,24 @@ Default.args = {
   useUrlAsState: true,
 };
 
+export const SaveTableOptions = DefaultStory.bind({});
+SaveTableOptions.args = {
+  ...Default.args,
+  id: 'index-saveTableOptions',
+  persistSettings: true,
+}
+
 export const alternateToolbarFilter = DefaultStory.bind({});
 alternateToolbarFilter.args = {
   ...Default.args,
+  id: 'index-alternateToolbarFilter',
   alternateToolbarFilter: true,
 };
 
 export const LargeDataSetVirtualization = DefaultStory.bind({});
 LargeDataSetVirtualization.args = {
   ...Default.args,
+  id: 'index-largeDataSet',
   rows: generateRows(500),
 }
 
@@ -110,6 +120,7 @@ const AddDynamicColumnsStory = ({ ...args }) => {
 export const AddDynamicColumns = AddDynamicColumnsStory.bind({});
 AddDynamicColumns.args = {
   ...Default.args,
+  id: 'index-addDynamicColumns',
   columns: [
     {
       key: "id",
@@ -121,6 +132,7 @@ AddDynamicColumns.args = {
 export const ToolbarAccessory = DefaultStory.bind({});
 ToolbarAccessory.args = {
   ...Default.args,
+  id: 'index-toolbarAccessory',
   filterable: false,
   showSelector: true,
   replaceFilterWithComponent: <Typography variant="h6">Heading</Typography>,

@@ -64,6 +64,7 @@ const DefaultStory = ({ ...args }) => {
 
 export const Default = DefaultStory.bind({});
 Default.args = {
+  id: `archived-default`,
   hasDateRangeFilter: true,
   hasSearchFilter: true,
   rows: rows,
@@ -98,10 +99,12 @@ const LoadingStory = ({ ...args }) => {
 export const Loading = LoadingStory.bind({});
 Loading.args = {
   ...Default.args,
+  id: `archived-loading`,
 }
 
 export const Basic = DefaultStory.bind({});
 Basic.args = {
+  id: `archived-basic`,
   rows: [
     {
       id: 1,
@@ -134,6 +137,7 @@ Basic.args = {
 export const CustomColumnDisplay = DefaultStory.bind({});
 CustomColumnDisplay.args = {
   ...Default.args,
+  id: `archived-customColumnDisplay`,
   customColumnDisplay: {
     component: Button,
     props: {
@@ -178,6 +182,7 @@ const SelectableStory = ({ ...args }) => {
 
 export const ConditionalSelector = SelectableStory.bind({});
 ConditionalSelector.args = {
+  id: `archived-conditionalSelector`,
   rows: [
     {
       id: 1,
@@ -216,13 +221,13 @@ ConditionalSelector.args = {
     {
       key: "name",
       name: "Name",
-        grow: true
-      
+      grow: true
+
     },
     {
       key: "age",
       name: "Age",
-      
+
     },
     {
       key: "age1",
@@ -259,6 +264,7 @@ ConditionalSelector.args = {
 
 export const ToolbarSearchPlaceholder = DefaultStory.bind({});
 ToolbarSearchPlaceholder.args = {
+  id: `archived-toolbarSearchPlaceholder`,
   hasDateRangeFilter: true,
   hasSearchFilter: true,
   searchPlaceholder: 'Type here to search',
@@ -288,18 +294,21 @@ const applyDateColumn = [
 
 CellFormatter.args = {
   ...Default.args,
+  id: `archived-cellFormatter`,
   columns: applyDateColumn,
 };
 
 export const Reorderable = DefaultStory.bind({});
 Reorderable.args = {
   ...Default.args,
+  id: `archived-reorderable`,
   draggable: true,
   columns: columnData,
 };
 export const Blank = DefaultStory.bind({});
 Blank.args = {
   ...Default.args,
+  id: `archived-blank`,
   rows: [],
   draggable: true,
   columns: columnData,
@@ -315,6 +324,7 @@ Blank.args = {
 export const NoHeaderElements = DefaultStory.bind({});
 NoHeaderElements.args = {
   ...Default.args,
+  id: `archived-noHeaderElements`,
   hasDateRangeFilter: false,
   hasSearchFilter: false,
   filterable: false
@@ -323,6 +333,7 @@ NoHeaderElements.args = {
 export const GridProps = DefaultStory.bind({});
 GridProps.args = {
   ...Default.args,
+  id: `archived-gridProps`,
   draggable: true,
   columns: columnData,
   gridProps: {
@@ -333,6 +344,7 @@ GridProps.args = {
 export const ClientSortable = DefaultStory.bind({});
 ClientSortable.args = {
   ...Default.args,
+  id: `archived-clientSortable`,
   columns: columnData.map((cols) => {
     return { ...cols, sortable: true };
   }),
@@ -341,6 +353,7 @@ ClientSortable.args = {
 export const ColumnDisplaySelection = DefaultStory.bind({});
 ColumnDisplaySelection.args = {
   ...Default.args,
+  id: `archived-columnDisplaySelection`,
   showSelector: true,
   filterable: true,
 };
@@ -419,6 +432,7 @@ const ServerFilterStory = ({ ...args }) => {
 export const ServerFilter = ServerFilterStory.bind({});
 ServerFilter.args = {
   ...Default.args,
+  id: `archived-serverFilter`,
   useUrlAsState: true,
   showSelector: true,
   filterable: true,
@@ -427,6 +441,7 @@ ServerFilter.args = {
 export const AlternateCriteriaEditor = ServerFilterStory.bind({});
 AlternateCriteriaEditor.args = {
   ...ServerFilter.args,
+  id: `archived-alternateCriteriaEditor`,
   alternateToolbarFilter: true,
 }
 
@@ -480,6 +495,7 @@ const ServerSortStory = ({ ...args }) => {
 export const ServerSort = ServerSortStory.bind({});
 ServerSort.args = {
   ...Default.args,
+  id: `archived-serverSort`,
   showSelector: true,
   filterable: true,
 };
@@ -487,6 +503,7 @@ ServerSort.args = {
 export const Selectable = SelectableStory.bind({});
 Selectable.args = {
   ...Default.args,
+  id: `archived-selectable`,
   rows: rows,
   columns: [
     {
@@ -525,6 +542,7 @@ function copyRow({ props: { row } }) {
 export const DemoContextMenu = DefaultStory.bind({});
 DemoContextMenu.args = {
   ...Default.args,
+  id: `archived-demoContextMenu`,
   contextMenu: {
     menuId: "CONTEXT_MENU_ID",
     contextItems(props) {
@@ -548,6 +566,7 @@ DemoContextMenu.args = {
 export const ToolbarAccessory = DefaultStory.bind({});
 ToolbarAccessory.args = {
   ...Default.args,
+  id: `archived-toolbarAccessory`,
   filterable: true,
   showSelector: true,
   rightAccessory: () => (
@@ -586,6 +605,7 @@ const RedrawBugStory = ({ ...args }) => {
 
 export const RedrawBug = RedrawBugStory.bind({});
 RedrawBug.args = {
+  id: `archived-redrawBug`,
   rows: rows,
   columns: columnData,
   containerStyle: {
@@ -639,6 +659,7 @@ const LoaderStory = ({ ...args }) => {
 export const Loader = LoaderStory.bind({});
 Loader.args = {
   ...Default.args,
+  id: `archived-loader`,
   filterable: true,
   showSelector: true,
   leftAccessory: () => (
@@ -729,6 +750,7 @@ const InfiniteLoaderStory = ({ ...args }) => {
 export const InfiniteLoader = InfiniteLoaderStory.bind({});
 InfiniteLoader.args = {
   ...Default.args,
+  id: `archived-infiniteLoader`,
   hasDateRangeFilter: false,
   hasSearchFilter: false,
   filterable: false,
@@ -741,12 +763,14 @@ InfiniteLoader.args = {
 export const InfiniteLoaderManualOverride = InfiniteLoaderStory.bind({});
 InfiniteLoaderManualOverride.args = {
   ...InfiniteLoader.args,
+  id: `archived-infiniteLoaderManualOverride`,
   manualLoadMore: true
 }
 
 export const ExtendedRowAttributes = DefaultStory.bind({});
 ExtendedRowAttributes.args = {
   ...Default.args,
+  id: `archived-extendedRowAttributes`,
   extendedRowAttributes: (row) => {
     return {
       style: {
@@ -760,6 +784,7 @@ ExtendedRowAttributes.args = {
 export const ZennyaLogger = DefaultStory.bind({});
 ZennyaLogger.args = {
   ...Default.args,
+  id: `archived-zennyaLogger`,
   columns: [
     {
 
@@ -848,6 +873,7 @@ ZennyaLogger.args = {
 export const TruncatedZennyaLogs = DefaultStory.bind({});
 TruncatedZennyaLogs.args = {
   ...ZennyaLogger.args,
+  id: `archived-truncatedZennyaLogs`,
   columns: [
     {
 

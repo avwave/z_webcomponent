@@ -64,6 +64,7 @@ const ExpanderRow = ({ ...args }) => {
 
 export const Default = ExpanderRow.bind({});
 Default.args = {
+  id: "expander-default",
   filterable: true,
   showSelector: true,
   rows: defaultRows,

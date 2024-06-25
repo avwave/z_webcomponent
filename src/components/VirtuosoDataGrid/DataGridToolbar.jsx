@@ -2,8 +2,10 @@ import {
   AppBar,
   Box,
   debounce,
+  IconButton,
   LinearProgress,
-  Toolbar
+  Toolbar,
+  Tooltip
 } from "@mui/material";
 import { MRT_GlobalFilterTextField, MRT_ToggleDensePaddingButton } from "material-react-table";
 import React, { useCallback, useContext, useEffect, useMemo, useState } from "react";
@@ -14,6 +16,7 @@ import { useUrlState } from "../hooks/useUrlState";
 import { CriteriaEditor } from "./CriteriaEditor";
 import { QueryBuilderEditor } from "./QueryBuilderEditor";
 import { ColumnListFilterMenu } from "./ColumnListFilterMenu";
+import { SettingsBackupRestore } from "@mui/icons-material";
 
 const POPUP_MODE = {
   FILTER: "FILTER",
@@ -128,6 +131,7 @@ const useStyles = makeStyles()(theme => ({
 const DataGridToolbar = ({
   alternateToolbarFilter,
   columns,
+  onResetSettings = () => { },
   showSelector,
   filterable,
   onFilterChange,
@@ -246,10 +250,10 @@ const DataGridToolbar = ({
     <AppBar position="static" color="transparent" elevation={0}>
       <Toolbar disableGutters
         sx={{
-          alignItems:'center'
+          alignItems: 'center'
         }} >
         <Box
-          sx={{ 
+          sx={{
             display: 'flex', flexDirection: 'row',
             flexGrow: 1, overflow: 'auto'
           }}
@@ -258,16 +262,31 @@ const DataGridToolbar = ({
         </Box>
         {tableInstanceRef && (
           <Box sx={{ paddingLeft: 2, minWidth: '250px', width: '250px', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end' }}>
-            <MRT_GlobalFilterTextField table={tableInstanceRef} />
-            <MRT_ToggleDensePaddingButton table={tableInstanceRef} />
-            <ColumnListFilterMenu table={tableInstanceRef} columns={columns} />
-            
+            <Tooltip title="Search">
+              <MRT_GlobalFilterTextField table={tableInstanceRef} />
+            </Tooltip>
+            <Tooltip title="Toggle Row Padding">
+              <MRT_ToggleDensePaddingButton table={tableInstanceRef} />
+            </Tooltip>
+              <ColumnListFilterMenu table={tableInstanceRef} columns={columns} />
+            <Tooltip title="Reset Table Settings">
+              <IconButton
+                onClick={() => {
+                  onResetSettings()
+                }}
+                size="small"
+                color="inherit"
+                aria-label="open drawer"
+              >
+                <SettingsBackupRestore />
+              </IconButton>
+            </Tooltip>
           </Box>
         )}
       </Toolbar>
       {hasChipFilter && (
         <>
-        {renderChipFilters}
+          {renderChipFilters}
         </>
       )}
       {loadingBar}
