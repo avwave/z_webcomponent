@@ -52,6 +52,7 @@ const PackageRenderer = ({ pack, key, tests }) => {
 
 export const Default = ExpanderCells.bind({});
 Default.args = {
+  id: 'expandercells-default',
   filterable: true,
   showSelector: true,
   rows: rows,

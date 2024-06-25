@@ -53,6 +53,7 @@ const DefaultStory = ({ ...args }) => {
 
 export const Default = DefaultStory.bind({});
 Default.args = {
+  id: 'filters-default',
   filterable: true,
   alternateToolbarFilter: true,
   rows: generateRows(1),
@@ -71,6 +72,7 @@ Default.args = {
 export const LegacyCriteriaEditorFilter = DefaultStory.bind({});
 LegacyCriteriaEditorFilter.args = {
   ...Default.args,
+  id: 'filters-legacyCriteriaEditor',
   alternateToolbarFilter: false,
 }
 
@@ -107,6 +109,7 @@ const HeightBugStory = ({ ...args }) => {
 
 export const HeightBug = HeightBugStory.bind({});
 HeightBug.args = {
+  id: 'filters-heightBug',
   filterable: true,
   alternateToolbarFilter: false,
   rows: generateRows(1),
@@ -128,6 +131,7 @@ HeightBug.args = {
 export const SingleAutocompleteFilter = DefaultStory.bind({});
 SingleAutocompleteFilter.args = {
   ...Default.args,
+  id: 'filters-singleAutocomplete',
   columns: [
     {
       key: "autocomplete",
@@ -155,6 +159,7 @@ SingleAutocompleteFilter.args = {
 export const MultipleAutocompleteFilter = DefaultStory.bind({});
 MultipleAutocompleteFilter.args = {
   ...Default.args,
+  id: 'filters-multipleAutocomplete',
   columns: [
     {
       key: "autocomplete",
@@ -181,6 +186,7 @@ MultipleAutocompleteFilter.args = {
 export const RenderLabelOptionFilter = DefaultStory.bind({});
 RenderLabelOptionFilter.args = {
   ...Default.args,
+  id: 'filters-renderLabelOption',
   columns: [
     {
       key: "autocomplete",
@@ -331,5 +337,6 @@ const APIStory = ({ ...args }) => {
 export const APIAutocompleteFilter = APIStory.bind({});
 APIAutocompleteFilter.args = {
   ...Default.args,
+  id: 'filters-apiAutocomplete',
   alternateToolbarFilter: false,
 }

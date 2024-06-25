@@ -39,6 +39,7 @@ const DefaultStory = ({ ...args }) => {
 
 export const Default = DefaultStory.bind({});
 Default.args = {
+  id: 'columntypes-default',
   rows: generateRows(1),
   columns: [
     {
@@ -52,6 +53,7 @@ Default.args = {
 export const NumberCell = DefaultStory.bind({});
 NumberCell.args = {
   ...Default.args,
+  id: 'columntypes-number',
   columns: [
     {
       key: "number",
@@ -79,6 +81,7 @@ NumberCell.args = {
 export const StandardDateCell = DefaultStory.bind({});
 StandardDateCell.args = {
   ...Default.args,
+  id: 'columntypes-date',
   columns: [
     {
       key: "date",
@@ -95,6 +98,7 @@ StandardDateCell.args = {
 export const ShortDateCell = DefaultStory.bind({});
 ShortDateCell.args = {
   ...Default.args,
+  id: 'columntypes-shortdate',
   columns: [
     {
       key: "date",
@@ -110,6 +114,7 @@ ShortDateCell.args = {
 export const RelativeDateCell = DefaultStory.bind({});
 RelativeDateCell.args = {
   ...Default.args,
+  id: 'columntypes-relativedate',
   columns: [
     {
       key: "date",
@@ -125,6 +130,7 @@ RelativeDateCell.args = {
 export const ReactAsRowCell = DefaultStory.bind({});
 ReactAsRowCell.args = {
   ...Default.args,
+  id: 'columntypes-react',
   columns: [
     {
       key: "react",
@@ -137,6 +143,7 @@ ReactAsRowCell.args = {
 export const ReactAsRenderedCell = DefaultStory.bind({});
 ReactAsRenderedCell.args = {
   ...Default.args,
+  id: 'columntypes-react-rendered',
   columns: [
     {
       key: "string",
@@ -152,6 +159,7 @@ ReactAsRenderedCell.args = {
 export const NullCell = DefaultStory.bind({});
 NullCell.args = {
   ...Default.args,
+  id: 'columntypes-null',
   rows: [
     {
       id: 1,
