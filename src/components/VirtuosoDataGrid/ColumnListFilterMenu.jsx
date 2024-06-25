@@ -1,4 +1,4 @@
-import { Button, Divider, IconButton, Menu, MenuItem, MenuList, TextField, useTheme } from '@mui/material';
+import { Button, Divider, IconButton, Menu, MenuItem, MenuList, TextField, Tooltip, useTheme } from '@mui/material';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { makeStyles } from 'tss-react/mui';
 import { ColumnListRow } from './ColumnListRow';
@@ -104,20 +104,20 @@ const ColumnListFilterMenu = ({ table, columns }) => {
       const visibility = []
       const filteredLeaves = getAllLeafColumns()
         .filter((col) => col.columnDef.enableHiding !== false)
-        filteredLeaves.forEach((col) => {
-          const isColVisible = !!arrCols.find(c => c.id === col.id)
+      filteredLeaves.forEach((col) => {
+        const isColVisible = !!arrCols.find(c => c.id === col.id)
 
-          const isVisible = col.getIsVisible()
-          const setVisible = isColVisible
-          visibility.push([
-            col.id,
-            setVisible
-          ])
-          col.toggleVisibility(isColVisible)
-        });
-      
-        table.setColumnVisibility(Object.fromEntries(visibility))
-        
+        const isVisible = col.getIsVisible()
+        const setVisible = isColVisible
+        visibility.push([
+          col.id,
+          setVisible
+        ])
+        col.toggleVisibility(isColVisible)
+      });
+
+      table.setColumnVisibility(Object.fromEntries(visibility))
+
     },
     [getAllLeafColumns, visibleColumns, table]
   );
@@ -126,9 +126,11 @@ const ColumnListFilterMenu = ({ table, columns }) => {
 
   return (
     <>
-      <IconButton onClick={(e) => setAnchorEl(e.currentTarget)} size="small" color="inherit" aria-label="open drawer">
-        <ViewColumn />
-      </IconButton>
+      <Tooltip title="Column Visibility">
+        <IconButton onClick={(e) => setAnchorEl(e.currentTarget)} size="small" color="inherit" aria-label="open drawer">
+          <ViewColumn />
+        </IconButton>
+      </Tooltip>
       <Menu
         anchorEl={anchorEl}
         open={!!anchorEl}
@@ -140,7 +142,7 @@ const ColumnListFilterMenu = ({ table, columns }) => {
           list: classes.nopadding,
         }}
         slotProps={{
-          
+
           paper: {
             sx: {
               maxHeight: '50vh',
@@ -152,7 +154,7 @@ const ColumnListFilterMenu = ({ table, columns }) => {
       >
         <MenuItem
           onKeyDown={(e) => e.stopPropagation()}
-          className={classes.header} 
+          className={classes.header}
           disableRipple
           disableTouchRipple
         >
@@ -173,7 +175,7 @@ const ColumnListFilterMenu = ({ table, columns }) => {
             }}
           />
         </MenuItem>
-        
+
         {allColumns.map((column, index) => (
           <ColumnListRow
             column={column}

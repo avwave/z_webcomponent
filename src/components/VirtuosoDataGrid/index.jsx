@@ -721,47 +721,47 @@ const VirtuosoDataGrid = ({
         updater instanceof Function ? updater(prev) : updater
       );
       writeSetting('columnSizing', columnSizesRef.current, 'current')
-      // queueMicrotask(rerender); //hack to rerender after state update
+      queueMicrotask(rerender); //hack to rerender after state update
     },
     onColumnOrderChange: (updater) => {
       setColumnOrder((prev) =>
         updater instanceof Function ? updater(prev) : updater,
       );
       writeSetting('columnOrder', columnOrderRef.current, 'current')
-      // queueMicrotask(rerender); //hack to rerender after state update
+      queueMicrotask(rerender); //hack to rerender after state update
     },
     onColumnPinningChange: (updater) => {
       setPinnedColumns((prev) =>
         updater instanceof Function ? updater(prev) : updater,
       );
       writeSetting('columnPinning', pinnedColumnsRef.current, 'current')
-      // queueMicrotask(rerender); //hack to rerender after state update
+      queueMicrotask(rerender); //hack to rerender after state update
     },
     onColumnVisibilityChange: (updater) => {
       setColumnVisibility((prev) =>
         updater instanceof Function ? updater(prev) : updater,
       );
       writeSetting('columnVisibility', columnVisibilityRef.current, 'current')
-      // queueMicrotask(rerender); //hack to rerender after state update
+      queueMicrotask(rerender); //hack to rerender after state update
     },
     onDensityChange: (updater) => {
       setDensity((prev) =>
         updater instanceof Function ? updater(prev) : updater,
       );
       writeSetting('density', densityRef.current, 'current')
-      // queueMicrotask(rerender); //hack to rerender after state update
+      queueMicrotask(rerender); //hack to rerender after state update
     },
     onPaginationChange: (updater) => {
       setPagination((prev) =>
         updater instanceof Function ? updater(prev) : updater,
       );
-      // queueMicrotask(rerender); //hack to rerender after state update
+      queueMicrotask(rerender); //hack to rerender after state update
     },
     onShowColumnFiltersChange: (updater) => {
       setShowColumnFilters((prev) =>
         updater instanceof Function ? updater(prev) : updater,
       );
-      // queueMicrotask(rerender); //hack to rerender after state update
+      queueMicrotask(rerender); //hack to rerender after state update
     },
     getRowId: (orow) => orow?.id,
     renderEmptyRowsFallback: () => {
@@ -791,11 +791,37 @@ const VirtuosoDataGrid = ({
       const r = table
       if (oneShot && r) return;
       setOneShot(true)
-      // queueMicrotask(rerender);
+      queueMicrotask(rerender);
     }, [table]
   );
 
 
+  const doResetSettings = useCallback(
+    async () => {
+      const settings = readVariant('default')
+      writeVariant('current', settings)
+      
+      const orderedcols = [...defaultCols, ...dataGridState.columns.map((col) => col.key)]
+      setColumnOrder(orderedcols)
+
+      
+      const pinnedcols = {
+        left: [...defaultCols, ...dataGridState?.columns?.filter(col => col.frozen)?.map(col => col.key)],
+      }
+      setPinnedColumns(pinnedcols)
+
+      const sizedCols = Object.fromEntries(dataGridState?.columns?.map(col => [col.key, col.width]))
+      setColumnSizes(sizedCols)
+
+      const hiddenCols = Object.fromEntries(dataGridState?.columns?.filter(col => col.hidden)?.map(col => [col.key, false]))
+      setColumnVisibility(hiddenCols)
+
+      const density = 'compact'
+      setDensity(density)
+
+      queueMicrotask(rerender)
+    }, [dataGridState.columns, defaultCols, readVariant, rerender, setColumnOrder, setColumnSizes, setColumnVisibility, setDensity, setPinnedColumns, writeVariant]
+  );
 
 
   if (defaultHideColumns === null && defaultColumnOrder === null)
@@ -805,6 +831,9 @@ const VirtuosoDataGrid = ({
     <div className={classes.rootContainer}>
       {renderAccessories}
       <DataGridToolbar
+        onResetSettings={()=>{
+          doResetSettings()
+        }}
         alternateToolbarFilter={alternateToolbarFilter}
         tableInstanceRef={table}
         useUrlAsState={useUrlAsState}
