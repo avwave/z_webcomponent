@@ -17,6 +17,7 @@ import { fuzzyDate, localizeCurrency, localizePercent } from '../utils/format';
 import moment from 'moment';
 import { useUpdateEffect } from 'usehooks-ts';
 import { useStateRef } from '../hooks/useStateRef';
+import useTableSettings from './useTableSettings';
 
 const useStyles = makeStyles()(theme => ({
   rootContainer: {
@@ -53,6 +54,7 @@ const LightTooltip = styled(({ className, ...props }) => (
 
 
 const VirtuosoDataGrid = ({
+  persistSettings = false,
   alternateToolbarFilter = false,
   showSelector,
   filterable,
@@ -80,17 +82,17 @@ const VirtuosoDataGrid = ({
   deferLoading = false,
   useUrlAsState = false,
   awaitUrlState = (filters) => { },
-  id = "grid",
+  id,
   customColumnDisplay,
   isRowExpandableCallback,
   density = "compact",
-  replaceFilterWithComponent=false,
+  replaceFilterWithComponent = false,
   loadMoreTriggerOffset = 500
 }) => {
   const { classes } = useStyles()
   const theme = useTheme()
   const tableContainerRef = useRef(null)
-
+  const [currentVariant, setCurrentVariant] = useState('current');
   const rowVirtualizerInstanceRef = useRef(null)
 
   const [globalFilter, setGlobalFilter] = useState('');
@@ -103,13 +105,15 @@ const VirtuosoDataGrid = ({
 
   const [dataGridState, dataGridDispatch] = useContext(DataGridContext);
 
+  const [tableSettings, createTableSetting, updateTableSetting, readTableSetting, switchVariant, readVariant, writeVariant, listVariants] = useTableSettings(id, {}, persistSettings);
+
   const rerender = useReducer(() => ({}), {})[1];
-  const [columnVisibility, setColumnVisibility] = useState({});
-  const [tableDensity, setDensity] = useState(density);
+  const [columnVisibility, setColumnVisibility, columnVisibilityRef] = useStateRef({});
+  const [tableDensity, setDensity, densityRef] = useStateRef(density);
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 5 });
   const [rowSelection, setRowSelection] = useState({});
   const [showColumnFilters, setShowColumnFilters] = useState(false);
-  const [pinnedColumns, setPinnedColumns] = useState();
+  const [pinnedColumns, setPinnedColumns, pinnedColumnsRef] = useStateRef();
 
   const [sortState, setSortState] = useState([]);
   const [sortColumn, setSortColumn] = useUrlState({
@@ -120,6 +124,16 @@ const VirtuosoDataGrid = ({
     queryKey: `${id}-sortBy`,
     disable: !useUrlAsState
   })
+
+  const writeSetting = useCallback(
+    (settingKey, value, variantKey) => {
+      let variantSettings = readVariant(variantKey)
+      variantSettings[settingKey] = value
+      writeVariant(variantKey, variantSettings)
+      return null
+    }, [readVariant, writeVariant]
+  );
+
 
   useEffect(() => {
     dataGridDispatch({
@@ -189,7 +203,8 @@ const VirtuosoDataGrid = ({
             enablePinning: !col.hidden,
             grow: !!col.grow,
             size: col?.width,
-            
+            enableResizing: !!col.resizable,
+
             Header: ({ column, ...rest }) => {
               if (col?.columnHeaderRenderer) {
                 return <div draggable className={classes.truncate}>{col?.columnHeaderRenderer()}</div>
@@ -279,6 +294,10 @@ const VirtuosoDataGrid = ({
     }, [classes.tooltip, classes.truncate, dataGridState?.columns]
   );
 
+
+  const [columnSizes, setColumnSizes, columnSizesRef] = useStateRef(null);
+
+
   //scroll events for loadmore
 
   const doLoadMore = useCallback(
@@ -299,12 +318,12 @@ const VirtuosoDataGrid = ({
     async (containerRefElement, manual) => {
       if (containerRefElement) {
         const { scrollHeight, scrollTop, clientHeight } = containerRefElement;
-        
+
         setLastScrollTop(scrollTop);
         if (scrollTop < lastScrollTop) {
           return;
         }
-        
+
         //once the user has scrolled within 400px of the bottom of the table, fetch more data if we can
         if (!!manual) {
           setShowManualLoadMore(true)
@@ -377,37 +396,91 @@ const VirtuosoDataGrid = ({
     }, [enableTableSelection, tableComponents?.detailsRow?.content]
   );
 
-  const [columnOrder, setColumnOrder] = useState([]);
+  const [columnOrder, setColumnOrder, columnOrderRef] = useStateRef([]);
 
   const defaultColumnOrder = useMemo(
     () => {
       if (dataGridState?.columns?.length <= 0) {
         return null
       }
-      const cols = dataGridState?.columns?.map((col) => col.key)
-      setColumnOrder([...defaultCols, ...cols])
-      return [...defaultCols, ...cols]
+      const setting = readVariant('current')
+      if (setting?.columnOrder?.length > 0) {
+        // has default column order
+        setColumnOrder([...defaultCols, ...setting?.columnOrder])
+        return [...defaultCols, ...setting?.columnOrder]
+      } else {
+        const cols = dataGridState?.columns?.map((col) => col.key)
+        setColumnOrder([...defaultCols, ...cols])
+        if (!readVariant('default').columnOrder) {
+          writeSetting('columnOrder', cols, 'default')
+        }
+        return [...defaultCols, ...cols]
+      }
+
     }, [dataGridState?.columns, defaultCols]
   );
 
   const defaultPinnedColumns = useMemo(
     () => {
       const cols = dataGridState?.columns?.filter(col => col.frozen)?.map(col => col.key)
+
       const pinopts = {
         left: [...defaultCols, ...cols],
       }
-      setPinnedColumns(pinopts)
+
+      const settings = readVariant('current')
+      if (settings?.columnPinning) {
+        setPinnedColumns(settings?.columnPinning)
+      } else {
+        if (!readVariant('default').columnPinning) {
+          writeSetting('columnPinning', pinopts, 'default')
+        }
+        setPinnedColumns(pinopts)
+      }
+
+
+    }, [dataGridState?.columns, defaultCols]
+  );
+
+  const defaultColumnSizes = useMemo(
+    () => {
+      if (dataGridState?.columns?.length <= 0) {
+        return null
+      }
+      const settings = readVariant('current')
+      if (settings?.columnSizing) {
+        setColumnSizes(settings?.columnSizing)
+        return settings?.columnSizing
+      } else {
+        const objMap = dataGridState?.columns?.map(col => [col.key, col.width])
+        const obj = Object.fromEntries(objMap)
+        setColumnSizes(obj)
+        if (!readVariant('default').columnSizing) {
+          writeSetting('columnSizing', obj, 'default')
+        }
+        return obj
+      }
     }, [dataGridState?.columns]
   );
+
   const defaultHideColumns = useMemo(
     () => {
       if (dataGridState?.columns?.length <= 0) {
         return null
       }
-      const objMap = dataGridState?.columns?.filter(col => col.hidden)?.map(col => [col.key, false])
-      const obj = Object.fromEntries(objMap)
-      setColumnVisibility(obj)
-      return obj
+      const settings = readVariant('current')
+      if (settings?.columnVisibility) {
+        setColumnVisibility(settings?.columnVisibility)
+        return settings?.columnVisibility
+      } else {
+        const objMap = dataGridState?.columns?.filter(col => col.hidden)?.map(col => [col.key, false])
+        const obj = Object.fromEntries(objMap)
+        setColumnVisibility(obj)
+        if (!readVariant('default').columnVisibility) {
+          writeSetting('columnVisibility', obj, 'default')
+        }
+        return obj
+      }
     }, [dataGridState?.columns]
   );
 
@@ -477,7 +550,6 @@ const VirtuosoDataGrid = ({
     [],
   );
 
-
   const table = useMaterialReactTable({
     enableFilterMatchHighlighting: true,
     localization: tableTranslation,
@@ -520,7 +592,7 @@ const VirtuosoDataGrid = ({
       },
       ...gridProps?.tableContainerProps
     },
-    layoutMode: 'grid-no-grow',
+    layoutMode: 'grid',
     muiTableHeadCellProps: ({ column, table }) => {
       return {
         onDragStart: e => {
@@ -545,7 +617,7 @@ const VirtuosoDataGrid = ({
           table.setHoveredColumn(null);
 
         },
-        
+
       }
     },
     muiTablePaperProps: {
@@ -567,6 +639,7 @@ const VirtuosoDataGrid = ({
       density: tableDensity,
       globalFilter,
       columnOrder,
+      columnSizing: columnSizes,
       ...gridProps?.gridState
     },
     onSortingChange: setSortState,
@@ -577,6 +650,7 @@ const VirtuosoDataGrid = ({
       columnVisibility: defaultHideColumns,
       columnPinning: defaultPinnedColumns,
       showGlobalFilter: hasSearchFilter && filterable,
+      columnSizing: defaultColumnSizes,
     },
     enableGlobalFilter: true,
     onGlobalFilterChange: (f) => {
@@ -642,28 +716,39 @@ const VirtuosoDataGrid = ({
     } : false,
 
     enableTopToolbar: false,
+    onColumnSizingChange: (updater) => {
+      setColumnSizes((prev) =>
+        updater instanceof Function ? updater(prev) : updater
+      );
+      writeSetting('columnSizing', columnSizesRef.current, 'current')
+      // queueMicrotask(rerender); //hack to rerender after state update
+    },
     onColumnOrderChange: (updater) => {
       setColumnOrder((prev) =>
         updater instanceof Function ? updater(prev) : updater,
       );
+      writeSetting('columnOrder', columnOrderRef.current, 'current')
       // queueMicrotask(rerender); //hack to rerender after state update
     },
     onColumnPinningChange: (updater) => {
       setPinnedColumns((prev) =>
         updater instanceof Function ? updater(prev) : updater,
       );
+      writeSetting('columnPinning', pinnedColumnsRef.current, 'current')
       // queueMicrotask(rerender); //hack to rerender after state update
     },
     onColumnVisibilityChange: (updater) => {
       setColumnVisibility((prev) =>
         updater instanceof Function ? updater(prev) : updater,
       );
+      writeSetting('columnVisibility', columnVisibilityRef.current, 'current')
       // queueMicrotask(rerender); //hack to rerender after state update
     },
     onDensityChange: (updater) => {
       setDensity((prev) =>
         updater instanceof Function ? updater(prev) : updater,
       );
+      writeSetting('density', densityRef.current, 'current')
       // queueMicrotask(rerender); //hack to rerender after state update
     },
     onPaginationChange: (updater) => {

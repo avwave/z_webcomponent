@@ -101,14 +101,25 @@ const ColumnListFilterMenu = ({ table, columns }) => {
   const applyFilteredColumns = useCallback(
     () => {
       const arrCols = Array.from(visibleColumns)
+      const visibility = []
       const filteredLeaves = getAllLeafColumns()
         .filter((col) => col.columnDef.enableHiding !== false)
         filteredLeaves.forEach((col) => {
-          const hasCol = !!arrCols.find(c => c.id === col.id)
-          col.toggleVisibility(hasCol)
+          const isColVisible = !!arrCols.find(c => c.id === col.id)
+
+          const isVisible = col.getIsVisible()
+          const setVisible = isColVisible
+          visibility.push([
+            col.id,
+            setVisible
+          ])
+          col.toggleVisibility(isColVisible)
         });
+      
+        table.setColumnVisibility(Object.fromEntries(visibility))
+        
     },
-    [getAllLeafColumns, visibleColumns]
+    [getAllLeafColumns, visibleColumns, table]
   );
 
   const [hoveredColumn, setHoveredColumn] = useState(null);
