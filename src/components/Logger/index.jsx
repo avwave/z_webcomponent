@@ -1,4 +1,4 @@
-import { Link, Typography } from '@mui/material';
+import { Box, Divider, Link, Table, TableBody, TableCell, TableRow, Typography } from '@mui/material';
 import { makeStyles } from 'tss-react/mui';
 import { id } from 'date-fns/locale';
 import PropTypes from "prop-types";
@@ -29,6 +29,82 @@ function generatePath(path, params) {
     });
 }
 
+function splitString(str) {
+  let result = [];
+  let currentLine = '';
+  let braceCount = 0;
+  let bracketCount = 0;
+  let parenthesesCount = 0;
+  let singleQuoteCount = 0;
+  let doubleQuoteCount = 0;
+  let chevronCount = 0;
+  let firstPipeIgnored = false;
+
+  for (let i = 0; i < str.length; i++) {
+    if (str[i] === '{') {
+      braceCount++;
+    } else if (str[i] === '}') {
+      braceCount--;
+    } else if (str[i] === '[') {
+      bracketCount++;
+    } else if (str[i] === ']') {
+      bracketCount--;
+    } else if (str[i] === '(') {
+      parenthesesCount++;
+    } else if (str[i] === ')') {
+      parenthesesCount--;
+    } else if (str[i] === "'" && str[i - 1] !== '\\') {
+      singleQuoteCount = 1 - singleQuoteCount;
+    } else if (str[i] === '"' && str[i - 1] !== '\\') {
+      doubleQuoteCount = 1 - doubleQuoteCount;
+    } else if (str[i] === '<') {
+      chevronCount++;
+      if (
+        braceCount === 0 &&
+        bracketCount === 0 &&
+        parenthesesCount === 0 &&
+        singleQuoteCount === 0 &&
+        doubleQuoteCount === 0 &&
+        chevronCount === 1
+      ) {
+        result.push(currentLine.trim());
+        currentLine = '';
+      }
+    } else if (str[i] === '>') {
+      chevronCount--;
+    }
+
+    if (
+      ((str[i] === '|' && firstPipeIgnored) ||
+        (str[i] === '>' &&
+          str[i - 1] === ' ' &&
+          str[i - 2] !== ',' &&
+          !(str[i - 2] === ' ' && str[i - 3] === ','))) &&
+      braceCount === 0 &&
+      bracketCount === 0 &&
+      parenthesesCount === 0 &&
+      singleQuoteCount === 0 &&
+      doubleQuoteCount === 0 &&
+      chevronCount === 0
+    ) {
+      result.push(currentLine.trim());
+      currentLine = '';
+    } else {
+      currentLine += str[i];
+      if (str[i] === '|' && !firstPipeIgnored) {
+        firstPipeIgnored = true;
+      }
+    }
+  }
+
+  if (currentLine.trim() !== '') {
+    result.push(currentLine.trim());
+  }
+
+  return result.filter((line) => line !== ',');
+}
+
+
 const Logger = ({
   routeMap = [],
   linkComponent: CLink,
@@ -43,24 +119,24 @@ const Logger = ({
       if (typeof log === 'string' && log.length <= 0) {
         return [log]
       }
-            
-      const regex = new RegExp('{(' + routeMap?.map(route=>route.resourceName).join('|') + ') ([0-9]*) \\| (.*?)}', 'g')
-      const splitRegex = new RegExp('({(?:' + routeMap?.map(route=>route.resourceName).join('|') + ') [0-9]* \\| .*?})', 'g')
+
+      const regex = new RegExp('{(' + routeMap?.map(route => route.resourceName).join('|') + ') ([0-9]*) \\| (.*?)}', 'g')
+      const splitRegex = new RegExp('({(?:' + routeMap?.map(route => route.resourceName).join('|') + ') [0-9]* \\| .*?})', 'g')
       const split = log.split(splitRegex)
       const matches = [...log?.matchAll(regex)]
       const routeMatches = matches?.map(match => {
         const route = routeMap?.find(route => route.resourceName === match[1])
         return {
           match,
-          route 
+          route
         }
       })
-      
+
       if (routeMatches.length <= 0) {
         return split
       }
 
-      
+
       const parseElements = split?.map((element, idx) => {
         const findMatch = routeMatches?.find(match => match?.match?.[0] === element)
         if (findMatch) {
@@ -82,7 +158,7 @@ const Logger = ({
           return element
         }
       })
-      
+
       return parseElements
     },
     [CLink, linkProps, routeMap],
@@ -141,6 +217,7 @@ const Logger = ({
         ...props
       } = { ...log }
 
+
       const mappableRoutes = routeMap.filter((route) => {
         return (route?.resourceName in props)
       }).map(route => {
@@ -165,16 +242,18 @@ const Logger = ({
     },
     [CLink, linkProps, log, routeMap],
   );
-  const parseBookingRequest = useMemo(
-    () => {
-      const logstr = log?.log_message ?? ''
-      let regex = /(?:(request \([a-zA-Z0-9]{24,}\) \||request: [a-zA-Z0-9]{24,}|booking \([a-zA-Z0-9]{24,}\)))/i
+  const parseBookingRequest = useCallback(
+    (log) => {
+      const logstr = log ?? ''
+      let regex = /(?:(request \([a-zA-Z0-9]{24,}\)\||appointment: \[(.*)\]|request: [a-zA-Z0-9]{24,}|booking \([a-zA-Z0-9]{24,}\)))/i
+
       let matches = logstr.match(regex)
 
       let bk = matches?.[0]
       if (bk) {
         const split = bk.split(/: | \(/)
         const id = split[1].substring(0, 24)
+        const appt = matches?.[2]
         const insertIndex = matches?.["index"]
         let splitBookingSuffix = logstr.slice(insertIndex + matches?.[0]?.length)
         let splitBookingPrefix = logstr.slice(0, insertIndex) + split[0]
@@ -218,23 +297,24 @@ const Logger = ({
           ]
         }
 
-        const genLink = routeMap.find(f => f?.resourceName === 'booking')?.pattern ?? null
-        const genPattern = genLink ? generatePath(genLink, { id: id.trim() }) : ''
+        let genLink
+        let bookingcomponent
+        if (split?.[0] === 'request' || split?.[0] === 'booking') {
+          genLink = routeMap.find(f => f?.resourceName === 'booking')?.pattern ?? null
+          const genPattern = genLink ? generatePath(genLink, { id: id.trim() }) : ''
+          bookingcomponent = constructLink(genPattern, id)
+        } else {
+          genLink = routeMap.find(f => f?.resourceName === 'appointment')?.pattern ?? null
+          const appts = appt.split(/[ ,]+/)
 
-        const lProps = CLink ? {
-          to: genPattern
-        } : {
-          href: genPattern
+          bookingcomponent = appts.map(appt => {
+            const genPattern = genLink ? generatePath(genLink, { id: appt }) : ''
+            return constructLink(genPattern, appt)
+          })
         }
-        const bookingcomponent = (
-          <Link
-            target="_blank"
-            component={CLink}
-            {...lProps}
-            {...linkProps}
-            underline="hover">{id.trim()}
-          </Link>
-        )
+
+
+
         const components = [
           splitBookingPrefix,
           ...bkcustomercomponents,
@@ -254,15 +334,67 @@ const Logger = ({
         return [parseSubLog(logstr)]
       }
     },
-    [CLink, linkProps, log?.log_message, parseSubLog, routeMap],
+    [CLink, linkProps, parseSubLog, routeMap],
   );
 
+  const constructLink = (genPattern, text) => {
+    const lProps = CLink ? {
+      to: genPattern
+    } : {
+      href: genPattern
+    }
+    const bookingcomponent = (
+      <>
+        <Link
+          target="_blank"
+          component={CLink}
+          {...lProps}
+          {...linkProps}
+          sx={{
+            marginRight: 1,
+            marginLeft: 1
+          }}
+          underline="hover">{text.trim()}
+        </Link>
+      </>
+    )
+    return bookingcomponent
+  }
+  const splitLogs = useMemo(
+    () => {
+      const subStrings = splitString(log?.log_message)
+      const splitLogs = subStrings.map((subString, idx) => {
+        return (
+          <TableRow>
+            <TableCell>
+              <>
+                {parseBookingRequest(subString)}
+              </>
+            </TableCell>
+          </TableRow>
+        )
+      })
+      return (
+        <Table size="small">
+          <TableBody>
+            {splitLogs}
+          </TableBody>
+        </Table>
+      )
 
+    }, [log, parseBookingRequest]
+  );
   return (
-    <>
-      {parseBookingRequest}
+    <Box sx={{
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'flex-start',
+      justifyContent: 'flex-start',
+      height: '100%',
+    }}>
+      {splitLogs}
       {/* <ReactJson src={{parseBookingRequest}}/> */}
-    </>
+    </Box>
 
   )
 }

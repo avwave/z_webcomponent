@@ -24,6 +24,17 @@ export const auditLogs = [
     "date_created": "2022-10-13T08:51:26Z"
   },
   {
+    "id": "667e1d13c2dc7aa2ad22deb3",
+    "log_type": "SERVER_ACTION",
+    "log_message": "Provider 693703 | Jacqueline Bautista at {coords | 14.68776,121.0868066} 48, 48 Gold St.Filinvest 2, Batasan Hills, Quezon City, Batasan, Commonwealth Avenue Cycleway, Commonwealth, Holy Spirit, 2nd District, Quezon City, Eastern Manila District, Metro Manila, 1100, Philippines has urgent products: < {product 307248 | 005005083 Medical Kit} | usedAt: 06/28/24 10:13 | appointment: [2845799] | deliveryDate: 06/28/24 10:13 | expedited: no >, < {product 1030515 | 01000BJ8QJJZ Lavender Blood Tube} | usedAt: 06/28/24 07:17 | appointment: [2845567] | deliveryDate: 06/28/24 09:17 | expedited: no | to: sgd_manila >, < {product 1030539 | 01000BCBBYBV Lavender Blood Tube} | usedAt: 06/28/24 09:19 | appointment: [2845735] | deliveryDate: 06/28/24 11:19 | expedited: no | to: sgd_manila >, < {product 1030880 | 01000HHYL7VX Lavender Blood Tube} | usedAt: 06/28/24 08:25 | appointment: [2845677] | deliveryDate: 06/28/24 10:25 | expedited: no | to: sgd_manila >, < {product 1030884 | 01000BNDXKLB Lavender Blood Tube} | usedAt: 06/28/24 07:57 | appointment: [2845633] | deliveryDate: 06/28/24 09:57 | expedited: no | to: sgd_manila >, < {product 1034294 | 0120032T4L9L Gold Blood Tube} | usedAt: 06/28/24 07:17 | appointment: [2845567] | deliveryDate: 06/28/24 09:17 | expedited: no | to: sgd_manila >, < {product 1034346 | 0120093D4QNF Gold Blood Tube} | usedAt: 06/28/24 10:15 | appointment: [2845799] | deliveryDate: 06/28/24 12:15 | expedited: no | to: sgd_manila >, < {product 1034422 | 01200WF9WXZ3 Gold Blood Tube} | usedAt: 06/28/24 09:19 | appointment: [2845735] | deliveryDate: 06/28/24 11:19 | expedited: no | to: sgd_manila >, < {product 1034482 | 012002BN8MPJ Gold Blood Tube} | usedAt: 06/28/24 07:57 | appointment: [2845633] | deliveryDate: 06/28/24 09:57 | expedited: no | to: sgd_manila >, < {product 1034486 | 01200ZZY8H3M Gold Blood Tube} | usedAt: 06/28/24 08:25 | appointment: [2845677] | deliveryDate: 06/28/24 10:25 | expedited: no | to: sgd_manila >, < {product 1034490 | 012004N9WMJP Gold Blood Tube} | usedAt: 06/28/24 09:55 | appointment: [2845790] | deliveryDate: 06/28/24 11:55 | expedited: no | to: sgd_manila >, < {product 1011687 | 01600CRP23JN Urine Specimen Cup} | usedAt: 06/28/24 07:17 | appointment: [2845567] | deliveryDate: 06/28/24 09:17 | expedited: no | to: sgd_manila >, < {product 1011692 | 016009QQLDDQ Urine Specimen Cup} | usedAt: 06/28/24 09:19 | appointment: [2845735] | deliveryDate: 06/28/24 11:19 | expedited: no | to: sgd_manila >, < {product 1014148 | 01600WQ738ML Urine Specimen Cup} | usedAt: 06/28/24 08:25 | appointment: [2845677] | deliveryDate: 06/28/24 10:25 | expedited: no | to: sgd_manila >, < {product 691633 | 00710691555 Specimen Pouch} | usedAt: 06/28/24 08:25 | appointment: [2845567, 2845677, 2845633] | deliveryDate: - | expedited: no >, < {product 691808 | 00710691590 Specimen Pouch} | usedAt: 06/28/24 10:15 | appointment: [2845735, 2845799, 2845790] | deliveryDate: - | expedited: no >",
+    "request_id": "667df30ac2dc7ea4d50b91df",
+    "consult_request_id": null,
+    "special_care_request_id": null,
+    "client_id": 1322431,
+    "provider_id": 693703,
+    "date_created": "2024-06-28T02:16:51Z"
+  },
+  {
     "id": "6347bad5c2dcc16537917f43",
     "log_type": "SERVER_ACTION",
     "log_message": "Maxicare Email Notification Sent to client: 1412",
@@ -139,13 +150,27 @@ const routeMap = [
   {
     resourceName: 'wlpPartner',
     pattern: '/'
-  }
+  }, 
+  {
+    resourceName: 'product',
+    pattern: '/product/:id'
+  },
+  {
+    resourceName: 'request_id',
+    pattern: '/request/:id'
+  },
+  {
+    resourceName: 'appointment',
+    pattern: '/appt/:id'
+  },
+  
+  
 
 ]
 const ActivityLogStory = ({ logs, ...args }) => {
   return (
     <>
-      <ReactJson src={{ routeMap }} />
+      <ReactJson src={{ routeMap }} collapsed/>
       <Table>
         <TableHead>
           <TableCell variant="footer">Raw log</TableCell>
@@ -171,6 +196,22 @@ const ActivityLogStory = ({ logs, ...args }) => {
   )
 }
 
+export const SingleMultiAppointmentLog = ActivityLogStory.bind({});
+SingleMultiAppointmentLog.args = {
+  logs: [
+    {
+      "id": "667e1d13c2dc7aa2ad22deb3",
+      "log_type": "SERVER_ACTION",
+      "log_message": "Provider 204 | Jan Providerz at {coords | 14.562574,121.025458} 349, Zennya Street, Zennya, 349 Unit 101-D, Ground Floor, Oppen Building, Senator Gil Puyat Avenue, Salcedo, Bel-Air, Makati 1st District, Makati, Southern Manila District, Metro Manila, 1200, Philippines has urgent products: < {product 7078 | 01100BHYTLW4 Red Blood Tube} | usedAt: 04/23/24 15:17 | appointment: [12209] | deliveryDate: 04/23/24 17:17 | expedited: no | to: sgd_manila >, < {product 18160 | 012004K9RM Gold Blood Tube} | usedAt: 04/23/24 15:17 | appointment: [12209] | deliveryDate: 04/23/24 17:17 | expedited: no | to: sgd_manila >, < {product 18174 | 01600LVBTK Urine Specimen Cup} | usedAt: 05/07/24 17:56 | appointment: [12212] | deliveryDate: 05/07/24 19:56 | expedited: no | to: sgd_manila >, < {product 18053 | 0071018053 Specimen Pouch} | usedAt: 05/07/24 17:56 | appointment: [12209, 12212] | deliveryDate: - | expedited: no >",
+      "request_id": "667df30ac2dc7ea4d50b91df",
+      "consult_request_id": null,
+      "special_care_request_id": null,
+      "client_id": 1322431,
+      "provider_id": 693703,
+      "date_created": "2024-06-28T02:16:51Z"
+    },
+  ]
+}
 export const ActivityLog = ActivityLogStory.bind({});
 ActivityLog.args = {
   logs: activityLogs
