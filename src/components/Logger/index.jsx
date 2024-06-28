@@ -351,7 +351,8 @@ const Logger = ({
           {...lProps}
           {...linkProps}
           sx={{
-            marginRight: 1
+            marginRight: 1,
+            marginLeft: 1
           }}
           underline="hover">{text.trim()}
         </Link>
