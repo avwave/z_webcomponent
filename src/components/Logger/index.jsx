@@ -38,6 +38,7 @@ function splitString(str) {
   let singleQuoteCount = 0;
   let doubleQuoteCount = 0;
   let chevronCount = 0;
+  let firstPipeIgnored = false;
 
   for (let i = 0; i < str.length; i++) {
     if (str[i] === '{') {
@@ -58,12 +59,27 @@ function splitString(str) {
       doubleQuoteCount = 1 - doubleQuoteCount;
     } else if (str[i] === '<') {
       chevronCount++;
+      if (
+        braceCount === 0 &&
+        bracketCount === 0 &&
+        parenthesesCount === 0 &&
+        singleQuoteCount === 0 &&
+        doubleQuoteCount === 0 &&
+        chevronCount === 1
+      ) {
+        result.push(currentLine.trim());
+        currentLine = '';
+      }
     } else if (str[i] === '>') {
       chevronCount--;
     }
 
     if (
-      (str[i] === '|' || (str[i] === '>' && str[i - 1] === ' ')) &&
+      ((str[i] === '|' && firstPipeIgnored) ||
+        (str[i] === '>' &&
+          str[i - 1] === ' ' &&
+          str[i - 2] !== ',' &&
+          !(str[i - 2] === ' ' && str[i - 3] === ','))) &&
       braceCount === 0 &&
       bracketCount === 0 &&
       parenthesesCount === 0 &&
@@ -75,6 +91,9 @@ function splitString(str) {
       currentLine = '';
     } else {
       currentLine += str[i];
+      if (str[i] === '|' && !firstPipeIgnored) {
+        firstPipeIgnored = true;
+      }
     }
   }
 
@@ -82,7 +101,7 @@ function splitString(str) {
     result.push(currentLine.trim());
   }
 
-  return result;
+  return result.filter((line) => line !== ',');
 }
 
 
@@ -227,7 +246,7 @@ const Logger = ({
     (log) => {
       const logstr = log ?? ''
       let regex = /(?:(request \([a-zA-Z0-9]{24,}\)\||appointment: \[(.*)\]|request: [a-zA-Z0-9]{24,}|booking \([a-zA-Z0-9]{24,}\)))/i
-      
+
       let matches = logstr.match(regex)
 
       let bk = matches?.[0]
@@ -287,15 +306,15 @@ const Logger = ({
         } else {
           genLink = routeMap.find(f => f?.resourceName === 'appointment')?.pattern ?? null
           const appts = appt.split(/[ ,]+/)
-          
+
           bookingcomponent = appts.map(appt => {
             const genPattern = genLink ? generatePath(genLink, { id: appt }) : ''
             return constructLink(genPattern, appt)
           })
         }
-        
-        
-        
+
+
+
         const components = [
           splitBookingPrefix,
           ...bkcustomercomponents,
@@ -326,14 +345,16 @@ const Logger = ({
     }
     const bookingcomponent = (
       <>
-      <Link
-        target="_blank"
-        component={CLink}
-        {...lProps}
-        {...linkProps}
-        underline="hover">{text.trim()}
-      </Link>
-      {", "}
+        <Link
+          target="_blank"
+          component={CLink}
+          {...lProps}
+          {...linkProps}
+          sx={{
+            marginRight: 1
+          }}
+          underline="hover">{text.trim()}
+        </Link>
       </>
     )
     return bookingcomponent
@@ -341,32 +362,25 @@ const Logger = ({
   const splitLogs = useMemo(
     () => {
       const subStrings = splitString(log?.log_message)
-      if (subStrings.length <= 2) {
+      const splitLogs = subStrings.map((subString, idx) => {
         return (
-          <Typography>
-            {parseBookingRequest(log?.log_message)}
-          </Typography>
+          <TableRow>
+            <TableCell>
+              <>
+                {parseBookingRequest(subString)}
+              </>
+            </TableCell>
+          </TableRow>
         )
-      } else {
-        const splitLogs = subStrings.map((subString, idx) => {
-          return (
-            <TableRow>
-              <TableCell>
-                <Typography key={idx}>
-                  {parseBookingRequest(subString)}
-                </Typography>
-              </TableCell>
-            </TableRow>
-          )
-        })
-        return (
-          <Table>
-            <TableBody>
-              {splitLogs}
-            </TableBody>
-          </Table>
-        )
-      }
+      })
+      return (
+        <Table size="small">
+          <TableBody>
+            {splitLogs}
+          </TableBody>
+        </Table>
+      )
+
     }, [log, parseBookingRequest]
   );
   return (
