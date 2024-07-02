@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import AddCriterion from './AddCriterion'
 import useI18nLabel from './hooks/useI18nLabel'
 import useCriterionAddableChecker from './hooks/useCriterionAddableChecker'
-import { Button, Card, CardContent, CardHeader, Container, Paper, Popover, Popper, Typography, useTheme } from '@mui/material'
+import { Button, ButtonGroup, Card, CardContent, CardHeader, Container, Paper, Popover, Popper, Typography, useTheme } from '@mui/material'
 import { Box } from "@mui/material";
 import { ClickAwayListener } from "@mui/material";
 AddCriterionDesktop.propTypes = {
@@ -70,8 +70,13 @@ function AddCriterionDesktop(props) {
 
   const theme = useTheme()
   return (
-    isCriterionAddable === true && (
-      <div ref={rootElementRef}>
+    
+      <div
+          ref={rootElementRef}
+      >
+      <ButtonGroup
+        size="small"
+       >
         <Button
           size="small"
           variant="contained"
@@ -133,9 +138,10 @@ function AddCriterionDesktop(props) {
           </ClickAwayListener>
 
         </Popper>
+      </ButtonGroup>
       </div>
     )
-  )
+  
 }
 
 export default React.memo(AddCriterionDesktop)
