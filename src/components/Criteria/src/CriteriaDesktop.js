@@ -15,11 +15,12 @@ const useStyles = makeStyles()(theme => ({
     flexDirection: 'row',
     flexGrow:0,
     flexShrink:0,
+    paddingRight: 10,
     minWidth: '100px',
   },
   criterias: {
     display: 'flex',
-    overflowY: 'scroll',
+    
     paddingBottom: '8px',
     
   
@@ -140,20 +141,28 @@ function CriteriaDesktop (props) {
     const active = activeItem === id
     const disabled = activeItem != null && active === false
 
+    const unselectedCriteria = Object.fromEntries(Object.entries(criteria).filter(([cKey, criterion]) => {
+      const ob = data.find(c=> c.type === cKey)
+      return !ob
+    }))
+
     return (
       <AddCriterionDesktop
         active={active}
         disabled={disabled}
-        criteria={criteria}
+        criteria={unselectedCriteria}
         onAdd={onNewCriterion}
         onActiveChange={state => onActiveItemChange(id, state)}
       >{children}
       </AddCriterionDesktop>
     )
-  }, [activeItem, criteria, onActiveItemChange, onNewCriterion, children])
+  }, [data, activeItem, criteria, onActiveItemChange, onNewCriterion, children])
 
   return (
     <div className={classes.root}>
+      <div className={classes.add}>
+        {addCriterionDOM}
+      </div>
       {
         criterionDOM.length > 0 && (
           <div className={classes.criterias}>
@@ -161,9 +170,7 @@ function CriteriaDesktop (props) {
           </div>
         )
       }
-      <div className={classes.add}>
-      {addCriterionDOM}
-      </div>
+      
     </div>
   )
 }
