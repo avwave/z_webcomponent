@@ -70,7 +70,7 @@ function AddCriterionDesktop(props) {
 
   const theme = useTheme()
   return (
-    isCriterionAddable === true && (
+    
       <div
           ref={rootElementRef}
       >
@@ -141,7 +141,7 @@ function AddCriterionDesktop(props) {
       </ButtonGroup>
       </div>
     )
-  )
+  
 }
 
 export default React.memo(AddCriterionDesktop)

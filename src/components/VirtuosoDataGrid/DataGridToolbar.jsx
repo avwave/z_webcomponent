@@ -4,6 +4,7 @@ import {
   debounce,
   IconButton,
   LinearProgress,
+  TextField,
   Toolbar,
   Tooltip
 } from "@mui/material";
@@ -16,7 +17,7 @@ import { useUrlState } from "../hooks/useUrlState";
 import { CriteriaEditor } from "./CriteriaEditor";
 import { QueryBuilderEditor } from "./QueryBuilderEditor";
 import { ColumnListFilterMenu } from "./ColumnListFilterMenu";
-import { SettingsBackupRestore } from "@mui/icons-material";
+import { Clear, Search, SettingsBackupRestore } from "@mui/icons-material";
 
 const POPUP_MODE = {
   FILTER: "FILTER",
@@ -170,7 +171,7 @@ const DataGridToolbar = ({
     debounce((filterKey, filterValue) => {
       const filterV = { ...filterValues, [filterKey]: filterValue }
       setFilterValues(filterV);
-      // setSearchField(filterV?.search ?? "")
+      setSearchField(filterV?.search ?? "")
       onFilterChange(filterV)
     }, 500),
     [filterValues],
@@ -209,10 +210,20 @@ const DataGridToolbar = ({
       const mappedFilters = { ...Object.fromEntries(mappedValueEntries), ...defaultdaterangefilter }
       setFilterValues(mappedFilters)
       onFilterChange(mappedFilters)
+      setSearchField(mappedFilters?.search ?? "")
 
 
     }, 500),
-    [onFilterChange, setFilterValues],
+    [onFilterChange, setFilterValues, filterValues],
+  );
+
+  const clearCriteriaFilters = useCallback(
+    async () => {
+      setSearchField("")
+      setFilterValues({})
+      onClearFilters()
+      return null
+    }, [onClearFilters, setFilterValues]
   );
   const loadingBar = useMemo(
     () => {
@@ -246,6 +257,9 @@ const DataGridToolbar = ({
           onCriteriaChange={(values) => {
             mapCriteriaToFilter(values)
           }}
+          onClear={() => {
+            clearCriteriaFilters()
+          }}
           filters={filterValues}
         />
       }
@@ -268,12 +282,36 @@ const DataGridToolbar = ({
         </Box>
         {tableInstanceRef && (
           <Box sx={{ paddingLeft: 2, display: 'flex', flexDirection: 'row', justifyContent: 'flex-end' }}>
-            
-              <MRT_GlobalFilterTextField table={tableInstanceRef} />
+            {hasSearchFilter && (
+            <TextField
+              value={searchField}
+              type="text"
+              size="small"
+              onChange={(e) => {
+                setSearchField(e.target.value)
+                changeFilter('search', e.target.value)
+              }}
+              InputProps={{
+                startAdornment: 
+                  <Search />,
+                endAdornment: <IconButton
+                  onClick={() => {
+                    setSearchField(null)
+                    changeFilter('search', null)
+                  }}
+                  disabled={searchField?.length <= 0}
+                  size="small"
+                  color="inherit"
+                  >
+                    <Clear />
+                  </IconButton>
+              }}
+            />
+            )}
             <Tooltip title="Toggle Row Padding">
               <MRT_ToggleDensePaddingButton table={tableInstanceRef} />
             </Tooltip>
-              <ColumnListFilterMenu table={tableInstanceRef} columns={columns} />
+            <ColumnListFilterMenu table={tableInstanceRef} columns={columns} />
             <Tooltip title="Reset Table Settings">
               <IconButton
                 onClick={() => {

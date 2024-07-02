@@ -5,7 +5,7 @@ import { makeStyles } from 'tss-react/mui';
 import { useUrlState } from '../hooks/useUrlState';
 
 
-import { Clear, Search } from '@mui/icons-material';
+import { Clear, ClearAll, Search } from '@mui/icons-material';
 import { Box, Button, CircularProgress, IconButton, InputAdornment, LinearProgress, ThemeProvider, Toolbar, Tooltip, Typography, createTheme, debounce, styled, tooltipClasses, useTheme } from '@mui/material';
 import { isEmpty } from 'lodash';
 import TruncateMarkup from 'react-truncate-markup';
@@ -514,7 +514,7 @@ const VirtuosoDataGrid = ({
     debounce(f => {
       setFilters({ ...filters, search: f })
     }, 500),
-    [],
+    [filters],
   );
 
   const renderAccessories = useMemo(
@@ -671,10 +671,13 @@ const VirtuosoDataGrid = ({
       columnSizing: defaultColumnSizes,
     },
     enableGlobalFilter: true,
+    enableGlobalFilterModes: true,
     onGlobalFilterChange: (f) => {
       setGlobalFilter(f)
       debounceSearch(f)
     },
+
+
 
     //row expansion
     enableExpanding: !!tableComponents?.detailsRow?.content,
