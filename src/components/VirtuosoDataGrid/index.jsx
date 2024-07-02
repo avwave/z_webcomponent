@@ -5,7 +5,7 @@ import { makeStyles } from 'tss-react/mui';
 import { useUrlState } from '../hooks/useUrlState';
 
 
-import { Clear, DoubleArrow, Search, UnfoldMore } from '@mui/icons-material';
+import { Clear, ClearAll, Search } from '@mui/icons-material';
 import { Box, Button, CircularProgress, IconButton, InputAdornment, LinearProgress, ThemeProvider, Toolbar, Tooltip, Typography, createTheme, debounce, styled, tooltipClasses, useTheme } from '@mui/material';
 import { isEmpty } from 'lodash';
 import TruncateMarkup from 'react-truncate-markup';
@@ -349,8 +349,10 @@ const VirtuosoDataGrid = ({
   const renderBottomToolbar = useMemo(
     () => {
       if (hideFooter) return <></>
+
+      let loadMoreComponent = <></>
       if (showManualLoadMore && manualLoadMore) {
-        return <Box display={'flex'} flexDirection={'row'} justifyContent={'flex-end'}>
+        loadMoreComponent = (
           <Button
             variant={'text'}
             onClick={() => {
@@ -358,11 +360,27 @@ const VirtuosoDataGrid = ({
             }}
             startIcon={loadMoreLoading && <CircularProgress size={16} />}
           >Load more</Button>
-        </Box>
+        )
       }
-      return <></>
+      const isInf = totalCount >= Number.MAX_VALUE
+      const tCount = `${dataGridState?.rows?.length} ${totalCount > 0 ? ` of ${isInf ? '∞' : totalCount} rows` : ' rows'}`
+      return <Box sx={{
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        gap: 2,
+        alignItems: 'center',
+        minHeight: 40,
+        paddingRight: 2,
+      }}>
+        <Typography variant='caption' sx={{ alignSelf: 'center' }}>
+          {tCount}
+        </Typography>
+        {loadMoreComponent}
+      </Box>
+
     },
-    [doLoadMore, hideFooter, loadMoreLoading, manualLoadMore, showManualLoadMore],
+    [dataGridState?.rows?.length, doLoadMore, hideFooter, loadMoreLoading, manualLoadMore, showManualLoadMore, totalCount],
   );
   //check on mount if needs to load more to fill the table
   useEffect(
@@ -496,7 +514,7 @@ const VirtuosoDataGrid = ({
     debounce(f => {
       setFilters({ ...filters, search: f })
     }, 500),
-    [],
+    [filters],
   );
 
   const renderAccessories = useMemo(
@@ -653,42 +671,14 @@ const VirtuosoDataGrid = ({
       columnSizing: defaultColumnSizes,
     },
     enableGlobalFilter: true,
+    enableGlobalFilterModes: true,
     onGlobalFilterChange: (f) => {
       setGlobalFilter(f)
       debounceSearch(f)
     },
-    muiSearchTextFieldProps: (props) => {
-      return {
-        placeholder: searchPlaceholder ?? 'Search',
-        variant: 'outlined',
-        size: 'small',
-        autoComplete: 'default-search-field',
-        inputProps: {
-          autoComplete: 'default-search-field',
-          type: 'search',
-        },
-        InputProps: {
-          autoComplete: 'default-search-field',
-          startAdornment:
-            <InputAdornment position="start">
-              <Search />
-            </InputAdornment>,
-          endAdornment: <InputAdornment position="end">
-            {globalFilter && (
-              <IconButton
-                aria-label="clear search"
-                onClick={() => {
-                  setGlobalFilter('')
-                  debounceSearch('')
-                }}
-              >
-                <Clear />
-              </IconButton>
-            )}
-          </InputAdornment>
-        }
-      }
-    },
+
+
+
     //row expansion
     enableExpanding: !!tableComponents?.detailsRow?.content,
     enableExpandAll: false,
@@ -800,11 +790,11 @@ const VirtuosoDataGrid = ({
     async () => {
       const settings = readVariant('default')
       writeVariant('current', settings)
-      
+
       const orderedcols = [...defaultCols, ...dataGridState.columns.map((col) => col.key)]
       setColumnOrder(orderedcols)
 
-      
+
       const pinnedcols = {
         left: [...defaultCols, ...dataGridState?.columns?.filter(col => col.frozen)?.map(col => col.key)],
       }
@@ -831,7 +821,7 @@ const VirtuosoDataGrid = ({
     <div className={classes.rootContainer}>
       {renderAccessories}
       <DataGridToolbar
-        onResetSettings={()=>{
+        onResetSettings={() => {
           doResetSettings()
         }}
         alternateToolbarFilter={alternateToolbarFilter}

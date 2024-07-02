@@ -66,7 +66,8 @@ Default.args = {
         type: "text",
       }
     }
-  ]
+  ],
+  useUrlAsState: true,
 }
 
 export const LegacyCriteriaEditorFilter = DefaultStory.bind({});
