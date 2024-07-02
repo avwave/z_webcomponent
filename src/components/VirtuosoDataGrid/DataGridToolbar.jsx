@@ -267,10 +267,9 @@ const DataGridToolbar = ({
           {renderFilterBox}
         </Box>
         {tableInstanceRef && (
-          <Box sx={{ paddingLeft: 2, minWidth: '250px', width: '250px', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end' }}>
-            <Tooltip title="Search">
+          <Box sx={{ paddingLeft: 2, display: 'flex', flexDirection: 'row', justifyContent: 'flex-end' }}>
+            
               <MRT_GlobalFilterTextField table={tableInstanceRef} />
-            </Tooltip>
             <Tooltip title="Toggle Row Padding">
               <MRT_ToggleDensePaddingButton table={tableInstanceRef} />
             </Tooltip>
