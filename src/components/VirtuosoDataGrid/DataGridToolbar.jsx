@@ -18,6 +18,7 @@ import { CriteriaEditor } from "./CriteriaEditor";
 import { QueryBuilderEditor } from "./QueryBuilderEditor";
 import { ColumnListFilterMenu } from "./ColumnListFilterMenu";
 import { Clear, Search, SettingsBackupRestore } from "@mui/icons-material";
+import { useStateRef } from "../hooks/useStateRef";
 
 const POPUP_MODE = {
   FILTER: "FILTER",
@@ -160,7 +161,7 @@ const DataGridToolbar = ({
   const [filterValues, setFilterValues] = useUrlState({ queryKey: `${gridId}-filters`, disable: !useUrlAsState });
   const [filterDisplay, setFilterDisplay] = useState({});
 
-  const [searchField, setSearchField] = useState("");
+  const [searchField, setSearchField, searchRef] = useStateRef("");
 
   useEffect(() => {
     setSearchField(filterValues?.search);
