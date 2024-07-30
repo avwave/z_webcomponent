@@ -12,9 +12,10 @@ import 'react-pdf/dist/esm/Page/TextLayer.css';
 import { Document, Page, pdfjs } from 'react-pdf';
 import { getMimeType } from './base64utils';
 import { Alert, LinearProgress } from '@mui/material';
-import { useElementSize } from 'usehooks-ts';
+
 import { DocumentOverlayControl, DocumentToolbar } from './DocumentToolbar';
 import { ImageLoader } from './ImageLoader';
+import { useResizeObserver } from 'usehooks-ts';
 
 // pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
@@ -60,7 +61,15 @@ const DocumentViewer = ({
 
   const [pageWidth, setPageWidth] = useState(0);
   const [pageHeight, setPageHeight] = useState(0);
-  const [ref, { width: wrapperWidth, height: wrapperHeight }] = useElementSize();
+  // const [ref, { width: wrapperWidth, height: wrapperHeight }] = useElementSize();
+  const ref = useRef(null);
+  const {
+    width: wrapperWidth,
+    height: wrapperHeight,
+  } = useResizeObserver({
+    box: 'border-box',
+    ref: ref
+  })
 
   const fileCB = useCallback(async () => {
     let file = {
