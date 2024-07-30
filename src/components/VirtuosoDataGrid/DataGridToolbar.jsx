@@ -161,11 +161,12 @@ const DataGridToolbar = ({
   const [filterValues, setFilterValues] = useUrlState({ queryKey: `${gridId}-filters`, disable: !useUrlAsState });
   const [filterDisplay, setFilterDisplay] = useState({});
 
-  const [searchField, setSearchField, searchRef] = useStateRef("");
+  const [searchField, setSearchField] = useStateRef("");
 
   useEffect(() => {
-    setSearchField(filterValues?.search);
-  }, [filterValues?.search]);
+    const fv = typeof filterValues?.search === 'string' ? filterValues.search : typeof filterValues === 'string' ? filterValues : "";
+    setSearchField(fv);
+  }, [filterValues]);
 
 
   const changeFilter = useCallback(
@@ -289,7 +290,7 @@ const DataGridToolbar = ({
               type="text"
               size="small"
               onChange={(e) => {
-                setSearchField(e.target.value)
+                setSearchField(e.target.value ?? "")
                 changeFilter('search', e.target.value)
               }}
               InputProps={{
@@ -297,7 +298,7 @@ const DataGridToolbar = ({
                   <Search />,
                 endAdornment: <IconButton
                   onClick={() => {
-                    setSearchField(null)
+                    setSearchField("")
                     changeFilter('search', null)
                   }}
                   disabled={searchField?.length <= 0}
