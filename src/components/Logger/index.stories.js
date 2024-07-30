@@ -11,7 +11,7 @@ const LoggerStory = {
 export default LoggerStory;
 
 
-export const auditLogs = [
+const auditLogs = [
   {
     "id": "6347d18e5a2008ccd2265b51",
     "log_type": "CLIENT_ACTION",
