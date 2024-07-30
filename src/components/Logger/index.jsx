@@ -362,7 +362,7 @@ const Logger = ({
   }
   const splitLogs = useMemo(
     () => {
-      const subStrings = splitString(log?.log_message)
+      const subStrings = splitString(log?.log_message ?? "")
       const splitLogs = subStrings.map((subString, idx) => {
         return (
           <TableRow>

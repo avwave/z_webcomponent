@@ -15,7 +15,7 @@ import { DataGridToolbar } from './DataGridToolbar';
 import { tableTranslation } from './localization';
 import { fuzzyDate, localizeCurrency, localizePercent } from '../utils/format';
 import moment from 'moment';
-import { useUpdateEffect } from 'usehooks-ts';
+
 import { useStateRef } from '../hooks/useStateRef';
 import useTableSettings from './useTableSettings';
 
@@ -502,7 +502,7 @@ const VirtuosoDataGrid = ({
     }, [dataGridState?.columns]
   );
 
-  useUpdateEffect(
+  useEffect(
     () => {
       if (sortState?.[0]?.id) {
         onSort(sortState?.[0]?.id, sortState?.[0]?.desc ? 'DESC' : 'ASC')
