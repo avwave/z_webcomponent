@@ -314,9 +314,19 @@ const VirtuosoDataGrid = ({
   const [loadMoreLoading, setLoadMoreLoading] = useState(false);
   const [lastScrollTop, setLastScrollTop] = useState(0);
 
+  const [lastScrollLeft, setLastScrollLeft] = useState(0);
+
+
   const fetchMoreOnBottomReached = useCallback(
     async (containerRefElement, manual) => {
       if (containerRefElement) {
+        if (containerRefElement.scrollLeft !== lastScrollLeft) {
+          return
+        }
+
+        setLastScrollLeft(lastScrollLeft)
+
+        
         const { scrollHeight, scrollTop, clientHeight } = containerRefElement;
 
         setLastScrollTop(scrollTop);
