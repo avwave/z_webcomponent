@@ -94,12 +94,15 @@ const WeekPicker = ({
   
   const theme = useTheme()
   
-  const renderWrappedWeekDay = (date, selectedDate, pickerProps) => {
+  const RenderWrappedWeekDay = (props, b) => {
+    const selectedDate = moment(props.selectedDate)
+    const {  day: date , ...pickerProps } = props;
     
-    let selectedDateClone = selectedDate?.[0]
+    let selectedDateClone = selectedDate
 
-    const start = selectedDateClone.startOf("week").toDate();
-    const end = selectedDateClone.endOf("week").toDate();
+    const dateC = moment(date).startOf("day").toDate();
+    const start = moment(selectedDateClone).startOf("week").toDate();
+    const end = moment(selectedDateClone).endOf("week").toDate();
 
     const dayIsBetween = date.isBetween(start, end, null, []);
     const isFirstDay = date.isSame(start, "day");
@@ -134,11 +137,6 @@ const WeekPicker = ({
         borderBottomRightRadius: '50%',
       }),
     }
-    // const dayClassName = cx(classes.day, {
-    //   [classes.nonCurrentMonthDay]: !dayInCurrentMonth,
-    //   [classes.highlightNonCurrentMonthDay]: !dayInCurrentMonth && dayIsBetween
-    // });
-
 
     return (
       <PickersDay
@@ -148,20 +146,6 @@ const WeekPicker = ({
       {...pickerProps}
       />
     )
-    // return (
-    //   <div className={classes.dayWrapper}>
-    //     <div className={wrapperClassName}>
-    //       <IconButton
-    //         className={dayClassName}
-    //         onClick={() => {
-    //           dayInCurrentMonth.onDaySelect(dayInCurrentMonth.day)
-    //         }}
-    //         size="large">
-    //         <span>{date.format("DD")} </span>
-    //       </IconButton>
-    //     </div>
-    //   </div>
-    // );
   };
 
   const [open, setOpen] = useState(false);
@@ -172,23 +156,17 @@ const WeekPicker = ({
       disableMaskedInput
       showDaysOutsideCurrentMonth
       showToolbar={false}
-      // renderInput={({ inputRef, inputProps, InputProps, ...props }) => {
-      //   const date = moment(inputProps?.value)
-      //   let dateweek = `${date.startOf('week').format('ll')} - ${date.endOf('week').format('ll')}`
-      //   dateweek = asMonthPicker ? date.format('MMMM YYYY') : dateweek
-      //   return (
-      //     <div className={classes.inputRoot}>
-      //       <input {...inputProps} readOnly hidden />
-      //       <Button {...inputProps} ref={inputRef} className={labelClass} style={labelStyle}>{dateweek}</Button>
-      //       {InputProps?.endAdornment}
-      //     </div>
-      //   )
-      // }}
-      slots={{field: ButtonField}}
+      slots={{
+        field: ButtonField,
+        day: RenderWrappedWeekDay
+      }}
       slotProps={{
         field:{
           setOpen,
           label: asMonthPicker ? moment(selectedDate).format('MMMM YYYY') : `${moment(selectedDate).startOf('week').format('ll')} - ${moment(selectedDate).endOf('week').format('ll')}`
+        },
+        day: {
+          selectedDate:selectedDate
         }
       }}
       open={open}
@@ -220,7 +198,6 @@ const WeekPicker = ({
         ActionBar: () => null,
       }}
       {...props}
-      renderDay={renderWrappedWeekDay}
     />
   )
 }
