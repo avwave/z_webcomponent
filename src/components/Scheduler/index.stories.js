@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 
-import { Typography } from "@mui/material";
+import { Card, CardContent, Divider, Typography } from "@mui/material";
 import { SchedulerUI, SchedulerSelector } from ".";
-import  ReactJson  from "react-json-view";
+import ReactJson from "react-json-view";
 
 
 export default {
@@ -26,7 +26,13 @@ const Template = (args) => {
         {...args}
         onChange={(schedule) => setSchedule(schedule)}
       />
-      <ReactJson src={schedule}/>
+
+      <Card>
+        <CardContent>
+          <ReactJson src={schedule} />
+
+        </CardContent>
+      </Card>
     </>
 
   )
@@ -34,8 +40,16 @@ const Template = (args) => {
 
 export const Default = Template.bind({});
 Default.args = {
-  size:'small',
-  
+  size: 'small',
+
+};
+
+export const OneTime = Template.bind({});
+OneTime.args = {
+  ...Default.args,
+  editable: true,
+  frequency: null,
+  scheduled_time: new Date().toISOString()
 };
 
 export const SetValueMonthly = Template.bind({});

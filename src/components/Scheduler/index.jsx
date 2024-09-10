@@ -4,8 +4,10 @@ import { SchedulerMonthly } from './SchedulerMonthly';
 import { SchedulerWeekly } from './SchedulerWeekly';
 import { SchedulerDaily } from './SchedulerDaily';
 import { SchedulerHourly } from './SchedulerHourly';
-import { Box, MenuItem, Select } from '@mui/material';
-
+import { Box, FormControl, FormControlLabel, FormLabel, MenuItem, Radio, RadioGroup, Select } from '@mui/material';
+import { DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
+import moment from 'moment-timezone';
 
 const useStyles = makeStyles()(theme => ({
 }));
@@ -74,7 +76,7 @@ const SchedulerSelector = ({
         {...props}
       />;
     default:
-      return <div>Invalid frequency</div>;
+      return <div>Select frequency</div>;
   }
 }
 
@@ -82,10 +84,11 @@ const SchedulerUI = ({
   onChange = (schedule) => { },
   editable = false,
   frequency = 'monthly',
-  day = 1,
-  day_of_week = 1,
-  hour = 0,
-  minute = 0,
+  day,
+  day_of_week,
+  hour,
+  minute,
+  schedule_time,
   ...props
 }) => {
   const [state, setState] = useState({
@@ -93,8 +96,11 @@ const SchedulerUI = ({
     day,
     day_of_week,
     hour,
-    minute
+    minute,
+    schedule_time
   });
+
+  const [isRepeating, setIsRepeating] = useState(`${!!frequency}`);
 
   useEffect(
     () => {
@@ -104,28 +110,70 @@ const SchedulerUI = ({
   return (
     <Box
       display="flex"
-      flexDirection="row"
+      flexDirection="column"
       gap={1}
     >
-      <Select
-        value={state.frequency}
-        onChange={(e) => setState({ ...state, frequency: e.target.value })}
-        {...props}
-      >
-        {['monthly', 'weekly', 'daily', 'hourly'].map((frequency, i) => (
-          <MenuItem key={i} value={frequency}>{frequency}</MenuItem>
-        ))}
-      </Select>
-      <SchedulerSelector
-        onChange={v=>onChange(v)}
-        editable={editable}
-        frequency={state.frequency}
-        day={state.day}
-        day_of_week={state.day_of_week}
-        hour={state.hour}
-        minute={state.minute}
-        {...props}
-      />
+      <FormControl>
+        <RadioGroup
+          row
+          value={isRepeating}
+          onChange={(e) => {
+            setIsRepeating(e.target.value)
+            if (e.target.value === 'false') {
+              setState({ frequency: null, schedule_time: null })
+            }
+          }}
+        >
+          <FormControlLabel value={true} control={<Radio />} label="Repeating" />
+          <FormControlLabel value={false} control={<Radio />} label="One time" />
+        </RadioGroup>
+      </FormControl>
+      {
+        isRepeating === 'true' ? (
+          <Box
+            display="flex"
+            flexDirection="row"
+            gap={1}
+          >
+            <Select
+              value={state.frequency}
+              onChange={(e) => setState({ ...state, frequency: e.target.value })}
+              {...props}
+            >
+              {['monthly', 'weekly', 'daily', 'hourly'].map((frequency, i) => (
+                <MenuItem key={i} value={frequency}>{frequency}</MenuItem>
+              ))}
+            </Select>
+            <SchedulerSelector
+              onChange={v => onChange(v)}
+              editable={editable}
+              frequency={state.frequency}
+              day={state.day}
+              day_of_week={state.day_of_week}
+              hour={state.hour}
+              minute={state.minute}
+              {...props}
+            />
+          </Box>
+
+        ) : (
+          <LocalizationProvider dateAdapter={AdapterMoment}>
+            <DateTimePicker
+              slotProps={{
+                textField: {
+                  ...props
+                }
+              }}
+              label="Schedule Time"
+              onChange={(evt, val) => {
+                setState({ frequency: null, schedule_time: evt.toISOString() })
+              }}
+              value={moment(state.schedule_time)}
+              variant="inline"
+            />
+          </LocalizationProvider>
+        )
+      }
     </Box>
 
   )
