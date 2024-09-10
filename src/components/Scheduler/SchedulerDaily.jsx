@@ -20,7 +20,7 @@ const SchedulerDaily = ({
   useEffect(
     () => {
       onChange(state);
-    }, [onChange, state]
+    }, [state]
   );
 
   return (
