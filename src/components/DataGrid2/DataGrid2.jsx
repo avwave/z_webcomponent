@@ -4,7 +4,7 @@ import { alpha, Checkbox, IconButton, lighten, LinearProgress, Tooltip, useTheme
 import { makeStyles } from 'tss-react/mui';
 import { UnfoldLess, UnfoldMore } from '@mui/icons-material';
 import { kaReducer, Table } from "ka-table";
-import { deselectAllFilteredRows, deselectRow, hideDetailsRow, selectAllFilteredRows, selectRow, showDetailsRow, updateData } from "ka-table/actionCreators";
+import { deselectAllFilteredRows, deselectRow, hideDetailsRow, moveFocusedDown, moveFocusedLeft, moveFocusedRight, moveFocusedUp, selectAllFilteredRows, selectRow, setFocused, showDetailsRow, updateData } from "ka-table/actionCreators";
 import { DataType, SortDirection, SortingMode } from "ka-table/enums";
 import { isEmpty } from 'lodash';
 import React, { isValidElement, useCallback, useContext, useEffect, useState } from 'react';
@@ -518,20 +518,37 @@ const DataGrid2 = React.forwardRef(({
             }
           },
           cell: {
-            elementAttributes: ({ column, ...props }) => {
-              return (['id', 'select-row'].includes(column.key) || column?.frozen) ? {
-                style: {
-                  ...column.style,
+            elementAttributes: ({ column, rowKeyValue, ...props }) => {
+              const style = (['id', 'select-row'].includes(column.key) || column?.frozen) ? {
+                ...column.style,
                   position: 'sticky',
                   left: 0,
                   backgroundColor: (highlightedRow === props?.rowData?.id) ? lighten(theme.palette.primary.light, .75) : theme.palette.background.paper,
-                }
               } : {
-                style: {
                   ...column.style,
                   backgroundColor: (highlightedRow === props?.rowData?.id) ? alpha(theme.palette.primary.light, .25) : null,
                   overflow: 'hidden'
-                }
+              } 
+              const cell = { columnKey: column.key, rowKeyValue }
+              const isFocused = cell.columnKey === tableProps.focused?.cell?.columnKey
+                && cell.rowKeyValue === tableProps.focused?.cell?.rowKeyValue;
+              return {
+                style,
+                tabIndex:0,
+                ref: (ref) => isFocused && ref?.focus(),
+                onKeyUp: (e) => {
+                  switch (e.key){
+                    case 'Home': kaDispatch(moveFocusedUp({ end: true })); break;
+                    case 'End': kaDispatch(moveFocusedDown({ end: true })); break;
+                    case 'ArrowUp': kaDispatch(moveFocusedUp({ end: e.ctrlKey })); break;
+                    case 'ArrowDown': kaDispatch(moveFocusedDown({ end: e.ctrlKey })); break;
+                    case 'ArrowLeft': kaDispatch(moveFocusedLeft({ end: e.ctrlKey })); break;
+                    case 'ArrowRight': kaDispatch(moveFocusedRight({ end: e.ctrlKey })); break;
+                    default:
+                  }
+                },
+                  onFocus: () => !isFocused &&  kaDispatch(setFocused({ cell: { columnKey: column.key, rowKeyValue } })),
+
               }
             }
           },
