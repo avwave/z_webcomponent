@@ -5,6 +5,10 @@
 
 image: node:18.19.0
 
+options:
+  size: 2x
+
+      
 pipelines:
   branches:
     '{develop}':
@@ -15,7 +19,7 @@ pipelines:
             script:
               - yarn install
               - yarn test -- -u
-              - yarn chromatic --project-token=5715d8611200 --auto-accept-changes
+              - yarn chromatic --ci --project-token=5715d8611200 --auto-accept-changes --zip
     '{master}':
         - step:
             name: Build, Test and Chromatic Publish
@@ -24,4 +28,4 @@ pipelines:
             script:
               - yarn install
               - yarn test -- -u
-              - yarn chromatic --project-token=5715d8611200 --auto-accept-changes
+              - yarn chromatic --ci --project-token=5715d8611200 --auto-accept-changes --zip

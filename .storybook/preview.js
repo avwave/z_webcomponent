@@ -69,10 +69,7 @@ const parameters = {
   },
   docs: {
     source: {
-      type: 'auto'
-    },
-    story: {
-      inline: true
+      type: 'code' 
     }
   }
 };

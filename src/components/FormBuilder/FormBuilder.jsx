@@ -53,6 +53,7 @@ import * as Yup from "yup";
 import { DateTimeRangePicker } from "../DateTimeRangePicker";
 import { fromEntries } from "../utils/fromEntries.polyfill";
 import { FormikPersist } from "./FormikPersist";
+import { MPhoneInput } from "./MPhoneInput";
 import { WizardFieldArray } from "./WizardFieldArray";
 import { DatePicker, DateTimePicker, LocalizationProvider, TimePicker } from "@mui/x-date-pickers";
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment'
@@ -544,7 +545,7 @@ const FormFieldSet = ({
                     {fieldParams.icon}
                   </InputAdornment>
                 ) : undefined,
-                inputComponent: PhoneInput,
+                inputComponent: MPhoneInput,
                 inputProps: {
                   country: "PH",
                   international: true,

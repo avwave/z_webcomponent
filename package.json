@@ -4,6 +4,7 @@
   "private": false,
   "dependencies": {
     "@alshdavid/mime-types": "2.2.3",
+    "@babel/plugin-proposal-private-property-in-object": "7.21.11",
     "@date-io/date-fns": "2.10.11",
     "@date-io/moment": "1.x",
     "@dropzone-ui/react": "6.7.20",
@@ -19,8 +20,8 @@
     "@testing-library/react": "12.1.5",
     "@testing-library/user-event": "14.4.3",
     "@wojtekmaj/react-hooks": "1.17.2",
-    "ag-grid-community": "25.1.0",
-    "ag-grid-react": "25.1.0",
+    "ag-grid-community": "30.0.6",
+    "ag-grid-react": "30.0.6",
     "axios": "1.2.1",
     "branch-sdk": "2.59.0",
     "clsx": "1.1.1",
@@ -30,6 +31,9 @@
     "file-saver": "2.0.5",
     "formik": "2.2.6",
     "javascript-stringify": "2.1.0",
+    "js-base64": "3.7.5",
+    "json-url": "3.1.0",
+    "jsoncrush": "1.1.6",
     "ka-table": "7.1.3",
     "litepicker": "2.0.11",
     "lodash.get": "4.4.2",
@@ -53,6 +57,7 @@
     "react-image-pan-zoom-rotate": "1.6.0",
     "react-json-view": "1.21.3",
     "react-loader-advanced": "1.7.1",
+    "react-lottie-player": "1.5.4",
     "react-phone-number-input": "3.1.25",
     "react-querybuilder": "6.5.0",
     "react-scripts": "5.0.1",
@@ -171,7 +176,7 @@
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@bitbucket.org/zennya/web-component-library.git"
+    "url": "git+ssh://git@bitbucket.org/zennya/web-component-library.git?sha=f4c76a6023c8f317fb0c329937c88c9981a5e09b"
   },
   "author": "",
   "license": "ISC",

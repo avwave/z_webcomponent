@@ -210,13 +210,12 @@ ConditionalSelector.args = {
     }
   ],
   columns: [
+    
     {
-      key: "select-row",
-      name: "",
-      sortable: false,
-      hidden: true,
+      key: "name",
+      name: "Name",
       selectable({ row }) {
-        return row.id !== '2'
+        return row.id !== 2
       }
     },
     {

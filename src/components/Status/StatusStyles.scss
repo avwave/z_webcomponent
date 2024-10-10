@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter');
+
+$color-negative: #f6e1df;
+$color-pending: #fff1d7;
+$color-matched: #ddf3fa;
+$color-live: #ebeffd;
+$color-cancelled: #e3ebec;
+$color-finished: #def0db;
+$color-default: #7c7c84;
+
+.status-container{
+    width: 100%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+    letter-spacing: 1px;
+    color: #787879;
+}
+
+.status-container-outer{
+    padding: 0.5rem 1.5rem 0.5rem 1.5rem;
+    border-radius: 16px;
+    width: auto;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    align-self: flex-start;
+}
+
+// Size Section
+.medium{
+    height: 1rem;
+    font-weight: 200;
+    font-size: medium;
+    line-height: 5px;
+}
+
+.small{
+    height: 0.5rem;
+    font-size: 12px;
+}
+
+.large{
+    height: 1.5rem;
+    font-size: large;
+}
+
+// Color section
+.color-negative{
+    background-color: $color-negative;
+}
+.color-pending{
+    background-color: $color-pending;
+}
+.color-matched{
+    background-color: $color-matched;
+}
+.color-live{
+    background-color: $color-live;
+}
+.color-cancelled{
+    background-color: $color-cancelled;
+}
+.color-finished{
+    background-color: $color-finished;
+}
+.color-default{
+    background-color: $color-default;
+    color:#f3f3f3
+}
+
+.is-hoverable{
+    transition: box-shadow 0.3s; /* Adding a transition for smooth effect */
+    &:hover {
+        box-shadow: 4px 4px 4px 0 rgba(0, 0, 0, 0.1);
+    }
+}
