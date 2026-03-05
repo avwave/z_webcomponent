@@ -1,0 +1,59 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter');
+
+$header-bgcolor: #fcfcfc;
+$header-font-color: #525252;
+$border-color: #EDEDED;
+
+.section{
+    display: flex;
+    flex-direction: column;
+    border: 1px solid $border-color;
+    padding-bottom: 58px;
+    border-radius: 12px;
+}
+
+.section-header{
+    height: 80px;
+    display: flex;
+    padding-left: 44px;
+    align-items: center;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    background-color: $header-bgcolor;
+    font-family: 'Inter', sans-serif;
+    font-weight: bold;
+    font-size: 25px;
+    letter-spacing: 1px;
+    color:$header-font-color;
+}
+
+.section-content{
+    padding-left: 44px;
+    padding-right: 44px;
+    .section-row{
+        border-bottom: 1px solid $border-color;
+    }
+}
+
+.section-row{
+    min-height: 10px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    display: flex;
+    // background-color: aqua;
+    .label{
+        display: flex;
+        flex-wrap: wrap;
+        min-width: 175px;
+        position: relative;
+        // background-color: gray;
+    };
+    .value{
+        display: flex;
+        flex-wrap: wrap;
+        max-width: 100%;
+        justify-content: flex-start;
+        overflow: hidden;
+        position: relative;
+    };
+}

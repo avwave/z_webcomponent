@@ -1,0 +1,87 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter');
+
+$outer-border-color: black;
+$border-color: #EDEDED;
+$font-color: #4A4A4A;
+$hovered-tab-font-color: #A8D6E2;
+$hovered-tab-background-color: #E9F6FB;
+$selected-tab-font-color: #3E91A8;
+$selected-tab-background-color: #D8EAF1;
+
+
+.container{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+// Tab Menu
+.tab-section{
+    margin-bottom: 1rem;
+    flex-shrink: 0;
+}
+
+.outer-tab-container{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 45px;
+    padding: 0;
+    margin: 0;
+    // margin-bottom: 1rem;
+    color: $font-color;
+    &.tab-full-width{
+        width: 100%;
+    };
+}
+.tab-container{
+    margin:0;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    &.tab-full-width{
+        flex-grow: 1;
+    };
+    .tab-content{
+        width: 100%;
+        height: 100%;
+        font-family: 'Inter', sans-serif;
+        font-weight: bold;
+        letter-spacing: 1px;
+        border-top: 1px solid $border-color;
+        border-bottom:1px solid $border-color;
+        border-right: 1px solid $border-color;
+        border-left:none;
+        background-color: white;
+        &.first-element{
+            border-left: 1px solid $border-color;
+            border-top-left-radius: 12px;
+            border-bottom-left-radius: 12px;
+            
+        };
+        &.last-element{
+            border-top-right-radius : 12px;
+            border-bottom-right-radius: 12px;
+        };
+        &:not(:last-child){
+        };
+        padding:0 2rem 0 2rem;
+        cursor: pointer;
+        &.selected-tab{
+            background-color: $selected-tab-background-color; 
+            color: $selected-tab-font-color;
+        }
+    }
+    &:hover .tab-content{
+        transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+        background-color: $hovered-tab-background-color; 
+        color: $hovered-tab-font-color;
+    }
+}
+
+// Component Section
+.component-section{
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}

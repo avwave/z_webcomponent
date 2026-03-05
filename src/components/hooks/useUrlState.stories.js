@@ -13,7 +13,7 @@ const useURLStateStory = {
 export default useURLStateStory;
 
 export const Default = ({ ...args }) => {
-  const [queryTerm, setQueryTerm, queryTermRef] = useUrlState({queryKey:'queryTerm'});
+  const [queryTerm, setQueryTerm, queryTermRef, url] = useUrlState({queryKey:'queryTerm'});
   return (
     <div>
       <TextField
@@ -27,7 +27,7 @@ export const Default = ({ ...args }) => {
 };
 
 export const Disable = ({ ...args }) => {
-  const [queryTerm, setQueryTerm, queryTermRef] = useUrlState({queryKey:'queryTerm', disable: true});
+  const [queryTerm, setQueryTerm, queryTermRef, url] = useUrlState({queryKey:'queryTerm', disable: true});
   return (
     <div>
       <TextField
@@ -41,8 +41,8 @@ export const Disable = ({ ...args }) => {
 };
 
 export const Multiple = ({ ...args }) => {
-  const [queryTerm, setQueryTerm, queryTermRef] = useUrlState({queryKey:'queryTerm'});
-  const [queryTerm2, setQueryTerm2, queryTerm2Ref] = useUrlState({queryKey:'queryTerm2'});
+  const [queryTerm, setQueryTerm, queryTermRef, url] = useUrlState({queryKey:'queryTerm'});
+  const [queryTerm2, setQueryTerm2, queryTerm2Ref, url2] = useUrlState({queryKey:'queryTerm2'});
   useEffect(() => {
     console.log('should only be called once per load', queryTerm, queryTerm2)
   }, [queryTerm, queryTerm2]);
@@ -58,13 +58,13 @@ export const Multiple = ({ ...args }) => {
         label="Query Term 2"
         value={queryTerm2}
         onChange={(e) => setQueryTerm2(e.target.value)} />
-      <ReactJsonView src={{queryTerm, queryTerm2}}/>
+      <ReactJsonView src={{queryTerm, queryTerm2, url}}/>
     </div>
   );
 };
 
 export const JSON = ({ ...args }) => {
-  const [queryTerm, setQueryTerm, queryTermRef] = useUrlState({queryKey:'jsonTerm'});
+  const [queryTerm, setQueryTerm, queryTermRef, url] = useUrlState({queryKey:'jsonTerm'});
   return (
     <div>
       <TextField
@@ -72,28 +72,50 @@ export const JSON = ({ ...args }) => {
         label="Query Term"
         value={queryTerm?.wrap?.value}
         onChange={(e) => setQueryTerm({ wrap: { value: e.target.value } })} />
-      <ReactJsonView src={{ queryTerm }} />
+      <ReactJsonView src={{ queryTerm, url }} />
     </div>
   );
 }
 
 export const DateRange = ({ ...args }) => {
-  const [queryTerm, setQueryTerm, queryTermRef] = useUrlState({queryKey:'dateRangeTerm'});
+  const [queryTerm, setQueryTerm, queryTermRef, url] = useUrlState({queryKey:'dateRangeTerm'});
   return (
     <div>
       <DateTimeRangePicker value={queryTerm} onChange={v => setQueryTerm(v)} />
-      <ReactJsonView src={{ queryTerm }} />
+      <ReactJsonView src={{ queryTerm, url }} />
     </div>
   )
 }
 export const Date = ({ ...args }) => {
-  const [queryTerm, setQueryTerm, queryTermRef] = useUrlState({queryKey:'dateTerm'});
+  const [queryTerm, setQueryTerm, queryTermRef, url] = useUrlState({queryKey:'dateTerm'});
   return (
     <div>
       <input type={"date"} value={queryTerm} onChange={v => {
         setQueryTerm(v.target.value)
       }} />
-      <ReactJsonView src={{ queryTerm }} />
+      <ReactJsonView src={{ queryTerm, url }} />
     </div>
   )
+}
+
+export const MedicalGridFilterExample = ({...args}) => {
+  const [queryTerm, setQueryTerm, queryTermRef, url] = useUrlState({queryKey:'medicalGridFilter'});
+  useEffect(
+    () => {
+      setQueryTerm({
+        laboratory: [
+          9,
+          1,
+        ],
+        startDate: "2023-08-01T08:51:52.000Z",
+        endDate: "2023-09-30T08:51:52.000Z",
+      })
+    }, []
+  );
+  return (
+    <div>
+      <ReactJsonView src={{ parameters: queryTerm }} name="Internal Query Parameters"/>
+      <ReactJsonView src={{ rendered_url_params: url }} name="External Parameters in URL"/>
+    </div>
+  );
 }
