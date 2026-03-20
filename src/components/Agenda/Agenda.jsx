@@ -91,7 +91,7 @@ function Agenda(_props) {
   const [paramView, setParamView] = useUrlState({
     queryKey:`${id}-view`,
     disable: !useUrlAsState,
-    defaultValue: props?.defaultView
+    defaultValue: props?.defaultView ?? 'month'
   })
 
   const [state, dispatch] = useContext(AgendaContext);
@@ -102,7 +102,7 @@ function Agenda(_props) {
     return (
       <EdgeContainer clear variant={event.variant}>
         <GridBox align="flex-start">
-          <Typography>{event.title}</Typography>
+          <Typography>{event?.title}</Typography>
           <Typography variant="body2">{event.description}</Typography>
         </GridBox>
         <GridBox align="flex-start">{metaRenderer(event)}</GridBox>
@@ -116,7 +116,7 @@ function Agenda(_props) {
           eventComponent(event)
         ) : (
           <Typography color={event.color} variant="caption">
-            {event.title}
+            {event?.title}
           </Typography>
         )}
       </GridBox>
@@ -221,7 +221,8 @@ function Agenda(_props) {
         <Calendar
           className={classes.root}
           localizer={localizer}
-          events={state?.events || defaultEvents}
+          events={(state?.events ?? defaultEvents ?? []).filter(Boolean)}
+          titleAccessor={(event) => event?.title ?? ''}
           startAccessor="start"
           endAccessor="end"
           components={{
@@ -249,12 +250,13 @@ function Agenda(_props) {
             onViewChange(view)
             setParamView(view)
           }}
-          view={paramView}
-          date={currentDate}
+          // {...(paramView != null ? { view: paramView } : {})}
+          {...(currentDate != null ? { date: currentDate } : {})}
           onNavigate={(date, view)=>{
             setCurrentDate(date)
           }}
-          {...props}
+          // {...props}
+          
         />
       </Paper>
     </BlockUi>
