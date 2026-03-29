@@ -65,7 +65,9 @@ function DataGrid({
   const domRef = useRef();
 
   const [checkListState, checkListDispatch] = useContext(CheckboxContext);
-  const [dataGridState, dataGridDispatch] = useContext(DataGridContext);
+  const dataContext = useContext(DataGridContext);
+  console.log("📢[DataGrid.jsx:dataContext]: ", dataContext);
+  const [dataGridState, dataGridDispatch] = dataContext;
 
   const [columns, setColumns] = useState(dataGridState.columns);
   const [filters, setFilters] = useState({});
@@ -279,6 +281,7 @@ function DataGrid({
     });
   }, [dataGridDispatch, filters]);
 
+  console.log("📢[DataGrid.jsx:286]: ", draggableColumns, dataGridState);
   return (
     <BlockUi
       message={<CircularProgress />}
@@ -303,7 +306,6 @@ function DataGrid({
         className={"rdg-light"}
         headerFiltersHeight={50}
         rowRenderer={RowRenderer}
-        {...gridProps}
         style={{ ...style }}
         columns={draggableColumns}
         rows={dataGridState.rows}
@@ -316,6 +318,7 @@ function DataGrid({
         onFiltersChange={(a) => {
           setFilters({ ...filters, ...a });
         }}
+        {...gridProps}
       />
       {contextMenu?.contextItems() ?? <></>}
     </BlockUi>
